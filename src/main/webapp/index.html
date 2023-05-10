@@ -2,10 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>REST First example</title>
+    <title>Shotmaniacs</title>
+    <link href="stylesheet.css" rel="stylesheet">
 </head>
 <body>
-<P>Run the TestHelloClient Java application to test this project.</P>
+<div class="wrapper">
+    <header class="navbar">
+        <a href="/">
+            <img alt="logo" class="logo-svg" src="img/logo.svg">
+        </a>
+        <div class="navbar-nav-scroll">
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item">Booking</li>
+                <li class="nav-item">General</li>
+                <li class="nav-item">Contact</li>
+            </ul>
+        </div>
+
+    </header>
+    <div class="main">
+        <p class="title">Booking Shotmaniacs</p>
+        <p class="sub-title">Underneath you can find a form to fill.
+            For more information, please contact us at hi@shotmaniacs.com</p>
+        <h2 class="heading">How it works</h2>
+        <p>Below you can fill in the client. You must select one of the two pages to what you desire.</p>
+        <div>
+            <form>
+                <div class="form">
+
+                    <div class="form-client">
+                        <div class="form-header">Client Information</div>
+
+                        <label for="fname">First name:</label>
+                        <input id="fname" name="fname" type="text"><br>
+                        <label for="lname">Last name:</label>
+                        <input id="lname" name="lname" type="text"><br>
+                        <label for="tel">Telephone:</label>
+                        <input id="tel" type="text"><br>
+                        <label for="email">Email:</label>
+                        <input id="email" type="email"><br>
+                    </div>
+                    <div class="form-event">
+                        <div class="form-header">Booking Information</div>
+                        <label for="ename">Event name:</label>
+                        <input id="ename" type="text"><br>
+                        <label for="etype">Event type:</label>
+                        <input id="etype" type="text"><br>
+                        <label for="edate">Event date:</label>
+                        <input id="edate" type="date"><br>
+                        <label for="eloca">Event duration:</label>
+                        <input id="eloca" type="text"><br>
+
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
 </body>
 </html>
 
