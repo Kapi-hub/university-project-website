@@ -1,0 +1,68 @@
+.shotmaniacs-black {
+    color: #1F1F1F
+}
+
+.shotmaniacs-gray {
+    color: #525252
+}
+
+.shotmaniacs-light-blue {
+    color: #1696D2
+}
+
+.shotmaniacs-peal{
+    color: #F1F1F1
+}
+
+nav {
+    background-color: #1696D2;
+    margin-bottom: 50px;
+}
+.navbar {
+    height: 100px;
+}
+.navbar-text {
+    color: #F1F1F1;
+}
+
+.navbar-brand {
+    position:absolute;
+    left: 10px;
+}
+
+.welcome-message {
+    text-align: center;
+    font-weight: bolder;
+    font-size: larger;
+    padding-bottom: 20px;
+}
+
+.text {
+    margin-right: 68%;
+    font-weight: bolder;
+}
+
+.announcementsContainer, .eventsContainer {
+    width: 50%;
+    height: 100px;
+    margin: auto;
+    /*padding: 10px;*/
+
+    display: flex;
+    align-items: flex-start;
+
+    border: 1px solid #1F1F1F;
+    border-radius: 5px;
+    background-color: #F1F1F1;
+}
+
+.postAnnouncementBttn {
+    background-color: #1696D2;
+    border-radius: 10px;
+    border-color: #F1F1F1;
+    color: #F1F1F1;
+}
+
+* {
+    font-family: 'Kiona', sans-serif;
+}
