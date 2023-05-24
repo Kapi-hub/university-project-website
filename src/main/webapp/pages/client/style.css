@@ -1,12 +1,4 @@
-:root {
-    font-size: 16px;
-    --bs-primary-rgb: 106, 164, 158;
-    --bs-primary: rgb(var(--bs-primary-rgb)) !important;
-    --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
-}
-
 body {
-    font-family: Segoe UI, sans-serif !important;
     font-weight: 100;
 }
 
@@ -92,7 +84,7 @@ body {
 
 /* Style the tab buttons */
 .tab button {
-    background-color: #f1f1f1;
+    background-color: var(--bs-light);
     border: none;
     outline: none;
     padding: 10px 20px;
