@@ -49,20 +49,22 @@
 
                     <div class="row form-client">
                         <div class="col-sm form-header">Client Information</div>
+                        <div class="form-questions">
+                            <label for="fname">First name:</label>
+                            <input id="fname" type="text"><br>
+                            <label for="lname">Last name:</label>
+                            <input id="lname" type="text"><br>
+                            <label for="tel">Telephone:</label>
+                            <input id="tel" type="text"><br>
+                            <label for="email">Email:</label>
+                            <input id="email" type="email"><br></div>
 
-                        <label for="fname">First name:</label>
-                        <input id="fname" type="text"><br>
-                        <label for="lname">Last name:</label>
-                        <input id="lname" type="text"><br>
-                        <label for="tel">Telephone:</label>
-                        <input id="tel" type="text"><br>
-                        <label for="email">Email:</label>
-                        <input id="email" type="email"><br>
                     </div>
                     <div class="row inner-borders form-event">
                         <div class="col-sm">
                             <div class="form-header pb-2">Single Booking</div>
-                            <div><label for="ename">Event name:</label>
+                            <div class="form-questions">
+                                <label for="ename">Event name:</label>
                                 <input id="ename" type="text"><br>
                                 <label for="etype">Event type:</label>
                                 <input id="etype" type="text"><br>
@@ -77,9 +79,9 @@
                             <div><p>Please download the following template.
                                 <a href="placeholder">(.xlsx)</a>
                                 <a href="placeholder">(.csv)</a>
-                            <p>
-                                Please upload the file: <input type="file" id="myFile" name="filename">
-                            </p></div>
+                                <p>
+                                    Please upload the file: <input id="myFile" name="filename" type="file">
+                                </p></div>
 
                         </div>
 
@@ -93,10 +95,73 @@
             </form>
         </div>
     </div>
+    <div class="container border-2 border-primary bg-primary-subtle border p-2 tab">
+        <div class="row">
+            <button class="col tablinks form-header active" onclick="openTab(event, 'tab1')">Single Bookings</button>
+            <button class="col tablinks form-header" onclick="openTab(event, 'tab2')">Multiple Bookings</button>
+        </div>
+        <div class="row inner-borders">
+            <div class="col tab1 tabcontent tab-a" style="display:block">
+
+                <label for="ename">Event name</label><br>
+
+                <label for="etype">Event type:</label><br>
+
+                <label for="edate">Event date:</label><br>
+
+                <label for="eloca">Event duration:</label>
+            </div>
+            <div class="col tab1 tabcontent tab-q" style="display:block">
+                <input id="ename" type="text"><br>
+                <input id="etype" type="text"><br>
+                <input id="edate" type="date"><br>
+                <input id="eloca" type="text"><br>
+            </div>
+
+
+            <div class="tab2 tabcontent">
+                <div class="col"><p>Please download the following template.
+                    <a href="placeholder">(.xlsx)</a>
+                    <a href="placeholder">(.csv)</a>
+                    <p>
+                        Please upload the file: <input id="myFile" name="filename" type="file">
+                    </p></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 </div>
 
 
 </body>
+<script>
+    function openTab(evt, tabName) {
+        // Hide all tab content
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove 'active' class from all tab buttons
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the selected tab content and mark the button as active
+        var tab = document.getElementsByClassName(tabName)
+        for (i = 0; i < tab.length; i++) {
+            tab[i].style.display = "block";
+        }
+        evt.currentTarget.className += " active";
+    }
+
+
+</script>
 </html>
 
