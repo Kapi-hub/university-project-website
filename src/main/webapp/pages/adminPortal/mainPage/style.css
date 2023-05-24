@@ -1,0 +1,61 @@
+.shotmaniacs-black {
+    color: #1F1F1F
+}
+
+.shotmaniacs-gray {
+    color: #525252
+}
+
+.shotmaniacs-light-blue {
+    color: #1696D2
+}
+
+.shotmaniacs-peal{
+    color: #F1F1F1
+}
+nav {
+    background-color: #1696D2;
+    margin-bottom: 50px;
+}
+.navbar {
+    height: 100px;
+}
+.navbar-text {
+    color: #F1F1F1;
+}
+
+.navbar-brand {
+    position:absolute;
+    left: 10px;
+}
+
+.welcome-message {
+    text-align: center;
+    font-weight: bolder;
+    font-size: larger;
+}
+
+.dashboardButton {
+    border-radius: 10px;
+    border-color: #F1F1F1;
+    background-color: #1696D2;
+    color: #F1F1F1;
+}
+
+.crewButton {
+    border-radius: 10px;
+    border-color: #F1F1F1;
+    background-color: #1696D2;
+    color: #F1F1F1;
+}
+
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-evenly;
+}
+
+* {
+    font-family: 'Kiona', sans-serif;
+}

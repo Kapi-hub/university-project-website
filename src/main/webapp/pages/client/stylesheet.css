@@ -1,0 +1,113 @@
+:root {
+    font-size: 16px;
+    --bs-primary-rgb: 106, 164, 158;
+    --bs-primary: rgb(var(--bs-primary-rgb)) !important;
+    --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+body {
+    font-family: Segoe UI, sans-serif !important;
+    font-weight: 100;
+}
+
+.ct-navbar {
+    padding: 0.75rem 0;
+}
+
+.nav-list {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-weight: 500;
+}
+
+.navbar {
+    min-height: 4rem;
+    background-color: var(--bs-primary) ;
+    padding: 1rem;
+    display: flex;
+}
+
+.navbar-nav {
+    padding-inline: 0;
+    display: flex;
+    list-style-type:none;
+}
+
+.nav-item {
+    padding-inline: 10px;
+}
+
+
+.logo-svg {
+    height: 100%;
+    width: 36px;
+}
+
+.main {
+    line-height: 1.2;
+}
+
+.title {
+    font-size: 3rem;
+}
+
+.sub-title {
+    font-size: 1.5rem;
+
+}
+.heading {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.form-event,.form-client {
+    /*background-color: var(--primary-color-op);*/
+    /*border: 1px solid var(--primary-color);*/
+    margin-top: 1rem;
+    padding: 0.5rem;
+}
+
+.form-header {
+    font-weight: 500;
+}
+
+
+
+.inner-borders > div[class^="col-"] {
+    border-right: 4px dashed var(--bs-primary);
+}
+
+.inner-borders > div[class^="col-"]:last-child {
+    border-right: none;
+}
+
+.form-questions > label {
+
+}
+
+/* Hide all tab content by default */
+.tabcontent {
+    display: none;
+}
+
+/* Style the tab buttons */
+.tab button {
+    background-color: #f1f1f1;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    margin:10px;
+    cursor: pointer;
+}
+
+/* Change background color of active tab button */
+.tab button.active {
+    background-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.tab-a {
+    text-align: left;
+}
+.tab-a label {
+    padding-left: 50%;
+}
