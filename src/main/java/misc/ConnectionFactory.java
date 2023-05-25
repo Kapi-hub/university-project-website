@@ -8,12 +8,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ServerConfig {
-    static Connection connection;
-    static String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
-    static String DB_USER = "dab_di22232b_249";
-    static String SCHEMA = "?currentSchema=shotmaniacs/";
-    static String FILE_NAME = "di-2023-project-password";
+/**
+ * Factory Pattern
+ */
+public class ConnectionFactory {
+    private static Connection connection;
+    private static String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
+    private static String DB_USER = "dab_di22232b_249";
+    private static String SCHEMA = "?currentSchema=shotmaniacs/";
+    private static String FILE_NAME = "di-2023-project-password";
 
     static void setup() {
         try {
@@ -28,6 +31,10 @@ public class ServerConfig {
         } catch (SQLException e) {
             System.err.println("Oops: "+e.getMessage());
         }
+    }
+
+    public static Connection getConnection() {
+        return connection;
     }
 
     private static String readPassword() {

@@ -6,6 +6,6 @@ import jakarta.servlet.ServletContextListener;
 public class ServletConfig implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-        ServerConfig.setup();
+        ConnectionFactory.setup();
     }
 }
