@@ -13,4 +13,7 @@
         <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+    <listener>
+        <listener-class>misc.ServletConfig</listener-class>
+    </listener>
 </web-app>
