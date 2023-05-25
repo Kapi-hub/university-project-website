@@ -13,10 +13,10 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
     private static Connection connection;
-    private static String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
-    private static String DB_USER = "dab_di22232b_249";
-    private static String SCHEMA = "?currentSchema=shotmaniacs/";
-    private static String FILE_NAME = "di-2023-project-password";
+    private static final String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
+    private static final String DB_USER = "dab_di22232b_249";
+    private static final String SCHEMA = "?currentSchema=shotmaniacs/";
+    private static final String FILE_NAME = "di-2023-project-password";
 
     static void setup() {
         try {

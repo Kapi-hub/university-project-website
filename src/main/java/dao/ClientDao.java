@@ -12,7 +12,7 @@ public enum ClientDao {
 
     Connection connection;
 
-    private ClientDao() {
+    ClientDao() {
         connection = ConnectionFactory.getConnection()
     }
 }
