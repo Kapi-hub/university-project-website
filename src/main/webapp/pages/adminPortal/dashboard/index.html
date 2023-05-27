@@ -6,13 +6,39 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
     <link href="/src/main/webapp/pages/general.css" rel="stylesheet">
     <link href="/src/main/webapp/pages/adminPortal/admin.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet" >
+    <link href="style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
 </head>
 <body>
+
+<!-- Modal -->
+<div class="modal fade" id="postAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Post announcement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <label for="inputTitle" class="inputTitle">Announcement Title</label>
+                <input type="text" class="inputTitle" id="inputTitle">
+                <label for="inputTitle" class="inputTitle">Announcement Details</label>
+                <input type="text" class="inputTitle" id="inputDetails">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="saveBttn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <nav>
     <div class="navbar">
         <div class="container">
@@ -30,26 +56,87 @@
     Welcome, Raluca!
 </div>
 
+
+<!--<div class="overflow-auto p-1 mb-1 mb-md-1 mr-md-1" style="max-height: 300px">-->
 <div class="announcementsContainer">
-    <div class = "row">
-        <div class ="col">
-            <p class ="inline-block">Announcements</p>
-            <button class="postAnnouncementBttn">Post +</button>
+    <div class="row">
+        <div class="col">
+            <div class="flex-container">
+                <p class="announcementText">Announcements</p>
+                <button type="button" class="postAnnouncementBttn" data-bs-toggle="modal"
+                        data-bs-target="#postAnnouncementModal">
+                    Post +
+                </button>
+            </div>
+            <div class="announcement1">
+                <div class="title">
+                    <span class="announcementTitle">Test announcement</span>
+                    <span class="dateTime">Posted by: Raluca on 22 May 2023, 10:25</span>
+
+                </div>
+                <div class="content"><p class="announcementContent">
+                    This is a test, i hope it will work.
+                </p>
+                </div>
+            </div>
+            <div class="announcement2">
+                <div class="title">
+                    <span class="announcementTitle">Test announcement 1</span>
+                    <span class="dateTime">Posted by: Alex on 6 May 2023, 14:56</span>
+                </div>
+                <div class="content"><p class="announcementContent">
+                    This is a test again, i hope it will work.
+                </p>
+                </div>
+            </div>
+            <div class="announcement3">
+                <div class="title">
+                    <span class="announcementTitle">Team meeting cancelled</span>
+                    <span class="dateTime">Posted by: Scrum master on 5 May 2023, 17:40</span>
+
+                </div>
+                <div class="content"><p class="announcementContent">
+                    Due to some unexpected events in my family that require me to fly back to Greece asap, I have to
+                    cancel the meeting tomorrow. I will announce you later when is it going to be rescheduled.
+                </p>
+                </div>
+            </div>
+            <div class="announcement4">
+                <div class="title">
+                    <span class="announcementTitle">Let's have a team meeting</span>
+                    <span class="dateTime">Posted by: Scrum master on 5 May 2023, 10:36</span>
+
+                </div>
+                <div class="content"><p class="announcementContent">
+                    Let's meet tomorrow at 11.00 to discuss some managerial problems. We will also discuss if anyone
+                    needs some new gear and also the progress on the edit of the after party.
+                </p>
+                </div>
+            </div>
         </div>
     </div>
-<!--    <span class="text">Announcements</span>-->
-<!--    <div class = "postButton">-->
-<!--        <button class="postAnnouncementBttn">Post +</button>-->
-<!--    </div>-->
 </div>
+<!--</div>-->
 
 
 <div class="eventsContainer">
     <div class="events">
-
+        <p class="eventsText">Events</p>
     </div>
+
 </div>
 
+<script>
+    // const myModal = bootstrap.Modal.getOrCreateInstance('#exampleModal');
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     myModal.show();
+    // });
+
+    var myModal = new bootstrap.Modal(document.getElementById('#exampleModal'), {
+        keyboard: false
+    })
+    myModal.toggle();
+</script>
 
 </body>
 </html>

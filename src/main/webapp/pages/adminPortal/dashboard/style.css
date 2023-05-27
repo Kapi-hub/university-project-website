@@ -5,39 +5,90 @@
     padding-bottom: 20px;
 }
 
-.text {
-    margin-right: 68%;
-    font-weight: bolder;
+.announcementText, .eventsText{
+    font-weight: bold;
+    font-size: 22px;
 }
 
-.announcementsContainer, .eventsContainer {
+.announcementsContainer {
     width: 50%;
-    height: 100px;
+    height: fit-content;
     margin: auto;
     padding: 10px;
+    margin-bottom: 30px;
 
     /*display: flex;*/
     /*align-items: flex-start;*/
 
-    border: 1px solid #1F1F1F;
+    border: 1px solid var(--bs-dark);
     border-radius: 5px;
     background-color: #F1F1F1;
-    margin-bottom: 20px;
 }
 
-.postAnnouncementBttn {
+
+.eventsContainer {
+    width: 50%;
+    height: fit-content;
+    margin: auto;
+    padding: 10px;
+
+    border: 1px solid;
+    border-color: var(--bs-dark);
+    border-radius: 5px;
+    background-color: #F1F1F1;
+}
+
+.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close {
     background-color: #1696D2;
     border-radius: 10px;
-    border-color: #F1F1F1;
+    border-color: var(--bs-primary);
     color: #F1F1F1;
+    margin-left: auto;
 }
 
+.closeBttn{
+    background-color: red;
+}
+
+.inputTitle{
+    display: block;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.announcementsContainer .row .col .flex-container{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid;
+    border-color: #1696D2;
+}
+
+.announcement1, .announcement2, .announcement3{
+    border-bottom: 1px solid;
+    border-color: #1696D2;
+}
 /* style.css */
 
 .inline-block {
     display: inline-block;
     vertical-align: middle;
 }
+.title {
+    font-weight: bold;
+}
+.announcementTitle {
+    font-size: 18px;
+    display: block;
+}
+.dateTime {
+    font-size: 14px;
+    display: block;
+}
+
+.announcementContent{
+    font-size: 14px;
+}
+
 
 
 * {
