@@ -7,16 +7,16 @@
 
 .dashboardButton {
     border-radius: 10px;
-    border-color: #1696D2;
-    background-color: #1696D2;
-    color: #F1F1F1;
+    border-color: var(--bs-primary);
+    background-color: var(--bs-primary);
+    color: var(--bs-light);
 }
 
 .crewButton {
     border-radius: 10px;
-    border-color: #1696D2;
-    background-color: #1696D2;
-    color: #F1F1F1;
+    border-color: var(--bs-primary);
+    background-color: var(--bs-primary);
+    color: var(--bs-light);
 }
 
 .button-container {

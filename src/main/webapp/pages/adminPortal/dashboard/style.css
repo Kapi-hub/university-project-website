@@ -22,7 +22,7 @@
 
     border: 1px solid var(--bs-dark);
     border-radius: 5px;
-    background-color: #F1F1F1;
+    background-color: var(--bs-light);
 }
 
 
@@ -35,14 +35,14 @@
     border: 1px solid;
     border-color: var(--bs-dark);
     border-radius: 5px;
-    background-color: #F1F1F1;
+    background-color: var(--bs-light);
 }
 
 .postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close{
-    background-color: #1696D2;
+    background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
-    color: #F1F1F1;
+    color: var(--bs-light);
     margin-left: auto;
 }
 
@@ -60,12 +60,12 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid;
-    border-color: #1696D2;
+    border-color: var(--bs-primary);
 }
 
 .announcement1, .announcement2, .announcement3{
     border-bottom: 1px solid;
-    border-color: #1696D2;
+    border-color: var(--bs-primary);
 }
 /* style.css */
 
@@ -95,7 +95,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: green;
-    color: #F1F1F1;
+    color: var(--bs-light);
 }
 
 * {
