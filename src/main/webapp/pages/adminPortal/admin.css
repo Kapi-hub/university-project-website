@@ -1,5 +1,5 @@
 nav {
-    background-color: #1696D2;
+    background-color: var(--bs-primary);
     margin-bottom: 50px;
 }
 .navbar {
@@ -12,4 +12,14 @@ nav {
 .navbar-brand {
     position:absolute;
     left: 10px;
+}
+
+.logout{
+    position: absolute;
+    right: 10px;
+    background-color: #1696D2;
+    border-radius: 10px;
+    border-color: var(--bs-primary);
+    color: #F1F1F1;
+    margin-left: auto;
 }

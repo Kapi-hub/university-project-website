@@ -38,7 +38,7 @@
     background-color: #F1F1F1;
 }
 
-.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close {
+.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close{
     background-color: #1696D2;
     border-radius: 10px;
     border-color: var(--bs-primary);
