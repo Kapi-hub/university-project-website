@@ -1,5 +1,5 @@
 .login-btn{
-    background-color: #1696D2
+    background-color: var(--bs-primary)
 }
 
 * {

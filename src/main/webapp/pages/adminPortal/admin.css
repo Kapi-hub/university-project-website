@@ -6,7 +6,7 @@ nav {
     height: 100px;
 }
 .navbar-text {
-    color: #F1F1F1;
+    color: var(--bs-light );
 }
 
 .navbar-brand {
@@ -17,9 +17,9 @@ nav {
 .logout{
     position: absolute;
     right: 10px;
-    background-color: #1696D2;
+    background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
-    color: #F1F1F1;
+    color: var(--bs-light);
     margin-left: auto;
 }
