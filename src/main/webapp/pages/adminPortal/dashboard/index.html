@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<!-- Modal -->
+<!-- Post Announcement Modal -->
 <div class="modal fade" id="postAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -34,11 +34,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn">Save changes</button>
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+
 <nav>
     <div class="navbar">
         <div class="container">
@@ -124,19 +126,30 @@
 </div>
 
 
+
+
 <div class="eventsContainer">
     <div class="events">
         <p class="eventsText">Events</p>
     </div>
 
 </div>
+<div class="toast" id="successful" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
+        Announcement posted successfully!
+    </div>
+</div>
 
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('#exampleModal'), {
-        keyboard: false
-    })
-    myModal.toggle();
+    const saveButton = document.querySelector('.saveBttn');
+    const toast = new bootstrap.Toast(document.querySelector('#successful'));
+
+    saveButton.addEventListener('click', function() {
+        toast.show();
+    });
+
 </script>
+
 
 </body>
 </html>
