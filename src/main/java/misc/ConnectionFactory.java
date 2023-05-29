@@ -7,23 +7,27 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 /**
  * Factory Pattern
  */
 public class ConnectionFactory {
-    private static Connection connection;
     private static final String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
     private static final String DB_USER = "dab_di22232b_249";
-    private static final String SCHEMA = "?currentSchema=shotmaniacs/";
+    private static final String SCHEMA = "?currentSchema=shotmaniacs";
     private static final String FILE_NAME = "di-2023-project-password";
+    private static Connection connection;
+    private static boolean connected = false;
 
-    static void setup() {
+    public static void setup() {
         try {
             Class.forName("org.postgresql.Driver");
-            String password = readPassword();
+//            String password = readPassword();
+            String password = "Y8AHMmfXpf9glCor";
             System.out.println(password);
             connection = DriverManager.getConnection(URL+DB_USER+SCHEMA, DB_USER, password);
+            connected = true;
             System.out.println("Connection successfully setup.");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -34,12 +38,13 @@ public class ConnectionFactory {
     }
 
     public static Connection getConnection() {
+        if (!connected) setup();
         return connection;
     }
 
     private static String readPassword() {
         try {
-            String path = System.getProperty("user.dir") + "/";
+            String path = System.getProperty("user.dir")+"/";
             var br = new BufferedReader(new FileReader(path+FILE_NAME));
             return br.readLine().strip();
         } catch (FileNotFoundException e) {
@@ -47,7 +52,7 @@ public class ConnectionFactory {
             System.err.println("Error: 'password' file does not exist.");
             return "";
         } catch (IOException e) {
-            System.err.println("Error reading document: " + e.getMessage());
+            System.err.println("Error reading document: "+e.getMessage());
             return "";
         }
     }
