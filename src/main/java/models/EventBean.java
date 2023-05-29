@@ -19,6 +19,21 @@ public class EventBean {
     private int client_id;
     private EventStatus status;
 
+    public EventBean(String name, EventType type, Date date, Time start_time, int duration, String location,int crew_members, int client_id) {
+        this.id = -1;
+        this.name = name;
+        this.type = type;
+        this.date = date;
+        this.start_time = start_time;
+        this.duration = duration;
+        this.location = location;
+        this.production_manager_id = -1;
+        this.crew_members = crew_members;
+        this.client_id = client_id;
+        this.status = EventStatus.TODO;
+
+    }
+
     public EventBean(int id, String name, EventType type, Date date, Time start_time, int duration, String location, int production_manager_id, int crew_members, int client_id, EventStatus status) {
         this.id = id;
         this.name = name;

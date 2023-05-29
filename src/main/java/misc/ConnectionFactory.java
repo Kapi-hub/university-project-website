@@ -23,8 +23,8 @@ public class ConnectionFactory {
     public static void setup() {
         try {
             Class.forName("org.postgresql.Driver");
-//            String password = readPassword();
-            String password = "Y8AHMmfXpf9glCor";
+            String password = readPassword();
+
             System.out.println(password);
             connection = DriverManager.getConnection(URL+DB_USER+SCHEMA, DB_USER, password);
             connected = true;

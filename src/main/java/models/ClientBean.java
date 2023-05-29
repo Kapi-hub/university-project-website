@@ -18,6 +18,13 @@ public class ClientBean {
         this.phone_number = phone_number;
     }
 
+    public ClientBean(String first_name, String last_name, String email, String phone_number) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.phone_number = phone_number;
+    }
+
     public int getClient_id() {
         return client_id;
     }

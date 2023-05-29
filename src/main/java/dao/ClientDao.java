@@ -52,7 +52,7 @@ public enum ClientDao {
         st.setInt(8, event.getProduction_manager_id());
         st.setInt(9, event.getCrew_members());
         st.setString(10, event.getStatus().toString());
-        st.executeQuery();
+        st.executeUpdate();
     }
 
     public static void main(String[] args) throws SQLException {
