@@ -38,7 +38,7 @@
     background-color: var(--bs-light);
 }
 
-.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close, .accordion-button {
+.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -46,7 +46,7 @@
     margin-left: auto;
 }
 
-.accordion-events-button{
+.accordion-events-button, .crewButton{
     background-color: var(--bs-primary-bg-subtle);
     border-radius: 10px;
     border-color: var(--bs-primary-bg-subtle);
@@ -74,6 +74,13 @@
 }
 
 .announcementsContainer .row .col .flex-container{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid;
+    border-color: var(--bs-primary);
+}
+
+.eventsContainer .row .col .flex-container{
     display: flex;
     align-items: center;
     border-bottom: 1px solid;
