@@ -20,28 +20,30 @@
 <nav>
     <div class="navbar"> <!--logo -->
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="../mainPage/index.html">
                 <img src="/src/main/webapp/img/Shotmaniacs_Logo_White_ZT.png" alt="Shotmaniacs" width="50" height="90">
             </a>
             <div class="navbar-text mx-auto">
                 <span class="navbar-text">Crew & Events Overview</span>
             </div>
             <div>
-                <form action="../loginPage/index.html">\
+                <form action="../loginPage/index.html">
                     <button class="logout">Logout</button>
                 </form>
             </div>
         </div>
     </div>
 </nav>
-
+<!--Side bar -->
 <div class="sidenav">
-    <a href="#crewGroup" data-bs-toggle="collapse">Crew members</a>
-    <a href="#bookingGroup" data-bs-toggle="collapse">Bookings</a>
+    <div class = "col">
+        <button class="collapse-button NavC" data-target="crewGroup" type="button">Crew members</button>
+        <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>
+    </div>
 </div>
 
 <!--crewmember and popup -->
-<div class="container-md mb-4 px-4">
+<div class="container offset-3">
     <div class = "collapse hide" id="crewGroup">
         <div class = "row">
             <div class = "col-4">
@@ -60,9 +62,8 @@
                     <button class="collapse-button Crew" data-target="crew4" type="button">Crew member 4</button>
                 </div>
             </div>
-        </div>
         <!--pop-up-->
-            <div class = "col-6 offset-md-1">
+            <div class = "col-4">
                 <div class="list-group">
                     <div class = "container text-center">
                         <div class="card bg-primary text-light">
@@ -102,10 +103,12 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
+
 <!--booking and pop-up-->
-<div class="container-md mt-5 px-4">
+<div class="container Booking offset-3">
     <div class = "collapse hide" id="bookingGroup">
         <div class="row">
             <div class="col-4 ">
@@ -124,9 +127,8 @@
                     <button class="collapse-button booking" data-target="booking4" type="button">Booking 4</button>
                 </div>
             </div>
-        </div>
         <!--pup-up -->
-        <div class="col-6 offset-md-1">
+        <div class="col-4">
              <div class="list-group">
                 <div class="container text-center">
                     <div class="card bg-primary text-light">
@@ -162,10 +164,11 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </div>
 <script>
-    // Get all collapse buttons
+    // Get all collapse buttons for Crew
     const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
 
     // Add click event listener to each button
@@ -186,7 +189,7 @@
     });
 </script>
 <script>
-    // Get all collapse buttons
+    // Get all collapse buttons for Booking
     const collapseButtons = document.querySelectorAll('.collapse-button.booking');
 
     // Add click event listener to each button
@@ -195,6 +198,27 @@
             const targetId = button.getAttribute('data-target');
             const targetCollapse = document.getElementById(targetId);
             const allCollapses = document.querySelectorAll('.collapse.booking');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+<script>
+    // Get all collapse buttons for Booking
+    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
+
+    // Add click event listener to each button
+    collapseButtonsNavC.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse');
 
             // Hide all collapse elements
             allCollapses.forEach(collapse => {
