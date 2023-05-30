@@ -1,0 +1,7 @@
+.collapse-button{
+    background-color: var(--bs-primary);
+    border-radius: 10px;
+    border-color: var(--bs-primary);
+    color: var(--bs-light);
+    padding-bottom:20px;
+}
