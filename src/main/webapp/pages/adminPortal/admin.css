@@ -9,16 +9,15 @@ nav {
     border-bottom-color: var(--bs-primary);
 }
 .navbar-text {
-    color: var(--bs-light );
+    color: var(--bs-primary );
+    font-weight: bolder;
 }
 
 .navbar-brand {
     position:absolute;
     left: 10px;
 }
-body{
-    background-color: var(--bs-dark);
-}
+
 .logout{
     position: absolute;
     right: 10px;
@@ -26,10 +25,10 @@ body{
     border-radius: 10px;
     border-color: var(--bs-primary);
     color: var(--bs-light);
+    font-weight: bolder;
     margin-left: auto;
 }
-/*for dashboard and Overview */
-.modal-content{
-    color: var(--bs-light);
-    background-color: var(--bs-dark);
+
+body{
+    background: var(--bs-dark);
 }
