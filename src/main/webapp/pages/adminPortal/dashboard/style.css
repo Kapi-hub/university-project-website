@@ -5,9 +5,6 @@
     padding-bottom: 20px;
     color: var(--bs-primary);
 }
-body{
-    background-color: var(--bs-dark);
-}
 .announcementText, .eventsText{
     font-weight: bold;
     font-size: 22px;
@@ -138,7 +135,4 @@ body{
     border-bottom: 1px solid  ;
     border-bottom-color: var(--bs-primary);
 }
- .modal-content{
-     color: var(--bs-light);
-     background-color: var(--bs-dark);
- }
+

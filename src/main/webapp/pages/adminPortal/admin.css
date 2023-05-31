@@ -16,7 +16,9 @@ nav {
     position:absolute;
     left: 10px;
 }
-
+body{
+    background-color: var(--bs-dark);
+}
 .logout{
     position: absolute;
     right: 10px;
@@ -25,4 +27,9 @@ nav {
     border-color: var(--bs-primary);
     color: var(--bs-light);
     margin-left: auto;
+}
+/*for dashboard and Overview */
+.modal-content{
+    color: var(--bs-light);
+    background-color: var(--bs-dark);
 }
