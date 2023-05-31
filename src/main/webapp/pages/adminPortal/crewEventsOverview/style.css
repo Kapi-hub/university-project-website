@@ -85,3 +85,7 @@ body{
 .createNewMemberBttn,.createEventBttn{
     margin-left: 25px;
 }
+.modal-content{
+    color: var(--bs-light);
+    background-color: var(--bs-dark);
+}
