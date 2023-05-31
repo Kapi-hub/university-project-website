@@ -138,7 +138,7 @@ body{
     border-bottom: 1px solid  ;
     border-bottom-color: var(--bs-primary);
 }
-/*scrollbar*/
-.overflow-auto{
-    background-color:;
-}
+ .modal-content{
+     color: var(--bs-light);
+     background-color: var(--bs-dark);
+ }

@@ -43,82 +43,6 @@
 
 
 <!--Post Events Manually Modal-->
-<div class="modal fade" id="postEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createEventModal">Create new event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-            </div>
-            <div class="modal-body">
-
-                <label for="eventTitle" class="eventTitleText">Event Title</label>
-                <input type="text" class="eventTitle" id="eventTitle">
-                <br>
-
-                <!--TODO: add boxes-->
-                <label for="eventType" class="eventTypeText">Event Type</label>
-                <br>
-                <div id="eventType">
-                    <label class="photoBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Photography</span>
-                    </label>
-
-                    <label class="filmBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Film</span>
-                    </label>
-
-                    <label class="marketingBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Marketing</span>
-                    </label>
-
-                    <label class="otherBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Other</span>
-                    </label> <!--TODO: when the checkbox is pressed, bring a new input box on the page-->
-                </div>
-
-                <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
-                <input type="datetime-local" class="eventTime" id="eventDate&Time">
-                <br>
-
-                <label for="eventLocation" class="eventLocationText"> Event Location</label>
-                <input type="text" class="eventTime" id="eventLocation">
-                <br>
-
-                <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                <input type="datetime-local" class="eventTime" id="eventDuration">
-                <br>
-
-                <label for="eventProducer" class="eventDurationText"> Event Producer</label>
-                <div id="eventProducer">
-                    <button class="crewButton" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        <span id="selectedCrewMember"> Select crew member </span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry Smith</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a></li>
-                    </ul>
-                </div>
-                <br>
-
-                <label for="eventcrewSize" class="eventDurationText"> Crew Size</label>
-                <input type="number" class="eventTime" id="eventcrewSize">
-                <br>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toast">Save event
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="toast" id="successful" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
@@ -127,11 +51,6 @@
 </div>
 
 
-<div class="toast" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-body">
-        Event created successfully!
-    </div>
-</div>
 
 
 <!--Navigation bar-->
@@ -152,11 +71,6 @@
         </div>
     </div>
 </nav>
-
-<!--<div class="sidenav">-->
-<!--    <a href=""-->
-
-<!--</div>-->
 
 <!--Welcome message-->
 <div class="welcome-message">
@@ -229,10 +143,6 @@
         <div class="col">
             <div class="flex-container">
                 <p class="eventsText">Events</p>
-                <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                        data-bs-target="#postEventsModal">
-                    Event +
-                </button>
             </div>
             <div class="accordion" id="accordionExample">
                 <!--Events that need crew assigned-->
@@ -340,12 +250,7 @@
         toast.show();
     });
 
-    const saveEventButton = document.querySelector('.saveEventBttn');
-    const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
 
-    saveEventButton.addEventListener('click', function () {
-        toastEvent.show();
-    });
 
     function selectCrewMember(name) {
         const selectedCrewMember = document.getElementById('selectedCrewMember');
