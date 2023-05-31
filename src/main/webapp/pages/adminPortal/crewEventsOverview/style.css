@@ -1,6 +1,5 @@
 .sidenav {
     height: auto; /* Full-height: remove this if you want "auto" height */
-    /*width: 280px; !* Set the width of the sidebar *!*/
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: auto; /* Stay at the top */
@@ -9,12 +8,11 @@
     padding-top: 20px;
     display: flex;
 }
+
+
 body{
     background-color:var(--bs-dark-bg-subtle);
 }
-
-
-
 
 /* The navigation menu links */
 .sidenav button {
@@ -22,7 +20,7 @@ body{
     text-decoration: none;
     font-size: 25px;
     display: flex;
-    /*width: 250px;*/
+    margin-bottom: 10px;
 }
 
 .collapse-button{
@@ -31,6 +29,35 @@ body{
     border-color: var(--bs-primary);
     color: var(--bs-light);
     padding-bottom:20px;
+}
+
+.toast{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: green;
+    color: var(--bs-light);
+}
+
+.closeBttn, .createEventBttn, .saveEventBttn, .btn-close , .createNewMemberBttn{
+    background-color: var(--bs-primary);
+    border-radius: 10px;
+    border-color: var(--bs-primary);
+    color: var(--bs-light);
+    margin-left: auto;
+}
+.closeBttn{
+    background-color: red;
+}
+
+ .crewButton{
+    background-color: var(--bs-primary-bg-subtle);
+    border-radius: 10px;
+    border-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    margin-left: 10%;
+    margin-bottom: 10px;
 }
 
 * {
