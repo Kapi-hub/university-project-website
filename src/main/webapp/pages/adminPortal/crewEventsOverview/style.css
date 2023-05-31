@@ -5,6 +5,43 @@
     z-index: 1; /* Stay on top */
     top: auto; /* Stay at the top */
     left: 0;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+body{
+    background-color:var(--bs-dark-bg-subtle);
+}
+
+/* The navigation menu links */
+.sidenav button {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    display: block;
+    width: 250px;
+}
+
+.collapse-button{
+    background-color: var(--bs-primary);
+    border-radius: 10px;
+    border-color: var(--bs-primary);
+    color: var(--bs-light);
+    padding-bottom:20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kiona', sans-serif;
+}
+.sidenav {
+    height: auto; /* Full-height: remove this if you want "auto" height */
+    width: 280px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: auto; /* Stay at the top */
+    left: 0;
     background-color: var(--bs-primary-bg-subtle); /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
