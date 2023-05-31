@@ -10,6 +10,10 @@ public class ClientBean {
     private String email;
     private String phone_number;
 
+    public ClientBean() {
+
+    }
+
     public ClientBean(int client_id, String first_name, String last_name, String email, String phone_number) {
         this.client_id = client_id;
         this.first_name = first_name;

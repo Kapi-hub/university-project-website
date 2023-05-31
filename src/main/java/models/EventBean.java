@@ -19,6 +19,10 @@ public class EventBean {
     private int client_id;
     private EventStatus status;
 
+    public EventBean() {
+
+    }
+
     public EventBean(String name, EventType type, Date date, Time start_time, int duration, String location,int crew_members, int client_id) {
         this.id = -1;
         this.name = name;
@@ -34,7 +38,7 @@ public class EventBean {
 
     }
 
-    public EventBean(int id, String name, EventType type, Date date, Time start_time, int duration, String location, int production_manager_id, int crew_members, int client_id, EventStatus status) {
+    public EventBean(int id, String name, EventType type, Date date, Time start_time, int duration, String location, int production_manager_id, int crew_members, int client_id) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -45,7 +49,6 @@ public class EventBean {
         this.production_manager_id = production_manager_id;
         this.crew_members = crew_members;
         this.client_id = client_id;
-        this.status = status;
     }
 
     public EventStatus getStatus() {

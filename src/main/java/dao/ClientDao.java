@@ -32,6 +32,7 @@ public enum ClientDao {
             st.setString(i, values[i-1]);
         }
         ResultSet rs = st.executeQuery();
+        System.out.println("===SQL=== ADDED CLIENT TO DATABASE");
         if (rs.next()) {
             return rs.getInt(1);
         }
@@ -40,7 +41,7 @@ public enum ClientDao {
 
     public void addEvent(EventBean event) throws SQLException {
         String query = "INSERT INTO event (event_id, client_id, name, type, date, start_time, duration, location, production_manager_id, crew_members, status) " +
-                "VALUES (DEFAULT, ?, ?, ?::event_type, ?, ?, ?, ?, ?, ?, ?::event_status)";
+                "VALUES (DEFAULT, ?, ?, ?::event_type, ?, ?, ?, ?, DEFAULT, ?, DEFAULT)";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, event.getClient_id());
         st.setString(2, event.getName());
@@ -49,15 +50,14 @@ public enum ClientDao {
         st.setTime(5, event.getStart_time());
         st.setInt(6, event.getDuration());
         st.setString(7, event.getLocation());
-        st.setInt(8, event.getProduction_manager_id());
-        st.setInt(9, event.getCrew_members());
-        st.setString(10, event.getStatus().toString());
+        st.setInt(8, event.getCrew_members());
         st.executeUpdate();
+        System.out.println("===SQL=== ADDED EVENT TO DATABASE");
     }
 
     public static void main(String[] args) throws SQLException {
-        EventBean event = new EventBean(-1, "De Reactie", EventType.PHOTOGRAPHY, new Date(System.currentTimeMillis()), new Time(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", -1, 20, -1, EventStatus.TODO);
-        ClientBean client = new ClientBean(-1, "Organisatie", "De Reactie", "organisatie@gmail.com","06123123123");
+        EventBean event = new EventBean(-1, "De Reactie", EventType.PHOTOGRAPHY, new Date(System.currentTimeMillis()), new Time(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", -1, 20, -1);
+        ClientBean client = new ClientBean("Organisatie", "De Reactie", "organisatie@gmail.com","06123123123");
         int id = I.addClient(client);
         event.setClient_id(id);
         I.addEvent(event);
