@@ -3,13 +3,9 @@ package dao;
 import misc.ConnectionFactory;
 import models.ClientBean;
 import models.EventBean;
-import models.EventStatus;
-import models.EventType;
-import org.postgresql.util.OSUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
+import models.EventType;
+
 import java.sql.*;
 
 /**
@@ -22,6 +18,14 @@ public enum ClientDao {
 
     ClientDao() {
         connection = ConnectionFactory.getConnection();
+    }
+
+    public static void main(String[] args) throws SQLException {
+        EventBean event = new EventBean(-1, "De Reactie", EventType.PHOTOGRAPHY, new Date(System.currentTimeMillis()), new Time(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", -1, 20, -1);
+        ClientBean client = new ClientBean("Organisatie", "De Reactie", "organisatie@gmail.com", "06123123123");
+        int id = I.addClient(client);
+        event.setClient_id(id);
+        I.addEvent(event);
     }
 
     public int addClient(ClientBean client) throws SQLException {
@@ -40,7 +44,7 @@ public enum ClientDao {
     }
 
     public void addEvent(EventBean event) throws SQLException {
-        String query = "INSERT INTO event (event_id, client_id, name, type, date, start_time, duration, location, production_manager_id, crew_members, status) " +
+        String query = "INSERT INTO event (event_id, client_id, name, type, date, start_time, duration, location, production_manager_id, crew_members, status) "+
                 "VALUES (DEFAULT, ?, ?, ?::event_type, ?, ?, ?, ?, DEFAULT, ?, DEFAULT)";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, event.getClient_id());
@@ -53,14 +57,6 @@ public enum ClientDao {
         st.setInt(8, event.getCrew_members());
         st.executeUpdate();
         System.out.println("===SQL=== ADDED EVENT TO DATABASE");
-    }
-
-    public static void main(String[] args) throws SQLException {
-        EventBean event = new EventBean(-1, "De Reactie", EventType.PHOTOGRAPHY, new Date(System.currentTimeMillis()), new Time(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", -1, 20, -1);
-        ClientBean client = new ClientBean("Organisatie", "De Reactie", "organisatie@gmail.com","06123123123");
-        int id = I.addClient(client);
-        event.setClient_id(id);
-        I.addEvent(event);
     }
 }
 

@@ -5,16 +5,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
-import models.ClientBean;
-import models.EventBean;
-import models.EventType;
 import models.FormBean;
-
-
-import java.sql.Date;
-import java.sql.Time;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Path("/client")
 public class ClientResource {
