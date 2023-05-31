@@ -4,6 +4,9 @@ nav {
 }
 .navbar {
     height: 100px;
+    background-color: var(--bs-dark) ;
+    border-bottom: 1px solid  ;
+    border-bottom-color: var(--bs-primary);
 }
 .navbar-text {
     color: var(--bs-light );

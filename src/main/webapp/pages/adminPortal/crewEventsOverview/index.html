@@ -203,22 +203,18 @@
     </div>
 
     <!--crewmember and popup -->
-    <div class="container offset-3">
+    <div class="container Crew">
         <div class="collapse hide" id="crewGroup">
             <div class="row">
                 <div class="col-4">
                     <div class="list-group ">
-                        <div class="container text-center">
-                            <div class="card bg-primary text-light">
-                                <div class="card-body">
+                                <div class="card-body Crew">
                                     Crew-members
                                     <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
                                             data-bs-target="#createMemberModal">
                                         New member +
                                     </button>
                                 </div>
-                            </div>
-                        </div>
                         <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
                         <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
                         <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
@@ -229,8 +225,7 @@
                 <!--pop-up-->
                 <div class="col-4">
                     <div class="list-group">
-                        <div class="container text-center">
-                            <div class="card bg-primary text-light">
+                            <div class="card pop-up bg-primary text-light">
                                 <div class="collapse crew" id="crew1">
                                     <div class="card-body">
                                         <h5>Crewmember 1</h5>
@@ -268,7 +263,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -277,22 +271,18 @@
 </div>
 
 <!--booking and pop-up-->
-<div class="container Booking offset-3">
+<div class="container Booking">
     <div class="collapse hide" id="bookingGroup">
         <div class="row">
             <div class="col-4 ">
                 <div class="list-group">
-                    <div class="container text-center">
-                        <div class="card bg-primary text-light">
-                            <div class="card-body">
+                            <div class="card-body Booking">
                                 Bookings
                                 <button type="button" class="createEventBttn" data-bs-toggle="modal"
                                         data-bs-target="#postEventsModal">
                                     Event +
                                 </button>
                             </div>
-                        </div>
-                    </div>
                     <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
                     <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
                     <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
@@ -303,36 +293,32 @@
             <!--pup-up -->
             <div class="col-4">
                 <div class="list-group">
-                    <div class="container text-center">
-                        <div class="card bg-primary text-light">
-                            <div class="collapse booking" id="booking1">
-                                <div class="card-body">
-                                    <h5>Booking 1</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                                </div>
-                            </div>
-                            <div class="collapse booking" id="booking2">
-                                <div class="card-body">
-                                    <h5>Booking 2</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                                </div>
-                            </div>
-                            <div class="collapse booking" id="booking3">
-                                <div class="card-body">
-                                    <h5>Booking 3</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                                </div>
-                            </div>
-                            <div class="collapse booking" id="booking4">
-                                <div class="card-body">
-                                    <h5>Booking 4</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                                </div>
-                            </div>
+                    <div class="collapse booking" id="booking1">
+                        <div class="card-body">
+                            <h5>Booking 1</h5>
+                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking2">
+                        <div class="card-body">
+                            <h5>Booking 2</h5>
+                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking3">
+                        <div class="card-body">
+                            <h5>Booking 3</h5>
+                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking4">
+                        <div class="card-body">
+                            <h5>Booking 4</h5>
+                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
                         </div>
                     </div>
                 </div>
