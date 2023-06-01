@@ -26,8 +26,14 @@
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" href="../dashboard/index.html"><strong>Dashboard</strong></a>
+            </li>
             <li class="nav-item border bg-white border-white rounded-pill">
-                <a class="nav-link text-dark" href="../loginPage/index.html"><strong>Logout</strong></a>
+                <a class="nav-link text-dark" href="../crewEventsOverview/index.html"><strong>Crew&Events</strong></a>
+            </li>
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" href="../loginPage/index.html"><strong>Logout</strong></a>
             </li>
             <!--leave this in case we add another buttons-->
         </ul>
@@ -53,23 +59,18 @@
                 <div id="eventType">
                     <label class="photoBox">
                         <input type="checkbox">
-                        <span class="checkmark">Photography</span>
+                        <span class="checkmark">Club Photography</span>
                     </label>
 
-                    <label class="filmBox">
+                    <label class="festivalBox">
                         <input type="checkbox">
-                        <span class="checkmark">Film</span>
+                        <span class="checkmark">Festival</span>
                     </label>
 
-                    <label class="marketingBox">
+                    <label class="productBox">
                         <input type="checkbox">
-                        <span class="checkmark">Marketing</span>
+                        <span class="checkmark">Product Shoot</span>
                     </label>
-
-                    <label class="otherBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Other</span>
-                    </label> <!--TODO: when the checkbox is pressed, bring a new input box on the page-->
                 </div>
 
                 <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
@@ -81,7 +82,7 @@
                 <br>
 
                 <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                <input type="datetime-local" class="eventTime" id="eventDuration">
+                <input type="number" class="eventTime" id="eventDuration">
                 <br>
 
                 <label for="eventProducer" class="eventDurationText"> Event Producer</label>
@@ -120,12 +121,31 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
-
-                <label for="eventTitle" class="memberNameText">Member name</label>
-                <input type="text" class="eventTitle" id="memberName">
+                <label for="memberFirstName" class="memberFirstNameText"><strong>First name</strong></strong></label>
+                <input type="text" class="memberName" id="memberFirstName">
                 <br>
 
-                <label for="permissionType" class="permissionTypeText">Permissions</label>
+                <label for="memberLastName" class="memberLastNameText"><strong>Last name</strong></strong></label>
+                <input type="text" class="memberName" id="memberLastName">
+                <br>
+
+                <label for="phoneNumber" class="memberNameText"><strong>Phone Number</strong></strong></label>
+                <input type="tel" class="phoneNumber" id="phoneNumber">
+                <div class="prefix">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Prefix
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href=“#”  value="DZ">Algeria (+213)</a></li>
+                        <li><a href=“#”  value="AD">Andorra (+376)</a></li>
+                        <li><a href=“#”  value="AO">Angola (+244)</a></li>
+                        <li><a href=“#”  value="AI">Anguilla (+1264)</a></li>
+                        <li><a href=“#”  value="AG">Antigua &amp; Barbuda (+1268)</a></li>
+
+                    </ul>
+                </div>
+                <br>
+
+                <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
                 <br>
                 <div id="permissionType">
                     <label class="clubTeam">
@@ -144,44 +164,54 @@
                     </label>
                 </div>
 
-                <label for="roleType" class="roleTypeText">Role</label>
+                <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
                 <br>
 
                 <div id="roleType">
-                    <label class="eventPhotography">
+                    <label class="photographer">
                         <input type="checkbox">
-                        <span class="checkmark">Event Photographer</span>
+                        <span class="checkmark">Photographer</span>
                     </label>
 
-                    <label class="event_videography">
+                    <label class="videographer">
                         <input type="checkbox">
-                        <span class="checkmark">Event Videographer</span>
+                        <span class="checkmark">Videographer</span>
                     </label>
 
-                    <label class="clubPhotography">
+                    <label class="producer">
                         <input type="checkbox">
-                        <span class="checkmark">Club Photography</span>
+                        <span class="checkmark">Producer</span>
                     </label>
 
-                    <label class="marketing">
+                    <label class="assistant">
                         <input type="checkbox">
-                        <span class="checkmark">Marketing</span>
+                        <span class="checkmark">Assistant</span>
+                    </label>
+
+                    <label class="dataHandler">
+                        <input type="checkbox">
+                        <span class="checkmark">Data Handler</span>
+                    </label>
+
+                    <label class="planner">
+                        <input type="checkbox">
+                        <span class="checkmark">Planner</span>
+                    </label>
+
+                    <label class="editor">
+                        <input type="checkbox">
+                        <span class="checkmark">Editor</span>
                     </label>
                 </div>
 
-                <label for="username" class="usernameText"> Username</label>
+                <label for="username" class="usernameText"><strong>Username</strong></label>
                 <input type="text" class="usernameText" id="username">
                 <br>
 
-                <label for="password" class="eventLocationText">Password</label>
-                <input type="password" class="passwordText" id="password">
-                <br>
-
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="#successfulNewMember">Save event
+                <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
+                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="#successfulNewMember"><strong>Create new member</strong>
                 </button>
             </div>
         </div>
