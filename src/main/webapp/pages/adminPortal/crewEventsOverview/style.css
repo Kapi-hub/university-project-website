@@ -9,10 +9,13 @@
     display: flex;
 }
 
+
+body{
+    background-color:var(--bs-dark);
+}
+
 /* The navigation menu links */
 .sidenav button {
-    text-align: center;
-    width:250px;
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
@@ -71,7 +74,6 @@
     background-color: var(--bs-primary);
     color: var(--bs-light);
     border-radius: 10px;
-    border: 1px solid var(--bs-dark);
 }
 .card-body,.collapse.booking, .collapse.crew{
     background-color: var(--bs-dark);
@@ -83,4 +85,7 @@
 .createNewMemberBttn,.createEventBttn{
     margin-left: 25px;
 }
-
+.modal-content{
+    color: var(--bs-light);
+    background-color: var(--bs-dark);
+}
