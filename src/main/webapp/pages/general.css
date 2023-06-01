@@ -35,4 +35,7 @@
     color: var(--bs-light)
 }
 
+body{
+    background-color: var(--bs-dark);
+}
 

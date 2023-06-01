@@ -54,21 +54,18 @@
 
 
 <!--Navigation bar-->
-<nav>
-    <div class="navbar">
-        <div class="container">
-            <a class="navbar-brand" href="../mainPage/index.html">
-                <img src="/src/main/webapp/img/Shotmaniacs_Logo_White_ZT.png" alt="Shotmaniacs" width="50" height="90">
-            </a>
-            <div class="navbar-text mx-auto">
-                <span class="navbar-text">Admin Dashboard</span>
-            </div>
-            <div>
-                <form action="../loginPage/index.html">
-                    <button class="logout">Logout</button>
-                </form>
-            </div>
-        </div>
+<nav class="navbar navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="../../../img/Shotmaniacs_Logo_White_ZT.png">
+            <span class="ps-3 LogoText color">Shotmaniacs</span>
+        </a>
+        <ul class="nav justify-content-end ">
+            <li class="nav-item border bg-white border-white rounded-pill">
+                <a class="nav-link text-dark" href="../loginPage/index.html"><strong>Logout</strong></a>
+            </li>
+            <!--leave this in case we add another buttons-->
+        </ul>
     </div>
 </nav>
 
