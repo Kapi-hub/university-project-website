@@ -7,7 +7,7 @@
 }
 
 .dashboardButton {
-    border-radius: 10px;
+    border-radius: 20px;
     height: 60px;
     border-color: var(--bs-primary);
     background-color: var(--bs-primary);
@@ -15,14 +15,14 @@
 }
 
 .crewButton {
-    border-radius: 10px;
+    border-radius: 20px;
     border-color: var(--bs-primary);
     background-color: var(--bs-primary);
     color: var(--bs-light);
 }
 
 .button-container {
-    margin-top: 30px;
+    padding-top: 100px;
     display: flex;
     align-items: stretch;
     justify-content: space-evenly;
