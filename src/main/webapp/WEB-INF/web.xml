@@ -8,9 +8,29 @@
     <servlet>
         <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>misc.ServletConfig</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>misc.AuthenticationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/admin/*</url-pattern>
+        <url-pattern>/pages/crew/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>misc.ApplicationConfig</listener-class>
+    </listener>
 </web-app>

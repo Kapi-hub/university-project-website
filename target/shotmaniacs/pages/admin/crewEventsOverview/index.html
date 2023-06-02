@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Overview</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+    <link href="/src/main/webapp/pages/general.css" rel="stylesheet">
+    <link href="/src/main/webapp/pages/adminPortal/admin.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" >
+    <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
+
+</head>
+<body>
+<nav>
+
+<!--logo -->
+    <div class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="../mainPage/index.html">
+                <img src="/src/main/webapp/img/Shotmaniacs_Logo_White_ZT.png" alt="Shotmaniacs" width="50" height="90">
+            </a>
+            <div class="navbar-text mx-auto">
+                <span class="navbar-text">Crew & Events Overview</span>
+            </div>
+            <div>
+                <form action="../loginPage/index.html">
+                    <button class="logout">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--Side bar -->
+<div class="sidenav">
+    <div class = "col">
+        <button class="collapse-button NavC" data-target="crewGroup" type="button">Crew members</button>
+        <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>
+    </div>
+</div>
+
+<!--crewmember and popup -->
+<div class="container offset-3">
+    <div class = "collapse hide" id="crewGroup">
+        <div class = "row">
+            <div class = "col-4">
+                <div class="list-group ">
+                    <div class = "container text-center">
+                        <div class="card bg-primary text-light">
+                            <div class="card-body">
+                                Crew-members
+                                <button type="button" class="btn btn-primary btn-sm float-right">Filter button</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
+                    <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
+                    <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
+                    <button class="collapse-button Crew" data-target="crew4" type="button">Crew member 4</button>
+                </div>
+            </div>
+
+        <!--pop-up-->
+            <div class = "col-4">
+                <div class="list-group">
+                    <div class = "container text-center">
+                        <div class="card bg-primary text-light">
+                            <div class = "collapse crew"  id = "crew1">
+                                <div class="card-body">
+                                    <h5>Crewmember 1</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                            <div class = "collapse crew"  id = "crew2">
+                                <div class="card-body">
+                                    <h5>Crewmember 2</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                            <div class = "collapse crew"  id = "crew3">
+                                <div class="card-body">
+                                    <h5>Crewmember 3</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                            <div class = "collapse crew"  id = "crew4">
+                                <div class="card-body">
+                                    <h5>Crewmember 4</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--booking and pop-up-->
+<div class="container Booking offset-3">
+    <div class = "collapse hide" id="bookingGroup">
+        <div class="row">
+            <div class="col-4 ">
+                <div class="list-group">
+                    <div class="container text-center">
+                        <div class="card bg-primary text-light">
+                            <div class="card-body">
+                                Bookings
+                                <button type="button" class="btn btn-primary btn-sm float-right">Filter button</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
+                    <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
+                    <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
+                    <button class="collapse-button booking" data-target="booking4" type="button">Booking 4</button>
+                </div>
+            </div>
+
+        <!--pup-up -->
+        <div class="col-4">
+             <div class="list-group">
+                <div class="container text-center">
+                    <div class="card bg-primary text-light">
+                        <div class = "collapse booking"  id = "booking1">
+                            <div class="card-body">
+                                <h5>Booking 1</h5>
+                                <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                                <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                            </div>
+                        </div>
+                        <div class = "collapse booking"  id = "booking2">
+                            <div class="card-body">
+                                <h5>Booking 2</h5>
+                                <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                                <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                            </div>
+                        </div>
+                        <div class = "collapse booking"  id = "booking3">
+                            <div class="card-body">
+                                <h5>Booking 3</h5>
+                                <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                                <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                            </div>
+                        </div>
+                        <div class = "collapse booking"  id = "booking4">
+                            <div class="card-body">
+                                <h5>Booking 4</h5>
+                                <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
+                                <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Get all collapse buttons for Crew
+    const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
+
+    // Add click event listener to each button
+    collapseButtonsCrew.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse.crew');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+<script>
+    // Get all collapse buttons for Booking
+    const collapseButtons = document.querySelectorAll('.collapse-button.booking');
+
+    // Add click event listener to each button
+    collapseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse.booking');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+<script>
+    // Get all collapse buttons for Booking
+    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
+
+    // Add click event listener to each button
+    collapseButtonsNavC.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+
+<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+</body>
+</html>
