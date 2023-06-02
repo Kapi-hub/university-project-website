@@ -56,7 +56,7 @@ public enum AccountDao {
     public boolean checkSession(AccountBean account) {
 
         try {
-            String query = "SELECT a.type FROM account a, has_session s WHERE s.account_id=? AND s.session_id=? " +
+            String query = "SELECT a.type FROM account a, has_login_session s WHERE s.account_id=? AND s.session_id=? " +
                     "AND a.id = s.account_id";
 
             PreparedStatement st = connection.prepareStatement(query);
@@ -104,10 +104,10 @@ public enum AccountDao {
     private void putSessionId(int accountId, String sessionId) throws SQLException {
         String query = "DO $$ \n" +
                 "BEGIN \n" +
-                "    IF EXISTS (SELECT 1 FROM has_session WHERE account_id = ?) THEN\n" +
-                "        UPDATE has_session SET session_id = ? WHERE account_id = ?;\n" +
+                "    IF EXISTS (SELECT 1 FROM has_login_session WHERE account_id = ?) THEN\n" +
+                "        UPDATE has_login_session SET session_id = ? WHERE account_id = ?;\n" +
                 "    ELSE\n" +
-                "        INSERT INTO has_session (account_id, session_id) VALUES (?, ?);\n" +
+                "        INSERT INTO has_login_session (account_id, session_id) VALUES (?, ?);\n" +
                 "    END IF;\n" +
                 "END $$;";
         PreparedStatement st = connection.prepareStatement(query);

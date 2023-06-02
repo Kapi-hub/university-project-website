@@ -12,6 +12,8 @@ import models.AccountBean;
 import models.AccountType;
 
 import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Path("/login")
 public class LoginResource {
@@ -20,7 +22,10 @@ public class LoginResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleSubmit(AccountBean account) {
+    public Response handleSubmit(Map<String, Object> formData) {
+
+        LinkedHashMap<String, String> beanData = (LinkedHashMap<String, String>) formData.get("accountBean");
+        AccountBean account = new AccountBean(beanData.get("username"), beanData.get("password"));
 
         if(AccountDao.instance.checkLogin(account)) {
 
@@ -67,4 +72,5 @@ public class LoginResource {
             return responseBuilder.build();
         }
     }
+
 }
