@@ -27,10 +27,12 @@ public class LoginResource {
 
             NewCookie.Builder sessionIdCookieBuilder = new NewCookie.Builder("sessionId");
             sessionIdCookieBuilder.value(account.getSessionId());
+            sessionIdCookieBuilder.path("/");
             NewCookie sessionIdCookie = sessionIdCookieBuilder.build();
 
             NewCookie.Builder accountIdCookieBuilder = new NewCookie.Builder("accountId");
             accountIdCookieBuilder.value(String.valueOf(account.getAccountId()));
+            accountIdCookieBuilder.path("/");
             NewCookie accountIdCookie = accountIdCookieBuilder.build();
 
             Response.ResponseBuilder responseBuilder;
@@ -54,11 +56,13 @@ public class LoginResource {
                 return responseBuilder.build();
 
             }
-            responseBuilder = Response.seeOther(uri);
+            responseBuilder = Response.ok();
+            responseBuilder.location(uri);
 
             responseBuilder.cookie(accountIdCookie);
             responseBuilder.cookie(sessionIdCookie);
 
+            System.out.println(responseBuilder.build().getHeaders());
             return responseBuilder.build();
 
         } else {

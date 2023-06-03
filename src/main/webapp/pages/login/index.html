@@ -15,15 +15,11 @@
 
 
     <script>
-        // if corresponding parameter is set, then show error message
         const urlParams = new URLSearchParams(window.location.search);
+
         const path = urlParams.get('loginRequiredForPath');
-        if (path) {
-            alert("You need to login to access " + path);
-        }
-        const wrongCredentials = urlParams.get('wrongCredentials');
-        if (wrongCredentials) {
-            alert("Wrong username/password");
+        if (path != null) {
+            alert("You need to be logged in to access " + path);
         }
         const logout = urlParams.get('logout');
         if (logout) {
@@ -33,13 +29,41 @@
         if (sessionExpired) {
             alert("Your session has expired");
         }
-        const permissionDenied = urlParams.get('permissionDenied');
-        if (permissionDenied) {
-            alert("You don't have permission to access this page");
-        }
         const error = urlParams.get('error');
-        if (error) {
+        if (error != null) {
             alert("An error occurred: " + error);
+        }
+
+        function sendLogin() {
+
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const XHR = new XMLHttpRequest();
+
+            XHR.open("POST", "http://localhost:8080/shotmaniacs_war/api/login/submit-form");
+            XHR.setRequestHeader("Content-Type", "application/json");
+            XHR.withCredentials = true;
+            XHR.addEventListener("load", function (event) {
+                if (this.status === 200) {
+
+                    console.log(XHR.getAllResponseHeaders())
+                    if (path == null) {
+                        window.location.href = XHR.getResponseHeader("Location");
+                    } else {
+                        window.location.href = path;
+                    }
+                } else if (this.status === 401) {
+                    alert("Wrong username/password");
+                } else {
+                    alert("An error occurred: " + this.status);
+                }
+            });
+            XHR.send(JSON.stringify({
+                username: username,
+                password: password
+            }));
         }
     </script>
 </head>
@@ -59,20 +83,18 @@
 
 <div class="container">
     <div class="mb-3">
-        <form action="http://localhost:8080/shotmaniacs_war/api/login/form-submission" method="post">
-            <label for="username" class="form-label">Username or email address:</label>
-            <input name="username" type="text" class="form-control" id="username" placeholder="name@example.com"
-                   style="font-family: 'Roboto Thin',sans-serif !important;" required>
+        <label for="username" class="form-label">Username or email address:</label>
+        <input name="username" type="text" class="form-control" id="username" placeholder="name@example.com"
+               style="font-family: 'Roboto Thin',sans-serif !important;" required>
 
-            <label for="password" class="form-label">Password:</label>
-            <input name="password" type="password" class="form-control" id="password"
-                   placeholder="The password for your account"
-                   style="font-family: 'Roboto Thin',sans-serif !important;" required>
+        <label for="password" class="form-label">Password:</label>
+        <input name="password" type="password" class="form-control" id="password"
+               placeholder="The password for your account"
+               style="font-family: 'Roboto Thin',sans-serif !important;" required>
 
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary login-btn">Login</button>
-            </div>
-        </form>
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary login-btn" onclick="sendLogin()">Login</button>
+        </div>
     </div>
 </div>
 </body>

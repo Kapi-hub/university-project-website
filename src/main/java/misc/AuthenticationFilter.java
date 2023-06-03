@@ -9,25 +9,11 @@ import models.AccountBean;
 import models.AccountType;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 
 public class AuthenticationFilter implements Filter {
-
-    public boolean isValidSession(String sessionId, String accountIdString, String path) {
-
-        if (sessionId == null || accountIdString == null) {
-            return false;
-        }
-
-        int accountId = Integer.parseInt(accountIdString);
-        AccountBean account = new AccountBean(accountId, sessionId);
-
-        if (AccountDao.instance.checkSession(account)) {
-            if (path.contains("/admin/") && account.getAccountType() == AccountType.ADMINISTRATOR) {
-                return true;
-            } else return path.contains("/crew/") && account.getAccountType() == AccountType.CREW_MEMBER;
-        }
-        return false;
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -59,10 +45,28 @@ public class AuthenticationFilter implements Filter {
 
         }
         if (!sessionIsValid) {
-            String loginURL = servletReq.getContextPath() + "/pages/login/index.html";
+            String loginURL = servletReq.getContextPath() + "/pages/login/index.html?loginRequiredForPath=" + servletReq.getRequestURI();
             servletRes.sendRedirect(loginURL);
 //            servletRes.sendError(401, "You're not allowed to see this page. Please log in.");
 
         }
+    }
+
+    public boolean isValidSession(String sessionId, String accountIdString, String path) {
+
+        if (sessionId == null || accountIdString == null) {
+            return false;
+        }
+
+        int accountId = Integer.parseInt(accountIdString);
+        AccountBean account = new AccountBean(accountId, sessionId);
+
+        if (AccountDao.instance.checkSession(account)) {
+            if (path.contains("/admin/") && account.getAccountType() == AccountType.ADMINISTRATOR) {
+                return true;
+            } else return path.contains("/crew/") && account.getAccountType() == AccountType.CREW_MEMBER;
+        }
+        System.out.println("Session is invalid");
+        return false;
     }
 }

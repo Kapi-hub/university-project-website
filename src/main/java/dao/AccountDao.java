@@ -35,7 +35,6 @@ public enum AccountDao {
 
                 int accountId = rs.getInt(1);
                 account.setAccountId(accountId);
-
                 account.setAccountType(determineAccountType(rs.getString(2)));
 
                 String sessionId = sessionIdGenerator();
@@ -49,7 +48,7 @@ public enum AccountDao {
             return false;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("SQL Exception in checkLogin: " + e.getMessage());
             return false;
         }
     }
@@ -74,13 +73,13 @@ public enum AccountDao {
             return false;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("SQL Exception in checkSession: " + e.getMessage());
             return false;
         }
     }
 
     private String sessionIdGenerator() {
-        String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}_+:;/.,<>?";
+        String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}_+:.<>?|~-";
 
         StringBuilder sessionId = new StringBuilder(20);
         for (int i = 0; i < 20; i++) {
