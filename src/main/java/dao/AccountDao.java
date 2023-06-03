@@ -31,7 +31,7 @@ public enum AccountDao {
 
             ResultSet rs = st.executeQuery();
 
-            if (rs.first()) {
+            if (rs.next()) {
 
                 int accountId = rs.getInt(1);
                 account.setAccountId(accountId);
@@ -49,6 +49,7 @@ public enum AccountDao {
             return false;
 
         } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
             return false;
         }
     }
@@ -57,7 +58,7 @@ public enum AccountDao {
 
         try {
             String query = "SELECT a.type FROM account a, has_login_session s WHERE s.account_id=? AND s.session_id=? " +
-                    "AND a.id = s.account_id";
+                    "AND a.id = s.account_id AND s.expires > NOW()";
 
             PreparedStatement st = connection.prepareStatement(query);
 
@@ -66,13 +67,14 @@ public enum AccountDao {
 
             ResultSet rs = st.executeQuery();
 
-            if (rs.first()) {
+            if (rs.next()) {
                 account.setAccountType(determineAccountType(rs.getString(1)));
                 return true;
             }
             return false;
 
         } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
             return false;
         }
     }
@@ -91,31 +93,25 @@ public enum AccountDao {
 
     private AccountType determineAccountType(String accountType) {
 
-        if (accountType.equals("administrator")) {
-            return AccountType.ADMINISTRATOR;
-        } else if (accountType.equals("crew_member")) {
-            return AccountType.CREW_MEMBER;
-        } else if (accountType.equals("client")){
-            return AccountType.CLIENT;
-        }
-        return null;
+        return switch (accountType) {
+            case "administrator" -> AccountType.ADMINISTRATOR;
+            case "crew_member" -> AccountType.CREW_MEMBER;
+            case "client" -> AccountType.CLIENT;
+            default -> null;
+        };
     }
 
     private void putSessionId(int accountId, String sessionId) throws SQLException {
-        String query = "DO $$ \n" +
-                "BEGIN \n" +
-                "    IF EXISTS (SELECT 1 FROM has_login_session WHERE account_id = ?) THEN\n" +
-                "        UPDATE has_login_session SET session_id = ? WHERE account_id = ?;\n" +
-                "    ELSE\n" +
-                "        INSERT INTO has_login_session (account_id, session_id) VALUES (?, ?);\n" +
-                "    END IF;\n" +
-                "END $$;";
+        String query = "UPDATE has_login_session SET session_id = ? WHERE account_id = ?; " +
+                "INSERT INTO has_login_session (account_id, session_id) SELECT ?, ? " +
+                "WHERE NOT EXISTS (SELECT 1 FROM has_login_session WHERE account_id = ?);";
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, accountId);
-        st.setString(2, sessionId);
+        st.setString(1, sessionId);
+        st.setInt(2, accountId);
         st.setInt(3, accountId);
-        st.setInt(4, accountId);
-        st.setString(5, sessionId);
+        st.setString(4, sessionId);
+        st.setInt(5, accountId);
+
         st.executeUpdate();
     }
 

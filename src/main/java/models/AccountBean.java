@@ -1,15 +1,21 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "account")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AccountBean {
 
     private int accountId;
     private String forename;
     private String surname;
+    @JsonProperty("username")
     private String username;
     private String emailAddress;
+    @JsonProperty("password")
     private String password;
     private String phoneNumber;
     private String sessionId;

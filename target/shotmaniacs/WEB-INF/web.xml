@@ -6,8 +6,12 @@
          version="6.0">
 
     <servlet>
-        <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
+        <servlet-name>Jersey</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>dao;misc;models;resources;com.fasterxml.jackson.jaxrs.json</param-value>
+        </init-param>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>misc.ServletConfig</param-value>
@@ -15,7 +19,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
+        <servlet-name>Jersey</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 

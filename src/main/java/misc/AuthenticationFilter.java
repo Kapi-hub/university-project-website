@@ -12,7 +12,11 @@ import java.io.IOException;
 
 public class AuthenticationFilter implements Filter {
 
-    private boolean isValidSession(String sessionId, String accountIdString, String path) {
+    public boolean isValidSession(String sessionId, String accountIdString, String path) {
+
+        if (sessionId == null || accountIdString == null) {
+            return false;
+        }
 
         int accountId = Integer.parseInt(accountIdString);
         AccountBean account = new AccountBean(accountId, sessionId);
@@ -28,7 +32,7 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletReq = (HttpServletRequest) request;
-        HttpServletResponse servletResp = (HttpServletResponse) response;
+        HttpServletResponse servletRes = (HttpServletResponse) response;
 
         Cookie[] cookies = servletReq.getCookies();
 
@@ -53,9 +57,12 @@ public class AuthenticationFilter implements Filter {
                 sessionIsValid = true;
             }
 
-            if (!sessionIsValid) {
-                servletResp.sendRedirect("localhost:8080/shotmaniacs_war/pages/login/index.html");
-            }
+        }
+        if (!sessionIsValid) {
+            String loginURL = servletReq.getContextPath() + "/pages/login/index.html";
+            servletRes.sendRedirect(loginURL);
+//            servletRes.sendError(401, "You're not allowed to see this page. Please log in.");
+
         }
     }
 }

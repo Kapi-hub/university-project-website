@@ -21,11 +21,7 @@ public class LoginResource {
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response handleSubmit(Map<String, Object> formData) {
-
-        LinkedHashMap<String, String> beanData = (LinkedHashMap<String, String>) formData.get("accountBean");
-        AccountBean account = new AccountBean(beanData.get("username"), beanData.get("password"));
+    public Response handleSubmit(AccountBean account) {
 
         if(AccountDao.instance.checkLogin(account)) {
 

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 /**
  * Factory Pattern
@@ -43,18 +42,18 @@ public class ConnectionFactory {
     }
 
     private static String readPassword() {
-        try {
-            String path = System.getProperty("user.dir")+"/";
-            var br = new BufferedReader(new FileReader(path+FILE_NAME));
+        return "Y8AHMmfXpf9glCor";
+//        try {
+//            String path = System.getProperty("user.dir")+"/";
+//            var br = new BufferedReader(new FileReader(path+FILE_NAME));
 //            return br.readLine().strip();
-            return "Y8AHMmfXpf9glCor";
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.err.println("Error: 'password' file does not exist.");
-            return "";
-        } catch (IOException e) {
-            System.err.println("Error reading document: "+e.getMessage());
-            return "";
-        }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            System.err.println("Error: 'password' file does not exist.");
+//            return "";
+//        } catch (IOException e) {
+//            System.err.println("Error reading document: "+e.getMessage());
+//            return "";
+//        }
     }
 }
