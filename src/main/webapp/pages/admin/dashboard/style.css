@@ -2,12 +2,17 @@
     text-align: center;
     font-weight: bolder;
     font-size: larger;
-    padding-bottom: 20px;
+    padding-top: 100px;
+    padding-bottom: 120px;
+    color: var(--bs-primary);
 }
-
+body{
+    background-color: var(--bs-dark);
+}
 .announcementText, .eventsText{
     font-weight: bold;
     font-size: 22px;
+    color:var(--bs-primary) ;
 }
 
 .announcementsContainer {
@@ -16,13 +21,11 @@
     margin: auto;
     padding: 10px;
     margin-bottom: 30px;
+    color:var(--bs-light);
 
-    /*display: flex;*/
-    /*align-items: flex-start;*/
-
-    border: 1px solid var(--bs-dark);
+    border: 1px solid var(--bs-primary);
     border-radius: 5px;
-    background-color: var(--bs-light);
+    background-color: var(--bs-dark);
 }
 
 
@@ -31,26 +34,25 @@
     height: fit-content;
     margin: auto;
     padding: 10px;
-
     border: 1px solid;
-    border-color: var(--bs-dark);
+    border-color: var(--bs-primary);
     border-radius: 5px;
-    background-color: var(--bs-light);
+    background-color: var(--bs-dark);
 }
 
 .postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
     background-color: var(--bs-primary);
-    border-radius: 10px;
+    border-radius: 20px;
     border-color: var(--bs-primary);
     color: var(--bs-light);
     margin-left: auto;
 }
 
 .accordion-events-button, .crewButton{
-    background-color: var(--bs-primary-bg-subtle);
-    border-radius: 10px;
-    border-color: var(--bs-primary-bg-subtle);
-    color: var(--bs-primary);
+    background-color: var(--bs-primary);
+    border-radius: 20px;
+    border-color: var(--bs-primary);
+    color: var(--bs-light);
     margin-left: 10%;
     margin-bottom: 10px;
 }
@@ -103,6 +105,7 @@
 .announcementTitle, .accordion-item {
     font-size: 18px;
     display: block;
+
 }
 .dateTime {
     font-size: 14px;
@@ -111,6 +114,9 @@
 
 .announcementContent{
     font-size: 14px;
+}
+.accordion-body{
+    color:var(--bs-primary) ;
 }
 
 .toast{
@@ -125,3 +131,12 @@
 * {
     font-family: 'Kiona', sans-serif;
 }
+.navbar{
+    background-color: var(--bs-dark) ;
+    border-bottom: 1px solid  ;
+    border-bottom-color: var(--bs-primary);
+}
+ .modal-content{
+     color: var(--bs-light);
+     background-color: var(--bs-dark);
+ }
