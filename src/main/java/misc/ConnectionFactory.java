@@ -12,9 +12,9 @@ import java.sql.SQLException;
  * Factory Pattern
  */
 public class ConnectionFactory {
-    private static final String URL = "jdbc:postgresql://bronto.ewi.utwente.nl/";
-    private static final String DB_USER = "dab_di22232b_249";
-    private static final String SCHEMA = "?currentSchema=shotmaniacs1";
+    private static final String URL = "jdbc:postgresql://node29422-shotmaniacs1.paas.hosted-by-previder.com/";
+    private static final String DB_USER = "webadmin";
+    private static final String SCHEMA = "?currentSchema=shotmaniacs";
     private static final String FILE_NAME = "di-2023-project-password";
     private static Connection connection;
     private static boolean connected = false;
@@ -42,7 +42,7 @@ public class ConnectionFactory {
     }
 
     private static String readPassword() {
-        return "Y8AHMmfXpf9glCor";
+        return "EFPsql77037";
 //        try {
 //            String path = System.getProperty("user.dir")+"/";
 //            var br = new BufferedReader(new FileReader(path+FILE_NAME));
