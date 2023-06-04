@@ -4,9 +4,13 @@ nav {
 }
 .navbar {
     height: 100px;
+    background-color: var(--bs-dark) ;
+    border-bottom: 1px solid  ;
+    border-bottom-color: var(--bs-primary);
 }
 .navbar-text {
-    color: var(--bs-light );
+    color: var(--bs-primary );
+    font-weight: bolder;
 }
 
 .navbar-brand {
@@ -21,5 +25,10 @@ nav {
     border-radius: 10px;
     border-color: var(--bs-primary);
     color: var(--bs-light);
+    font-weight: bolder;
     margin-left: auto;
+}
+
+body{
+    background: var(--bs-dark);
 }

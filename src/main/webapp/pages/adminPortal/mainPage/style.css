@@ -3,10 +3,12 @@
     text-align: center;
     font-weight: bolder;
     font-size: larger;
+    color: var(--bs-primary);
 }
 
 .dashboardButton {
     border-radius: 10px;
+    height: 60px;
     border-color: var(--bs-primary);
     background-color: var(--bs-primary);
     color: var(--bs-light);

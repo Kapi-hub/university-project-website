@@ -1,15 +1,17 @@
 .sidenav {
     height: auto; /* Full-height: remove this if you want "auto" height */
-    width: 280px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: auto; /* Stay at the top */
     left: 0;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
+    display: flex;
 }
+
+
 body{
-    background-color:var(--bs-dark-bg-subtle);
+    background-color:var(--bs-dark);
 }
 
 /* The navigation menu links */
@@ -17,8 +19,8 @@ body{
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
-    display: block;
-    width: 250px;
+    display: flex;
+    margin-bottom: 10px;
 }
 
 .collapse-button{
@@ -27,6 +29,35 @@ body{
     border-color: var(--bs-primary);
     color: var(--bs-light);
     padding-bottom:20px;
+}
+
+.toast{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: green;
+    color: var(--bs-light);
+}
+
+.closeBttn, .createEventBttn, .saveEventBttn, .btn-close , .createNewMemberBttn{
+    background-color: var(--bs-primary);
+    border-radius: 10px;
+    border-color: var(--bs-primary);
+    color: var(--bs-light);
+    margin-left: auto;
+}
+.closeBttn{
+    background-color: red;
+}
+
+ .crewButton{
+    background-color: var(--bs-primary-bg-subtle);
+    border-radius: 10px;
+    border-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    margin-left: 10%;
+    margin-bottom: 10px;
 }
 
 * {
@@ -35,37 +66,26 @@ body{
     box-sizing: border-box;
     font-family: 'Kiona', sans-serif;
 }
-.sidenav {
-    height: auto; /* Full-height: remove this if you want "auto" height */
-    width: 280px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: auto; /* Stay at the top */
-    left: 0;
-    background-color: var(--bs-primary-bg-subtle); /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
-}
-body{
-    background-color:var(--bs-dark-bg-subtle);
-}
+.container.Booking,.container.Crew{
+    margin-left: 300px;
 
-/* The navigation menu links */
-.sidenav button {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    display: block;
-    width: 250px;
 }
-.collapse-button{
+.card-body a{
     background-color: var(--bs-primary);
-    border-radius: 10px;
-    border-color: var(--bs-primary);
     color: var(--bs-light);
-    padding-bottom:20px;
+    border-radius: 10px;
+}
+.card-body,.collapse.booking, .collapse.crew{
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
+    border: 1px solid var(--bs-primary);
+    border-radius: 10px;
 }
 
-* {
-    font-family: 'Kiona', sans-serif;
+.createNewMemberBttn,.createEventBttn{
+    margin-left: 25px;
+}
+.modal-content{
+    color: var(--bs-light);
+    background-color: var(--bs-dark);
 }
