@@ -70,6 +70,7 @@ public enum AccountDao {
                 account.setAccountType(determineAccountType(rs.getString(1)));
                 return true;
             }
+
             return false;
 
         } catch (SQLException e) {
@@ -94,7 +95,7 @@ public enum AccountDao {
 
         return switch (accountType) {
             case "administrator" -> AccountType.ADMINISTRATOR;
-            case "crew_member" -> AccountType.CREW_MEMBER;
+            case "crew member" -> AccountType.CREW_MEMBER;
             case "client" -> AccountType.CLIENT;
             default -> null;
         };

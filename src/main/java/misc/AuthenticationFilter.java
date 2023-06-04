@@ -1,6 +1,7 @@
 package misc;
 
 import dao.AccountDao;
+import models.SessionValidity;
 import jakarta.servlet.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,9 +10,6 @@ import models.AccountBean;
 import models.AccountType;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
 
 public class AuthenticationFilter implements Filter {
 
@@ -25,7 +23,7 @@ public class AuthenticationFilter implements Filter {
         String sessionId = null;
         String accountIdString = null;
 
-        boolean sessionIsValid = false;
+        SessionValidity  sessionValidity;
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -38,24 +36,25 @@ public class AuthenticationFilter implements Filter {
             }
 
             String path = servletReq.getRequestURI();
-            if (isValidSession(sessionId, accountIdString, path)) {
+            sessionValidity = isValidSession(sessionId, accountIdString, path);
+            if (sessionValidity == SessionValidity.VALID) {
                 chain.doFilter(request, response);
-                sessionIsValid = true;
             }
-
+        } else {
+            sessionValidity = SessionValidity.LOG_IN_REQUIRED;
         }
-        if (!sessionIsValid) {
-            String loginURL = servletReq.getContextPath() + "/pages/login/index.html?loginRequiredForPath=" + servletReq.getRequestURI();
-            servletRes.sendRedirect(loginURL);
-//            servletRes.sendError(401, "You're not allowed to see this page. Please log in.");
-
+        String loginURL = servletReq.getContextPath() + "/pages/login/index.html?path=" + servletReq.getRequestURI() + "&";
+        switch (sessionValidity) {
+            case EXPIRED -> servletRes.sendRedirect(loginURL + "sessionExpired=true");
+            case LOG_IN_REQUIRED -> servletRes.sendRedirect(loginURL + "loginRequired=true");
+            case UNAUTHORIZED -> servletRes.sendError(403, "You don't have the permission to view this page");
         }
     }
 
-    public boolean isValidSession(String sessionId, String accountIdString, String path) {
+    public SessionValidity isValidSession(String sessionId, String accountIdString, String path) {
 
         if (sessionId == null || accountIdString == null) {
-            return false;
+            return SessionValidity.LOG_IN_REQUIRED;
         }
 
         int accountId = Integer.parseInt(accountIdString);
@@ -63,10 +62,13 @@ public class AuthenticationFilter implements Filter {
 
         if (AccountDao.instance.checkSession(account)) {
             if (path.contains("/admin/") && account.getAccountType() == AccountType.ADMINISTRATOR) {
-                return true;
-            } else return path.contains("/crew/") && account.getAccountType() == AccountType.CREW_MEMBER;
+                return SessionValidity.VALID;
+            } else if (path.contains("/crew/") && account.getAccountType() == AccountType.CREW_MEMBER) {
+                return SessionValidity.VALID;
+            }
+        } else {
+            return SessionValidity.EXPIRED;
         }
-        System.out.println("Session is invalid");
-        return false;
+        return SessionValidity.UNAUTHORIZED;
     }
 }

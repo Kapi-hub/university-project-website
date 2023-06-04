@@ -17,9 +17,10 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
 
-        const path = urlParams.get('loginRequiredForPath');
-        if (path != null) {
-            alert("You need to be logged in to access " + path);
+        const path = urlParams.get('path');
+        const loginRequired = urlParams.get('loginRequired');
+        if (loginRequired) {
+            alert("Please log in with an account that has the required permission to access this page");
         }
         const logout = urlParams.get('logout');
         if (logout) {
@@ -29,25 +30,19 @@
         if (sessionExpired) {
             alert("Your session has expired");
         }
-        const error = urlParams.get('error');
-        if (error != null) {
-            alert("An error occurred: " + error);
-        }
 
         function sendLogin() {
-
 
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
             const XHR = new XMLHttpRequest();
 
-            XHR.open("POST", "http://localhost:8080/shotmaniacs_war/api/login/submit-form");
+            XHR.open("POST", "/api/login/submit-form");
             XHR.setRequestHeader("Content-Type", "application/json");
             XHR.withCredentials = true;
-            XHR.addEventListener("load", function (event) {
+            XHR.addEventListener("load", function () {
                 if (this.status === 200) {
-
                     console.log(XHR.getAllResponseHeaders())
                     if (path == null) {
                         window.location.href = XHR.getResponseHeader("Location");
@@ -64,6 +59,17 @@
                 username: username,
                 password: password
             }));
+        }
+    </script>
+
+    <script>
+        function logout() {
+
+            document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+            document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+
+            window.location.href = "/pages/login/index.html?logout=true"
+
         }
     </script>
 </head>
@@ -84,11 +90,11 @@
 <div class="container">
     <div class="mb-3">
         <label for="username" class="form-label">Username or email address:</label>
-        <input name="username" type="text" class="form-control" id="username" placeholder="name@example.com"
+        <input type="text" class="form-control" id="username" placeholder="name@example.com"
                style="font-family: 'Roboto Thin',sans-serif !important;" required>
 
         <label for="password" class="form-label">Password:</label>
-        <input name="password" type="password" class="form-control" id="password"
+        <input type="password" class="form-control" id="password"
                placeholder="The password for your account"
                style="font-family: 'Roboto Thin',sans-serif !important;" required>
 
