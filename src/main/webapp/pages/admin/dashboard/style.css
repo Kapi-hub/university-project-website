@@ -18,9 +18,8 @@ body{
 .announcementsContainer {
     width: 50%;
     height: fit-content;
-    margin: auto;
     padding: 10px;
-    margin-bottom: 30px;
+    margin: auto auto 30px;
     color:var(--bs-light);
 
     border: 1px solid var(--bs-primary);
