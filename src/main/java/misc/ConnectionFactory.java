@@ -24,14 +24,13 @@ public class ConnectionFactory {
     }
 
     public static void setup() {
-        String URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs";
+        String URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
         String username;
         if (USE_PREVIDER_DB) {
-            URL = String.format(URL, PREVIDER_HOST, PREVIDER_DB_NAME);
+            URL = String.format(URL, PREVIDER_HOST, PREVIDER_DB_NAME, "");
             username = PREVIDER_USERNAME;
-        }
-        else {
-            URL = String.format(URL, BRONTO_HOST, BRONTO_DB_NAME);
+        } else {
+            URL = String.format(URL, BRONTO_HOST, BRONTO_DB_NAME, "1");
             username = BRONTO_USERNAME;
         }
         try {
@@ -40,7 +39,7 @@ public class ConnectionFactory {
             if (password == null) throw new NullPointerException("Password env variable could not be found.");
             connection = DriverManager.getConnection(URL, username, password);
             connected = true;
-            System.out.println("Connection successfully setup.");
+            System.out.println("Connection to database successfully setup.");
         } catch (ClassNotFoundException e) {
             System.err.printf("Driver is not loaded: %s\n", e.getMessage());
         } catch (SQLException e) {
