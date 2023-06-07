@@ -34,6 +34,18 @@ public class AccountBean {
         this.sessionId = sessionId;
     }
 
+    public AccountBean(int accountId, String forename, String surname, String username, String emailAddress, String password, String phoneNumber, String sessionId, AccountType accountType) {
+        this.accountId = accountId;
+        this.forename = forename;
+        this.surname = surname;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.sessionId = sessionId;
+        this.accountType = accountType;
+    }
+
     public int getAccountId() {
         return accountId;
     }
