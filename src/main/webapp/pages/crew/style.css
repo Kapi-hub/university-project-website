@@ -25,6 +25,9 @@
 /**************************************/
 /******** STYLES FOR DASHBOARD ********/
 /**************************************/
+
+/* To edit the height of the welcome container, so the animation
+doesn't get in the way of building / maintaining the website*/
 .container.welcome-container {
     display: flex;
     min-height: 0 !important;
@@ -80,20 +83,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 80%;
     height: 60vh !important;
     margin: auto;
 }
 
-.main-container .main-box {
+.main-container .content-container {
     width: 100%;
     height: 100%;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     background-color: var(--bs-secondary);
+    padding: 20px;
 }
 
-.main-container .main-box  {
+.main-container .content-container  {
     margin-top: 5px;
     margin-bottom: 5px;
     width: 100%;
@@ -102,16 +106,73 @@
     border: white;
 }
 
-/*.main-container .main-box .container-fluid.announcement {*/
-/*    margin: 30px;*/
-/*    width: 100%;*/
-/*}*/
+.content-container .tab_content.tab_anno {
+    margin: 30px;
+    height: auto;
+    width: auto;
+}
+
+.content-container .tab_content.tab_current {
+    margin: 30px;
+    height: auto;
+    width: auto;
+    color: white;
+    padding-bottom: 5px;
+}
+
+.content-container .tab_content.tab_current .accordion {
+
+}
+
+.content-container .tab_content.tab_current .accordion .accordion-item {
+    border-radius: 0.5rem;
+}
+
+.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body .halfOne{
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    width: 100%;
+    border-right: 1px solid var(--bs-dark);
+}
+
+.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body .halfTwo {
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    width: 100%;
+    padding-left: 10px;
+
+}
+.content-container .tab_content.tab_past {
+    margin: 30px;
+    height: auto;
+    width: auto;
+    color: white;
+    padding-bottom: 5px;
+}
+
+.content-container .tab_content.tab_stats {
+    margin: 30px;
+    height: auto;
+    width: auto;
+    color: white;
+    padding-bottom: 5px;
+}
+
+
 
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
 
-.sidebar-dashboard {
+.sidebar-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,7 +185,7 @@
     background: var(--bs-light);
 }
 
-.sidebar-dashboard .slider {
+.sidebar-container .slider {
     display: flex;
     position: absolute;
     left: 0;
@@ -135,7 +196,7 @@
     /*z-index: -1;*/
 }
 
-.sidebar-dashboard .sidebar-list {
+.sidebar-container .sidebar-list {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -146,7 +207,7 @@
     padding: 0;
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item a {
+.sidebar-container .sidebar-list li.sidebar-list-item a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -158,7 +219,7 @@
     height: 80px;
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item.active a {
+.sidebar-container .sidebar-list li.sidebar-list-item.active a {
     /*background: var(--bs-secondary);*/
     color: var(--bs-light);
     transition: color 0.3s ease-in-out;
@@ -166,19 +227,14 @@
     padding-bottom: 15px;
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item a .icon {
+.sidebar-container .sidebar-list li.sidebar-list-item a .icon {
     font-size: 23px;
 }
 
-/* ************************** */
-/* ************************** */
+/**************************************/
+/********* STYLES FOR CALENDAR ********/
+/**************************************/
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Kiona', sans-serif;
-}
 
 .container {
     width: 100%;
@@ -283,6 +339,7 @@
     padding: 8px;
     text-decoration: none;
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 .left_side_bar ul li.active a{
@@ -343,6 +400,14 @@
 /* ********************** BODY ********************** */
 /* ************************************************** */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kiona', sans-serif;
+}
+
 body {
     background-color: var(--bs-dark);
+    overflow: hidden;
 }
