@@ -2,6 +2,9 @@
 /******* STYLES FOR CREW MEMBERS ******/
 /**************************************/
 
+/**************************************/
+/********** STYLES FOR NAVBAR *********/
+/**************************************/
 .navbar-animated {
     animation-duration: 4.0s;
     animation-name: navbarFadeInAnimation;
@@ -19,6 +22,9 @@
     color: var(--bs-light);
 }
 
+/**************************************/
+/******** STYLES FOR DASHBOARD ********/
+/**************************************/
 .container.welcome-container {
     display: flex;
     min-height: 0 !important;
@@ -87,6 +93,20 @@
     background-color: var(--bs-secondary);
 }
 
+.main-container .main-box  {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: white;
+}
+
+/*.main-container .main-box .container-fluid.announcement {*/
+/*    margin: 30px;*/
+/*    width: 100%;*/
+/*}*/
+
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
@@ -104,27 +124,26 @@
     background: var(--bs-light);
 }
 
-.sidebar-dashboard .sidebar-list {
+.sidebar-dashboard .slider {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: 1; /* to space content evenly in the list */
-    list-style-type: none;
-    margin-top: 70px;
-    margin-bottom: 70px;
-    width: 100%;
-    padding: 0;
-}
-
-.sidebar-dashboard .sidebar-list .slider {
     position: absolute;
-    top: 60px;
     left: 0;
     width: 100%;
     height: 80px;
     background-image: linear-gradient(to right, var(--bs-dark), var(--bs-secondary)) ;
     transition: transform 0.3s ease-in-out; /* Add transition for sliding effect */
     /*z-index: -1;*/
+}
+
+.sidebar-dashboard .sidebar-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style-type: none;
+    margin-top: 70px;
+    margin-bottom: 70px;
+    width: 100%;
+    padding: 0;
 }
 
 .sidebar-dashboard .sidebar-list li.sidebar-list-item a {
@@ -139,16 +158,16 @@
     height: 80px;
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item a .icon {
-    font-size: 23px;
-}
-
 .sidebar-dashboard .sidebar-list li.sidebar-list-item.active a {
     /*background: var(--bs-secondary);*/
     color: var(--bs-light);
     transition: color 0.3s ease-in-out;
     transition-delay: 0.1s;
     padding-bottom: 15px;
+}
+
+.sidebar-dashboard .sidebar-list li.sidebar-list-item a .icon {
+    font-size: 23px;
 }
 
 /* ************************** */

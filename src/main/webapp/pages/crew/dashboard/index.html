@@ -6,7 +6,6 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Dashboard</title>
-
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
@@ -51,17 +50,15 @@
         </ul>
     </div>
 </nav>
-
 <div class="container welcome-container">
     <!--    <button onclick="resizeContainer()">Resize</button>-->
     <h1 class="welcomeMessageName">Welcome, Alex</h1>
     <h4 class="welcomeMessageEvents">No new events.</h4>
 </div>
-
 <div class="main-container">
     <div class="sidebar-dashboard">
         <ul class="sidebar-list">
-            <div class="slider"></div>
+            <li class="slider"></li>
             <li class="sidebar-list-item" >
                 <a href="#">
                         <span class="icon">
@@ -86,17 +83,17 @@
             </li>
         </ul>
     </div>
-    <div class="main-box"></div>
+    <div class="main-box">
+        <div class="container-fluid announcement">
+            <h3 class="text-white sticky-top">
+                <span id="numberOfAnno">0</span> Announcements</h3>
+            <div id="liveAlertPlaceholder"></div>
+            <button class="btn btn-primary" id="liveAlertBtn" onclick="countAnnouncementsAsc()" type="button">Show live alert
+            </button>
+        </div>
+    </div>
 </div>
 
-
-<div class="container-fluid mt-5 mb-5 w-75 pt-3 pb-3 border border-white">
-    <h3 class="text-white sticky-top">
-        <span id="numberOfAnno">0</span> Announcements</h3>
-    <div id="liveAlertPlaceholder"></div>
-    <button class="btn btn-primary" id="liveAlertBtn" onclick="countAnnouncementsAsc()" type="button">Show live alert
-    </button>
-</div>
 
 <div class="container-fluid mt-5 mb-5 w-75 pt-3 pb-3 border border-white text-white">
     <!--    TODO: set with an actual counter-->
