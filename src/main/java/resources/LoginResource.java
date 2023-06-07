@@ -70,5 +70,4 @@ public class LoginResource {
             return responseBuilder.build();
         }
     }
-
 }
