@@ -1,11 +1,13 @@
 package misc;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 
-public class ServletConfig implements ServletContextListener {
-    @Override
-    public void contextInitialized(ServletContextEvent arg0) {
-        ConnectionFactory.setup();
+public class ServletConfig extends ResourceConfig {
+
+    public ServletConfig() {
+        packages("dao", "misc", "models", "resources");
+        register(AuthenticationFilter.class);
+        register(JacksonFeature.class);
     }
 }

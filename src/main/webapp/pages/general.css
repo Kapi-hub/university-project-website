@@ -4,14 +4,14 @@
     --bs-primary: rgb(var(--bs-primary-rgb)) !important;
     --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
     --bs-secondary-rgb: 82, 82, 82;
-    --bs-secondary: rgb(var(--bs-primary-rgb)) !important;
-    --bs-secondary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+    --bs-secondary: rgb(var(--bs-secondary-rgb)) !important;
+    --bs-secondary-bg-subtle: rgba(var(--bs-secondary-rgb), 0.1);
     --bs-dark-rgb: 31, 31, 31;
-    --bs-dark: rgb(var(--bs-primary-rgb)) !important;
-    --bs-dark-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+    --bs-dark: rgb(var(--bs-dark-rgb)) !important;
+    --bs-dark-bg-subtle: rgba(var(--bs-dark-rgb), 0.8);
     --bs-light-rgb: 241, 241, 241;
-    --bs-light: rgb(var(--bs-primary-rgb)) !important;
-    --bs-light-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+    --bs-light: rgb(var(--bs-light-rgb)) !important;
+    --bs-light-bg-subtle: rgba(var(--bs-light-rgb), 0.1);
 
 }
 
@@ -38,3 +38,8 @@
 .shotmaniacs-peal{
     color: var(--bs-light)
 }
+
+body{
+    background-color: var(--bs-dark);
+}
+

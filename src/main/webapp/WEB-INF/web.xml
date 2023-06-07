@@ -6,8 +6,17 @@
          version="6.0">
 
     <servlet>
-        <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
+        <servlet-name>Jersey</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>dao;misc;models;resources;com.fasterxml.jackson.jaxrs.json</param-value>
+        </init-param>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>misc.ServletConfig</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
@@ -15,5 +24,20 @@
     </servlet-mapping>
     <listener>
         <listener-class>misc.ServletConfig</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>misc.AuthenticationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/admin/*</url-pattern>
+        <url-pattern>/pages/crew/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>misc.ApplicationConfig</listener-class>
     </listener>
 </web-app>
