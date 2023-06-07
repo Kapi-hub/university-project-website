@@ -8,16 +8,23 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "account")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AccountBean {
-
     private int accountId;
     private String forename;
     private String surname;
+
+    public AccountBean(String forename, String surname, String username, String emailAddress, AccountType accountType) {
+        this.forename = forename;
+        this.surname = surname;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.accountType = accountType;
+    }
+
     @JsonProperty("username")
     private String username;
     private String emailAddress;
     @JsonProperty("password")
     private String password;
-    private String phoneNumber;
     private String sessionId;
     private AccountType accountType;
 
@@ -26,6 +33,8 @@ public class AccountBean {
         this.password = password;
     }
 
+
+
     public AccountBean() {
     }
 
@@ -33,6 +42,8 @@ public class AccountBean {
         this.accountId = accountId;
         this.sessionId = sessionId;
     }
+
+
 
     public int getAccountId() {
         return accountId;
@@ -80,14 +91,6 @@ public class AccountBean {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getSessionId() {
