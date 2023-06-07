@@ -10,6 +10,11 @@ public class ClientBean extends AccountBean {
 
     }
 
+    public ClientBean(String forename, String lastname, String username, String email_address, String phone_number) {
+        super(forename, lastname, username, email_address, AccountType.CLIENT);
+        this.phone_number = phone_number;
+    }
+
     public String getPhone_number() {
         return phone_number;
     }

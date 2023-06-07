@@ -8,6 +8,15 @@ import java.sql.Timestamp;
 
 @XmlRootElement
 public class EventBean {
+    public EventBean(String name, String description, Timestamp start, int duration, String location, EventType type) {
+        this.name = name;
+        this.description = description;
+        this.start = start;
+        this.duration = duration;
+        this.location = location;
+        this.type = type;
+    }
+
     private int id;
     private int client_id;
     private String name;
@@ -22,6 +31,7 @@ public class EventBean {
     public EventBean() {
 
     }
+
 
     public int getId() {
         return id;

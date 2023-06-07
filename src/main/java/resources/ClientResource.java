@@ -6,6 +6,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import models.FormBean;
+import models.RequiredCrewBean;
 
 @Path("/client")
 public class ClientResource {
@@ -16,7 +17,11 @@ public class ClientResource {
         try {
             int client_id = ClientDao.I.addClient(formBean.getClientBean());
             formBean.getEventBean().setClient_id(client_id);
-            ClientDao.I.addEvent(formBean.getEventBean());
+            int event_id = ClientDao.I.addEvent(formBean.getEventBean());
+            for (RequiredCrewBean required: formBean.getRequiredCrewBeans()) {
+                required.setEvent_id(event_id);
+                ClientDao.I.addRequirement(required);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

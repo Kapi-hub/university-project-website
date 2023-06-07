@@ -1,14 +1,13 @@
 package models;
 
 public enum EventType {
-    PHOTOGRAPHY,
-    FILM,
-    MARKETING,
-    OTHER;
+    CLUB_PHOTOGRAPHY,
+    FESTIVAL,
+    PHOTOSHOOT;
 
     @Override
     public String toString() {
-        return this.name();
+        return this.name().toLowerCase();
     }
 
 }

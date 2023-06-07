@@ -11,6 +11,15 @@ public class AccountBean {
     private int accountId;
     private String forename;
     private String surname;
+
+    public AccountBean(String forename, String surname, String username, String emailAddress, AccountType accountType) {
+        this.forename = forename;
+        this.surname = surname;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.accountType = accountType;
+    }
+
     @JsonProperty("username")
     private String username;
     private String emailAddress;
@@ -24,6 +33,8 @@ public class AccountBean {
         this.password = password;
     }
 
+
+
     public AccountBean() {
     }
 
@@ -31,6 +42,8 @@ public class AccountBean {
         this.accountId = accountId;
         this.sessionId = sessionId;
     }
+
+
 
     public int getAccountId() {
         return accountId;
