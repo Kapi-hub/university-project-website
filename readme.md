@@ -10,7 +10,7 @@ Welcome to the repository of Shotmaniacs Group 1. This project is part of Module
 - [Usage](#usage)
 - [Install locally](#install-locally)
     - [Tomcat Installation](#tomcat-installation)
-    - [Adding the Password File for the Database](#adding-the-password-file-for-the-database)
+    - [Adding the Password Environment Variable for the Database](#adding-the-password-Environment-Variable-for-the-database)
     - [IDE Setup - IntelliJ IDEA](#ide-setup---intellij-idea)
 
 ## About the Team
@@ -54,24 +54,41 @@ If you don't have Tomcat installed already, follow these steps:
 1. Download the latest version of Tomcat [here](https://tomcat.apache.org/). We are using Tomcat 10.1.9.
 2. Extract the downloaded Tomcat zip file to your desired location.
 
-### Adding the Password File for the Database
+### Adding the Password Environment Variable for the Database
 The password for the database is, of course, not published on Git, and you should have access to it already.
 <!-- TODO: Add instructions on how to get the password, how to configure database -->
 
-To add the password file:
+To add the password variable:
 1. Locate the previously installed Tomcat folder in your file explorer (e.g., `apache-tomcat-x.x.x`).
 2. Open a terminal in this folder (usually by right-clicking and selecting the "Open in terminal" option).
 3. Navigate to the bin folder:
     ```bash
     cd ./bin
     ```
-4. Create a file called `di-2023-project-password` in this folder, containing the password for the database:
-    ```bash
-    echo [password] > di-2023-project-password
-    ```
-   Replace `[password]` with the actual password.
+4. Create an environment variable in this folder, containing the password for the database:
+   1. - On Windows, using PowerShell:
+         ```bash
+         [Environment]::SetEnvironmentVariable("DB_PASSWORD", "[password]", "Machine")
+         ```
 
-You should now have a file containing the secret password in the `bin` folder of the Apache Tomcat folder.
+      - On a Linux distribution, using Bash:
+          ```bash
+          sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
+          ```
+      Replace `[password]` with the actual password.
+
+   2. Restart your system to apply the changes.
+   3. Double-check that the changes have been applied:
+      - On Windows, using PowerShell:
+         ```bash
+         Get-ChildItem Env:
+         ```
+
+      - On a Linux distribution, using Bash:
+          ```bash
+          source /etc/environment
+          ```
+      Verify that the output contains the `DB_PASSWORD` variable with the correct password.
 
 ### IDE Setup - IntelliJ IDEA
 If you don't have IntelliJ IDEA installed yet, you can download and install the latest version from [here](https://www.jetbrains.com/idea/download/). We are using IntelliJ IDEA 2023.1.2.
