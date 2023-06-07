@@ -3,22 +3,31 @@ package dao;
 import misc.ConnectionFactory;
 import models.AccountBean;
 import models.AccountType;
+import models.SessionBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public enum AccountDao {
     instance;
 
-    final Connection connection;
+    // Map of account types to their corresponding enum
+    private static final Map<String, AccountType> ACCOUNT_TYPE_MAP = Map.of(
+            "administrator", AccountType.ADMINISTRATOR,
+            "crew member", AccountType.CREW_MEMBER,
+            "client", AccountType.CLIENT
+    );
+
+    private final Connection connection;
 
     AccountDao() {
         connection = ConnectionFactory.getConnection();
     }
 
-    public boolean checkLogin(AccountBean account) {
+    public boolean checkValidLogin(AccountBean account) {
 
         try {
             String query = "SELECT id, type FROM account WHERE (username=? OR email_address=?) AND password=?";
@@ -35,81 +44,34 @@ public enum AccountDao {
 
                 int accountId = rs.getInt(1);
                 account.setAccountId(accountId);
-                account.setAccountType(determineAccountType(rs.getString(2)));
+                account.setAccountType(getAccountTypeEnum(rs.getString(2)));
 
-                String sessionId = sessionIdGenerator();
-
-                putSessionId(accountId, sessionId);
-
-                account.setSessionId(sessionId);
                 return true;
-
             }
             return false;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception in checkLogin: " + e.getMessage());
+            System.out.println("SQL Exception in checkValidLogin: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean checkSession(AccountBean account) {
+    public AccountType determineAccountType(int AccountId) throws SQLException {
+        String query = "SELECT type FROM account WHERE id = ?";
 
-        try {
-            String query = "SELECT a.type FROM account a, has_login_session s WHERE s.account_id=? AND s.session_id=? " + "AND a.id = s.account_id AND s.expires > NOW()";
-
-            PreparedStatement st = connection.prepareStatement(query);
-
-            st.setInt(1, account.getAccountId());
-            st.setString(2, account.getSessionId());
-
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                account.setAccountType(determineAccountType(rs.getString(1)));
-                return true;
-            }
-
-            return false;
-
-        } catch (SQLException e) {
-            System.out.println("SQL Exception in checkSession: " + e.getMessage());
-            return false;
-        }
-    }
-
-    private String sessionIdGenerator() {
-        String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}_+:.<>?|~-";
-
-        StringBuilder sessionId = new StringBuilder(20);
-        for (int i = 0; i < 20; i++) {
-            int index = (int) (possibleChars.length() * Math.random());
-            sessionId.append(possibleChars.charAt(index));
-        }
-
-        return sessionId.toString();
-    }
-
-    private AccountType determineAccountType(String accountType) {
-
-        return switch (accountType) {
-            case "administrator" -> AccountType.ADMINISTRATOR;
-            case "crew member" -> AccountType.CREW_MEMBER;
-            case "client" -> AccountType.CLIENT;
-            default -> null;
-        };
-    }
-
-    private void putSessionId(int accountId, String sessionId) throws SQLException {
-        String query = "UPDATE has_login_session SET session_id = ? WHERE account_id = ?; " + "INSERT INTO has_login_session (account_id, session_id) SELECT ?, ? " + "WHERE NOT EXISTS (SELECT 1 FROM has_login_session WHERE account_id = ?);";
         PreparedStatement st = connection.prepareStatement(query);
-        st.setString(1, sessionId);
-        st.setInt(2, accountId);
-        st.setInt(3, accountId);
-        st.setString(4, sessionId);
-        st.setInt(5, accountId);
+        st.setInt(1, AccountId);
 
-        st.executeUpdate();
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            return getAccountTypeEnum(rs.getString(1));
+        }
+
+        throw new SQLException("Account not found");
     }
 
+    public AccountType getAccountTypeEnum(String accountType) {
+        return ACCOUNT_TYPE_MAP.get(accountType);
+    }
 }

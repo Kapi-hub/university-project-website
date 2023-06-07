@@ -1,15 +1,17 @@
 package misc;
 
 import dao.AccountDao;
-import models.SessionValidity;
+import dao.SessionDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import models.AccountBean;
 import models.AccountType;
+import models.SessionBean;
+import models.SessionValidity;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class AuthenticationFilter implements Filter {
 
@@ -23,7 +25,7 @@ public class AuthenticationFilter implements Filter {
         String sessionId = null;
         String accountIdString = null;
 
-        SessionValidity  sessionValidity;
+        SessionValidity sessionValidity = SessionValidity.LOG_IN_REQUIRED;
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -36,14 +38,14 @@ public class AuthenticationFilter implements Filter {
             }
 
             String path = servletReq.getRequestURI();
-            sessionValidity = isValidSession(sessionId, accountIdString, path);
+            sessionValidity = getSessionValidity(sessionId, accountIdString, path);
             if (sessionValidity == SessionValidity.VALID) {
                 chain.doFilter(request, response);
+                return;
             }
-        } else {
-            sessionValidity = SessionValidity.LOG_IN_REQUIRED;
         }
         String loginURL = servletReq.getContextPath() + "/pages/login/index.html?path=" + servletReq.getRequestURI() + "&";
+
         switch (sessionValidity) {
             case EXPIRED -> servletRes.sendRedirect(loginURL + "sessionExpired=true");
             case LOG_IN_REQUIRED -> servletRes.sendRedirect(loginURL + "loginRequired=true");
@@ -51,19 +53,34 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-    public SessionValidity isValidSession(String sessionId, String accountIdString, String path) {
+    public SessionValidity getSessionValidity(String sessionId, String accountIdString, String path) {
 
         if (sessionId == null || accountIdString == null) {
             return SessionValidity.LOG_IN_REQUIRED;
         }
 
-        int accountId = Integer.parseInt(accountIdString);
-        AccountBean account = new AccountBean(accountId, sessionId);
+        int accountId;
+        try {
+            accountId = Integer.parseInt(accountIdString);
+        } catch (NumberFormatException e) {
+            // handle invalid account ID
+            return SessionValidity.LOG_IN_REQUIRED;
+        }
 
-        if (AccountDao.instance.checkSession(account)) {
-            if (path.contains("/admin/") && account.getAccountType() == AccountType.ADMINISTRATOR) {
+        SessionBean session = new SessionBean(accountId, sessionId);
+
+        boolean sessionIsValid = SessionDao.instance.checkValidSession(session);
+
+        if (sessionIsValid) {
+            AccountType accountType;
+            try {
+                accountType = AccountDao.instance.determineAccountType(accountId);
+            } catch (SQLException e) {
+                return SessionValidity.UNAUTHORIZED;
+            }
+            if (path.contains("/admin/") && accountType == AccountType.ADMINISTRATOR) {
                 return SessionValidity.VALID;
-            } else if (path.contains("/crew/") && account.getAccountType() == AccountType.CREW_MEMBER) {
+            } else if (path.contains("/crew/") && accountType == AccountType.CREW_MEMBER) {
                 return SessionValidity.VALID;
             }
         } else {
