@@ -15,7 +15,7 @@ import java.sql.*;
 public enum ClientDao {
     I;
 
-    Connection connection;
+    final Connection connection;
 
     ClientDao() {
         connection = ConnectionFactory.getConnection();
