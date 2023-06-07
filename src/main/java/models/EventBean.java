@@ -4,67 +4,23 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 @XmlRootElement
 public class EventBean {
     private int id;
+    private int client_id;
     private String name;
-    private EventType type;
-    private Date date;
-    private Time start_time;
+    private String description;
+    private Timestamp start;
     private int duration;
     private String location;
     private int production_manager_id;
-    private int crew_members;
-    private int client_id;
+    private EventType type;
     private EventStatus status;
 
     public EventBean() {
 
-    }
-
-    public EventBean(String name, EventType type, Date date, Time start_time, int duration, String location,int crew_members, int client_id) {
-        this.id = -1;
-        this.name = name;
-        this.type = type;
-        this.date = date;
-        this.start_time = start_time;
-        this.duration = duration;
-        this.location = location;
-        this.production_manager_id = -1;
-        this.crew_members = crew_members;
-        this.client_id = client_id;
-        this.status = EventStatus.TODO;
-
-    }
-
-    public EventBean(int id, String name, EventType type, Date date, Time start_time, int duration, String location, int production_manager_id, int crew_members, int client_id) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.date = date;
-        this.start_time = start_time;
-        this.duration = duration;
-        this.location = location;
-        this.production_manager_id = production_manager_id;
-        this.crew_members = crew_members;
-        this.client_id = client_id;
-    }
-
-    public EventStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(EventStatus status) {
-        this.status = status;
-    }
-
-    public Time getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(Time start_time) {
-        this.start_time = start_time;
     }
 
     public int getId() {
@@ -75,6 +31,14 @@ public class EventBean {
         this.id = id;
     }
 
+    public int getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(int client_id) {
+        this.client_id = client_id;
+    }
+
     public String getName() {
         return name;
     }
@@ -83,20 +47,20 @@ public class EventBean {
         this.name = name;
     }
 
-    public EventType getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setStart(Timestamp start) {
+        this.start = start;
     }
 
     public int getDuration() {
@@ -123,21 +87,20 @@ public class EventBean {
         this.production_manager_id = production_manager_id;
     }
 
-    public int getCrew_members() {
-        return crew_members;
+    public EventType getType() {
+        return type;
     }
 
-    public void setCrew_members(int crew_members) {
-        this.crew_members = crew_members;
+    public void setType(EventType type) {
+        this.type = type;
     }
 
-    public int getClient_id() {
-        return client_id;
+    public EventStatus getStatus() {
+        return status;
     }
 
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
+    public void setStatus(EventStatus status) {
+        this.status = status;
     }
-
 
 }

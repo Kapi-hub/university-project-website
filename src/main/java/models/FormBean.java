@@ -6,6 +6,15 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 public class FormBean {
     private EventBean eventBean;
     private ClientBean clientBean;
+    private RequiredCrewBean[] requiredCrewBeans;
+
+    public RequiredCrewBean[] getRequiredCrewBeans() {
+        return requiredCrewBeans;
+    }
+
+    public void setRequiredCrewBeans(RequiredCrewBean[] requiredCrewBeans) {
+        this.requiredCrewBeans = requiredCrewBeans;
+    }
 
     public EventBean getEventBean() {
         return eventBean;

@@ -19,12 +19,9 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>org.glassfish.jersey.servlet.ServletContainer</servlet-name>
+        <servlet-name>Jersey</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
-    <listener>
-        <listener-class>misc.ServletConfig</listener-class>
-    </listener>
 
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -40,4 +37,5 @@
     <listener>
         <listener-class>misc.ApplicationConfig</listener-class>
     </listener>
+
 </web-app>
