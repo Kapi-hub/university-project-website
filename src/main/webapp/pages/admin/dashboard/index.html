@@ -45,7 +45,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast">Save changes
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick=saveAnnouncement()>Save changes
                 </button>
             </div>
         </div>
@@ -263,13 +263,42 @@
     savePostButton.addEventListener('click', function () {
         toast.show();
     });
-
-
-
     function selectCrewMember(name) {
         const selectedCrewMember = document.getElementById('selectedCrewMember');
         selectedCrewMember.textContent = name;
     }
+
+    function notNullTitle(){}
+    function saveAnnouncement(){
+        const title = document.getElementById(inputTitle).value
+        const descr = document.getElementById(inputDetail).value
+        if (Title){
+            const XHR = new XMLHttpRequest();
+            XHR.open("Post", "/api/admin/dashboard/new",);
+            XHR.setRequestHeader("Content-Type" , "application/json");
+            XHR.onload= function(){
+                if (self.status === 200 ){
+                    console.log(XHR.getAllResponseHeaders());
+                    if (self.path == null) window.location.href = self.getResponseHeader("Location");
+                        else window.location.href = self.path;
+                        }
+                else alert("An error occured" + this.status)
+            }
+
+            XHR.withCredentials = true;
+
+            XHR.send(Json.stringify({
+                Title: title,
+                Description :descr
+        }
+            )
+    )
+
+
+        }
+        else notNullTitle();
+    }
+
 </script>
 
 
