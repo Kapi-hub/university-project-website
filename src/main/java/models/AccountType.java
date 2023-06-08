@@ -10,4 +10,13 @@ public enum AccountType {
         return this.name().toLowerCase();
     }
 
+    public static AccountType toEnum(String string) {
+        return switch (string) {
+            case "administrator" -> ADMINISTRATOR;
+            case "crew_member" -> CREW_MEMBER;
+            case "client" -> CLIENT;
+            default -> null;
+        };
+    }
+
 }

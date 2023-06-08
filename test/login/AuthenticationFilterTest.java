@@ -1,12 +1,14 @@
+//package login;
+//
 //import misc.AuthenticationFilter;
+//import models.SessionValidity;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //
-//import static org.junit.jupiter.api.Assertions.assertFalse;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
+//import static org.junit.jupiter.api.Assertions.*;
 //
 //public class AuthenticationFilterTest {
 //
@@ -15,14 +17,18 @@
 //    @BeforeEach
 //    public void setUp() {
 //        filter = new AuthenticationFilter();
+//        try {
+//            String query = "INSERT INTO has_login_session VALUES ()";
+//        }
 //    }
 //
 //    @Test
 //    public void isValidSessionTest() {
 //        String adminSessionId = "adminadminadminadmin";
 //        String crewSessionId = "crewcrewcrewcrewcrew";
-//        String clientSessionId = ""; // should not be a thing yet, so ensure it really isn't!
+//        String clientSessionId = ""; // should not be a thing yet!
 //        String bsSessionId = "bsSessionId";
+//        String expiredSessionId = "expiredexpired";
 //        String nullSessionId = null;
 //
 //        String adminAccountId = "7";
@@ -31,8 +37,8 @@
 //        String bsAccountId = "12345";
 //        String nullAccountId = null;
 //
-//        String adminPath = "/shotmaniacs_war/pages/admin/mainPage/index.html";
-//        String crewPath = "/shotmaniacs_war/pages/crew/dashboard/index.html";
+//        String adminPath = "/pages/admin/mainPage/index.html";
+//        String crewPath = "/pages/crew/dashboard/index.html";
 //        String clientPath = ""; // should not even call this method, though maybe think about equipping it to handle
 //        // this sort of edge-case??
 //
@@ -64,10 +70,10 @@
 //
 //                    if (isValidCombo) {
 //                        System.out.println("Testing valid combo: " + Arrays.toString(currentCombo));
-////                        assertTrue(filter.isValidSession(sessionId, accountId, path));
+//                        assertSame(filter.getSessionValidity(sessionId, accountId, path), SessionValidity.VALID);
 //                    } else {
 //                        System.out.println("Testing invalid combo: " + Arrays.toString(currentCombo));
-////                        assertFalse(filter.isValidSession(sessionId, accountId, path));
+//                        assertNotSame(filter.getSessionValidity(sessionId, accountId, path), SessionValidity.VALID);
 //                    }
 //
 //                }
