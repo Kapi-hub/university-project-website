@@ -12,17 +12,17 @@ public class AccountBean {
     private String forename;
     private String surname;
 
-    public AccountBean(String forename, String surname, String username, String emailAddress, AccountType accountType) {
+    public AccountBean(String forename, String surname, String username, String email_address, AccountType accountType) {
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.emailAddress = emailAddress;
+        this.email_address = email_address;
         this.accountType = accountType;
     }
 
     @JsonProperty("username")
     private String username;
-    private String emailAddress;
+    private String email_address;
     @JsonProperty("password")
     private String password;
     private String sessionId;
@@ -77,12 +77,12 @@ public class AccountBean {
         this.username = username;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail_address() {
+        return email_address;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail_address(String email_address) {
+        this.email_address = email_address;
     }
 
     public String getPassword() {

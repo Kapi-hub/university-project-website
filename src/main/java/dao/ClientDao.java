@@ -4,7 +4,6 @@ import misc.ConnectionFactory;
 import models.ClientBean;
 import models.EventBean;
 
-import models.EventType;
 import models.RequiredCrewBean;
 
 import java.sql.*;
@@ -22,12 +21,12 @@ public enum ClientDao {
     }
 
     public int addClient(ClientBean client) throws SQLException {
-        String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type) RETURNING id";
+        String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
         st.setString(1, client.getForename());
         st.setString(2, client.getSurname());
         st.setString(3, client.getUsername());
-        st.setString(4, client.getEmailAddress());
+        st.setString(4, client.getEmail_address());
         ResultSet rs = st.executeQuery();
         System.out.println("===SQL=== ADDED A CLIENT TO ACCOUNT");
         int client_id = -1;
@@ -45,7 +44,7 @@ public enum ClientDao {
     }
 
     public int addEvent(EventBean event) throws SQLException {
-        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?, ?::event_type) RETURNING id";
+        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?, ?::event_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, event.getClient_id());
         st.setString(2, event.getName());
@@ -64,7 +63,7 @@ public enum ClientDao {
     }
 
     public void addRequirement(RequiredCrewBean required) throws SQLException {
-        String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role)";
+        String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, required.getEvent_id());
         st.setInt(2, required.getCrew_size());
