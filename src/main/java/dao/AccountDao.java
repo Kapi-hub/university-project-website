@@ -23,6 +23,8 @@ public enum AccountDao {
 
     private final Connection connection;
 
+
+
     AccountDao() {
         connection = ConnectionFactory.getConnection();
     }
