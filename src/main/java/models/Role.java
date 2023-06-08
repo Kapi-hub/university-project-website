@@ -7,5 +7,10 @@ public enum Role {
     PHOTOGRAPHER,
     PLANNER,
     PRODUCER,
-    VIDEOGRAPHER
+    VIDEOGRAPHER;
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }
