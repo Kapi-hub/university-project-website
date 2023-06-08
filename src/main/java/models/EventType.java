@@ -1,9 +1,9 @@
 package models;
 
-public enum AccountType {
-    ADMINISTRATOR,
-    CREW_MEMBER,
-    CLIENT;
+public enum EventType {
+    CLUB_PHOTOGRAPHY,
+    FESTIVAL,
+    PHOTOSHOOT;
 
     @Override
     public String toString() {

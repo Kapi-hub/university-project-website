@@ -15,6 +15,10 @@
 
 }
 
+* {
+    font-family: "Segoe UI", sans-serif;
+}
+
 .kiona {
     font-family: 'Kiona', sans-serif !important;
 }

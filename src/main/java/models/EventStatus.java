@@ -1,9 +1,10 @@
 package models;
 
-public enum AccountType {
-    ADMINISTRATOR,
-    CREW_MEMBER,
-    CLIENT;
+public enum EventStatus {
+    TODO,
+    IN_PROGRESS,
+    REVIEW,
+    DONE;
 
     @Override
     public String toString() {

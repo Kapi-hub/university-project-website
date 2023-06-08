@@ -37,4 +37,5 @@
     <listener>
         <listener-class>misc.ApplicationConfig</listener-class>
     </listener>
+
 </web-app>
