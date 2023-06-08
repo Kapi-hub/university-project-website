@@ -65,30 +65,47 @@ To add the password variable:
     ```bash
     cd ./bin
     ```
-4. Create an environment variable in this folder, containing the password for the database:
-   1. - On Windows, using PowerShell:
-         ```bash
-         [Environment]::SetEnvironmentVariable("DB_PASSWORD", "[password]", "Machine")
-         ```
+4. Setting up the Database Password
 
-      - On a Linux distribution, using Bash:
-          ```bash
-          sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
-          ```
-      Replace `[password]` with the actual password.
+   To configure the database password, follow the steps below based on your operating system.
 
-   2. Restart your system to apply the changes.
-   3. Double-check that the changes have been applied:
-      - On Windows, using PowerShell:
-         ```bash
-         Get-ChildItem Env:
-         ```
+   #### Windows
 
-      - On a Linux distribution, using Bash:
-          ```bash
-          source /etc/environment
-          ```
-      Verify that the output contains the `DB_PASSWORD` variable with the correct password.
+    1. Open a PowerShell terminal with administrator privileges:
+        - Refer to this [tutorial](https://www.makeuseof.com/windows-11-powershell-administrator/) for detailed instructions on running PowerShell as an administrator.
+
+    2. Set the environment variable by running the following command:
+       ```bash
+       [Environment]::SetEnvironmentVariable("DB_PASSWORD", "[password]", "Machine")
+       ```
+       Replace `[password]` with the actual password.
+
+    3. Restart your system to apply the changes.
+
+    4. Double-check that the changes have been applied by running the following command in PowerShell:
+       ```bash
+       Get-ChildItem Env:
+       ```
+       Verify that the output contains the `DB_PASSWORD` variable with the correct password.
+
+   #### Linux
+
+    1. Open a terminal.
+
+    2. Set the environment variable by running the following command with administrative privileges:
+       ```bash
+       sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
+       ```
+       Replace `[password]` with the actual password.
+
+    3. Restart your system to apply the changes.
+
+    4. Double-check that the changes have been applied by running the following command in the terminal:
+       ```bash
+       source /etc/environment
+       ```
+       Verify that the output contains the `DB_PASSWORD` variable with the correct password.
+
 
 ### IDE Setup - IntelliJ IDEA
 If you don't have IntelliJ IDEA installed yet, you can download and install the latest version from [here](https://www.jetbrains.com/idea/download/). We are using IntelliJ IDEA 2023.1.2.
