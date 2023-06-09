@@ -2,6 +2,9 @@
 /******* STYLES FOR CREW MEMBERS ******/
 /**************************************/
 
+/**************************************/
+/********** STYLES FOR NAVBAR *********/
+/**************************************/
 .navbar-animated {
     animation-duration: 4.0s;
     animation-name: navbarFadeInAnimation;
@@ -19,6 +22,12 @@
     color: var(--bs-light);
 }
 
+/**************************************/
+/******** STYLES FOR DASHBOARD ********/
+/**************************************/
+
+/* To edit the height of the welcome container, so the animation
+doesn't get in the way of building / maintaining the website*/
 .container.welcome-container {
     display: flex;
     min-height: 0 !important;
@@ -74,24 +83,63 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 60%;
     height: 60vh !important;
     margin: auto;
 }
 
-.main-container .main-box {
+.main-container .content-container {
     width: 100%;
     height: 100%;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     background-color: var(--bs-secondary);
+    padding: 20px;
 }
 
+.content-container .tab_content {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 98%;
+    color: white;
+}
+
+.content-container .tab_content.tab_current .carousel.slide {
+    display: flex;
+    justify-content: flex-start;
+    color: var(--bs-light);
+    height: 90%;
+    width: 100%;
+}
+
+.content-container .tab_content.tab_current .carousel.slide .carousel-inner .carousel-item.active {
+    font-size: 19px;
+}
+
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-prev {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    width: 6%;
+}
+
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-next {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 6%;
+}
+
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-prev .carousel.icon,
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-next .carousel.icon {
+    font-size: 30px;
+}
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
 
-.sidebar-dashboard {
+.sidebar-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,21 +152,9 @@
     background: var(--bs-light);
 }
 
-.sidebar-dashboard .sidebar-list {
+.sidebar-container .slider {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: 1; /* to space content evenly in the list */
-    list-style-type: none;
-    margin-top: 70px;
-    margin-bottom: 70px;
-    width: 100%;
-    padding: 0;
-}
-
-.sidebar-dashboard .sidebar-list .slider {
     position: absolute;
-    top: 60px;
     left: 0;
     width: 100%;
     height: 80px;
@@ -127,7 +163,18 @@
     /*z-index: -1;*/
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item a {
+.sidebar-container .sidebar-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    list-style-type: none;
+    margin-top: 70px;
+    margin-bottom: 70px;
+    width: 100%;
+    padding: 0;
+}
+
+.sidebar-container .sidebar-list li.sidebar-list-item a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,11 +186,7 @@
     height: 80px;
 }
 
-.sidebar-dashboard .sidebar-list li.sidebar-list-item a .icon {
-    font-size: 23px;
-}
-
-.sidebar-dashboard .sidebar-list li.sidebar-list-item.active a {
+.sidebar-container .sidebar-list li.sidebar-list-item.active a {
     /*background: var(--bs-secondary);*/
     color: var(--bs-light);
     transition: color 0.3s ease-in-out;
@@ -151,15 +194,14 @@
     padding-bottom: 15px;
 }
 
-/* ************************** */
-/* ************************** */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Kiona', sans-serif;
+.sidebar-container .sidebar-list li.sidebar-list-item a .icon {
+    font-size: 23px;
 }
+
+/**************************************/
+/********* STYLES FOR CALENDAR ********/
+/**************************************/
+
 
 .container {
     width: 100%;
@@ -264,6 +306,7 @@
     padding: 8px;
     text-decoration: none;
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 .left_side_bar ul li.active a{
@@ -311,19 +354,27 @@
     color: var(--bs-dark);
 }
 
-.accordion-item {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-
-}
-.accordion-item + .accordion-item{
- margin-top: 10px;
-}
-
 /* ************************************************** */
 /* ********************** BODY ********************** */
 /* ************************************************** */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kiona', sans-serif;
+}
+
 body {
     background-color: var(--bs-dark);
+    overflow: hidden;
 }
+
+.accordion-item, .accordion-button {
+    border-radius: 20px !important;
+}
+
+.accordion-item + .accordion-item{
+    margin-top: 10px;
+}
+
