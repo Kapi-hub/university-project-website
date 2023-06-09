@@ -114,7 +114,7 @@
                     <br>
 
                     <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                    <input type="number" class="eventTime" id="eventDuration">
+                    <input type="number" min="0" class="eventTime" id="eventDuration">
                     <br>
 
                     <label for="eventProducer" class="eventDurationText"> Event Producer</label>
@@ -123,7 +123,7 @@
                                 aria-expanded="false">
                             <span id="selectedCrewMember"> Select crew member </span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" id="dropdown-menu">
                             <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a>
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry
@@ -135,9 +135,33 @@
                     </div>
                     <br>
 
-                    <label for="eventcrewSize" class="eventDurationText"> Crew Size</label>
-                    <input type="number" class="eventTime" id="eventcrewSize">
-                    <br>
+                    <div class="requiredCrew" id="requiredCrew">
+                        <label for="eventPhotographer" class="PhotographerText"> Photographer</label>
+                        <input type="number" min="0" class="photographerTime" id="eventPhotographer">
+                        <br>
+
+                        <label for="eventAssistant" class="AssistantText"> Assistant</label>
+                        <input type="number" min="0" class="assistantText" id="eventAssistant">
+                        <br>
+
+                        <label for="eventEditor" class="EditorText"> Editor</label>
+                        <input type="number" min="0" class="editorText" id="eventEditor">
+                        <br>
+
+                        <label for="eventDataHandler" class="dataHandlerText">Data Handler</label>
+                        <input type="number" min="0" class="eventDataHandler" id="eventDataHandler">
+                        <br>
+
+                        <label for="eventPlanner" class="plannerText">Event Planner</label>
+                        <input type="number" min="0" class="eventPlanner" id="eventPlanner">
+                        <br>
+
+
+                        <label for="eventVideographer" class="VideographerText"> Videographer</label>
+                        <input type="number" min="0" class="eventVideographer" id="eventVideographer">
+                        <br>
+                    </div>
+
 
                     <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
                     <input type="text" class="eventTime" id="eventDescription">
@@ -162,98 +186,88 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
-                <label for="memberFirstName" class="memberFirstNameText"><strong>First name</strong></label>
-                <input type="text" class="memberName" id="memberFirstName">
-                <br>
-
-                <label for="memberLastName" class="memberLastNameText"><strong>Last name</strong></label>
-                <input type="text" class="memberName" id="memberLastName">
-                <br>
-
-                <label for="phoneNumber" class="memberNameText"><strong>Phone Number</strong>
-                    <input type="tel" class="phoneNumber" id="phoneNumber">
-                    <div class="prefix">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">Prefix
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a href=“#” value="DZ">Algeria (+213)</a></li>
-                            <li><a href=“#” value="AD">Andorra (+376)</a></li>
-                            <li><a href=“#” value="AO">Angola (+244)</a></li>
-                            <li><a href=“#” value="AI">Anguilla (+1264)</a></li>
-                            <li><a href=“#” value="AG">Antigua &amp; Barbuda (+1268)</a></li>
-
-                        </ul>
-                    </div>
+                <div class="memberInfo" id="memberInfo">
+                    <label for="memberFirstName" class="memberFirstNameText"><strong>First name</strong></label>
+                    <input type="text" class="memberName" id="memberFirstName">
                     <br>
 
-                    <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
-                    <br>
-                    <div id="permissionType">
-                        <label class="clubTeam">
-                            <input type="radio">
-                            <span class="checkmark">Club Team</span>
-                        </label>
-
-                        <label class="coreTeam">
-                            <input type="radio">
-                            <span class="checkmark">Core Team</span>
-                        </label>
-
-                        <label class="both">
-                            <input type="radio">
-                            <span class="checkmark">Core&Club Team</span>
-                        </label>
-                    </div>
-
-                    <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
+                    <label for="memberLastName" class="memberLastNameText"><strong>Last name</strong></label>
+                    <input type="text" class="memberName" id="memberLastName">
                     <br>
 
-                    <div id="roleType">
-                        <label class="photographer">
-                            <input type="checkbox">
-                            <span class="checkmark">Photographer</span>
-                        </label>
-
-                        <label class="videographer">
-                            <input type="checkbox">
-                            <span class="checkmark">Videographer</span>
-                        </label>
-
-                        <label class="producer">
-                            <input type="checkbox">
-                            <span class="checkmark">Producer</span>
-                        </label>
-
-                        <label class="assistant">
-                            <input type="checkbox">
-                            <span class="checkmark">Assistant</span>
-                        </label>
-
-                        <label class="dataHandler">
-                            <input type="checkbox">
-                            <span class="checkmark">Data Handler</span>
-                        </label>
-
-                        <label class="planner">
-                            <input type="checkbox">
-                            <span class="checkmark">Planner</span>
-                        </label>
-
-                        <label class="editor">
-                            <input type="checkbox">
-                            <span class="checkmark">Editor</span>
-                        </label>
-                    </div>
+                    <label for="email" class="emailText"><strong>Email</strong></label>
+                    <input type="email" class="emailText" id="email">
+                    <br>
 
                     <label for="username" class="usernameText"><strong>Username</strong></label>
                     <input type="text" class="usernameText" id="username">
                     <br>
-                </label>
+                </div>
+                <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
+                <br>
+                <div id="permissionType">
+                    <label class="clubTeam">
+                        <input type="radio">
+                        <span class="checkmark">Club Team</span>
+                    </label>
+
+                    <label class="coreTeam">
+                        <input type="radio">
+                        <span class="checkmark">Core Team</span>
+                    </label>
+
+                    <label class="both">
+                        <input type="radio">
+                        <span class="checkmark">Core&Club Team</span>
+                    </label>
+                </div>
+
+
+                <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
+                <br>
+
+                <div id="roleType">
+                    <label class="photographer">
+                        <input type="checkbox">
+                        <span class="checkmark">Photographer</span>
+                    </label>
+
+                    <label class="videographer">
+                        <input type="checkbox">
+                        <span class="checkmark">Videographer</span>
+                    </label>
+
+                    <label class="producer">
+                        <input type="checkbox">
+                        <span class="checkmark">Producer</span>
+                    </label>
+
+                    <label class="assistant">
+                        <input type="checkbox">
+                        <span class="checkmark">Assistant</span>
+                    </label>
+
+                    <label class="dataHandler">
+                        <input type="checkbox">
+                        <span class="checkmark">Data Handler</span>
+                    </label>
+
+                    <label class="planner">
+                        <input type="checkbox">
+                        <span class="checkmark">Planner</span>
+                    </label>
+
+                    <label class="editor">
+                        <input type="checkbox">
+                        <span class="checkmark">Editor</span>
+                    </label>
+                </div>
+
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal"
+                <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
                         data-bs-target="#successfulNewMember"><strong>Create new member</strong>
                 </button>
             </div>
@@ -474,10 +488,20 @@
     });
 
     const saveEventButton = document.querySelector('.saveEventBttn');
+    const saveMemberButton = document.querySelector('.saveMemberBttn');
+
     const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
+    const toastMember= new bootstrap.Toast(document.querySelector('#successfulNewMember'));
+
 
     saveEventButton.addEventListener('click', function () {
+        addEvent();
         toastEvent.show();
+    });
+
+    saveMemberButton.addEventListener('click', function () {
+        addCrewMember();
+        toastMember.show();
     });
 </script>
 
