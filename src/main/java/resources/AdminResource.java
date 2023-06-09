@@ -16,11 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-@Path("/admin/dashboard")
+@Path("/admin")
 public class AdminResource {
 Connection connection = ConnectionFactory.getConnection();
     @POST
-    @Path("/new")
+    @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handlePostAnnouncement(AnnouncementBean announcement) {
         String insertQuery =    "INSERT INTO announcements(announcer_id,title,body) VALUES (?,?,?)" ;
@@ -37,8 +37,22 @@ Connection connection = ConnectionFactory.getConnection();
     }
 
     @POST
-    public void handleCreateNewMember(CrewMemberBean crewMember) {
+    @Path("/crewEvents/") //TODO change the url
+    public Response handleCreateNewMember(CrewMemberBean crewMember) {
+        String insertQuery =  "INSERT INTO crewMember(id, role, team) VALUES (?,?::Role,?::Team)" ;
+        try {
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, crewMember.getId());
+            st.setString(2,crewMember.getRole().toString());
+            st.setString(3, crewMember.getTeam().toString()) ;
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
+        /*TODO create query that adds the rest of the crewMember details too - maybe also change in the js to create 2
+        different jsons - one for Id, role, team, and another one for the rest of the details*/
+        return Response.accepted().build();
     }
 
     @POST

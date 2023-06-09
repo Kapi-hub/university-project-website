@@ -32,7 +32,7 @@ function addEvent() {
     // const eventProducer;
 
     const XHR = new XMLHttpRequest();
-    XHR.open("Post", "/api/admin/crewEvents/new",);
+    XHR.open("Post", "/api/admin/crewEvents/newEvent",); //TODO change the URL
     XHR.setRequestHeader("Content-Type", "application/json");
     XHR.withCredentials = true;
 
@@ -73,7 +73,7 @@ function addEvent() {
     }))
 
     const XHR1 = new XMLHttpRequest();
-    XHR1.open("Post", "/api/admin/crewEvents/newEvent",);
+    XHR1.open("Post", "/api/admin/crewEvents/newEvent",); //TODO change the url
     XHR1.setRequestHeader("Content-Type", "application/json");
     XHR1.withCredentials = true;
 
