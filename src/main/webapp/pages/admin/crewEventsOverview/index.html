@@ -32,7 +32,8 @@
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="../../../img/Shotmaniacs_Logo_White_ZT.png">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30"
+                 src="../../../img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
@@ -58,61 +59,91 @@
                 <h5 class="modal-title" id="createEventModal">Create new event</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
+
             <div class="modal-body">
+                <div class="clientInfo" id="clientInfo">
+                    <!--Client information-->
+                    <label for="clientFirstName" class="clientFirstNameText">Client First Name</label>
+                    <input type="text" class="clientFirstNameText" id="clientFirstName">
+                    <br>
 
-                <label for="eventTitle" class="eventTitleText">Event Title</label>
-                <input type="text" class="eventTitle" id="eventTitle">
-                <br>
+                    <label for="clientLastName" class="clientLastNameText">Client Last Name</label>
+                    <input type="text" class="clientLastName" id="clientLastName">
+                    <br>
 
-                <label for="eventType" class="eventTypeText">Event Type</label>
-                <br>
-                <div id="eventType">
-                    <label class="photoBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Club Photography</span>
-                    </label>
+                    <label for="clientTelephone" class="clientTelephoneText">Client Telephone</label>
+                    <input type="tel" class="clientTelephone" id="clientTelephone">
+                    <br>
 
-                    <label class="festivalBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Festival</span>
-                    </label>
-
-                    <label class="productBox">
-                        <input type="checkbox">
-                        <span class="checkmark">Product Shoot</span>
-                    </label>
+                    <label for="clientEmail" class="clientEmailText">Client Email</label>
+                    <input type="email" class="clientEmail" id="clientEmail">
+                    <br>
                 </div>
 
-                <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
-                <input type="datetime-local" class="eventTime" id="eventDate&Time">
-                <br>
+                <!--Event information-->
+                <div class="eventInfo" id="eventInfo">
+                    <label for="eventTitle" class="eventTitleText">Event Title</label>
+                    <input type="text" class="eventTitle" id="eventTitle">
+                    <br>
 
-                <label for="eventLocation" class="eventLocationText"> Event Location</label>
-                <input type="text" class="eventTime" id="eventLocation">
-                <br>
+                    <label for="eventType" class="eventTypeText">Event Type</label>
+                    <br>
+                    <div id="eventType">
+                        <label class="photoBox">
+                            <input type="radio" name="flexRadioDefault" id="photoBox">
+                            <span class="checkmark">Club Photography</span>
+                        </label>
 
-                <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                <input type="number" class="eventTime" id="eventDuration">
-                <br>
+                        <label class="festivalBox">
+                            <input type="radio" name="flexRadioDefault" id="festivalBox">
+                            <span class="checkmark">Festival</span>
+                        </label>
 
-                <label for="eventProducer" class="eventDurationText"> Event Producer</label>
-                <div id="eventProducer">
-                    <button class="crewButton" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        <span id="selectedCrewMember"> Select crew member </span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry Smith</a>
-                        </li>
-                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a></li>
-                    </ul>
+                        <label class="productBox">
+                            <input type="radio" name="flexRadioDefault" id="productBox">
+                            <span class="checkmark">Product Shoot</span>
+                        </label>
+                    </div>
+
+                    <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
+                    <input type="datetime-local" class="eventTime" id="eventDate&Time">
+                    <br>
+
+                    <label for="eventLocation" class="eventLocationText"> Event Location</label>
+                    <input type="text" class="eventTime" id="eventLocation">
+                    <br>
+
+                    <label for="eventDuration" class="eventDurationText"> Event Duration</label>
+                    <input type="number" class="eventTime" id="eventDuration">
+                    <br>
+
+                    <label for="eventProducer" class="eventDurationText"> Event Producer</label>
+                    <div id="eventProducer">
+                        <button class="crewButton" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <span id="selectedCrewMember"> Select crew member </span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry
+                                Smith</a>
+                            </li>
+                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+
+                    <label for="eventcrewSize" class="eventDurationText"> Crew Size</label>
+                    <input type="number" class="eventTime" id="eventcrewSize">
+                    <br>
+
+                    <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
+                    <input type="text" class="eventTime" id="eventDescription">
+                    <br>
+
                 </div>
-                <br>
-
-                <label for="eventcrewSize" class="eventDurationText"> Crew Size</label>
-                <input type="number" class="eventTime" id="eventcrewSize">
-                <br>
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
@@ -141,93 +172,94 @@
 
                 <label for="phoneNumber" class="memberNameText"><strong>Phone Number</strong>
                     <input type="tel" class="phoneNumber" id="phoneNumber">
-                <div class="prefix">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Prefix
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a href=“#”  value="DZ">Algeria (+213)</a></li>
-                        <li><a href=“#”  value="AD">Andorra (+376)</a></li>
-                        <li><a href=“#”  value="AO">Angola (+244)</a></li>
-                        <li><a href=“#”  value="AI">Anguilla (+1264)</a></li>
-                        <li><a href=“#”  value="AG">Antigua &amp; Barbuda (+1268)</a></li>
+                    <div class="prefix">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">Prefix
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a href=“#” value="DZ">Algeria (+213)</a></li>
+                            <li><a href=“#” value="AD">Andorra (+376)</a></li>
+                            <li><a href=“#” value="AO">Angola (+244)</a></li>
+                            <li><a href=“#” value="AI">Anguilla (+1264)</a></li>
+                            <li><a href=“#” value="AG">Antigua &amp; Barbuda (+1268)</a></li>
 
-                    </ul>
-                </div>
-                <br>
+                        </ul>
+                    </div>
+                    <br>
 
-                <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
-                <br>
-                <div id="permissionType">
-                    <label class="clubTeam">
-                        <input type="checkbox">
-                        <span class="checkmark">Club Team</span>
-                    </label>
+                    <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
+                    <br>
+                    <div id="permissionType">
+                        <label class="clubTeam">
+                            <input type="radio">
+                            <span class="checkmark">Club Team</span>
+                        </label>
 
-                    <label class="coreTeam">
-                        <input type="checkbox">
-                        <span class="checkmark">Core Team</span>
-                    </label>
+                        <label class="coreTeam">
+                            <input type="radio">
+                            <span class="checkmark">Core Team</span>
+                        </label>
 
-                    <label class="both">
-                        <input type="checkbox">
-                        <span class="checkmark">Core&Club Team</span>
-                    </label>
-                </div>
+                        <label class="both">
+                            <input type="radio">
+                            <span class="checkmark">Core&Club Team</span>
+                        </label>
+                    </div>
 
-                <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
-                <br>
+                    <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
+                    <br>
 
-                <div id="roleType">
-                    <label class="photographer">
-                        <input type="checkbox">
-                        <span class="checkmark">Photographer</span>
-                    </label>
+                    <div id="roleType">
+                        <label class="photographer">
+                            <input type="checkbox">
+                            <span class="checkmark">Photographer</span>
+                        </label>
 
-                    <label class="videographer">
-                        <input type="checkbox">
-                        <span class="checkmark">Videographer</span>
-                    </label>
+                        <label class="videographer">
+                            <input type="checkbox">
+                            <span class="checkmark">Videographer</span>
+                        </label>
 
-                    <label class="producer">
-                        <input type="checkbox">
-                        <span class="checkmark">Producer</span>
-                    </label>
+                        <label class="producer">
+                            <input type="checkbox">
+                            <span class="checkmark">Producer</span>
+                        </label>
 
-                    <label class="assistant">
-                        <input type="checkbox">
-                        <span class="checkmark">Assistant</span>
-                    </label>
+                        <label class="assistant">
+                            <input type="checkbox">
+                            <span class="checkmark">Assistant</span>
+                        </label>
 
-                    <label class="dataHandler">
-                        <input type="checkbox">
-                        <span class="checkmark">Data Handler</span>
-                    </label>
+                        <label class="dataHandler">
+                            <input type="checkbox">
+                            <span class="checkmark">Data Handler</span>
+                        </label>
 
-                    <label class="planner">
-                        <input type="checkbox">
-                        <span class="checkmark">Planner</span>
-                    </label>
+                        <label class="planner">
+                            <input type="checkbox">
+                            <span class="checkmark">Planner</span>
+                        </label>
 
-                    <label class="editor">
-                        <input type="checkbox">
-                        <span class="checkmark">Editor</span>
-                    </label>
-                </div>
+                        <label class="editor">
+                            <input type="checkbox">
+                            <span class="checkmark">Editor</span>
+                        </label>
+                    </div>
 
-                <label for="username" class="usernameText"><strong>Username</strong></label>
-                <input type="text" class="usernameText" id="username">
-                <br>
-
+                    <label for="username" class="usernameText"><strong>Username</strong></label>
+                    <input type="text" class="usernameText" id="username">
+                    <br>
+                </label>
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="#successfulNewMember"><strong>Create new member</strong>
+                <button type="button" class="saveEventBttn" data-bs-dismiss="modal"
+                        data-bs-target="#successfulNewMember"><strong>Create new member</strong>
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 
 
 <div class="flex-container">
@@ -245,13 +277,13 @@
             <div class="row">
                 <div class="col-4">
                     <div class="list-group ">
-                                <div class="card-body Crew">
-                                    Crew-members
-                                    <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
-                                            data-bs-target="#createMemberModal">
-                                        New member +
-                                    </button>
-                                </div>
+                        <div class="card-body Crew">
+                            Crew-members
+                            <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
+                                    data-bs-target="#createMemberModal">
+                                New member +
+                            </button>
+                        </div>
                         <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
                         <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
                         <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
@@ -262,44 +294,44 @@
                 <!--pop-up-->
                 <div class="col-4">
                     <div class="list-group">
-                            <div class="card pop-up bg-primary text-light">
-                                <div class="collapse crew" id="crew1">
-                                    <div class="card-body">
-                                        <h5>Crewmember 1</h5>
-                                        <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                            bookings</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                    </div>
-                                </div>
-                                <div class="collapse crew" id="crew2">
-                                    <div class="card-body">
-                                        <h5>Crewmember 2</h5>
-                                        <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                            bookings</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                    </div>
-                                </div>
-                                <div class="collapse crew" id="crew3">
-                                    <div class="card-body">
-                                        <h5>Crewmember 3</h5>
-                                        <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                            bookings</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                    </div>
-                                </div>
-                                <div class="collapse crew" id="crew4">
-                                    <div class="card-body">
-                                        <h5>Crewmember 4</h5>
-                                        <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                            bookings</a>
-                                        <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                    </div>
+                        <div class="card pop-up bg-primary text-light">
+                            <div class="collapse crew" id="crew1">
+                                <div class="card-body">
+                                    <h5>Crewmember 1</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
+                                        bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
                                 </div>
                             </div>
+                            <div class="collapse crew" id="crew2">
+                                <div class="card-body">
+                                    <h5>Crewmember 2</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
+                                        bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                            <div class="collapse crew" id="crew3">
+                                <div class="card-body">
+                                    <h5>Crewmember 3</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
+                                        bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                            <div class="collapse crew" id="crew4">
+                                <div class="card-body">
+                                    <h5>Crewmember 4</h5>
+                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
+                                        bookings</a>
+                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -313,13 +345,13 @@
         <div class="row">
             <div class="col-4 ">
                 <div class="list-group">
-                            <div class="card-body Booking">
-                                Bookings
-                                <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                                        data-bs-target="#postEventsModal">
-                                    Event +
-                                </button>
-                            </div>
+                    <div class="card-body Booking">
+                        Bookings
+                        <button type="button" class="createEventBttn" data-bs-toggle="modal"
+                                data-bs-target="#postEventsModal">
+                            Event +
+                        </button>
+                    </div>
                     <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
                     <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
                     <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
@@ -450,6 +482,6 @@
 </script>
 
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-
+<script src="addCrew&Events.js"></script>
 </body>
 </html>

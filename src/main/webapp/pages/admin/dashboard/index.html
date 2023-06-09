@@ -270,8 +270,8 @@
 
     function notNullTitle(){}
     function saveAnnouncement(){
-        const title = document.getElementById(inputTitle).value
-        const descr = document.getElementById(inputDetail).value
+        const title = document.getElementById('inputTitle').value
+        const descr = document.getElementById('inputDetail').value
         if (Title){
             const XHR = new XMLHttpRequest();
             XHR.open("Post", "/api/admin/dashboard/new",);

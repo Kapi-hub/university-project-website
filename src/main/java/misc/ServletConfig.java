@@ -1,6 +1,6 @@
 package misc;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
+import com.fasterxml.jackson.core.util.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class ServletConfig extends ResourceConfig {
