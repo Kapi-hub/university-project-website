@@ -51,13 +51,11 @@
         </ul>
     </div>
 </nav>
-
 <div class="container welcome-container">
     <!--    <button onclick="resizeContainer()">Resize</button>-->
     <h1 class="welcomeMessageName">Welcome, Alex</h1>
     <h4 class="welcomeMessageEvents">No new events.</h4>
 </div>
-
 <div class="main-container">
     <div class="sidebar-container">
         <ul class="sidebar-list">
@@ -92,17 +90,49 @@
                 <span id="numberOfAnno">0</span> Announcements</h3>
         </div>
         <div class="tab_content tab_current container-fluid">
-            <h3> On-going events (2)</h3>
-            <div class="accordion" id="currentEvents">
+            <h3> Currently enrolled events (2)</h3>
+            <div id="carouselContainer" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        Name: <br>
+                        Type: <br>
+                        Date: <br>
+                        Location: <br>
+                        Duration: <br>
+                        Client: <br>
+                        Booking Type: <br>
+                        Supervisor: <br>
+                        Crew: <br>
+                        Status: <br>
+                        Description:
+                    </div>
+                    <div class="carousel-item">
+                        <h3> Test 2</h3>
+                    </div>
+                    <div class="carousel-item">
+                        <h3> Test 3</h3>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselContainer" role="button" data-bs-slide="prev">
+                    <ion-icon name="chevron-back-outline" class="carousel icon"></ion-icon>
+                </a>
+                <a class="carousel-control-next" href="#carouselContainer" role="button" data-bs-slide="next">
+                    <ion-icon name="chevron-forward-outline" class="carousel icon"></ion-icon>
+                </a>
+            </div>
+        </div>
+        <div class="tab_content tab_past container-fluid">
+            <h3> Past events (2)</h3>
+            <div class="accordion" id="pastEvents">
                 <div class="accordion-item">
-                    <h2 class="accordion-header ">
-                        <button aria-controls="collapseOneCurrent" aria-expanded="false"
-                                class="accordion-button collapsed rounded-4"
-                                data-bs-target="#collapseOneCurrent" data-bs-toggle="collapse" type="button">
-                            On-going event #1
+                    <h2 class="accordion-header">
+                        <button aria-controls="collapseOnePast" aria-expanded="false"
+                                class="accordion-button collapsed"
+                                data-bs-target="#collapseOnePast" data-bs-toggle="collapse" type="button">
+                            Past event #1
                         </button>
                     </h2>
-                    <div class="accordion-collapse collapse" data-bs-parent="#currentEvents" id="collapseOneCurrent">
+                    <div class="accordion-collapse collapse" data-bs-parent="#pastEvents" id="collapseOnePast">
                         <div class="accordion-body">
                             <div class="halfOne">
                                 Name: <br>
@@ -114,57 +144,18 @@
                             <div class="halfTwo">
                                 Client: <br>
                                 Booking Type: <br>
-                                Supervisor: <br>
+                                Product Manager: <br>
                                 Crew: <br>
                                 Status: <br>
+                                Description:
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button aria-controls="collapseTwo" aria-expanded="false"
-                                class="accordion-button collapsed rounded-4"
-                                data-bs-target="#collapseTwo" data-bs-toggle="collapse" type="button">
-                            On-going event #2
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" data-bs-parent="#currentEvents" id="collapseTwo">
-                        <div class="accordion-body">
-                            <strong>Second body.</strong> Testing to see how it goes.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab_content tab_past container-fluid">
-            <!--    TODO: set with an actual counter-->
-            <h3> Past events (2)</h3>
-            <div class="accordion " id="pastEvents">
-                <div class="accordion-item rounded-4 ">
-                    <h2 class="accordion-header ">
-                        <button aria-controls="collapseOnePast" aria-expanded="false"
-                                class="accordion-button collapsed rounded-4"
-                                data-bs-target="#collapseOnePast" data-bs-toggle="collapse" type="button">
-                            Past event #1
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" data-bs-parent="#pastEvents" id="collapseOnePast">
-                        <div class="accordion-body">
-                            <strong>First body.</strong>
-                            It is hidden by default, until the collapse plugin adds the appropriate classes
-                            that we use to style each element. These classes control the overall appearance,
-                            as well as the showing and hiding via CSS transitions. You can modify any of
-                            this with custom CSS or overriding our default variables. It's also worth noting
-                            that just about any HTML can go within the <code>.accordion-body</code>, though
-                            the transition does limit overflow.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item rounded-4 ">
-                    <h2 class="accordion-header">
                         <button aria-controls="collapseTwoPast" aria-expanded="false"
-                                class="accordion-button collapsed rounded-4"
+                                class="accordion-button collapsed"
                                 data-bs-target="#collapseTwoPast" data-bs-toggle="collapse" type="button">
                             Past event #2
                         </button>
@@ -179,11 +170,26 @@
         </div>
         <div class="tab_content tab_stats container-fluid">
             <p>something here so it has some text.
-            Later on, stats will be shown here using the allowed library</p>
+                Later on, stats will be shown here using the allowed library</p>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        // by default, since upon the page the slider is on announcements,
+        // the announcements section is shown
+        $(".main-container .content-container .tab_content").hide();
+        $(".main-container .content-container .tab_content:first-child").show();
 
+        $("ul li.sidebar-list-item").click(function () {
+            let currentTabValue = $(this).attr("data-list");
+            $(".main-container .content-container .tab_content").hide();
+            $("." + currentTabValue).show();
+        });
+    });
+</script>
 <script>
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
     const appendAlert = (message, type) => {
@@ -232,20 +238,13 @@
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="sideBar.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script>
-    $(document).ready(function () {
-        // by default, since upon the page the slider is on announcements,
-        // the announcements section is shown
-        $(".main-container .content-container .tab_content").hide();
-        $(".main-container .content-container .tab_content:first-child").show();
+    const myCarouselElement = document.querySelector('#carouselContainer')
 
-        $("ul li.sidebar-list-item").click(function () {
-            let currentTabValue = $(this).attr("data-list");
-            $(".main-container .content-container .tab_content").hide();
-            $("." + currentTabValue).show();
-        });
-    });
+    const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 2000,
+        touch: false
+    })
 </script>
 </body>
 </html>

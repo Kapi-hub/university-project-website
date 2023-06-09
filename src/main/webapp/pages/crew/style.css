@@ -83,7 +83,7 @@ doesn't get in the way of building / maintaining the website*/
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80%;
+    width: 60%;
     height: 60vh !important;
     margin: auto;
 }
@@ -97,77 +97,44 @@ doesn't get in the way of building / maintaining the website*/
     padding: 20px;
 }
 
-.main-container .content-container  {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    border: white;
-}
-
-.content-container .tab_content.tab_anno {
-    margin: 30px;
-    height: auto;
-    width: auto;
-}
-
-.content-container .tab_content.tab_current {
-    margin: 30px;
-    height: auto;
-    width: auto;
+.content-container .tab_content {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 98%;
     color: white;
-    padding-bottom: 5px;
 }
 
-.content-container .tab_content.tab_current .accordion {
-
-}
-
-.content-container .tab_content.tab_current .accordion .accordion-item {
-    border-radius: 0.5rem;
-}
-
-.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body {
+.content-container .tab_content.tab_current .carousel.slide {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body .halfOne{
-    display: flex;
-    align-items: flex-start;
-    justify-content: left;
+    justify-content: flex-start;
+    color: var(--bs-light);
+    height: 90%;
     width: 100%;
-    border-right: 1px solid var(--bs-dark);
 }
 
-.content-container .tab_content.tab_current .accordion .accordion-item .accordion-collapse .accordion-body .halfTwo {
+.content-container .tab_content.tab_current .carousel.slide .carousel-inner .carousel-item.active {
+    font-size: 19px;
+}
+
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-prev {
     display: flex;
-    justify-content: left;
-    align-items: flex-start;
-    width: 100%;
-    padding-left: 10px;
-
-}
-.content-container .tab_content.tab_past {
-    margin: 30px;
-    height: auto;
-    width: auto;
-    color: white;
-    padding-bottom: 5px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    width: 6%;
 }
 
-.content-container .tab_content.tab_stats {
-    margin: 30px;
-    height: auto;
-    width: auto;
-    color: white;
-    padding-bottom: 5px;
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-next {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 6%;
 }
 
-
-
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-prev .carousel.icon,
+.content-container .tab_content.tab_current .carousel.slide .carousel-control-next .carousel.icon {
+    font-size: 30px;
+}
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
@@ -387,15 +354,6 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
-.accordion-item {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-
-}
-.accordion-item + .accordion-item{
- margin-top: 10px;
-}
-
 /* ************************************************** */
 /* ********************** BODY ********************** */
 /* ************************************************** */
@@ -411,3 +369,12 @@ body {
     background-color: var(--bs-dark);
     overflow: hidden;
 }
+
+.accordion-item, .accordion-button {
+    border-radius: 20px !important;
+}
+
+.accordion-item + .accordion-item{
+    margin-top: 10px;
+}
+
