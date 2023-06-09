@@ -60,7 +60,6 @@ function renderCalendar() {
 
         }
     }
-
     weekdaysNumberContainer.innerHTML = days;
 }
 

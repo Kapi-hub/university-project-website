@@ -2,20 +2,7 @@ const weekdaysNumberContainer = document.querySelector(".weekdaysNumber");
 const month = document.querySelector(".month");
 let monthItem = document.querySelectorAll(".monthItem");
 
-const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-]
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 // get current date, month, year
@@ -60,7 +47,6 @@ function renderCalendar() {
                 div.classList.remove("current");
             });
             item.classList.add("day", "current");
-            console.log(item.innerHTML);
         });
     })
 }
@@ -69,7 +55,6 @@ renderCalendar();
 
 monthItem.forEach( function (item) {
     item.addEventListener("click", () => {
-        console.log(event.target.id);
         switch(event.target.id) {
             case "Jan":
                 currentMonth = 0;
@@ -120,12 +105,13 @@ monthItem.forEach( function (item) {
 let eventDayHandler = document.querySelector(".event-day");
 let eventDateHandler = document.querySelector(".event-date");
 
-function updateTaskBarUpdate() {
-    eventDayHandler.innerHTML = `${days[currentDate.getDay() + 1]}`;
-    eventDateHandler.innerHTML = `${new Date().getDate()} ${months[currentMonth]}`;
+function updateTaskBar() {
+    let newTaskBarDate = new Date();
+    newTaskBarDate.setDate(
+        parseInt(document.querySelector(".day.current").textContent));
+    newTaskBarDate.setMonth(currentMonth);
+    eventDayHandler.innerHTML = `${days[newTaskBarDate.getDate()]}`;
+    eventDateHandler.innerHTML = `${newTaskBarDate.getDate()} ${months[currentMonth]}`
+    console.log(newTaskBarDate.getDay(), newTaskBarDate.getMonth());
 }
-updateTaskBarUpdate();
-
-
-
-
+updateTaskBar();
