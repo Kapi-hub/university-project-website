@@ -75,7 +75,17 @@ To add the password variable:
           ```bash
           sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
           ```
-      Replace `[password]` with the actual password.
+      - On MacOS, using Terminal:
+         ```bash
+         open -a TextEdit.app ~/.bash_profile
+         ```
+         Replace TextEdit.app with a textEditor you have installed
+         in the bash file put this at the end:
+         ```bash
+         export DB_PASSWORD=[password]
+         ```
+   
+   Replace `[password]` with the actual password.
 
    2. Restart your system to apply the changes.
    3. Double-check that the changes have been applied:
@@ -88,6 +98,10 @@ To add the password variable:
           ```bash
           source /etc/environment
           ```
+      - On MacOS, using Terminal
+         ```bash
+          echo $DB_PASSWORD
+         ```
       Verify that the output contains the `DB_PASSWORD` variable with the correct password.
 
 ### IDE Setup - IntelliJ IDEA
