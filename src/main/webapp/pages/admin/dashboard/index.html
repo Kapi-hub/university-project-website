@@ -276,21 +276,18 @@
             const XHR = new XMLHttpRequest();
             XHR.open("Post", "/api/admin/dashboard/new",);
             XHR.setRequestHeader("Content-Type" , "application/json");
-            XHR.onload= function(){
-                if (self.status === 200 ){
-                    console.log(XHR.getAllResponseHeaders());
-                    if (self.path == null) window.location.href = self.getResponseHeader("Location");
-                        else window.location.href = self.path;
-                        }
+            XHR.onload= () => {
+                if (XHR.status == 200 ){
+                }
                 else alert("An error occured" + this.status)
             }
 
             XHR.withCredentials = true;
-
-            XHR.send(Json.stringify({
+            XHR.send(Json.stringify(
+                {
                 Title: title,
                 Description :descr
-        }
+                }
             )
     )
 
