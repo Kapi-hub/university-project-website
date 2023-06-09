@@ -32,7 +32,7 @@ doesn't get in the way of building / maintaining the website*/
     display: flex;
     min-height: 0 !important;
     height: 15vh !important; // TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS
-    /*height: 100vh;*/
+    /*height: 92vh;*/
     flex-wrap: wrap;
     flex-direction: column;
     color: white;
@@ -113,7 +113,7 @@ doesn't get in the way of building / maintaining the website*/
     width: 100%;
 }
 
-.content-container .tab_content.tab_current .carousel.slide .carousel-inner .carousel-item.active {
+.content-container .tab_content.tab_current .carousel.slide .carousel-inner {
     font-size: 19px;
 }
 
