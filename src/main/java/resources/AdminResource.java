@@ -10,10 +10,10 @@ import misc.ConnectionFactory;
 import models.AnnouncementBean;
 import models.CrewMemberBean;
 import models.EventBean;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import models.EventType;
+
+import java.sql.*;
+import java.util.ArrayList;
 
 
 @Path("/admin")
@@ -23,7 +23,7 @@ Connection connection = ConnectionFactory.getConnection();
     @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handlePostAnnouncement(AnnouncementBean announcement) {
-        String insertQuery =    "INSERT INTO announcements(announcer_id,title,body) VALUES (?,?,?)" ;
+        String insertQuery =    "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)" ;
         try {
             PreparedStatement st = connection.prepareStatement(insertQuery);
             st.setInt(1,announcement.getAnnouncer());
@@ -61,17 +61,69 @@ Connection connection = ConnectionFactory.getConnection();
     }
 
     @GET
-    public void getAnnouncement(AnnouncementBean announcement) {
-
+    @Path("/dashboard/all")
+    public ArrayList<AnnouncementBean> getAnnouncement(AnnouncementBean announcement) {
+        String insertQuery = "SELECT * FROM announcement";
+        ArrayList<AnnouncementBean> announcements =null;
+        try {
+            announcements = new ArrayList<>();
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
+                announcements.add(ab);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return announcements;
     }
 
+
     @GET
+    @Path("/dashboard/crewRew")
     public void getCrewMember(CrewMemberBean crewMember) {
-
+//        String insertQuery = "SELECT * FROM announcement"; //TODO how do you know when more crew is needed
+//        ArrayList<AnnouncementBean> announcements =null;
+//        try {
+//            announcements = new ArrayList<>();
+//            PreparedStatement st = connection.prepareStatement(insertQuery);
+//            ResultSet rs = st.executeQuery();
+//            while (rs.next()) {
+//                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
+//                announcements.add(ab);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e);
+//        }
+//        return announcements;
+//    }
     }
 
     @GET
-    public void getEvent(EventBean event) {
-
+    @Path("/dashboard/latest")
+    public ArrayList<EventBean> getEvent(EventBean event) {
+        String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
+        ArrayList<EventBean> events =null;
+        try {
+            events = new ArrayList<>();
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                try{
+                    EventType type = EventType.valueOf(rs.getString("type"));
+                    EventBean eventBean = new EventBean(
+                            rs.getString("name"),rs.getString("description"),
+                            rs.getTimestamp("start"), rs.getInt("duration" ),
+                            rs.getString("location"),type);
+                    events.add(eventBean);
+                }catch (IllegalArgumentException e){
+                    System.out.println(e);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return events;
     }
 }

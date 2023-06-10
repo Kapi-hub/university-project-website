@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
+    <script>  src = Dashboard.js </script>
     <link href="../../general.css" rel="stylesheet">
     <link href="../admin.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -151,7 +152,7 @@
         </div>
     </div>
 </div>
-
+<!--events                      -->
 <div class="eventsContainer">
     <div class="row">
         <div class="col">
@@ -182,7 +183,7 @@
                                          aria-labelledby="headingOne"
                                          data-bs-parent="#eventsListAcc">
                                         <div class="accordion-body">
-
+                                            <span> test</span>
                                         </div>
                                     </div>
                                 </div>
@@ -266,34 +267,6 @@
     function selectCrewMember(name) {
         const selectedCrewMember = document.getElementById('selectedCrewMember');
         selectedCrewMember.textContent = name;
-    }
-
-    function notNullTitle(){}
-    function saveAnnouncement(){
-        const title = document.getElementById('inputTitle').value
-        const descr = document.getElementById('inputDetail').value
-        if (Title){
-            const XHR = new XMLHttpRequest();
-            XHR.open("Post", "/api/admin/dashboard/new",);
-            XHR.setRequestHeader("Content-Type" , "application/json");
-            XHR.onload= () => {
-                if (XHR.status == 200 ){
-                }
-                else alert("An error occured" + this.status)
-            }
-
-            XHR.withCredentials = true;
-            XHR.send(Json.stringify(
-                {
-                Title: title,
-                Description :descr
-                }
-            )
-    )
-
-
-        }
-        else notNullTitle();
     }
 
 </script>
