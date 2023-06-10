@@ -205,18 +205,25 @@ doesn't get in the way of building / maintaining the website*/
 
 .container {
     width: 100%;
-    min-height: 100vh;
-    max-width: 90%;
+    max-width: 95%;
+    max-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .calendar {
-    width: 100%;
+    width: 80%;
+    max-height: 90vh;
     padding: 30px 20px;
     border-radius: 20px;
     background-color: var(--bs-light);
+    overflow: scroll;
+
+}
+
+.container .calendar::-webkit-scrollbar {
+    display: none;
 }
 
 .calendar .header {
@@ -229,11 +236,40 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 .calendar .header .month {
-    display:flex ;
+    display: flex ;
     align-items: center;
     font-size: 30px;
     font-weight:1000;
-    color: #1F1F1F;
+    color: var(--bs-dark);
+}
+
+.calendar .header .btns {
+    display: flex;
+    gap: 10px;
+}
+
+.calendar .header .btns .btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar .header .btns .btn.prev .icon,
+.calendar .header .btns .btn.next .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.calendar .header .btns .btn:hover {
+    background-color: var(--bs-primary-bg-subtle);
+    transition: 0.3s;
+    border-radius: 5px;
 }
 
 .weekdaysName {
@@ -270,7 +306,7 @@ doesn't get in the way of building / maintaining the website*/
     transition: all 0.3s;
 }
 
-.weekdaysNumber .day:hover {
+.weekdaysNumber .day:not(.next):not(.prev):hover {
     color: var(--bs-light);
     background-color: #1696D2;
     transform: scale(1.10);
@@ -279,6 +315,12 @@ doesn't get in the way of building / maintaining the website*/
 .weekdaysNumber .day.current {
     color: var(--bs-light);
     background-color: #1696D2;
+}
+
+.weekdaysNumber .day.prev,
+.weekdaysNumber .day.next {
+    background-color: #ccc;
+    color: var(--bs-dark);
 }
 
 /* ********************** LEFT SIDE BAR ***************** */
