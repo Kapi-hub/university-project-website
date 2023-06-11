@@ -31,23 +31,6 @@ function addEvent() {
     //TODO: check how to do with the drop down list - how do i extract the name that is selected
     // const eventProducer;
 
-    const XHR = new XMLHttpRequest();
-    XHR.open("Post", "/api/admin/crewEvents/newEvent",); //TODO change the URL
-    XHR.setRequestHeader("Content-Type", "application/json");
-    XHR.withCredentials = true;
-
-    XHR.addEventListener("load", function () {
-        if (this.status === 200) {
-            console.log(XHR.getAllResponseHeaders())
-            if (path == null) {
-                window.location.href = XHR.getResponseHeader("Location");
-            } else {
-                window.location.href = path;
-            }
-        } else {
-            alert("An error occurred: " + this.status);
-        }
-    });
 
     let eventType = ' ';
     if (clubPhotography.checked === true && festival.checked === false && product.checked === false) {
@@ -57,7 +40,7 @@ function addEvent() {
     } else if (clubPhotography.checked === false && festival.checked === false && product.checked === true) {
         eventType = product;
     }
-    XHR.send(JSON.stringify({
+    sendHttpRequest("Post", "/api/admin/crewEvents/newEvent", {
         eventTitle: eventTitle,
         eventType: eventType,
         eventDateTime: eventDateTime,
@@ -70,32 +53,19 @@ function addEvent() {
         eventDataHandler: eventDataHandler,
         eventPlanner: eventPlanner,
         eventVideographer: eventVideographer
-    }))
+    }).catch(err => {
+        console.log(err)
+    }) //TODO figure out what to do when fail
 
-    const XHR1 = new XMLHttpRequest();
-    XHR1.open("Post", "/api/admin/crewEvents/newEvent",); //TODO change the url
-    XHR1.setRequestHeader("Content-Type", "application/json");
-    XHR1.withCredentials = true;
 
-    XHR1.addEventListener("load", function () {
-        if (this.status === 200) {
-            console.log(XHRgetAllResponseHeaders())
-            if (path == null) {
-                window.location.href = XHR1.getResponseHeader("Location");
-            } else {
-                window.location.href = path;
-            }
-        } else {
-            alert("An error occurred: " + this.status);
-        }
-    });
-
-    XHR1.send(JSON.stringify({
+    sendHttpRequest("Post", "/api/admin/crewEvents/newEvent", {
         firstName: clientFirstName,
         lastName: clientLastName,
         phone: clientPhone,
         email: clientEmail
-    }))
+    }).catch(err => {
+        console.log(err)
+    })//TODO figure out what to do when fail
 }
 
 function addCrewMember() {
@@ -107,7 +77,7 @@ function addCrewMember() {
     const memberEmail = memberQuery.children[7].value;
     const memberUsername = memberQuery.children[4].value;
 
-
+    //get member's permissions
     let permissionQuery = document.querySelector('#permissionType');
     const clubTeam = permissionQuery.children[0].children[0].value;
     const coreTeam = permissionQuery.children[1].children[0].value;
@@ -122,30 +92,34 @@ function addCrewMember() {
         permissionType = clubAndCoreTeam;
     }
 
-    const XHR1 = new XMLHttpRequest();
-    XHR1.open("Post", "/api/admin/crewEvents/newMember",);
-    XHR1.setRequestHeader("Content-Type", "application/json");
-    XHR1.withCredentials = true;
+    //get member's roles
+    var roles = '';
+    let photographer = document.getElementById('photographer');
+    let videographer = document.getElementById('videographer');
+    let producer = document.getElementById('producer');
+    let assistant = document.getElementById('assistant');
+    let dataHandler = document.getElementById('dataHandler');
+    let planner = document.getElementById('planner');
+    let editor = document.getElementById('editor');
 
-    XHR1.addEventListener("load", function () {
-        if (this.status === 200) {
-            console.log(XHR1.getAllResponseHeaders())
-            if (path == null) {
-                window.location.href = XHR1.getResponseHeader("Location");
-            } else {
-                window.location.href = path;
-            }
-        } else {
-            alert("An error occurred: " + this.status);
-        }
-    });
+    if (photographer.checked === true) {
+        roles = roles + photographer.value + ',';
+    }
 
-    XHR1.send(JSON.stringify({
+
+    sendHttpRequest("Post", "/api/admin/crewEvents/newMember", {
         firstName: memberFirstName,
         lastName: memberLastName,
         email: memberEmail,
         username: memberUsername,
         permissionType: permissionType
-    }))
+    }).catch(err => {
+        console.log(err)
+    })//TODO figure out what to do when fail
 }
-console.log(document.querySelector('#dropdown-menu').children);
+
+// console.log(document.querySelector('#dropdown-menu').children);
+var checkbox = document.querySelector('#photographer input[type="checkbox"]');
+var value = checkbox.value;
+
+console.log(value);
