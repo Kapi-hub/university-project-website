@@ -29,6 +29,7 @@ Connection connection = ConnectionFactory.getConnection();
             st.setInt(1,announcement.getAnnouncer());
             st.setString(2,announcement.getTitle());
             st.setString(3, announcement.getBody()) ;
+            //TODO: add also the id of the announcement and the date and time
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -49,6 +50,8 @@ Connection connection = ConnectionFactory.getConnection();
         } catch (SQLException e) {
             System.out.println(e);
         }
+
+
 
         /*TODO create query that adds the rest of the crewMember details too - maybe also change in the js to create 2
         different jsons - one for Id, role, team, and another one for the rest of the details*/

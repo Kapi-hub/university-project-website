@@ -46,6 +46,13 @@
     background-size: cover;
 
 }
+
+::placeholder{
+    font-family: 'Kiona', sans-serif;
+    color: var(--bs-primary);
+    font-weight: bolder;
+}
+
 .form-control {
     margin-bottom: 20px;
     width: 400px !important;
