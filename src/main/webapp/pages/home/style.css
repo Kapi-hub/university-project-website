@@ -1,0 +1,18 @@
+.navbar-custom .navbar-brand {
+    color: var(--bs-light);
+}
+
+body {
+    background-color: var(--bs-dark);
+}
+
+* {
+    font-family: 'Kiona', sans-serif;
+    color: var(--bs-light);
+}
+
+.nav-link:hover {
+    color: var(--bs-dark) !important;
+    background-color: var(--bs-light);
+    border-radius: 50px;
+}
