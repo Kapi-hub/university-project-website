@@ -2,6 +2,7 @@ package resources;
 
 import dao.AccountDao;
 import dao.SessionDao;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -17,19 +18,22 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Random;
 
+@RolesAllowed({"ADMINISTRATOR", "CREW_MEMBER", "CLIENT"})
 @Path("/login")
+
 public class LoginResource {
     // Map of account types to their corresponding paths they should be redirected to after a successful login
     private static final Map<AccountType, String> accountTypePaths = Map.of(
-            AccountType.ADMINISTRATOR, "/admin/mainPage/index.html",
-            AccountType.CREW_MEMBER, "/crew/dashboard/index.html",
+            AccountType.ADMINISTRATOR, "admin/dashboard",
+            AccountType.CREW_MEMBER, "crew/dashboard",
             // Unused, unless user accounts are implemented later
-            AccountType.CLIENT, "/client/index.html"
+            AccountType.CLIENT, "submit"
     );
     // All possible characters for the sessionId generator
     private static final String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
             "0123456789!@#$%^&*()[]{}_+:.<>?|~-";
 
+    @RolesAllowed({"ADMINISTRATOR", "CREW_MEMBER", "CLIENT"})
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -60,7 +64,7 @@ public class LoginResource {
         NewCookie sessionIdCookie = createCookie("sessionId", sessionId);
         NewCookie accountIdCookie = createCookie("accountId", String.valueOf(account.getAccountId()));
 
-        URI uri = UriBuilder.fromPath("/pages")
+        URI uri = UriBuilder.fromPath("/")
                 .path(accountTypePaths.get(account.getAccountType()))
                 .build();
 

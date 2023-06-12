@@ -1,7 +1,6 @@
 package dao;
 
 import misc.ConnectionFactory;
-import models.SessionBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,15 +17,15 @@ public enum SessionDao {
         connection = ConnectionFactory.getConnection();
     }
 
-    public boolean checkValidSession(SessionBean session) {
+    public boolean checkValidSession(int accountId, String sessionId) {
         try {
             String query = "SELECT 1 FROM has_login_session " +
                     "WHERE account_id=? AND session_id=? AND expires > NOW()";
 
             PreparedStatement st = connection.prepareStatement(query);
 
-            st.setInt(1, session.getAccountId());
-            st.setString(2, session.getSessionId());
+            st.setInt(1, accountId);
+            st.setString(2, sessionId);
 
             ResultSet rs = st.executeQuery();
 

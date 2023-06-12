@@ -18,6 +18,8 @@ public class ConnectionFactory {
     private static final String PREVIDER_DB_NAME = "postgres";
     private static final String PREVIDER_USERNAME = "webadmin";
 
+    private static final String DEFAULT_URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
+
     private static Connection connection;
     private static boolean connected = false;
 
@@ -27,13 +29,11 @@ public class ConnectionFactory {
     }
 
     public static void setup() {
-        String URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
-
         String host = USE_PREVIDER_DB ? PREVIDER_HOST : BRONTO_HOST;
         String dbName = USE_PREVIDER_DB ? PREVIDER_DB_NAME : BRONTO_DB_NAME;
         String username = USE_PREVIDER_DB ? PREVIDER_USERNAME : BRONTO_USERNAME;
 
-        URL = String.format(URL, host, dbName, USE_PREVIDER_DB ? "" : "1");
+        String URL = String.format(DEFAULT_URL, host, dbName, USE_PREVIDER_DB ? "" : "1");
 
         try {
             Class.forName("org.postgresql.Driver");

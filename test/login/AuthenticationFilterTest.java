@@ -1,7 +1,7 @@
 //package login;
 //
-//import misc.AuthenticationFilter;
-//import models.SessionValidity;
+//import misc.StaticAuthenticationFilter;
+//import misc.SessionInvalidReason;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //
@@ -12,11 +12,11 @@
 //
 //public class AuthenticationFilterTest {
 //
-//    private AuthenticationFilter filter;
+//    private StaticAuthenticationFilter filter;
 //
 //    @BeforeEach
 //    public void setUp() {
-//        filter = new AuthenticationFilter();
+//        filter = new StaticAuthenticationFilter();
 //        try {
 //            String query = "INSERT INTO has_login_session VALUES ()";
 //        }
@@ -70,10 +70,10 @@
 //
 //                    if (isValidCombo) {
 //                        System.out.println("Testing valid combo: " + Arrays.toString(currentCombo));
-//                        assertSame(filter.getSessionValidity(sessionId, accountId, path), SessionValidity.VALID);
+//                        assertSame(filter.getSessionValidity(sessionId, accountId, path), SessionInvalidReason.VALID);
 //                    } else {
 //                        System.out.println("Testing invalid combo: " + Arrays.toString(currentCombo));
-//                        assertNotSame(filter.getSessionValidity(sessionId, accountId, path), SessionValidity.VALID);
+//                        assertNotSame(filter.getSessionValidity(sessionId, accountId, path), SessionInvalidReason.VALID);
 //                    }
 //
 //                }

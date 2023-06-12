@@ -18,7 +18,7 @@ public class ClientResource {
             int client_id = ClientDao.I.addClient(formBean.getClientBean());
             formBean.getEventBean().setClient_id(client_id);
             int event_id = ClientDao.I.addEvent(formBean.getEventBean());
-            for (RequiredCrewBean required: formBean.getRequiredCrewBeans()) {
+            for (RequiredCrewBean required : formBean.getRequiredCrewBeans()) {
                 required.setEvent_id(event_id);
                 ClientDao.I.addRequirement(required);
             }
