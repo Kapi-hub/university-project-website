@@ -18,9 +18,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Random;
 
-@RolesAllowed({"ADMINISTRATOR", "CREW_MEMBER", "CLIENT"})
 @Path("/login")
-
 public class LoginResource {
     // Map of account types to their corresponding paths they should be redirected to after a successful login
     private static final Map<AccountType, String> accountTypePaths = Map.of(
@@ -33,7 +31,6 @@ public class LoginResource {
     private static final String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
             "0123456789!@#$%^&*()[]{}_+:.<>?|~-";
 
-    @RolesAllowed({"ADMINISTRATOR", "CREW_MEMBER", "CLIENT"})
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
