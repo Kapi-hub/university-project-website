@@ -1,3 +1,9 @@
 .navbar-custom .navbar-brand {
     color: var(--bs-light);
 }
+
+.nav-link:hover{
+    background-color: var(--bs-light);
+    color: var(--bs-dark) !important;
+    border-radius: 40px;
+}
