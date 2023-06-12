@@ -60,19 +60,20 @@ function setAnnouncements() {
 function setLatestEvents() {
     let events = []
     sendHttpRequest('Get', "/api/admin/dashboard/latest").then(responseData => {
-        responseData.events.forEach(event => event.push(event));
+        responseData.events.forEach(event => events.push(event));
         let o = 0;
-        var textHolders = document.getElementById("collapseThree");
-        textHolders.forEach(event => {
-                while (o < events.length) {
-                    const titleElement = event.querySelector(".accordion-body");
-                    titleElement.textContent = events[o].name;
-                    o++;
-                }
-            }
-        )
+        var parent = document.getElementById("collapseThree");
+        const children = Array.from(parent.children);
+        while(o < children.length && o< events.length){
+            children[o].span.textContent = events[o].title;
+            o++;
+        }
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })
+}
+
+function setCreNeeded(){
+    sendHttpRequest("Get","/api/admin/dashboard/crewReq")
 }
 

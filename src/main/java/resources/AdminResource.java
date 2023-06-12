@@ -84,23 +84,32 @@ Connection connection = ConnectionFactory.getConnection();
 
 
     @GET
-    @Path("/dashboard/crewRew")
+    @Path("/dashboard/crewReq")
     public void getCrewMember(CrewMemberBean crewMember) {
-//        String insertQuery = "SELECT * FROM announcement"; //TODO how do you know when more crew is needed
-//        ArrayList<AnnouncementBean> announcements =null;
-//        try {
-//            announcements = new ArrayList<>();
-//            PreparedStatement st = connection.prepareStatement(insertQuery);
-//            ResultSet rs = st.executeQuery();
-//            while (rs.next()) {
-//                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
-//                announcements.add(ab);
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
-//        return announcements;
-//    }
+        String insertQuery = "SELECT e.id, e.name\n" +
+                "FROM event e\n" +
+                "JOIN event_requirement er ON e.id = er.event_id\n" +
+                "LEFT JOIN (\n" +
+                "  SELECT event_id, COUNT(*) AS enrollments\n" +
+                "  FROM event_enrollment\n" +
+                "  GROUP BY event_id\n" +
+                ") ee ON e.id = ee.event_id\n" +
+                "WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; ";
+
+        ArrayList<AnnouncementBean> announcements =null;
+        try {
+            announcements = new ArrayList<>();
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
+                announcements.add(ab);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return announcements;
+    }
     }
 
     @GET
