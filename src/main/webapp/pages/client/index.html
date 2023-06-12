@@ -11,17 +11,16 @@
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="../../img/Shotmaniacs_Logo_White_ZT.png">
+            <span class="ps-3 LogoText color kiona">Shotmaniacs</span>
+        </a>
+        <ul class="nav justify-content-end ">
 
-<nav>
-    <div class="navbar">
-        <div class="container">
-            <a class="navbar-brand">
-                <img alt="Shotmaniacs" height="90" src="../../img/Shotmaniacs_Logo_Black_ZT.png" width="50">
-            </a>
-            <div class="navbar-text mx-auto">
-                <span class="navbar-text">Bookings for Customers</span>
-            </div>
-        </div>
+            <!--leave this in case we add another buttons-->
+        </ul>
     </div>
 </nav>
 <div class="container-lg">
@@ -75,7 +74,7 @@
                 </div>
                 <div class="form-group">
                     <label for="type">Event Type</label>
-                    <select class="form-control select" id="type">
+                    <select style ="background-color: #1696D2" class="form-control select" id="type">
                         <option value="CLUB_PHOTOGRAPHY">Club Photography</option>
                         <option value="FESTIVAL">Festival</option>
                         <option value="PHOTOSHOOT">Photoshoot</option>
@@ -83,7 +82,7 @@
                 </div>
                 <div class="form-group">
                     <label for="start">Event Start</label>
-                    <input class="form-control" id="start" type="datetime-local">
+                    <input class="form-control select" id="start" type="datetime-local">
                 </div>
                 <div class="form-group">
                     <label for="duration">Event Duration (in hours)</label>
@@ -242,10 +241,10 @@
                         dataType: "json",
                         contentType: "application/json",
                         data: JSON.stringify(formData),
-                        success: function (data) {
+                        success: function () {
                             alert("Form successfully sent!");
                         },
-                        error: function (error) {
+                        error: function () {
                             alert("An error has occurred");
                         }
 
@@ -271,10 +270,10 @@
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function(response) {
+                        success: function() {
                             alert('File uploaded successfully');
                         },
-                        error: function(xhr, status, error) {
+                        error: function() {
                             alert('File upload failed');
                         }
                     });

@@ -1,9 +1,9 @@
 body {
     font-weight: 100;
     background: var(--bs-light);
-    color: var(--bs-dark);
+    color: var(--bs-light);
     font-family: 'Kiona', sans-serif;
-    background-image: radial-gradient(circle, lightgray 40%, var(--bs-light) 70%, var(--bs-primary) 150%);
+    background-image: radial-gradient(circle, #1F1F1F 40%, var(--bs-dark) 70%, var(--bs-primary) 200%);
 }
 
 * {
@@ -69,10 +69,19 @@ nav {
 }
 
 .select {
-    background-color: transparent;
+    background-color: var(--bs-dark) !important;
+    color: #ccc;
     border: none;
     border-radius: 0;
     border-bottom: 2px dotted #6c757d;
+}
+
+#start {
+    color: #ccc;
+}
+
+.select option {
+    color: white;
 }
 
 .form {
@@ -106,3 +115,12 @@ h3, h2 {
 
 }
 
+
+
+.form-control::placeholder {
+    color: #ccc
+}
+
+.navbar-custom .navbar-brand {
+    color: var(--bs-light);
+};
