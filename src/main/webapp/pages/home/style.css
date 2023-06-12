@@ -1,18 +1,45 @@
+* {
+    font-family: 'Kiona', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main{
+    position: relative;
+    background: linear-gradient(120deg, var(--bs-primary), var(--bs-primary) 60%, var(--bs-dark) 60%);
+    min-height: 100vh;
+    padding: 0 100px;
+    display: flex;
+    align-items: center ;
+}
+
+.nav-link{
+    color: white;
+}
+
+.nav-link#crew-member-login {
+    background-color: yellow;
+}
+
+.nav {
+    justify-content: end;
+}
+
 .navbar-custom .navbar-brand {
     color: var(--bs-light);
 }
 
-body {
-    background-color: var(--bs-dark);
-}
-
-* {
-    font-family: 'Kiona', sans-serif;
-    color: var(--bs-light);
-}
-
-.nav-link:hover {
-    color: var(--bs-dark) !important;
+.nav .nav-item.create-booking:hover,
+.nav .nav-item.crew-member-login:hover{
     background-color: var(--bs-light);
+    color: var(--bs-dark);
     border-radius: 50px;
+}
+
+.imgBx img{
+    margin-left: 50px;
+}
+
+body {
 }
