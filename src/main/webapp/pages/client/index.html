@@ -16,7 +16,7 @@
     <div class="navbar">
         <div class="container">
             <a class="navbar-brand">
-                <img src="../../img/Shotmaniacs_Logo_Black_ZT.png" alt="Shotmaniacs" width="50" height="90">
+                <img alt="Shotmaniacs" height="90" src="../../img/Shotmaniacs_Logo_Black_ZT.png" width="50">
             </a>
             <div class="navbar-text mx-auto">
                 <span class="navbar-text">Bookings for Customers</span>
@@ -25,6 +25,7 @@
     </div>
 </nav>
 <div class="container-lg">
+
     <div class="main p-3">
         <p class="title kiona">&nbspShotmaniacs<sup>®</sup></p>
         <p class="sub-title pb-5">
@@ -39,80 +40,108 @@
             <h3 class="pt-4">Client Details</h3>
             <div class="form-group">
                 <label for="forename">Forename</label>
-                <input type="text" class="form-control" id="forename" placeholder="Enter forename">
+                <input class="form-control" id="forename" placeholder="Enter forename" type="text">
             </div>
             <div class="form-group">
                 <label for="surname">Surname</label>
-                <input type="text" class="form-control" id="surname" placeholder="Enter surname">
+                <input class="form-control" id="surname" placeholder="Enter surname" type="text">
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" placeholder="Enter phone number">
+                <input class="form-control" id="phone" placeholder="Enter phone number" type="tel">
             </div>
             <div class="form-group">
                 <label for="email_address">Email Address</label>
-                <input type="text" class="form-control" id="email_address" placeholder="Enter Email Address">
+                <input class="form-control" id="email_address" placeholder="Enter Email Address" type="text">
             </div>
 
             <!-- Event Details Section -->
-            <h3 class="pt-4"> Event Details</h3>
-            <div class="form-group">
-                <label for="name">Event Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter event name">
-            </div>
-            <div class="form-group">
-                <label for="type">Event Type</label>
-                <select class="form-control select" id="type">
-                    <option value="CLUB_PHOTOGRAPHY">Club Photography</option>
-                    <option value="FESTIVAL">Festival</option>
-                    <option value="PHOTOSHOOT">Photoshoot</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="start">Event Start</label>
-                <input type="datetime-local" class="form-control" id="start">
-            </div>
-            <div class="form-group">
-                <label for="duration">Event Duration (in hours)</label>
-                <input type="number" class="form-control" id="duration" placeholder="Enter event duration">
-            </div>
-            <div class="form-group">
-                <label for="location">Event Location</label>
-                <input type="text" class="form-control" id="location" placeholder="Enter event location">
-            </div>
 
-            <!-- Required Crew Section -->
-            <h3 class="pt-4">Required Crew</h3>
-            <div class="form-group">
-                <label for="photographer">Photographer</label>
-                <input type="number" class="form-control" id="photographer" placeholder="Enter required photographer count">
+            <h3 class="pt-4">Event Details</h3>
+            <div>
+                <label>
+                    <input checked name="booking-type" onclick="showForm('single')" type="radio" value="single">
+                    Single Booking
+                </label>
+                <label>
+                    <input name="booking-type" onclick="showForm('multiple')" type="radio" value="multiple">
+                    Multiple Bookings
+                </label>
             </div>
-            <div class="form-group">
-                <label for="assistant">Assistant</label>
-                <input type="number" class="form-control" id="assistant" placeholder="Enter required assistant count">
+            <div id="single">
+                <div class="form-group">
+                    <label for="name">Event Name</label>
+                    <input class="form-control" id="name" placeholder="Enter event name" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="type">Event Type</label>
+                    <select class="form-control select" id="type">
+                        <option value="CLUB_PHOTOGRAPHY">Club Photography</option>
+                        <option value="FESTIVAL">Festival</option>
+                        <option value="PHOTOSHOOT">Photoshoot</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="start">Event Start</label>
+                    <input class="form-control" id="start" type="datetime-local">
+                </div>
+                <div class="form-group">
+                    <label for="duration">Event Duration (in hours)</label>
+                    <input class="form-control" id="duration" placeholder="Enter event duration" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="location">Event Location</label>
+                    <input class="form-control" id="location" placeholder="Enter event location" type="text">
+                </div>
+
+                <!-- Required Crew Section -->
+                <h3 class="pt-4">Required Crew</h3>
+                <div class="form-group">
+                    <label for="photographer">Photographer</label>
+                    <input class="form-control" id="photographer" placeholder="Enter required photographer count"
+                           type="number">
+                </div>
+                <div class="form-group">
+                    <label for="assistant">Assistant</label>
+                    <input class="form-control" id="assistant" placeholder="Enter required assistant count"
+                           type="number">
+                </div>
+                <div class="form-group">
+                    <label for="editor">Editor</label>
+                    <input class="form-control" id="editor" placeholder="Enter required editor count" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="data_handler">Data Handler</label>
+                    <input class="form-control" id="data_handler" placeholder="Enter required data handler count"
+                           type="number">
+                </div>
+                <div class="form-group">
+                    <label for="planner">Planner</label>
+                    <input class="form-control" id="planner" placeholder="Enter required planner count" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="producer">Producer</label>
+                    <input class="form-control" id="producer" placeholder="Enter required producer count" type="number">
+                </div>
+                <div class="form-group">
+                    <label for="videographer">Videographer</label>
+                    <input class="form-control" id="videographer" placeholder="Enter required videographer count"
+                           type="number">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="editor">Editor</label>
-                <input type="number" class="form-control" id="editor" placeholder="Enter required editor count">
-            </div>
-            <div class="form-group">
-                <label for="data_handler">Data Handler</label>
-                <input type="number" class="form-control" id="data_handler" placeholder="Enter required data handler count">
-            </div>
-            <div class="form-group">
-                <label for="planner">Planner</label>
-                <input type="number" class="form-control" id="planner" placeholder="Enter required planner count">
-            </div>
-            <div class="form-group">
-                <label for="producer">Producer</label>
-                <input type="number" class="form-control" id="producer" placeholder="Enter required producer count">
-            </div>
-            <div class="form-group">
-                <label for="videographer">Videographer</label>
-                <input type="number" class="form-control" id="videographer" placeholder="Enter required videographer count">
+            <div id="multiple">
+                <div class="pt-3">For the booking, please fill out this template.
+                    <a download href="template/template.xlsx">(.xlsx)</a>
+                    <a download href="template/template.csv">(.csv)</a>
+                </div>
+
+                <div class="form-group">
+                    <label for="excel_template">Upload form here<br></label>
+                    <input accept=".xlsx, .xls, .csv" class="form-control-file" id="excel_template" type="file">
+                </div>
             </div>
             <!-- Submit Button -->
-            <button type="submit" class="btn-primary btn submit-btn px-5 m-2 ">Submit</button>
+            <button class="btn-primary btn submit-btn px-5 m-2 " type="submit">Submit</button>
         </form>
     </div>
 
@@ -121,18 +150,35 @@
 
 </body>
 <script>
-    $(document).ready(function() {
-        // Add event listener for form submission
-        $("form").submit(function(event) {
+    let single = true;
 
-            var requiredElements = ["forename", "surname","phone", "email_address", // client
-                "name","type","start","duration","location",  // event
+    function showForm(type) {
+        if (type === 'single') {
+            document.getElementById('single').style.display = 'block';
+            document.getElementById('multiple').style.display = 'none';
+            single = true;
+        } else if (type === 'multiple') {
+            document.getElementById('single').style.display = 'none';
+            document.getElementById('multiple').style.display = 'block';
+            single = false;
+        }
+    }
+
+    $(document).ready(function () {
+// Add event listener for form submission
+        $("form").submit(function (event) {
+
+            var requiredElements = ["forename", "surname", "phone", "email_address", // client
+                "name", "type", "start", "duration", "location", // event
                 "photographer", "assistant", "editor", "data_handler", "planner", "producer", "videographer"]; // requirements
 
             var unfilledElements = [];
-            for (i = 0; i < requiredElements.length ; i++) {
+            for (i = 0; i < requiredElements.length; i++) {
                 var el = $(`#${requiredElements[i]}`);
-                if  (el.val().length === 0) {
+                if (!single && i >= 4) {
+                    break;
+                }
+                if (el.val().length === 0) {
                     unfilledElements.push(requiredElements[i]);
                     el.css("border-bottom", "2px solid red");
 
@@ -142,71 +188,97 @@
             if (unfilledElements.length > 0) {
                 alert("Please fill in the details for " + unfilledElements);
             } else {
-
-                // Get the form data
-                var formData = {
-                    clientBean: {
-                        forename: $("#forename").val(),
-                        surname: $("#surname").val(),
-                        phone_number: $("#phone").val(),
-                        email_address: $("#email_address").val()
-                    },
-                    eventBean: {
-                        name: $("#name").val(),
-                        type: $("#type").val(),
-                        start: $("#start").val(),
-                        duration: $("#duration").val(),
-                        location: $("#location").val()
-                    },
-                    requiredCrewBeans: [
-                        {
-                            crew_size: $("#photographer").val(),
-                            role: "PHOTOGRAPHER"
+                if (single) {
+// Get the form data
+                    var formData = {
+                        clientBean: {
+                            forename: $("#forename").val(),
+                            surname: $("#surname").val(),
+                            phone_number: $("#phone").val(),
+                            email_address: $("#email_address").val()
                         },
-                        {
-                            crew_size: $("#assistant").val(),
-                            role: "ASSISTANT"
+                        eventBean: {
+                            name: $("#name").val(),
+                            type: $("#type").val(),
+                            start: $("#start").val(),
+                            duration: $("#duration").val(),
+                            location: $("#location").val()
                         },
-                        {
-                            crew_size: $("#editor").val(),
-                            role: "EDITOR"
+                        requiredCrewBeans: [
+                            {
+                                crew_size: $("#photographer").val(),
+                                role: "PHOTOGRAPHER"
+                            },
+                            {
+                                crew_size: $("#assistant").val(),
+                                role: "ASSISTANT"
+                            },
+                            {
+                                crew_size: $("#editor").val(),
+                                role: "EDITOR"
+                            },
+                            {
+                                crew_size: $("#data_handler").val(),
+                                role: "DATA_HANDLER"
+                            },
+                            {
+                                crew_size: $("#planner").val(),
+                                role: "PLANNER"
+                            },
+                            {
+                                crew_size: $("#producer").val(),
+                                role: "PRODUCER"
+                            },
+                            {
+                                crew_size: $("#videographer").val(),
+                                role: "VIDEOGRAPHER"
+                            }
+                        ]
+                    };
+                    // Make the POST request
+                    $.ajax({
+                        url: "../../api/client/submit-form/",
+                        method: "POST",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(formData),
+                        success: function (data) {
+                            alert("Form successfully sent!");
                         },
-                        {
-                            crew_size: $("#data_handler").val(),
-                            role: "DATA_HANDLER"
-                        },
-                        {
-                            crew_size: $("#planner").val(),
-                            role: "PLANNER"
-                        },
-                        {
-                            crew_size: $("#producer").val(),
-                            role: "PRODUCER"
-                        },
-                        {
-                            crew_size: $("#videographer").val(),
-                            role: "VIDEOGRAPHER"
+                        error: function (error) {
+                            alert("An error has occurred");
                         }
-                    ]
-                };
 
-                // Make the POST request
-                $.ajax({
-                    url: "../../api/client/submit-form/",
-                    method: "POST",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify(formData),
-                    success: function (data) {
-                        console.log("Response:", data);
-                        // Handle the response as needed
-                    },
-                    error: function (error) {
-                        console.error("Error:", error);
-                        // Handle the error as needed
+                    });
+                } else {
+                    const formData = new FormData();
+                    // formData.delete("booking-type");
+                    const clientBean = {
+                        forename: $('#forename').val(),
+                        surname: $('#surname').val(),
+                        phone_number: $('#phone').val(),
+                        email_address: $('#email_address').val()
+                    };
+                    const fileInput = $('#excel_template')[0];
+                    formData.append('client_data', JSON.stringify(clientBean));
+                    formData.append('excel_template', fileInput.files[0]);
+                    for (const entry of formData.entries()) {
+                        console.log(entry);
                     }
-
-                });
+                    $.ajax({
+                        url: '../../api/client/submit-form-multiple/',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            alert('File uploaded successfully');
+                        },
+                        error: function(xhr, status, error) {
+                            alert('File upload failed');
+                        }
+                    });
+                }
             }
         });
     });

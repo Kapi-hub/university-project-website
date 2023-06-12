@@ -30,18 +30,29 @@ nav {
     left: 10px;
 }
 
+@keyframes movingTitle {
+    0% { transform: translateX(1000px); }
+    100% { transform: translateX(0); }
+}
 
+@keyframes movingSubTitle {
+    0% { transform: translateX(-1000px); }
+    100% { transform: translateX(0); }
+}
 
 .title {
     text-shadow: 5px 5px 5px rgba(0,0,0,0.2);
     font-size: 6rem;
     text-align: center;
+    animation: movingTitle 1.5s;
 }
 
 .sub-title {
     font-size: 3rem;
     font-style: italic;
     text-align: center;
+    animation: movingSubTitle 1.5s;
+
 
 }
 .heading {
@@ -85,3 +96,13 @@ h3, h2 {
     position: relative;
     alignment: center;
 }
+
+#single {
+    display:block;
+}
+
+#multiple {
+    display:none;
+
+}
+
