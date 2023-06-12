@@ -38,9 +38,9 @@ function renderCalendar() {
     let days = "";
 
     // current month days
-    for(let x = 1; x <= lastDayDate; x++) {
+    for (let x = 1; x <= lastDayDate; x++) {
         //check if it's today then add today class
-        if( x === new Date().getDate() &&
+        if (x === new Date().getDate() &&
             currentMonth === new Date().getMonth() &&
             currentYear === new Date().getFullYear()) {
             // if date month year matches
@@ -54,9 +54,9 @@ function renderCalendar() {
 
     // MANDATORY to be here because the elements are loaded by renderCalendar().
     let day_items = document.querySelectorAll(".weekdaysNumber div");
-    day_items.forEach(function(item) {
-        item.addEventListener("click", function() {
-            day_items.forEach(function (div){
+    day_items.forEach(function (item) {
+        item.addEventListener("click", function () {
+            day_items.forEach(function (div) {
                 div.classList.remove("current");
             });
             item.classList.add("day", "current");
@@ -64,13 +64,14 @@ function renderCalendar() {
         });
     })
 }
+
 renderCalendar();
 
 
-monthItem.forEach( function (item) {
+monthItem.forEach(function (item) {
     item.addEventListener("click", () => {
         console.log(event.target.id);
-        switch(event.target.id) {
+        switch (event.target.id) {
             case "Jan":
                 currentMonth = 0;
                 break;
@@ -124,6 +125,7 @@ function updateTaskBarUpdate() {
     eventDayHandler.innerHTML = `${days[currentDate.getDay() + 1]}`;
     eventDateHandler.innerHTML = `${new Date().getDate()} ${months[currentMonth]}`;
 }
+
 updateTaskBarUpdate();
 
 

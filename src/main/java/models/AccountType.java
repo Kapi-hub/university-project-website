@@ -5,11 +5,6 @@ public enum AccountType {
     CREW_MEMBER,
     CLIENT;
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
-    }
-
     public static AccountType toEnum(String string) {
         return switch (string) {
             case "admin" -> ADMIN;
@@ -17,6 +12,11 @@ public enum AccountType {
             case "client" -> CLIENT;
             default -> null;
         };
+    }
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
     }
 
 }

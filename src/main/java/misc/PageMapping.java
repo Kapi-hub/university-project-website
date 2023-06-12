@@ -8,8 +8,6 @@ import java.util.Map;
 public class PageMapping {
     private static final Map<String, PageInfo> pageMap = new HashMap<>();
 
-    private record PageInfo(String resourceLocation, AccountType requiredAccountType) {}
-
     // place all the page mappings here, fellow teammates :)
     static {
         pageMap.put("/", new PageInfo("/home/index.html", null));
@@ -30,5 +28,8 @@ public class PageMapping {
     public static AccountType getRequiredAccountType(String url) {
         PageInfo pageInfo = pageMap.get(url);
         return pageInfo == null ? null : pageInfo.requiredAccountType();
+    }
+
+    private record PageInfo(String resourceLocation, AccountType requiredAccountType) {
     }
 }

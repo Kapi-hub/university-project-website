@@ -23,7 +23,7 @@ public class StaticAuthenticationFilter implements Filter {
         // by default, we assume the user is not logged in
         SessionInvalidReason sessionInvalidReason = SessionInvalidReason.NOT_LOGGED_IN;
 
-        if (cookies != null){
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("sessionId")) {
                     sessionId = cookie.getValue();
@@ -47,7 +47,6 @@ public class StaticAuthenticationFilter implements Filter {
         AccountType requiredAccountType = PageMapping.getRequiredAccountType(path);
 
         if (requiredAccountType == null || requiredAccountType == accountType) {
-            System.out.println("Static filter passed");
             chain.doFilter(request, response);
             return;
         } else if (accountType != null) {

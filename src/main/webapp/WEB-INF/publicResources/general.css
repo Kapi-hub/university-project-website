@@ -35,11 +35,11 @@
     color: var(--bs-primary)
 }
 
-.shotmaniacs-peal{
+.shotmaniacs-peal {
     color: var(--bs-light)
 }
 
-body{
+body {
     background-color: var(--bs-dark);
 }
 

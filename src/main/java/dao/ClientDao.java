@@ -3,11 +3,12 @@ package dao;
 import misc.ConnectionFactory;
 import models.ClientBean;
 import models.EventBean;
-
-import models.EventType;
 import models.RequiredCrewBean;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Singleton Pattern // Data access Object

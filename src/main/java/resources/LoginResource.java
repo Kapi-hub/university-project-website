@@ -2,7 +2,6 @@ package resources;
 
 import dao.AccountDao;
 import dao.SessionDao;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

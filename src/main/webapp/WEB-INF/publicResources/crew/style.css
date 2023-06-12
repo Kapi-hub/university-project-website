@@ -11,11 +11,21 @@
 }
 
 @keyframes navbarFadeInAnimation {
-    0% { opacity: 0}
-    60% { opacity: 0}
-    80% { opacity: 0.8}
-    90% { opacity: 0.9}
-    100% { opacity: 1}
+    0% {
+        opacity: 0
+    }
+    60% {
+        opacity: 0
+    }
+    80% {
+        opacity: 0.8
+    }
+    90% {
+        opacity: 0.9
+    }
+    100% {
+        opacity: 1
+    }
 }
 
 .navbar-custom .navbar-brand {
@@ -31,9 +41,10 @@ doesn't get in the way of building / maintaining the website*/
 .container.welcome-container {
     display: flex;
     min-height: 0 !important;
-    height: 15vh !important; // TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS
+    height: 15vh !important;
+/ / TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS
     /*height: 92vh;*/
-    flex-wrap: wrap;
+flex-wrap: wrap;
     flex-direction: column;
     color: white;
     opacity: 1;
@@ -44,7 +55,9 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 @keyframes shrinkAnimation {
-    to { height: 19vh;}
+    to {
+        height: 19vh;
+    }
 }
 
 .container.welcome-container .welcomeMessageName {
@@ -66,13 +79,25 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 @keyframes welcomeMessageNameAnimation {
-    0% { left: -180px; opacity: 0}
-    100% { left: 0; opacity: 1;}
+    0% {
+        left: -180px;
+        opacity: 0
+    }
+    100% {
+        left: 0;
+        opacity: 1;
+    }
 }
 
 @keyframes welcomeMessageEventsAnimation {
-    0% { left: 180px; opacity: 0}
-    100% { left: 0; opacity: 1;}
+    0% {
+        left: 180px;
+        opacity: 0
+    }
+    100% {
+        left: 0;
+        opacity: 1;
+    }
 }
 
 /* ************************** */
@@ -135,6 +160,7 @@ doesn't get in the way of building / maintaining the website*/
 .content-container .tab_content.tab_current .carousel.slide .carousel-control-next .carousel.icon {
     font-size: 30px;
 }
+
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
@@ -158,7 +184,7 @@ doesn't get in the way of building / maintaining the website*/
     left: 0;
     width: 100%;
     height: 80px;
-    background-image: linear-gradient(to right, var(--bs-dark), var(--bs-secondary)) ;
+    background-image: linear-gradient(to right, var(--bs-dark), var(--bs-secondary));
     transition: transform 0.3s ease-in-out; /* Add transition for sliding effect */
     /*z-index: -1;*/
 }
@@ -229,10 +255,10 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 .calendar .header .month {
-    display:flex ;
+    display: flex;
     align-items: center;
     font-size: 30px;
-    font-weight:1000;
+    font-weight: 1000;
     color: #1F1F1F;
 }
 
@@ -295,7 +321,8 @@ doesn't get in the way of building / maintaining the website*/
     list-style: none;
     text-align: center;
     padding-left: 0;
-    margin-bottom: 0; !important;
+    margin-bottom: 0;
+!important;
 }
 
 .left_side_bar ul li a {
@@ -309,7 +336,7 @@ doesn't get in the way of building / maintaining the website*/
     cursor: pointer;
 }
 
-.left_side_bar ul li.active a{
+.left_side_bar ul li.active a {
     background: var(--bs-light);
     color: var(--bs-dark);
     padding-bottom: 15px;
@@ -331,7 +358,7 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 .right_side_bar .today-date {
-    width:100%;
+    width: 100%;
     height: 50px;
     display: flex;
     flex-wrap: wrap;
@@ -374,7 +401,7 @@ body {
     border-radius: 20px !important;
 }
 
-.accordion-item + .accordion-item{
+.accordion-item + .accordion-item {
     margin-top: 10px;
 }
 

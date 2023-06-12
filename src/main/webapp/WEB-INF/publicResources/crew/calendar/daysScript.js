@@ -47,9 +47,9 @@ function renderCalendar() {
     // }
 
     // current month days
-    for(let x = 1; x <= lastDayDate; x++) {
+    for (let x = 1; x <= lastDayDate; x++) {
         //check if it's today then add today class
-        if( x === new Date().getDate() &&
+        if (x === new Date().getDate() &&
             currentMonth === new Date().getMonth() &&
             currentYear === new Date().getFullYear()) {
             // if date month year matches

@@ -1,4 +1,4 @@
-.ps-3{
+.ps-3 {
     color: var(--bs-light);
 
 }
@@ -19,7 +19,7 @@
     backdrop-filter: blur(2px);
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0,.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
     /*display: flex;*/
     /*align-items: flex-start;*/
 
@@ -46,12 +46,13 @@
     background-size: cover;
 
 }
+
 .form-control {
     margin-bottom: 20px;
     width: 400px !important;
 }
 
-.sign{
+.sign {
     visibility: visible;
 }
 

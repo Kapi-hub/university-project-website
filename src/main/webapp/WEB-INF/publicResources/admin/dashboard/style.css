@@ -6,13 +6,15 @@
     padding-bottom: 120px;
     color: var(--bs-primary);
 }
-body{
+
+body {
     background-color: var(--bs-dark);
 }
-.announcementText, .eventsText{
+
+.announcementText, .eventsText {
     font-weight: bold;
     font-size: 22px;
-    color:var(--bs-primary) ;
+    color: var(--bs-primary);
 }
 
 .announcementsContainer {
@@ -20,7 +22,7 @@ body{
     height: fit-content;
     padding: 10px;
     margin: auto auto 30px;
-    color:var(--bs-light);
+    color: var(--bs-light);
 
     border: 1px solid var(--bs-primary);
     border-radius: 5px;
@@ -47,7 +49,7 @@ body{
     margin-left: auto;
 }
 
-.accordion-events-button, .crewButton{
+.accordion-events-button, .crewButton {
     background-color: var(--bs-primary);
     border-radius: 20px;
     border-color: var(--bs-primary);
@@ -57,68 +59,73 @@ body{
 }
 
 
-.accordion-button{
+.accordion-button {
     margin-bottom: 10px;
     text-align: justify;
     display: inline-block;
     width: 100%;
 }
 
-.closeBttn{
+.closeBttn {
     background-color: red;
 }
 
-.inputTitle{
+.inputTitle {
     display: block;
     width: 100%;
     overflow-y: auto;
 }
 
-.announcementsContainer .row .col .flex-container{
+.announcementsContainer .row .col .flex-container {
     display: flex;
     align-items: center;
     border-bottom: 1px solid;
     border-color: var(--bs-primary);
 }
 
-.eventsContainer .row .col .flex-container{
+.eventsContainer .row .col .flex-container {
     display: flex;
     align-items: center;
     border-bottom: 1px solid;
     border-color: var(--bs-primary);
 }
 
-.announcement1, .announcement2, .announcement3{
+.announcement1, .announcement2, .announcement3 {
     border-bottom: 1px solid;
     border-color: var(--bs-primary);
 }
+
 /* style.css */
 
 .inline-block {
     display: inline-block;
     vertical-align: middle;
 }
+
 .title {
     font-weight: bold;
 }
+
 .announcementTitle, .accordion-item {
     font-size: 18px;
     display: block;
 
 }
+
 .dateTime {
     font-size: 14px;
     display: block;
 }
 
-.announcementContent{
+.announcementContent {
     font-size: 14px;
 }
-.accordion-body{
-    color:var(--bs-primary) ;
+
+.accordion-body {
+    color: var(--bs-primary);
 }
 
-.toast{
+.toast {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -130,12 +137,14 @@ body{
 * {
     font-family: 'Kiona', sans-serif;
 }
-.navbar{
-    background-color: var(--bs-dark) ;
-    border-bottom: 1px solid  ;
+
+.navbar {
+    background-color: var(--bs-dark);
+    border-bottom: 1px solid;
     border-bottom-color: var(--bs-primary);
 }
- .modal-content{
-     color: var(--bs-light);
-     background-color: var(--bs-dark);
- }
+
+.modal-content {
+    color: var(--bs-light);
+    background-color: var(--bs-dark);
+}
