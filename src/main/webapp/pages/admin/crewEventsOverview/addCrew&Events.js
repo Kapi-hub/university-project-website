@@ -34,11 +34,43 @@ function addEvent() {
 
     let eventType = ' ';
     if (clubPhotography.checked === true && festival.checked === false && product.checked === false) {
-        eventType = clubPhotography;
+        eventType = "CLUB_PHOTOGRAPHY";
     } else if (clubPhotography.checked === false && festival.checked === true && product.checked === false) {
-        eventType = festival;
+        eventType = "FESTIVAL";
     } else if (clubPhotography.checked === false && festival.checked === false && product.checked === true) {
-        eventType = product;
+        eventType = "PHOTOSHOOT";
+    }
+    var requiredCrew = {
+        requiredCrewBeans: [
+            {
+                crew_size: eventPhotographer,
+                role: "PHOTOGRAPHER"
+            },
+            {
+                crew_size: eventAssistant,
+                role: "ASSISTANT"
+            },
+            {
+                crew_size: eventEditor,
+                role: "EDITOR"
+            },
+            {
+                crew_size: eventDataHandler,
+                role: "DATA_HANDLER"
+            },
+            {
+                crew_size: eventPlanner,
+                role: "PLANNER"
+            },
+            {
+                crew_size: eventProducer,
+                role: "PRODUCER"
+            },
+            {
+                crew_size: eventVideographer,
+                role: "VIDEOGRAPHER"
+            }
+        ]
     }
     sendHttpRequest("Post", "/api/admin/crewEvents/newEvent", {
         eventTitle: eventTitle,
@@ -47,12 +79,7 @@ function addEvent() {
         eventLocation: eventLocation,
         eventDuration: eventDuration,
         eventDescription: eventDescription,
-        eventPhotographer: eventPhotographer,
-        eventAssistant: eventAssistant,
-        eventEditor: eventEditor,
-        eventDataHandler: eventDataHandler,
-        eventPlanner: eventPlanner,
-        eventVideographer: eventVideographer
+        eventCrew: requiredCrew
     }).catch(err => {
         console.log(err)
     }) //TODO figure out what to do when fail
@@ -94,32 +121,44 @@ function addCrewMember() {
 
     //get member's roles
     var roles = '';
-    let photographer = document.getElementById('photographer');
-    let videographer = document.getElementById('videographer');
-    let producer = document.getElementById('producer');
-    let assistant = document.getElementById('assistant');
-    let dataHandler = document.getElementById('dataHandler');
-    let planner = document.getElementById('planner');
-    let editor = document.getElementById('editor');
+    let photographer = document.querySelector('#photographer input[type="checkbox"]');
+    let videographer = document.querySelector('#videographer input[type="checkbox"]');
+    let producer = document.querySelector('#producer input[type="checkbox"]');
+    let assistant = document.querySelector('#assistant input[type="checkbox"]');
+    let dataHandler = document.querySelector('#dataHandler input[type="checkbox"]');
+    let planner = document.querySelector('#planner input[type="checkbox"]');
+    let editor = document.querySelector('#editor input[type="checkbox"]');
 
-    if (photographer.checked === true) {
-        roles = roles + photographer.value + ',';
+
+    if (photographer.checked) {
+        roles = roles + photographer.value + ",";
     }
-
-
+    if (videographer.checked) {
+        roles = roles + videographer.value + ",";
+    }
+    if (producer.checked) {
+        roles = roles + producer.value + ",";
+    }
+    if (assistant.checked) {
+        roles = roles + assistant.value + ",";
+    }
+    if (dataHandler.checked) {
+        roles = roles + dataHandler.value + ",";
+    }
+    if (planner.checked) {
+        roles = roles + planner.value + ",";
+    }
+    if (editor.checked) {
+        roles = roles + editor.value + ",";
+    }
     sendHttpRequest("Post", "/api/admin/crewEvents/newMember", {
         firstName: memberFirstName,
         lastName: memberLastName,
         email: memberEmail,
         username: memberUsername,
-        permissionType: permissionType
+        permissionType: permissionType,
+        role: roles//TODO figure out the sending of the roles
     }).catch(err => {
         console.log(err)
     })//TODO figure out what to do when fail
 }
-
-// console.log(document.querySelector('#dropdown-menu').children);
-var checkbox = document.querySelector('#photographer input[type="checkbox"]');
-var value = checkbox.value;
-
-console.log(value);
