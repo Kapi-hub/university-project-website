@@ -24,7 +24,7 @@ import java.util.Random;
 public class LoginResource {
     // Map of account types to their corresponding paths they should be redirected to after a successful login
     private static final Map<AccountType, String> accountTypePaths = Map.of(
-            AccountType.ADMINISTRATOR, "admin/dashboard",
+            AccountType.ADMIN, "admin/dashboard",
             AccountType.CREW_MEMBER, "crew/dashboard",
             // Unused, unless user accounts are implemented later
             AccountType.CLIENT, "submit"

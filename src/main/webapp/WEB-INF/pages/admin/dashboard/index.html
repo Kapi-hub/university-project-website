@@ -11,9 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
-    <link href="../../general.css" rel="stylesheet">
-    <link href="../admin.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <link href="/static/general.css" rel="stylesheet">
+    <link href="/static/admin/admin.css" rel="stylesheet">
+    <link href="/static/admin/dashboard/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
 
     <script>
@@ -22,7 +22,7 @@
             document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
             document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
 
-            window.location.href = "../../login/index.html"
+            window.location.href = "/login?logout=true"
 
         }
     </script>
@@ -68,15 +68,15 @@
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="../../../img/Shotmaniacs_Logo_White_ZT.png">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
             <li class="nav-item border bg-white border-white rounded-pill">
-                <a class="nav-link text-dark" href="../dashboard/index.html"><strong>Dashboard</strong></a>
+                <a class="nav-link text-dark" href="/admin/dashboard"><strong>Dashboard</strong></a>
             </li>
             <li class="nav-item me-2">
-                <a class="nav-link text-white" href="../crewEventsOverview/index.html"><strong>Crew&Events</strong></a>
+                <a class="nav-link text-white" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
             </li>
             <li class="nav-item me-2">
                 <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>

@@ -23,12 +23,14 @@ public class StaticAuthenticationFilter implements Filter {
         // by default, we assume the user is not logged in
         SessionInvalidReason sessionInvalidReason = SessionInvalidReason.NOT_LOGGED_IN;
 
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("sessionId")) {
-                sessionId = cookie.getValue();
-            }
-            if (cookie.getName().equals("accountId")) {
-                accountIdString = cookie.getValue();
+        if (cookies != null){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("sessionId")) {
+                    sessionId = cookie.getValue();
+                }
+                if (cookie.getName().equals("accountId")) {
+                    accountIdString = cookie.getValue();
+                }
             }
         }
 
@@ -45,13 +47,14 @@ public class StaticAuthenticationFilter implements Filter {
         AccountType requiredAccountType = PageMapping.getRequiredAccountType(path);
 
         if (requiredAccountType == null || requiredAccountType == accountType) {
+            System.out.println("Static filter passed");
             chain.doFilter(request, response);
             return;
         } else if (accountType != null) {
             sessionInvalidReason = SessionInvalidReason.UNAUTHORIZED;
         }
 
-        String loginURL = servletReq.getContextPath() + "/login/?path=" + servletReq.getRequestURI() + "&";
+        String loginURL = servletReq.getContextPath() + "/login?path=" + servletReq.getRequestURI() + "&";
 
         switch (sessionInvalidReason) {
             case EXPIRED -> servletRes.sendRedirect(loginURL + "sessionExpired=true");

@@ -32,11 +32,8 @@ public enum AccountDao {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-
-                int accountId = rs.getInt(1);
-                account.setAccountId(accountId);
+                account.setAccountId(rs.getInt(1));
                 account.setAccountType(AccountType.toEnum(rs.getString(2)));
-
                 return true;
             }
             return false;

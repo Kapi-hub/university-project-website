@@ -10,7 +10,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>dao;misc;models</param-value>
+            <param-value>dao;misc;models;resources</param-value>
         </init-param>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
@@ -41,6 +41,16 @@
         <filter-name>StaticAuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <servlet>
+        <servlet-name>StaticResources</servlet-name>
+        <servlet-class>misc.StaticResources</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaticResources</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
 
     <listener>
         <listener-class>misc.ApplicationConfig</listener-class>

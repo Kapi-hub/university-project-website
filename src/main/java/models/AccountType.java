@@ -1,7 +1,7 @@
 package models;
 
 public enum AccountType {
-    ADMINISTRATOR,
+    ADMIN,
     CREW_MEMBER,
     CLIENT;
 
@@ -12,7 +12,7 @@ public enum AccountType {
 
     public static AccountType toEnum(String string) {
         return switch (string) {
-            case "administrator" -> ADMINISTRATOR;
+            case "admin" -> ADMIN;
             case "crew_member" -> CREW_MEMBER;
             case "client" -> CLIENT;
             default -> null;

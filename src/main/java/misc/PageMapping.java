@@ -2,7 +2,6 @@ package misc;
 
 import models.AccountType;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,9 +15,9 @@ public class PageMapping {
         pageMap.put("/", new PageInfo("/home/index.html", null));
         pageMap.put("/login", new PageInfo("/login/index.html", null));
         pageMap.put("/submit", new PageInfo("/client/index.html", null));
-        pageMap.put("/admin", new PageInfo("/admin/mainPage/index.html", AccountType.ADMINISTRATOR));
-        pageMap.put("/admin/dashboard", new PageInfo("/admin/dashboard/index.html", AccountType.ADMINISTRATOR));
-        pageMap.put("/admin/crewAssignments", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMINISTRATOR));
+        pageMap.put("/admin", new PageInfo("/admin/mainPage/index.html", AccountType.ADMIN));
+        pageMap.put("/admin/dashboard", new PageInfo("/admin/dashboard/index.html", AccountType.ADMIN));
+        pageMap.put("/admin/crewAssignments", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
         pageMap.put("/crew/dashboard", new PageInfo("/crew/dashboard/index.html", AccountType.CREW_MEMBER));
         pageMap.put("/crew/calendar", new PageInfo("/crew/calendar/index.html", AccountType.CREW_MEMBER));
     }

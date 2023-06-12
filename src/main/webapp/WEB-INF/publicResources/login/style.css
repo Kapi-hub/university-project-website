@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     height: 100vh;
-    background: url('../../img/img411.jpg') no-repeat center;
+    background: url('/static/img/img411.jpg') no-repeat center;
     background-size: cover;
 
 }
