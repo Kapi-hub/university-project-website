@@ -3,6 +3,7 @@ package dao;
 import misc.ConnectionFactory;
 import models.AccountBean;
 import models.AccountType;
+import models.RoleType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,11 +45,11 @@ public enum AccountDao {
         }
     }
 
-    public AccountType determineAccountType(int AccountId) throws SQLException {
+    public AccountType determineAccountType(int accountId) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";
 
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, AccountId);
+        st.setInt(1, accountId);
 
         ResultSet rs = st.executeQuery();
 
