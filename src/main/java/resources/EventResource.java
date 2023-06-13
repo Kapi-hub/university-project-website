@@ -9,7 +9,9 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import models.CrewMemberBean;
 import models.EventBean;
+import models.ForceEnrolBean;
 import models.RoleType;
 
 import java.sql.SQLException;
@@ -23,13 +25,30 @@ public class EventResource {
     @RolesAllowed("crew_member")
     public Response enrollSelf(EventBean event, @CookieParam("accountId") String accountIdString) {
         int accountId = Integer.parseInt(accountIdString);
+        return enrol(accountId, event.getId());
+    }
+
+    @Path("/force-enrol")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public Response forceEnrolCrew(ForceEnrolBean beans) {
+        CrewMemberBean crewMemberBean = beans.getCrewMemberBean();
+        EventBean eventBean = beans.getEventBean();
+        int crewMemberId = crewMemberBean.getAccountId();
+        int eventId = eventBean.getId();
+        return enrol(crewMemberId, eventId);
+    }
+
+    private Response enrol(int crewId, int eventId) {
         try {
-            RoleType role = CrewMemberDao.I.getRole(accountId);
-            int required = EventDao.instance.getRequiredCrewSize(role, event.getId());
-            int currentEnrolled = EventDao.instance.getCurrentEnrolmentsForRole(role, event.getId());
+            RoleType role = CrewMemberDao.I.getRole(crewId);
+            int required = EventDao.instance.getRequiredCrewSize(role, eventId);
+            int currentEnrolled = EventDao.instance.getCurrentEnrolmentsForRole(role, eventId);
             if (required < currentEnrolled) {
-                EventDao.instance.addEnrolment(accountId, event.getId());
-                return Response.ok().build();
+                EventDao.instance.addEnrolment(crewId, eventId);
+                return Response.ok()
+                        .build();
             } else {
                 return Response.notModified()
                         .build();

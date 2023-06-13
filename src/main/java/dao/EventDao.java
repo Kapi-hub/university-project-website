@@ -28,7 +28,7 @@ public enum EventDao {
     }
 
     public int getRequiredCrewSize(RoleType role, int eventId) throws SQLException {
-        String query = "SELECT crew_size FROM event_requirement WHERE event_id = ? AND role = ?";
+        String query = "SELECT crew_size FROM event_requirement WHERE event_id = ? AND role = ?::role_enum";
 
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, eventId);
@@ -44,11 +44,7 @@ public enum EventDao {
     }
 
     public int getCurrentEnrolmentsForRole(RoleType role, int eventID) throws SQLException {
-        String query = "SELECT count(c.id) " +
-                "FROM crew_member c, event_enrollment ee " +
-                "WHERE c.id = ee.crew_member_id " +
-                "AND ee.event_id = ? AND c.role = ? " +
-                "GROUP BY c.role";
+        String query = "SELECT COUNT(*) FROM crew_member c, event_enrollment ee WHERE ee.event_id = ? AND c.role = ?::role_enum AND c.id = ee.crew_member_id";
 
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, eventID);

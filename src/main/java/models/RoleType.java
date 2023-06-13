@@ -9,8 +9,8 @@ public enum RoleType {
     PRODUCER,
     VIDEOGRAPHER;
 
-    public static RoleType toEum(String roleString) {
-        return switch (roleString) {
+    public static RoleType toEum(String string) {
+        return string == null ? null : switch (string) {
             case "assistant" -> ASSISTANT;
             case "data_handler" -> DATA_HANDLER;
             case "editor" -> EDITOR;

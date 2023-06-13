@@ -38,6 +38,10 @@ public class AccountBean {
         this.accountType = accountType;
     }
 
+    public AccountBean(int accountId) {
+        this.accountId = accountId;
+    }
+
     public int getAccountId() {
         return accountId;
     }
