@@ -54,7 +54,7 @@ If you don't have Tomcat installed already, follow these steps:
 1. Download the latest version of Tomcat [here](https://tomcat.apache.org/). We are using Tomcat 10.1.9.
 2. Extract the downloaded Tomcat zip file to your desired location.
 
-### Adding the Password Environment Variable for the Database
+### Adding the necessary Environment Variables for the Database
 The password for the database is, of course, not published on Git, and you should have access to it already.
 <!-- TODO: Add instructions on how to get the password, how to configure database -->
 
@@ -69,13 +69,18 @@ To add the password variable:
    1. - On Windows, using PowerShell:
          ```bash
          [Environment]::SetEnvironmentVariable("DB_PASSWORD", "[password]", "Machine")
+         [Environment]::SetEnvironmentVariable("MAIL_CLIENT_ID", "[mail_client_id]", "Machine")
+         [Environment]::SetEnvironmentVariable("MAIL_CLIENT_SECRET", "[mail_client_secret]", "Machine")
          ```
 
       - On a Linux distribution, using Bash:
           ```bash
           sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
+          sudo echo "export MAIL_CLIENT_ID=[mail_client_id]" >> /etc/environment
+          sudo echo "export MAIL_CLIENT_SECRET=[mail_client_secret]" >> /etc/environment
           ```
       Replace `[password]` with the actual password.
+      Replace `[mail_client_id]` and `[mail_client_secret]` with the actual id and secret you can find in the JSON.
 
    2. Restart your system to apply the changes.
    3. Double-check that the changes have been applied:

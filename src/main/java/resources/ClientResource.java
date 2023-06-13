@@ -3,6 +3,7 @@ package resources;
 //import org.apache.poi.ss.usermodel.*;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import dao.MailService;
 import models.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,13 +17,17 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import models.RoleType.*;
 
+import javax.mail.MessagingException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static dao.MailService.MAIL;
 
 @Path("/client")
 public class ClientResource {
@@ -38,9 +43,92 @@ public class ClientResource {
                 required.setEvent_id(event_id);
                 ClientDao.I.addRequirement(required);
             }
+            formBean.getEventBean().setId(event_id);
+            sendConfirmation(formBean);
+            sendConfirmationToMe(formBean.getClientBean());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendConfirmation(FormBean formBean) {
+        ClientBean client = formBean.getClientBean();
+        EventBean event = formBean.getEventBean();
+        String subject = String.format("Confirmation Booking of event - %s", event.getName());
+        String body = String.format(
+               """
+               Hi %s!
+               
+               This is a confirmation email based on the event you have booked on %s.
+               Your event id is %s. Your client_id is %s.
+               Shotmaniacs will get in contact with you.
+               
+               Sincerely,
+               The Shotmaniacs Team
+               """, client.getForename(), event.getStart(), event.getId() ,event.getClient_id());
+        String recipient = client.getEmail_address();
+        try {
+            MAIL.sendMessage(recipient, subject, body);
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            e.printStackTrace();
+        }
+    }
+
+    private void sendConfirmationMultiple(ClientBean client) {
+        String subject = "Confirmation Booking of multiple events";
+        String body = String.format(
+                """
+                Hi %s!
+                
+                This is a confirmation email based on the events you have booked.
+                
+                Your information.
+                - Client-id: %s
+                - Name: %s %s
+                - Telephone: %s
+                - Email: %s
+                
+                Shotmaniacs will get in contact with you.
+                
+                Sincerely,
+                The Shotmaniacs Team
+                """, client.getForename(), client.getAccountId(), client.getForename(),
+                client.getSurname(), client.getPhone_number(), client.getEmail_address());
+        String recipient = client.getEmail_address();
+        try {
+            MAIL.sendMessage(recipient, subject, body);
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            e.printStackTrace();
+        }
+    }
+
+    private void sendConfirmationToMe(ClientBean client) {
+        String subject = "New Booking has arrived.";
+        String body = String.format(
+                """
+                Dear Shotmaniacs Team!
+                
+                A client has signed up with bookings. Please consult the admin dashboard to edit the event.
+                
+                The client information:
+                - Client-id: %s
+                - Name: %s %s
+                - Telephone: %s
+                - Email: %s
+
+                Sincerely,
+                The computer behind Shotmaniacs.
+                """, client.getAccountId(), client.getForename(),
+                client.getSurname(), client.getPhone_number(), client.getEmail_address());
+        try {
+            MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            e.printStackTrace();
+        }
+
     }
 
     @Path("/submit-form-multiple")
@@ -58,8 +146,9 @@ public class ClientResource {
                 case "csv" -> handleCsvFile(excelStream, client_id);
                 default -> throw new IOException("Incorrect file has been uploaded.");
             }
-
-
+            clientBean.setAccountId(client_id);
+            sendConfirmationMultiple(clientBean);
+            sendConfirmationToMe(clientBean);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -113,9 +202,9 @@ public class ClientResource {
             }
             EventBean eventBean = new EventBean(
                     values[0],
-                   values[5],
+                    values[5],
                     Timestamp.valueOf(values[2]+":00.000"),
-                    Integer.parseInt (values[3]),
+                    Integer.parseInt(values[3]),
                     values[4],
                     EventType.valueOf(values[1])
             );

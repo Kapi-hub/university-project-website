@@ -70,7 +70,7 @@ public enum ClientDao {
         st.setInt(2, required.getCrew_size());
         st.setString(3, required.getRole().toString());
         st.executeUpdate();
-        System.out.printf("===SQL=== ADDED A ROLE REQUIREMENT WITH VALUES %s, %s, %s",
+        System.out.printf("===SQL=== ADDED A ROLE REQUIREMENT WITH VALUES %s, %s, %s\n",
                 required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
     }
 }
