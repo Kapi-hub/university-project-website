@@ -19,7 +19,9 @@ public enum CrewMemberDao {
     }
 
     public RoleType getRole(int accountId) throws SQLException {
-        String query = "SELECT role FROM crew_member WHERE id = ?";
+        String query = "SELECT role " +
+                "FROM crew_member " +
+                "WHERE id = ?";
 
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, accountId);
