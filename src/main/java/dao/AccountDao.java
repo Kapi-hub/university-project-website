@@ -3,7 +3,6 @@ package dao;
 import misc.ConnectionFactory;
 import models.AccountBean;
 import models.AccountType;
-import models.RoleType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,7 +32,7 @@ public enum AccountDao {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                account.setAccountId(rs.getInt(1));
+                account.setId(rs.getInt(1));
                 account.setAccountType(AccountType.toEnum(rs.getString(2)));
                 return true;
             }

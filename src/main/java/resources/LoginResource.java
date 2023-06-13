@@ -57,7 +57,7 @@ public class LoginResource {
         String sessionId = sessionIdGenerator();
 
         try {
-            SessionDao.instance.putSessionId(account.getAccountId(), sessionId);
+            SessionDao.instance.putSessionId(account.getId(), sessionId);
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error creating session")
@@ -65,7 +65,7 @@ public class LoginResource {
         }
 
         NewCookie sessionIdCookie = createCookie("sessionId", sessionId);
-        NewCookie accountIdCookie = createCookie("accountId", String.valueOf(account.getAccountId()));
+        NewCookie accountIdCookie = createCookie("accountId", String.valueOf(account.getId()));
 
         URI uri = UriBuilder.fromPath("/")
                 .path(accountTypePaths.get(account.getAccountType()))

@@ -19,6 +19,12 @@ import java.sql.SQLException;
 @Path("/event")
 public class EventResource {
 
+    /**
+     * In JSON, use syntax:
+     * "{
+     *     "id": [the event id]
+     * }"
+     */
     @Path("/enroll-self")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -28,6 +34,17 @@ public class EventResource {
         return enrol(accountId, event.getId());
     }
 
+    /**
+     * In JSON, use syntax:
+     * "{
+     *     "crewMember": {
+     *         "id": [the crewMember's account id]
+     *     },
+     *     "event": {
+     *         "id": [the event id]
+     *     }
+     * }"
+     */
     @Path("/force-enroll")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,7 +52,7 @@ public class EventResource {
     public Response forceEnrolCrew(ForceEnrolBean beans) {
         CrewMemberBean crewMemberBean = beans.getCrewMember();
         EventBean eventBean = beans.getEvent();
-        int crewMemberId = crewMemberBean.getAccountId();
+        int crewMemberId = crewMemberBean.getId();
         int eventId = eventBean.getId();
         return enrol(crewMemberId, eventId);
     }

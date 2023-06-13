@@ -10,8 +10,8 @@ public class CrewMemberBean extends AccountBean {
     public CrewMemberBean() {
     }
 
-    public CrewMemberBean(int accountId) {
-        super(accountId);
+    public CrewMemberBean(int id) {
+        super(id);
     }
 
     public RoleType getRole() {
