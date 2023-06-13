@@ -3,12 +3,16 @@ package resources;
 import dao.AccountDao;
 import dao.SessionDao;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import misc.InvalidSessionException;
+import misc.SessionInvalidReason;
+import misc.SessionVerifier;
 import models.AccountBean;
 import models.AccountType;
 
@@ -69,6 +73,25 @@ public class LoginResource {
                 .cookie(accountIdCookie)
                 .cookie(sessionIdCookie)
                 .build();
+    }
+
+    @Path("/logout")
+    @POST
+    public Response handleLogout(@CookieParam("sessionId") String sessionId,
+                                 @CookieParam("accountId") String accountIdString) {
+        // We will send a 200 response even if the user is not logged in, as the user is still logged out in the end
+        Response.ResponseBuilder response = Response.ok();
+        try {
+            SessionVerifier.determineAccountType(sessionId, accountIdString);
+            AccountDao.instance.deleteSessionId(Integer.parseInt(accountIdString), sessionId);
+        } catch (InvalidSessionException | SQLException e) {
+            if (e instanceof SQLException || ((InvalidSessionException) e).getReason() == SessionInvalidReason.UNAUTHORIZED) {
+                // if session deletion failed or the session still exists, just part of the query failed
+                return Response.serverError()
+                        .build();
+            }
+        }
+        return response.build();
     }
 
     public NewCookie createCookie(String name, String value) {

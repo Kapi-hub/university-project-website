@@ -8,17 +8,7 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
     <link href="/static/crew/style.css" rel="stylesheet" type="text/css">
-
-    <script>
-        function logout() {
-
-            document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-            document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-
-            window.location.href = "/login?logout=true"
-
-        }
-    </script>
+    <script src="/static/logout.js"></script>
 </head>
 
 <body>

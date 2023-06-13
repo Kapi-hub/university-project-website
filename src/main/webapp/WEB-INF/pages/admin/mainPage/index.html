@@ -9,17 +9,7 @@
     <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/mainPage/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
-
-    <script>
-        function logout() {
-
-            document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-            document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-
-            window.location.href = "/login?logout=true"
-
-        }
-    </script>
+    <script src="/static/logout.js"></script>
 </head>
 
 <body>
