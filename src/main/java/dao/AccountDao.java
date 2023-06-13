@@ -58,14 +58,4 @@ public enum AccountDao {
 
         throw new SQLException("Account not found");
     }
-
-    public void deleteSessionId(int accountId, String sessionId) throws SQLException {
-        String query = "DELETE FROM has_login_session WHERE account_id = ? AND session_id = ?";
-
-        PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, accountId);
-        st.setString(2, sessionId);
-
-        st.executeUpdate();
-    }
 }

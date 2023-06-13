@@ -93,7 +93,7 @@ public class LoginResource {
                 // determined. We still want to log this user out and delete their session id from the database
             }
             try {
-                AccountDao.instance.deleteSessionId(Integer.parseInt(accountIdString), sessionId);
+                SessionDao.instance.deleteSessionId(Integer.parseInt(accountIdString), sessionId);
                 return response.build();
             } catch (SQLException ignored) {
                 // This means that the deletion failed, so we will try again.
