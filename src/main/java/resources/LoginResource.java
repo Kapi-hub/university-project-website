@@ -79,19 +79,28 @@ public class LoginResource {
     @POST
     public Response handleLogout(@CookieParam("sessionId") String sessionId,
                                  @CookieParam("accountId") String accountIdString) {
-        // We will send a 200 response even if the user is not logged in, as the user is still logged out in the end
         Response.ResponseBuilder response = Response.ok();
-        try {
-            SessionVerifier.determineAccountType(sessionId, accountIdString);
-            AccountDao.instance.deleteSessionId(Integer.parseInt(accountIdString), sessionId);
-        } catch (InvalidSessionException | SQLException e) {
-            if (e instanceof SQLException || ((InvalidSessionException) e).getReason() == SessionInvalidReason.UNAUTHORIZED) {
-                // if session deletion failed or the session still exists, just part of the query failed
-                return Response.serverError()
-                        .build();
+        for (int i = 0; i < 3; i++) {
+            try {
+                SessionVerifier.determineAccountType(sessionId, accountIdString);
+            } catch (InvalidSessionException e) {
+                if (e.getReason() != SessionInvalidReason.UNAUTHORIZED) {
+                    // the user is either not logged already or trying to log someone else out by falsifying the cookies
+                    // We therefore send the 200 response as this user is as a matter of fact logged out
+                    return response.build();
+                }
+                // The unauthorized is only thrown if the users' session is valid but their account type could not be
+                // determined. We still want to log this user out and delete their session id from the database
+            }
+            try {
+                AccountDao.instance.deleteSessionId(Integer.parseInt(accountIdString), sessionId);
+                return response.build();
+            } catch (SQLException ignored) {
+                // This means that the deletion failed, so we will try again.
             }
         }
-        return response.build();
+        return Response.serverError()
+                .build();
     }
 
     public NewCookie createCookie(String name, String value) {
