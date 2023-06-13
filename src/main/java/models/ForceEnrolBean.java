@@ -5,25 +5,30 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ForceEnrolBean {
 
-    private CrewMemberBean crewMemberBean;
-    private EventBean eventBean;
+    private CrewMemberBean crewMember;
+    private EventBean event;
 
     public ForceEnrolBean() {
     }
 
-    public CrewMemberBean getCrewMemberBean() {
-        return crewMemberBean;
+    public ForceEnrolBean(CrewMemberBean crewMember, EventBean event) {
+        this.crewMember = crewMember;
+        this.event = event;
     }
 
-    public void setCrewMemberBean(CrewMemberBean crewMemberBean) {
-        this.crewMemberBean = crewMemberBean;
+    public CrewMemberBean getCrewMember() {
+        return crewMember;
     }
 
-    public EventBean getEventBean() {
-        return eventBean;
+    public void setCrewMember(CrewMemberBean crewMember) {
+        this.crewMember = crewMember;
     }
 
-    public void setEventBean(EventBean eventBean) {
-        this.eventBean = eventBean;
+    public EventBean getEvent() {
+        return event;
+    }
+
+    public void setEvent(EventBean event) {
+        this.event = event;
     }
 }

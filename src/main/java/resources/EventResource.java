@@ -28,13 +28,13 @@ public class EventResource {
         return enrol(accountId, event.getId());
     }
 
-    @Path("/force-enrol")
+    @Path("/force-enroll")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public Response forceEnrolCrew(ForceEnrolBean beans) {
-        CrewMemberBean crewMemberBean = beans.getCrewMemberBean();
-        EventBean eventBean = beans.getEventBean();
+        CrewMemberBean crewMemberBean = beans.getCrewMember();
+        EventBean eventBean = beans.getEvent();
         int crewMemberId = crewMemberBean.getAccountId();
         int eventId = eventBean.getId();
         return enrol(crewMemberId, eventId);
