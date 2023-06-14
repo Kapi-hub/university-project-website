@@ -28,12 +28,12 @@ public class AccountBean {
     public AccountBean() {
     }
 
-    public AccountBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
+    public AccountBean(int accountId, String forename, String surname, String username, String email_address, String password, AccountType accountType) {
         this.accountId = accountId;
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.emailAddress = emailAddress;
+        this.email_address = email_address;
         this.password = password;
         this.accountType = accountType;
     }
