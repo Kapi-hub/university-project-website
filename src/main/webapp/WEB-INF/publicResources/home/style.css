@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    --shadow: rgba(0,0,0,0.2);
 }
 
 .main{
@@ -150,4 +151,12 @@
 .main .contentBx .sci a ion-icon:hover {
     transform: scale(1.15);
     transition: 0.5s ease-in-out;
+}
+
+h2 {
+    text-shadow: 5px 5px 5px var(--shadow);
+}
+p {
+    text-shadow: 5px 5px 5px var(--shadow);
+
 }

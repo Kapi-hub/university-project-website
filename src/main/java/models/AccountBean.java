@@ -34,7 +34,7 @@ public class AccountBean {
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.email_address = email_address;
+        this.emailAddress = email_address;
         this.password = password;
         this.accountType = accountType;
     }
