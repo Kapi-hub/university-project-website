@@ -2,21 +2,10 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @XmlRootElement
 public class EventBean {
-    public EventBean(String name, String description, Timestamp start, int duration, String location, EventType type) {
-        this.name = name;
-        this.description = description;
-        this.start = start;
-        this.duration = duration;
-        this.location = location;
-        this.type = type;
-    }
-
     private int id;
     private int client_id;
     private String name;
@@ -27,6 +16,14 @@ public class EventBean {
     private int production_manager_id;
     private EventType type;
     private EventStatus status;
+    public EventBean(String name, String description, Timestamp start, int duration, String location, EventType type) {
+        this.name = name;
+        this.description = description;
+        this.start = start;
+        this.duration = duration;
+        this.location = location;
+        this.type = type;
+    }
 
     public EventBean() {
 

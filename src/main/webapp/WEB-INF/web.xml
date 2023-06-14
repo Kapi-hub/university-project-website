@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                       https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
@@ -10,7 +10,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>dao;misc;models;resources;com.fasterxml.jackson.jaxrs.json</param-value>
+            <param-value>dao;misc;models;resources</param-value>
         </init-param>
         <init-param>
             <param-name>javax.ws.rs.Application</param-name>
@@ -23,16 +23,34 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>misc.AuthenticationFilter</filter-class>
-    </filter>
+    <servlet>
+        <servlet-name>FrontController</servlet-name>
+        <servlet-class>misc.FrontController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FrontController</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
+    <filter>
+        <filter-name>StaticAuthenticationFilter</filter-name>
+        <filter-class>misc.StaticAuthenticationFilter</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/pages/admin/*</url-pattern>
-        <url-pattern>/pages/crew/*</url-pattern>
+        <filter-name>StaticAuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <servlet>
+        <servlet-name>StaticResources</servlet-name>
+        <servlet-class>misc.StaticResources</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaticResources</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
 
     <listener>
         <listener-class>misc.ApplicationConfig</listener-class>

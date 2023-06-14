@@ -6,7 +6,10 @@ import models.EventBean;
 
 import models.RequiredCrewBean;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Singleton Pattern // Data access Object
@@ -14,7 +17,7 @@ import java.sql.*;
 public enum ClientDao {
     I;
 
-    Connection connection;
+    final Connection connection;
 
     ClientDao() {
         connection = ConnectionFactory.getConnection();

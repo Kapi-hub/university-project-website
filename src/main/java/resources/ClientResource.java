@@ -11,6 +11,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.ClientDao;
+import jakarta.annotation.security.PermitAll;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -29,8 +30,10 @@ import java.util.List;
 
 import static dao.MailService.MAIL;
 
+@PermitAll
 @Path("/client")
 public class ClientResource {
+    @PermitAll
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Admin Overview</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/static/general.css" rel="stylesheet">
+    <link href="/static/admin/admin.css" rel="stylesheet">
+    <link href="/static/admin/crewEventsOverview/style.css" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
+    <script src="/static/logout.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img alt="Logo" class="d-inline-block align-text-middle" src="/static/img/Shotmaniacs_Logo_White_ZT.png"
+                 width="30">
+            <span class="ps-3 LogoText color">Shotmaniacs</span>
+        </a>
+        <ul class="nav justify-content-end ">
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" href="/admin/dashboard"><strong>Dashboard</strong></a>
+            </li>
+            <li class="nav-item border bg-white border-white rounded-pill">
+                <a class="nav-link text-dark" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
+            </li>
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
+            </li>
+            <!--leave this in case we add another buttons-->
+        </ul>
+    </div>
+</nav>
+
+
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="postEventsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createEventModal">Create new event</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">X</button>
+            </div>
+            <div class="modal-body">
+
+                <label class="eventTitleText" for="eventTitle">Event Title</label>
+                <input class="eventTitle" id="eventTitle" type="text">
+                <br>
+
+                <label class="eventTypeText" for="eventType">Event Type</label>
+                <br>
+                <div id="eventType">
+                    <label class="photoBox">
+                        <input type="checkbox">
+                        <span class="checkmark">Club Photography</span>
+                    </label>
+
+                    <label class="festivalBox">
+                        <input type="checkbox">
+                        <span class="checkmark">Festival</span>
+                    </label>
+
+                    <label class="productBox">
+                        <input type="checkbox">
+                        <span class="checkmark">Product Shoot</span>
+                    </label>
+                </div>
+
+                <label class="eventDate&TimeText" for="eventDate&Time"> Event Date&Time</label>
+                <input class="eventTime" id="eventDate&Time" type="datetime-local">
+                <br>
+
+                <label class="eventLocationText" for="eventLocation"> Event Location</label>
+                <input class="eventTime" id="eventLocation" type="text">
+                <br>
+
+                <label class="eventDurationText" for="eventDuration"> Event Duration</label>
+                <input class="eventTime" id="eventDuration" type="number">
+                <br>
+
+                <label class="eventDurationText" for="eventProducer"> Event Producer</label>
+                <div id="eventProducer">
+                    <button aria-expanded="false" class="crewButton" data-bs-toggle="dropdown"
+                            type="button">
+                        <span id="selectedCrewMember"> Select crew member </span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry Smith</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a></li>
+                    </ul>
+                </div>
+                <br>
+
+                <label class="eventDurationText" for="eventcrewSize"> Crew Size</label>
+                <input class="eventTime" id="eventcrewSize" type="number">
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button class="closeBttn" data-bs-dismiss="modal" type="button">Close</button>
+                <button class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toast" type="button">Save event
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="createMemberModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createMemberModalText">Create new member account</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">X</button>
+            </div>
+            <div class="modal-body">
+                <label class="memberFirstNameText" for="memberFirstName"><strong>First name</strong></label>
+                <input class="memberName" id="memberFirstName" type="text">
+                <br>
+
+                <label class="memberLastNameText" for="memberLastName"><strong>Last name</strong></label>
+                <input class="memberName" id="memberLastName" type="text">
+                <br>
+
+                <label class="memberNameText" for="phoneNumber"><strong>Phone Number</strong></label>
+                <input class="phoneNumber" id="phoneNumber" type="tel">
+                <div class="prefix">
+                    <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            type="button">Prefix
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href=“#” value="DZ">Algeria (+213)</a></li>
+                        <li><a href=“#” value="AD">Andorra (+376)</a></li>
+                        <li><a href=“#” value="AO">Angola (+244)</a></li>
+                        <li><a href=“#” value="AI">Anguilla (+1264)</a></li>
+                        <li><a href=“#” value="AG">Antigua &amp; Barbuda (+1268)</a></li>
+
+                    </ul>
+                </div>
+                <br>
+
+                <label class="permissionTypeText" for="permissionType"><strong>Permission</strong></label>
+                <br>
+                <div id="permissionType">
+                    <label class="clubTeam">
+                        <input type="checkbox">
+                        <span class="checkmark">Club Team</span>
+                    </label>
+
+                    <label class="coreTeam">
+                        <input type="checkbox">
+                        <span class="checkmark">Core Team</span>
+                    </label>
+
+                    <label class="both">
+                        <input type="checkbox">
+                        <span class="checkmark">Core&Club Team</span>
+                    </label>
+                </div>
+
+                <label class="roleTypeText" for="roleType"><strong>Role</strong></label>
+                <br>
+
+                <div id="roleType">
+                    <label class="photographer">
+                        <input type="checkbox">
+                        <span class="checkmark">Photographer</span>
+                    </label>
+
+                    <label class="videographer">
+                        <input type="checkbox">
+                        <span class="checkmark">Videographer</span>
+                    </label>
+
+                    <label class="producer">
+                        <input type="checkbox">
+                        <span class="checkmark">Producer</span>
+                    </label>
+
+                    <label class="assistant">
+                        <input type="checkbox">
+                        <span class="checkmark">Assistant</span>
+                    </label>
+
+                    <label class="dataHandler">
+                        <input type="checkbox">
+                        <span class="checkmark">Data Handler</span>
+                    </label>
+
+                    <label class="planner">
+                        <input type="checkbox">
+                        <span class="checkmark">Planner</span>
+                    </label>
+
+                    <label class="editor">
+                        <input type="checkbox">
+                        <span class="checkmark">Editor</span>
+                    </label>
+                </div>
+
+                <label class="usernameText" for="username"><strong>Username</strong></label>
+                <input class="usernameText" id="username" type="text">
+                <br>
+
+            </div>
+            <div class="modal-footer">
+                <button class="closeBttn" data-bs-dismiss="modal" type="button"><strong>Close</strong></button>
+                <button class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="#successfulNewMember"
+                        type="button"><strong>Create new member</strong>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex-container">
+    <!--Side bar -->
+    <div class="sidenav">
+        <div class="col">
+            <button class="collapse-button NavC" data-target="crewGroup" type="button">Crew members</button>
+            <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>
+        </div>
+    </div>
+
+    <!--crewmember and popup -->
+    <div class="container Crew">
+        <div class="collapse hide" id="crewGroup">
+            <div class="row">
+                <div class="col-4">
+                    <div class="list-group ">
+                        <div class="card-body Crew">
+                            Crew-members
+                            <button class="createNewMemberBttn" data-bs-target="#createMemberModal" data-bs-toggle="modal"
+                                    type="button">
+                                New member +
+                            </button>
+                        </div>
+                        <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
+                        <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
+                        <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
+                        <button class="collapse-button Crew" data-target="crew4" type="button">Crew member 4</button>
+                    </div>
+                </div>
+
+                <!--pop-up-->
+                <div class="col-4">
+                    <div class="list-group">
+                        <div class="card pop-up bg-primary text-light">
+                            <div class="collapse crew" id="crew1">
+                                <div class="card-body">
+                                    <h5>Crewmember 1</h5>
+                                    <a class="list-group-item list-group-item-action " href="#">Bookings Active</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Hours spent on
+                                        bookings</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Change role</a>
+                                </div>
+                            </div>
+                            <div class="collapse crew" id="crew2">
+                                <div class="card-body">
+                                    <h5>Crewmember 2</h5>
+                                    <a class="list-group-item list-group-item-action " href="#">Bookings Active</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Hours spent on
+                                        bookings</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Change role</a>
+                                </div>
+                            </div>
+                            <div class="collapse crew" id="crew3">
+                                <div class="card-body">
+                                    <h5>Crewmember 3</h5>
+                                    <a class="list-group-item list-group-item-action " href="#">Bookings Active</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Hours spent on
+                                        bookings</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Change role</a>
+                                </div>
+                            </div>
+                            <div class="collapse crew" id="crew4">
+                                <div class="card-body">
+                                    <h5>Crewmember 4</h5>
+                                    <a class="list-group-item list-group-item-action " href="#">Bookings Active</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Hours spent on
+                                        bookings</a>
+                                    <a class="list-group-item list-group-item-action " href="#">Change role</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--booking and pop-up-->
+<div class="container Booking">
+    <div class="collapse hide" id="bookingGroup">
+        <div class="row">
+            <div class="col-4 ">
+                <div class="list-group">
+                    <div class="card-body Booking">
+                        Bookings
+                        <button class="createEventBttn" data-bs-target="#postEventsModal" data-bs-toggle="modal"
+                                type="button">
+                            Event +
+                        </button>
+                    </div>
+                    <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
+                    <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
+                    <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
+                    <button class="collapse-button booking" data-target="booking4" type="button">Booking 4</button>
+                </div>
+            </div>
+
+            <!--pup-up -->
+            <div class="col-4">
+                <div class="list-group">
+                    <div class="collapse booking" id="booking1">
+                        <div class="card-body">
+                            <h5>Booking 1</h5>
+                            <a class="list-group-item list-group-item-action " href="#">Modify details</a>
+                            <a class="list-group-item list-group-item-action " href="#">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking2">
+                        <div class="card-body">
+                            <h5>Booking 2</h5>
+                            <a class="list-group-item list-group-item-action " href="#">Modify details</a>
+                            <a class="list-group-item list-group-item-action " href="#">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking3">
+                        <div class="card-body">
+                            <h5>Booking 3</h5>
+                            <a class="list-group-item list-group-item-action " href="#">Modify details</a>
+                            <a class="list-group-item list-group-item-action " href="#">Cancel Booking</a>
+                        </div>
+                    </div>
+                    <div class="collapse booking" id="booking4">
+                        <div class="card-body">
+                            <h5>Booking 4</h5>
+                            <a class="list-group-item list-group-item-action " href="#">Modify details</a>
+                            <a class="list-group-item list-group-item-action " href="#">Cancel Booking</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div aria-atomic="true" aria-live="assertive" class="toast" id="successfulEvent" role="alert">
+    <div class="toast-body">
+        Event created successfully!
+    </div>
+</div>
+
+
+<div aria-atomic="true" aria-live="assertive" class="toast" id="successfulNewMember" role="alert">
+    <div class="toast-body">
+        New member created successfully!
+    </div>
+</div>
+
+<script>
+    // Get all collapse buttons for Crew
+    const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
+
+    // Add click event listener to each button
+    collapseButtonsCrew.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse.crew');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+<script>
+    // Get all collapse buttons for Booking
+    const collapseButtons = document.querySelectorAll('.collapse-button.booking');
+
+    // Add click event listener to each button
+    collapseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse.booking');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+</script>
+<script>
+    // Get all collapse buttons for Booking
+    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
+
+    // Add click event listener to each button
+    collapseButtonsNavC.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            const targetCollapse = document.getElementById(targetId);
+            const allCollapses = document.querySelectorAll('.collapse');
+
+            // Hide all collapse elements
+            allCollapses.forEach(collapse => {
+                collapse.classList.remove('show');
+            });
+
+            // Show the target collapse element
+            targetCollapse.classList.add('show');
+        });
+    });
+
+    const saveEventButton = document.querySelector('.saveEventBttn');
+    const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
+
+    saveEventButton.addEventListener('click', function () {
+        toastEvent.show();
+    });
+</script>
+
+<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+</body>
+</html>

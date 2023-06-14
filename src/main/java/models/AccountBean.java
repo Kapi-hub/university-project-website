@@ -1,16 +1,16 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "account")
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement()
 public class AccountBean {
     private int accountId;
     private String forename;
     private String surname;
+    private String username;
+    private String email_address;
+    private String password;
+    private AccountType accountType;
 
     public AccountBean(String forename, String surname, String username, String email_address, AccountType accountType) {
         this.forename = forename;
@@ -20,30 +20,23 @@ public class AccountBean {
         this.accountType = accountType;
     }
 
-    @JsonProperty("username")
-    private String username;
-    private String email_address;
-    @JsonProperty("password")
-    private String password;
-    private String sessionId;
-    private AccountType accountType;
-
     public AccountBean(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-
-
     public AccountBean() {
     }
 
-    public AccountBean(int accountId, String sessionId) {
+    public AccountBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
         this.accountId = accountId;
-        this.sessionId = sessionId;
+        this.forename = forename;
+        this.surname = surname;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+        this.accountType = accountType;
     }
-
-
 
     public int getAccountId() {
         return accountId;
@@ -91,14 +84,6 @@ public class AccountBean {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public AccountType getAccountType() {

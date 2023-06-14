@@ -9,12 +9,17 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
     private static final boolean USE_PREVIDER_DB = false;
-    private static final String PREVIDER_HOST = "node29422-shotmaniacs1.paas.hosted-by-previder.com";
+
     private static final String BRONTO_HOST = "bronto.ewi.utwente.nl";
-    private static final String PREVIDER_DB_NAME = "postgres";
     private static final String BRONTO_DB_NAME = "dab_di22232b_249";
-    private static final String PREVIDER_USERNAME = "webadmin";
     private static final String BRONTO_USERNAME = "dab_di22232b_249";
+
+    private static final String PREVIDER_HOST = "node29422-shotmaniacs1.paas.hosted-by-previder.com";
+    private static final String PREVIDER_DB_NAME = "postgres";
+    private static final String PREVIDER_USERNAME = "webadmin";
+
+    private static final String DEFAULT_URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
+
     private static Connection connection;
     private static boolean connected = false;
 
@@ -24,15 +29,12 @@ public class ConnectionFactory {
     }
 
     public static void setup() {
-        String URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
-        String username;
-        if (USE_PREVIDER_DB) {
-            URL = String.format(URL, PREVIDER_HOST, PREVIDER_DB_NAME, "");
-            username = PREVIDER_USERNAME;
-        } else {
-            URL = String.format(URL, BRONTO_HOST, BRONTO_DB_NAME, "1");
-            username = BRONTO_USERNAME;
-        }
+        String host = USE_PREVIDER_DB ? PREVIDER_HOST : BRONTO_HOST;
+        String dbName = USE_PREVIDER_DB ? PREVIDER_DB_NAME : BRONTO_DB_NAME;
+        String username = USE_PREVIDER_DB ? PREVIDER_USERNAME : BRONTO_USERNAME;
+
+        String URL = String.format(DEFAULT_URL, host, dbName, USE_PREVIDER_DB ? "" : "1");
+
         try {
             Class.forName("org.postgresql.Driver");
             String password = readPassword();
