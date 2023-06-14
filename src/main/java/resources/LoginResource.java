@@ -2,6 +2,8 @@ package resources;
 
 import dao.AccountDao;
 import dao.SessionDao;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.POST;
@@ -37,6 +39,7 @@ public class LoginResource {
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response handleSubmit(AccountBean account) {
 
         if (account == null || account.getUsername() == null || account.getPassword() == null) {
@@ -54,7 +57,7 @@ public class LoginResource {
         String sessionId = sessionIdGenerator();
 
         try {
-            SessionDao.instance.putSessionId(account.getAccountId(), sessionId);
+            SessionDao.instance.putSessionId(account.getId(), sessionId);
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error creating session")
@@ -62,7 +65,7 @@ public class LoginResource {
         }
 
         NewCookie sessionIdCookie = createCookie("sessionId", sessionId);
-        NewCookie accountIdCookie = createCookie("accountId", String.valueOf(account.getAccountId()));
+        NewCookie accountIdCookie = createCookie("accountId", String.valueOf(account.getId()));
 
         URI uri = UriBuilder.fromPath("/")
                 .path(accountTypePaths.get(account.getAccountType()))
@@ -77,6 +80,7 @@ public class LoginResource {
 
     @Path("/logout")
     @POST
+    @RolesAllowed({"admin", "crew_member"})
     public Response handleLogout(@CookieParam("sessionId") String sessionId,
                                  @CookieParam("accountId") String accountIdString) {
         Response.ResponseBuilder response = Response.ok();
