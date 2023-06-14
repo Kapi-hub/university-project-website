@@ -1,32 +1,29 @@
 package resources;
 
-//import org.apache.poi.ss.usermodel.*;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import dao.MailService;
-import models.*;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.ClientDao;
+import dao.MailService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
-import models.RoleType.*;
+import models.*;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.mail.MessagingException;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static dao.MailService.MAIL;
 
@@ -59,16 +56,16 @@ public class ClientResource {
         EventBean event = formBean.getEventBean();
         String subject = String.format("Confirmation Booking of event - %s", event.getName());
         String body = String.format(
-               """
-               Hi %s!
-               
-               This is a confirmation email based on the event you have booked on %s.
-               Your event id is %s. Your client_id is %s.
-               Shotmaniacs will get in contact with you.
-               
-               Sincerely,
-               The Shotmaniacs Team
-               """, client.getForename(), event.getStart(), event.getId() ,event.getClient_id());
+                """
+                        Hi %s!
+                                       
+                        This is a confirmation email based on the event you have booked on %s.
+                        Your event id is %s. Your client_id is %s.
+                        Shotmaniacs will get in contact with you.
+                                       
+                        Sincerely,
+                        The Shotmaniacs Team
+                        """, client.getForename(), event.getStart(), event.getId(), event.getClient_id());
         String recipient = client.getEmail_address();
         try {
             MAIL.sendMessage(recipient, subject, body);
@@ -82,21 +79,21 @@ public class ClientResource {
         String subject = "Confirmation Booking of multiple events";
         String body = String.format(
                 """
-                Hi %s!
-                
-                This is a confirmation email based on the events you have booked.
-                
-                Your information.
-                - Client-id: %s
-                - Name: %s %s
-                - Telephone: %s
-                - Email: %s
-                
-                Shotmaniacs will get in contact with you.
-                
-                Sincerely,
-                The Shotmaniacs Team
-                """, client.getForename(), client.getAccountId(), client.getForename(),
+                        Hi %s!
+                                        
+                        This is a confirmation email based on the events you have booked.
+                                        
+                        Your information.
+                        - Client-id: %s
+                        - Name: %s %s
+                        - Telephone: %s
+                        - Email: %s
+                                        
+                        Shotmaniacs will get in contact with you.
+                                        
+                        Sincerely,
+                        The Shotmaniacs Team
+                        """, client.getForename(), client.getAccountId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmail_address());
         String recipient = client.getEmail_address();
         try {
@@ -111,19 +108,19 @@ public class ClientResource {
         String subject = "New Booking has arrived.";
         String body = String.format(
                 """
-                Dear Shotmaniacs Team!
-                
-                A client has signed up with bookings. Please consult the admin dashboard to edit the event.
-                
-                The client information:
-                - Client-id: %s
-                - Name: %s %s
-                - Telephone: %s
-                - Email: %s
+                        Dear Shotmaniacs Team!
+                                        
+                        A client has signed up with bookings. Please consult the admin dashboard to edit the event.
+                                        
+                        The client information:
+                        - Client-id: %s
+                        - Name: %s %s
+                        - Telephone: %s
+                        - Email: %s
 
-                Sincerely,
-                The computer behind Shotmaniacs.
-                """, client.getAccountId(), client.getForename(),
+                        Sincerely,
+                        The computer behind Shotmaniacs.
+                        """, client.getAccountId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmail_address());
         try {
             MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
