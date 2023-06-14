@@ -5,10 +5,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Crew member")
 public class CrewMemberBean extends AccountBean {
     private int id;
-    private Role role;
+    private RoleType role;
     private Team team;
 
-    public CrewMemberBean(String forename, String surname, String username, String emailAddress, AccountType accountType, int id, Role role, Team team) {
+    public CrewMemberBean(String forename, String surname, String username, String emailAddress, AccountType accountType, int id, RoleType role, Team team) {
         super(forename, surname, username, emailAddress, accountType);
         this.id = id;
         this.role = role;
@@ -16,20 +16,20 @@ public class CrewMemberBean extends AccountBean {
     }
 
 
-    public CrewMemberBean(String username, String password, int id, Role role, Team team) {
+    public CrewMemberBean(String username, String password, int id, RoleType role, Team team) {
         super(username, password);
         this.id = id;
         this.role = role;
         this.team = team;
     }
 
-    public CrewMemberBean(int id, Role role, Team team) {
+    public CrewMemberBean(int id, RoleType role, Team team) {
         this.id = id;
         this.role = role;
         this.team = team;
     }
 
-    public CrewMemberBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType, int id, Role role, Team team) {
+    public CrewMemberBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType, int id, RoleType role, Team team) {
         super(accountId, forename, surname, username, emailAddress, password, accountType);
         this.id = id;
         this.role = role;
@@ -44,11 +44,11 @@ public class CrewMemberBean extends AccountBean {
         this.id = id;
     }
 
-    public Role getRole() {
+    public RoleType getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(RoleType role) {
         this.role = role;
     }
 

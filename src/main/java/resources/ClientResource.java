@@ -66,7 +66,7 @@ public class ClientResource {
                Sincerely,
                The Shotmaniacs Team
                """, client.getForename(), event.getStart(), event.getId() ,event.getClient_id());
-        String recipient = client.getEmail_address();
+        String recipient = client.getEmailAddress();
         try {
             MAIL.sendMessage(recipient, subject, body);
         } catch (MessagingException | IOException e) {
@@ -94,8 +94,8 @@ public class ClientResource {
                 Sincerely,
                 The Shotmaniacs Team
                 """, client.getForename(), client.getId(), client.getForename(),
-                client.getSurname(), client.getPhone_number(), client.getEmail_address());
-        String recipient = client.getEmail_address();
+                client.getSurname(), client.getPhone_number(), client.getEmailAddress());
+        String recipient = client.getEmailAddress();
         try {
             MAIL.sendMessage(recipient, subject, body);
         } catch (MessagingException | IOException e) {
@@ -121,7 +121,7 @@ public class ClientResource {
                 Sincerely,
                 The computer behind Shotmaniacs.
                 """, client.getId(), client.getForename(),
-                client.getSurname(), client.getPhone_number(), client.getEmail_address());
+                client.getSurname(), client.getPhone_number(), client.getEmailAddress());
         try {
             MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
         } catch (MessagingException | IOException e) {

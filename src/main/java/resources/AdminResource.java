@@ -30,7 +30,7 @@ public class AdminResource {
 
     @GET
     @Path("/dashboard/all")
-    public ArrayList<AnnouncementBean> getAnnouncement(AnnouncementBean announcement) {
+    public ArrayList<AnnouncementBean> getAnnouncement() {
         ArrayList<AnnouncementBean> announcements = new ArrayList<>();
         try {
             announcements =  AdminDao.I.getAllAnnouncements();
@@ -55,7 +55,7 @@ public class AdminResource {
 
     @GET
     @Path("/dashboard/latest")
-    public ArrayList<EventBean> getLatestEvent(EventBean event) {
+    public ArrayList<EventBean> getLatestEvent() {
         ArrayList<EventBean> events = null;
         try {
             events = AdminDao.I.getLatestEvent();
@@ -67,7 +67,7 @@ public class AdminResource {
 
 
     @POST
-    @Path("/crewEvents/") //TODO change the url
+    @Path("/crewEvents/newMember") //TODO change the url
     @Consumes(MediaType.APPLICATION_JSON)
     public void handleCreateNewMember(CrewMemberBean crewMember) {
         try {
@@ -77,7 +77,7 @@ public class AdminResource {
         }
     }
     @POST
-    @Path("crewEvents/")
+    @Path("crewEvents/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
     public void handleCreateNewEvent(FormBean form) throws SQLException {
         try {

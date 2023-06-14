@@ -34,16 +34,16 @@ public class AccountBean {
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.email_address = emailAddress;
+        this.emailAddress = emailAddress;
         this.password = password;
         this.accountType = accountType;
     }
 
-    public int getAccountId() {
+    public int getId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setId(int accountId) {
         this.accountId = accountId;
     }
 
