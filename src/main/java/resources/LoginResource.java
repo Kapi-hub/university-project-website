@@ -59,6 +59,7 @@ public class LoginResource {
         try {
             SessionDao.instance.putSessionId(account.getId(), sessionId);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error creating session")
                     .build();

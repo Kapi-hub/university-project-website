@@ -93,7 +93,7 @@ public class ClientResource {
                 
                 Sincerely,
                 The Shotmaniacs Team
-                """, client.getForename(), client.getAccountId(), client.getForename(),
+                """, client.getForename(), client.getId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmail_address());
         String recipient = client.getEmail_address();
         try {
@@ -120,7 +120,7 @@ public class ClientResource {
 
                 Sincerely,
                 The computer behind Shotmaniacs.
-                """, client.getAccountId(), client.getForename(),
+                """, client.getId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmail_address());
         try {
             MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
@@ -146,7 +146,7 @@ public class ClientResource {
                 case "csv" -> handleCsvFile(excelStream, client_id);
                 default -> throw new IOException("Incorrect file has been uploaded.");
             }
-            clientBean.setAccountId(client_id);
+            clientBean.setId(client_id);
             sendConfirmationMultiple(clientBean);
             sendConfirmationToMe(clientBean);
         } catch (SQLException | IOException e) {

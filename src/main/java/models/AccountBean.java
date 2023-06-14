@@ -33,7 +33,7 @@ public class AccountBean {
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.emailAddress = emailAddress;
+        this.email_address = emailAddress;
         this.password = password;
         this.accountType = accountType;
     }
