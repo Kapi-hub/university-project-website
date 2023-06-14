@@ -1,32 +1,29 @@
 package dao;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-
-import java.io.*;
-import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.Properties;
-import java.util.Scanner;
-
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.model.Message;
 import org.apache.commons.codec.binary.Base64;
-
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.Properties;
 
 /**
  * Singleton pattern.
@@ -34,12 +31,12 @@ import javax.mail.internet.MimeMessage;
 public enum MailService {
     MAIL;
 
-    private static final String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
-    private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     public static final String SHOTMANIACS_MAIL = "shotmaniacs.photography@gmail.com";
+    private static final String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
     private static final String APPLICATION_NAME = "Shotmaniacs Mail Service";
-    private Gmail service;
+    private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     public boolean success = false;
+    private Gmail service;
 
     MailService() {
         try {
@@ -56,6 +53,12 @@ public enum MailService {
         }
     }
 
+    public static void main(String[] args) throws MessagingException, IOException {
+        MAIL.sendMessage("bfc.jonkhout@gmail.com", "TEST SUBJECT", "TEST BODY");
+    }
+
+    // Setting environment
+
     private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
         try {
             String clientId = System.getenv("MAIL_CLIENT_ID");
@@ -68,13 +71,13 @@ public enum MailService {
             String filename = "mail_authentication_token";
             // Obtain the authorization URL
             System.out.println(flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build());
-            System.out.printf("Please save the authentication token in %s\\%s\n", System.getProperty("user.dir"),filename);
-            Thread.sleep(1000*25);
+            System.out.printf("Please save the authentication token in %s\\%s\n", System.getProperty("user.dir"), filename);
+            Thread.sleep(1000 * 25);
             // Print the authorization URL and ask the user to visit it and authorize the application
             String authorizationCode = new BufferedReader(new FileReader(filename)).readLine().strip();
             System.out.println(authorizationCode);
-            // Exchange the authorization code for an access token
-            GoogleTokenResponse tokenResponse = flow.newTokenRequest(authorizationCode).setRedirectUri(REDIRECT_URI).execute();
+            // Exchange the authorization code for access token
+            flow.newTokenRequest(authorizationCode).setRedirectUri(REDIRECT_URI).execute();
             LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
             return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
         } catch (IOException | InterruptedException e) {
@@ -82,8 +85,6 @@ public enum MailService {
         }
         return null;
     }
-
-    // Setting environment
 
     private MimeMessage createEmail(String subject, String body)
             throws MessagingException {
@@ -107,6 +108,7 @@ public enum MailService {
         service.users().messages().send(SHOTMANIACS_MAIL, message).execute();
         System.out.printf("===MAIL=== Mail has successfully been sent to %s.\n", recipient);
     }
+
     /**
      * Turns it into byte array to allow it to be sent.
      */
@@ -123,10 +125,6 @@ public enum MailService {
 
     public void setup() {
 
-    }
-
-    public static void main(String[] args) throws MessagingException, IOException {
-        MAIL.sendMessage("bfc.jonkhout@gmail.com", "TEST SUBJECT", "TEST BODY");
     }
 
 }
