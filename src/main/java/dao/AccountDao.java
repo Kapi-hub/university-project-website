@@ -14,6 +14,8 @@ public enum AccountDao {
 
     private final Connection connection;
 
+
+
     AccountDao() {
         connection = ConnectionFactory.getConnection();
     }
@@ -32,7 +34,7 @@ public enum AccountDao {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                account.setAccountId(rs.getInt(1));
+                account.setId(rs.getInt(1));
                 account.setAccountType(AccountType.toEnum(rs.getString(2)));
                 return true;
             }
@@ -44,11 +46,11 @@ public enum AccountDao {
         }
     }
 
-    public AccountType determineAccountType(int AccountId) throws SQLException {
+    public AccountType determineAccountType(int accountId) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";
 
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, AccountId);
+        st.setInt(1, accountId);
 
         ResultSet rs = st.executeQuery();
 

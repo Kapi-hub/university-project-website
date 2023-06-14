@@ -29,7 +29,7 @@ public enum ClientDao {
         st.setString(1, client.getForename());
         st.setString(2, client.getSurname());
         st.setString(3, client.getUsername());
-        st.setString(4, client.getEmail_address());
+        st.setString(4, client.getEmailAddress());
         ResultSet rs = st.executeQuery();
 
         int client_id = -1;

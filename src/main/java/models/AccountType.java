@@ -6,7 +6,7 @@ public enum AccountType {
     CLIENT;
 
     public static AccountType toEnum(String string) {
-        return switch (string) {
+        return string == null ? null : switch (string) {
             case "admin" -> ADMIN;
             case "crew_member" -> CREW_MEMBER;
             case "client" -> CLIENT;

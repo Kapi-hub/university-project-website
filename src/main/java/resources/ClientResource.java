@@ -1,5 +1,8 @@
 package resources;
 
+//import org.apache.poi.ss.usermodel.*;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.ClientDao;
 import dao.MailService;
@@ -9,10 +12,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import models.*;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -56,17 +56,17 @@ public class ClientResource {
         EventBean event = formBean.getEventBean();
         String subject = String.format("Confirmation Booking of event - %s", event.getName());
         String body = String.format(
-                """
-                        Hi %s!
-                                       
-                        This is a confirmation email based on the event you have booked on %s.
-                        Your event id is %s. Your client_id is %s.
-                        Shotmaniacs will get in contact with you.
-                                       
-                        Sincerely,
-                        The Shotmaniacs Team
-                        """, client.getForename(), event.getStart(), event.getId(), event.getClient_id());
-        String recipient = client.getEmail_address();
+               """
+               Hi %s!
+               
+               This is a confirmation email based on the event you have booked on %s.
+               Your event id is %s. Your client_id is %s.
+               Shotmaniacs will get in contact with you.
+               
+               Sincerely,
+               The Shotmaniacs Team
+               """, client.getForename(), event.getStart(), event.getId() ,event.getClient_id());
+        String recipient = client.getEmailAddress();
         try {
             MAIL.sendMessage(recipient, subject, body);
         } catch (MessagingException | IOException e) {
@@ -79,23 +79,23 @@ public class ClientResource {
         String subject = "Confirmation Booking of multiple events";
         String body = String.format(
                 """
-                        Hi %s!
-                                        
-                        This is a confirmation email based on the events you have booked.
-                                        
-                        Your information.
-                        - Client-id: %s
-                        - Name: %s %s
-                        - Telephone: %s
-                        - Email: %s
-                                        
-                        Shotmaniacs will get in contact with you.
-                                        
-                        Sincerely,
-                        The Shotmaniacs Team
-                        """, client.getForename(), client.getAccountId(), client.getForename(),
-                client.getSurname(), client.getPhone_number(), client.getEmail_address());
-        String recipient = client.getEmail_address();
+                Hi %s!
+                
+                This is a confirmation email based on the events you have booked.
+                
+                Your information.
+                - Client-id: %s
+                - Name: %s %s
+                - Telephone: %s
+                - Email: %s
+                
+                Shotmaniacs will get in contact with you.
+                
+                Sincerely,
+                The Shotmaniacs Team
+                """, client.getForename(), client.getId(), client.getForename(),
+                client.getSurname(), client.getPhone_number(), client.getEmailAddress());
+        String recipient = client.getEmailAddress();
         try {
             MAIL.sendMessage(recipient, subject, body);
         } catch (MessagingException | IOException e) {
@@ -108,20 +108,20 @@ public class ClientResource {
         String subject = "New Booking has arrived.";
         String body = String.format(
                 """
-                        Dear Shotmaniacs Team!
-                                        
-                        A client has signed up with bookings. Please consult the admin dashboard to edit the event.
-                                        
-                        The client information:
-                        - Client-id: %s
-                        - Name: %s %s
-                        - Telephone: %s
-                        - Email: %s
+                Dear Shotmaniacs Team!
+                
+                A client has signed up with bookings. Please consult the admin dashboard to edit the event.
+                
+                The client information:
+                - Client-id: %s
+                - Name: %s %s
+                - Telephone: %s
+                - Email: %s
 
-                        Sincerely,
-                        The computer behind Shotmaniacs.
-                        """, client.getAccountId(), client.getForename(),
-                client.getSurname(), client.getPhone_number(), client.getEmail_address());
+                Sincerely,
+                The computer behind Shotmaniacs.
+                """, client.getId(), client.getForename(),
+                client.getSurname(), client.getPhone_number(), client.getEmailAddress());
         try {
             MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
         } catch (MessagingException | IOException e) {
@@ -146,7 +146,7 @@ public class ClientResource {
                 case "csv" -> handleCsvFile(excelStream, client_id);
                 default -> throw new IOException("Incorrect file has been uploaded.");
             }
-            clientBean.setAccountId(client_id);
+            clientBean.setId(client_id);
             sendConfirmationMultiple(clientBean);
             sendConfirmationToMe(clientBean);
         } catch (SQLException | IOException e) {

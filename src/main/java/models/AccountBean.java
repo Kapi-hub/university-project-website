@@ -8,17 +8,18 @@ public class AccountBean {
     private String forename;
     private String surname;
     private String username;
-    private String email_address;
+    private String emailAddress;
     private String password;
     private AccountType accountType;
 
-    public AccountBean(String forename, String surname, String username, String email_address, AccountType accountType) {
+    public AccountBean(String forename, String surname, String username, String emailAddress, AccountType accountType) {
         this.forename = forename;
         this.surname = surname;
         this.username = username;
-        this.email_address = email_address;
+        this.emailAddress = emailAddress;
         this.accountType = accountType;
     }
+
 
     public AccountBean(String username, String password) {
         this.username = username;
@@ -38,11 +39,11 @@ public class AccountBean {
         this.accountType = accountType;
     }
 
-    public int getAccountId() {
+    public int getId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setId(int accountId) {
         this.accountId = accountId;
     }
 
@@ -70,12 +71,12 @@ public class AccountBean {
         this.username = username;
     }
 
-    public String getEmail_address() {
-        return email_address;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmail_address(String email_address) {
-        this.email_address = email_address;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPassword() {

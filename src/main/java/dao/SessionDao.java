@@ -38,20 +38,12 @@ public enum SessionDao {
     }
 
     public void putSessionId(int accountId, String sessionId) throws SQLException {
-        String updateQuery = "UPDATE has_login_session SET session_id = ? WHERE account_id = ?; ";
-        String insertQuery = "INSERT INTO has_login_session (account_id, session_id) SELECT ?, ? "
-                + "WHERE NOT EXISTS (SELECT 1 FROM has_login_session WHERE account_id = ?);";
+        String insertQuery = "INSERT INTO has_login_session (account_id, session_id) VALUES (?, ?)";
 
-        PreparedStatement updateSt = connection.prepareStatement(updateQuery);
         PreparedStatement insertSt = connection.prepareStatement(insertQuery);
-
-        updateSt.setString(1, sessionId);
-        updateSt.setInt(2, accountId);
-        updateSt.executeUpdate();
 
         insertSt.setInt(1, accountId);
         insertSt.setString(2, sessionId);
-        insertSt.setInt(3, accountId);
         insertSt.executeUpdate();
     }
 
