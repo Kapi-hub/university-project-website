@@ -77,8 +77,12 @@ To add the password variable:
     2. Set the environment variable by running the following command:
        ```bash
        [Environment]::SetEnvironmentVariable("DB_PASSWORD", "[password]", "Machine")
+       [Environment]::SetEnvironmentVariable("MAIL_CLIENT_ID", "[mail_client_id]", "Machine")
+       [Environment ]::SetEnvironmentVariable("MAIL_CLIENT_SECRET", "[mail_client_secret]", "Machine")
+       
        ```
        Replace `[password]` with the actual password.
+    3. Replace `[mail_client_id]` and `[mail_client_secret]` with the actual id and secret you can find in the JSON.
 
     3. Restart your system to apply the changes.
 
@@ -95,6 +99,8 @@ To add the password variable:
     2. Set the environment variable by running the following command with administrative privileges:
        ```bash
        sudo echo "export DB_PASSWORD=[password]" >> /etc/environment
+       sudo echo "export MAIL_CLIENT_ID=[mail_client_id]" >> /etc/environment
+       sudo echo "export MAIL_CLIENT_SECRET=[mail_client_secret]" >> /etc/environment
        ```
        Replace `[password]` with the actual password.
 

@@ -2,11 +2,20 @@ package models;
 
 public class RequiredCrewBean {
     private int event_id;
+
+    public RequiredCrewBean(int event_id, RoleType role, int crew_size) {
+        this.event_id = event_id;
+        this.role = role;
+        this.crew_size = crew_size;
+    }
+
     private RoleType role;
     private int crew_size;
 
     public RequiredCrewBean() {
     }
+
+
 
     public int getEvent_id() {
         return event_id;

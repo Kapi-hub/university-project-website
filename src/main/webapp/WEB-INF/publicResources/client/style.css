@@ -1,104 +1,126 @@
 body {
     font-weight: 100;
-    background: var(--bs-dark);
-    color: var(--bs-primary);
+    background: var(--bs-light);
+    color: var(--bs-light);
     font-family: 'Kiona', sans-serif;
+    background-image: radial-gradient(circle, #1F1F1F 40%, var(--bs-dark) 70%, var(--bs-primary) 200%);
+}
+
+* {
+    line-height: 1.2;
 }
 
 nav {
-    background-color: var(--bs-primary);
+    background-color: transparent;
     margin-bottom: 50px;
 }
-
 .navbar {
     height: 100px;
-    background-color: var(--bs-dark);
-    border-bottom: 1px solid;
+
+    border-bottom: 1px solid  ;
     border-bottom-color: var(--bs-primary);
 }
-
 .navbar-text {
-    color: var(--bs-primary);
+    color: var(--bs-primary );
     font-weight: bolder;
 }
 
 .navbar-brand {
-    position: absolute;
+    position:absolute;
     left: 10px;
 }
 
-
-.logo-svg {
-    height: 100%;
-    width: 36px;
+@keyframes movingTitle {
+    0% { transform: translateX(1000px); }
+    100% { transform: translateX(0); }
 }
 
-.main {
-    line-height: 1.2;
+@keyframes movingSubTitle {
+    0% { transform: translateX(-1000px); }
+    100% { transform: translateX(0); }
 }
 
 .title {
-    font-size: 3rem;
+    text-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+    font-size: 6rem;
+    text-align: center;
+    animation: movingTitle 1.5s;
 }
 
 .sub-title {
-    font-size: 1.5rem;
+    font-size: 3rem;
+    font-style: italic;
+    text-align: center;
+    animation: movingSubTitle 1.5s;
+
 
 }
-
 .heading {
     font-size: 2rem;
     font-weight: 500;
 }
 
-.form-event, .form-client {
-    /*background-color: var(--primary-color-op);*/
-    /*border: 1px solid var(--primary-color);*/
-    margin-top: 1rem;
-    padding: 0.5rem;
-}
-
-.form-header {
-    font-weight: 500;
-}
-
-
-.inner-borders > div[class^="col-"] {
-    border-right: 4px dashed var(--bs-primary);
-}
-
-.inner-borders > div[class^="col-"]:last-child {
-    border-right: none;
-}
-
-.form-questions > label {
-
-}
-
-/* Hide all tab content by default */
-.tabcontent {
-    display: none;
-}
-
-/* Style the tab buttons */
-.tab button {
-    background-color: var(--bs-light);
+.form-group input, .form-control {
+    background-color: transparent;
     border: none;
-    outline: none;
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
+    border-radius: 0;
+    border-bottom: 2px dotted #6c757d;
+    color: var(--bs-dark);
 }
 
-/* Change background color of active tab button */
-.tab button.active {
-    background-color: rgba(var(--bs-primary-rgb), 0.5);
+.select {
+    background-color: var(--bs-dark) !important;
+    color: #ccc;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px dotted #6c757d;
 }
 
-.tab-a {
-    text-align: left;
+#start {
+    color: #ccc;
 }
 
-.tab-a label {
-    padding-left: 50%;
+.select option {
+    color: white;
 }
+
+.form {
+    align-self: center;
+    max-width: 600px;
+    border: 2px dashed var(--bs-primary);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.2);
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+}
+
+h3, h2 {
+    color: var(--bs-primary);
+}
+
+.btn {
+    position: relative;
+    alignment: center;
+}
+
+#single {
+    display:block;
+}
+
+#multiple {
+    display:none;
+
+}
+
+
+
+.form-control::placeholder {
+    color: #ccc
+}
+
+.navbar-custom .navbar-brand {
+    color: var(--bs-light);
+};
