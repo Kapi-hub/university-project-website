@@ -30,7 +30,7 @@ public class AdminResource {
 
     @GET
     @Path("/dashboard/all")
-    public ArrayList<AnnouncementBean> getAnnouncement() {
+    public ArrayList<AnnouncementBean> getAnnouncement(AnnouncementBean announcement) {
         ArrayList<AnnouncementBean> announcements = new ArrayList<>();
         try {
             announcements =  AdminDao.I.getAllAnnouncements();
