@@ -3,23 +3,14 @@ package dao;
 import misc.ConnectionFactory;
 import models.AccountBean;
 import models.AccountType;
-import models.SessionBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 public enum AccountDao {
     instance;
-
-    // Map of account types to their corresponding enum
-    private static final Map<String, AccountType> ACCOUNT_TYPE_MAP = Map.of(
-            "administrator", AccountType.ADMINISTRATOR,
-            "crew member", AccountType.CREW_MEMBER,
-            "client", AccountType.CLIENT
-    );
 
     private final Connection connection;
 
@@ -43,11 +34,8 @@ public enum AccountDao {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-
-                int accountId = rs.getInt(1);
-                account.setAccountId(accountId);
-                account.setAccountType(getAccountTypeEnum(rs.getString(2)));
-
+                account.setId(rs.getInt(1));
+                account.setAccountType(AccountType.toEnum(rs.getString(2)));
                 return true;
             }
             return false;
@@ -58,22 +46,18 @@ public enum AccountDao {
         }
     }
 
-    public AccountType determineAccountType(int AccountId) throws SQLException {
+    public AccountType determineAccountType(int accountId) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";
 
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, AccountId);
+        st.setInt(1, accountId);
 
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            return getAccountTypeEnum(rs.getString(1));
+            return AccountType.toEnum(rs.getString(1));
         }
 
         throw new SQLException("Account not found");
-    }
-
-    public AccountType getAccountTypeEnum(String accountType) {
-        return ACCOUNT_TYPE_MAP.get(accountType);
     }
 }
