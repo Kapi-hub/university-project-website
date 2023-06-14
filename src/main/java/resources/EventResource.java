@@ -9,10 +9,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import models.CrewMemberBean;
-import models.EventBean;
-import models.ForceEnrolBean;
-import models.RoleType;
+import models.*;
 
 import java.sql.SQLException;
 
@@ -22,7 +19,7 @@ public class EventResource {
     /**
      * In JSON, use syntax:
      * "{
-     *     "id": [the event id]
+     * "id": *the event id*
      * }"
      */
     @Path("/enroll-self")
@@ -37,12 +34,12 @@ public class EventResource {
     /**
      * In JSON, use syntax:
      * "{
-     *     "crewMember": {
-     *         "id": [the crewMember's account id]
-     *     },
-     *     "event": {
-     *         "id": [the event id]
-     *     }
+     * "crewMember": {
+     * "id": *the crewMember's account id*
+     * },
+     * "event": {
+     * "id": *the event id*
+     * }
      * }"
      */
     @Path("/force-enroll")
@@ -55,6 +52,41 @@ public class EventResource {
         int crewMemberId = crewMemberBean.getId();
         int eventId = eventBean.getId();
         return enrol(crewMemberId, eventId);
+    }
+
+    /**
+     * "{
+     * "eventId": *the event id*,
+     * "roles": [
+     * "*Role1*",
+     * "*Role2*",
+     * "Role3*"
+     * ],
+     * "amounts": [
+     * *Amount1*,
+     * *Amount2*,
+     * *Amount3*
+     * ]
+     * }"
+     **/
+    @Path("/crewRequired")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public Response crewRequired(EventRequiresBean required) {
+        int eventId = required.getEventId();
+        RoleType[] roles = required.getRoles();
+        int[] amounts = required.getAmounts();
+        try {
+            for (int i = 0; i < roles.length; i++) {
+                EventDao.instance.overwriteRequired(eventId, roles[i], amounts[i]);
+            }
+        } catch (SQLException e) {
+            return Response.serverError()
+                    .build();
+        }
+        return Response.ok()
+                .build();
     }
 
     private Response enrol(int crewId, int eventId) {

@@ -49,6 +49,7 @@ public enum EventDao {
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, eventID);
         st.setString(2, role.toString());
+
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
@@ -56,5 +57,19 @@ public enum EventDao {
         }
 
         throw new SQLException();
+    }
+
+    public void overwriteRequired(int eventId, RoleType role, int amount) throws SQLException {
+        String query = "INSERT INTO event_requirement (event_id, crew_size, role)" +
+                "VALUES (?, ?, ?::role_enum) " +
+                "ON CONFLICT (event_id, role) " +
+                "DO UPDATE SET crew_size = EXCLUDED.crew_size;";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, eventId);
+        st.setInt(2, amount);
+        st.setString(3, role.toString());
+
+        st.executeUpdate();
     }
 }

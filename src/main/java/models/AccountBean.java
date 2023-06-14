@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
 public class AccountBean {
-    private int accountId;
+    private int id;
     private String forename;
     private String surname;
     private String username;
@@ -29,8 +29,8 @@ public class AccountBean {
     public AccountBean() {
     }
 
-    public AccountBean(int accountId, String forename, String surname, String username, String email_address, String password, AccountType accountType) {
-        this.accountId = accountId;
+    public AccountBean(int id, String forename, String surname, String username, String email_address, String password, AccountType accountType) {
+        this.id = id;
         this.forename = forename;
         this.surname = surname;
         this.username = username;
@@ -40,11 +40,11 @@ public class AccountBean {
     }
 
     public int getId() {
-        return accountId;
+        return id;
     }
 
-    public void setId(int accountId) {
-        this.accountId = accountId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getForename() {
