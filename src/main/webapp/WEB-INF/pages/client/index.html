@@ -194,7 +194,7 @@
                             forename: $("#forename").val(),
                             surname: $("#surname").val(),
                             phone_number: $("#phone").val(),
-                            email_address: $("#email_address").val()
+                            emailAddress: $("#email_address").val()
                         },
                         eventBean: {
                             name: $("#name").val(),
@@ -236,7 +236,7 @@
                     };
                     // Make the POST request
                     $.ajax({
-                        url: "../../api/client/submit-form/",
+                        url: "../api/client/submit-form/",
                         method: "POST",
                         dataType: "json",
                         contentType: "application/json",
@@ -256,7 +256,7 @@
                         forename: $('#forename').val(),
                         surname: $('#surname').val(),
                         phone_number: $('#phone').val(),
-                        email_address: $('#email_address').val()
+                        emailAddress: $('#email_address').val()
                     };
                     const fileInput = $('#excel_template')[0];
                     formData.append('client_data', JSON.stringify(clientBean));
@@ -265,7 +265,7 @@
                         console.log(entry);
                     }
                     $.ajax({
-                        url: '../../api/client/submit-form-multiple/',
+                        url: '../api/client/submit-form-multiple/',
                         type: 'POST',
                         data: formData,
                         processData: false,
