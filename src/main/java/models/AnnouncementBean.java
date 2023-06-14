@@ -22,6 +22,12 @@ public class AnnouncementBean {
         this.dateTime = dateTime;
     }
 
+    public AnnouncementBean(int announcer, String title, String body) {
+        this.announcer = announcer;
+        this.title = title;
+        this.body = body;
+    }
+
     public int getAnnouncementID() {
         return announcementID;
     }
