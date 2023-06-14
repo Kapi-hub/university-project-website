@@ -80,7 +80,7 @@ public class LoginResource {
 
     @Path("/logout")
     @POST
-    @RolesAllowed({"admin", "crew_member", "client"})
+    @RolesAllowed({"admin", "crew_member"})
     public Response handleLogout(@CookieParam("sessionId") String sessionId,
                                  @CookieParam("accountId") String accountIdString) {
         Response.ResponseBuilder response = Response.ok();
