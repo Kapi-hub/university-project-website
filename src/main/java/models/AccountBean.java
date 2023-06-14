@@ -20,6 +20,7 @@ public class AccountBean {
         this.accountType = accountType;
     }
 
+
     public AccountBean(String username, String password) {
         this.username = username;
         this.password = password;

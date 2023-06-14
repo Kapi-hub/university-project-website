@@ -2,8 +2,6 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @XmlRootElement
@@ -15,6 +13,11 @@ public class EventBean {
         this.duration = duration;
         this.location = location;
         this.type = type;
+    }
+
+    public EventBean(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     private int id;

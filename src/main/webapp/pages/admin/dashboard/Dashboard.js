@@ -73,7 +73,18 @@ function setLatestEvents() {
     })
 }
 
-function setCreNeeded(){
-    sendHttpRequest("Get","/api/admin/dashboard/crewReq")
+function setCrewNeeded(){
+    let events = []
+    sendHttpRequest("Get","/api/admin/dashboard/crewReq").then(responseData => {
+        responseData.events.forEach(event => {
+            events.push(event);
+        });
+        const parent = document.getElementsByClassName('eventsList-item');
+        for(let o = 0; o<events.length && o<4;o++ ){
+            parent[o].button.textContent = events[o].name;
+            span = parent[o].querySelector('accordion-body span');
+            span.textContent = events[o].id.toString();
+        }
+    })
 }
 

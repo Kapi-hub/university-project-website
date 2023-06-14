@@ -7,12 +7,11 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import misc.ConnectionFactory;
 import models.*;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Path("/admin")
@@ -20,37 +19,23 @@ public class AdminResource {
     @POST
     @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response handlePostAnnouncement(AnnouncementBean announcement) {
-        String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+    public void handlePostAnnouncement(AnnouncementBean announcement) {
         try {
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            st.setInt(1, announcement.getAnnouncer());
-            st.setString(2, announcement.getTitle());
-            st.setString(3, announcement.getBody());
-            //TODO: add also the id of the announcement and the date and time
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+            AdminDao.I.addAnnouncement(announcement);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return Response.accepted().build();
     }
 
 
     @GET
     @Path("/dashboard/all")
     public ArrayList<AnnouncementBean> getAnnouncement(AnnouncementBean announcement) {
-        String insertQuery = "SELECT * FROM announcement";
-        ArrayList<AnnouncementBean> announcements = null;
+        ArrayList<AnnouncementBean> announcements = new ArrayList<>();
         try {
-            announcements = new ArrayList<>();
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
-                announcements.add(ab);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+            announcements =  AdminDao.I.getAllAnnouncements();
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return announcements;
     }
@@ -58,56 +43,24 @@ public class AdminResource {
 
     @GET
     @Path("/dashboard/crewReq")
-    public void getCrewMember(CrewMemberBean crewMember) {
-        String insertQuery = "SELECT e.id, e.name\n" +
-                "FROM event e\n" +
-                "JOIN event_requirement er ON e.id = er.event_id\n" +
-                "LEFT JOIN (\n" +
-                "  SELECT event_id, COUNT(*) AS enrollments\n" +
-                "  FROM event_enrollment\n" +
-                "  GROUP BY event_id\n" +
-                ") ee ON e.id = ee.event_id\n" +
-                "WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; ";
-
-        ArrayList<AnnouncementBean> announcements =null;
-        try {
-            announcements = new ArrayList<>();
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
-                announcements.add(ab);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+    public List<EventBean> showEventsWithoutCrew() {
+        List<EventBean> events = null;
+        try{
+            events = AdminDao.I.getNotFullEvents();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return announcements;
-    }
+        return events;
     }
 
     @GET
     @Path("/dashboard/latest")
-    public ArrayList<EventBean> getEvent(EventBean event) {
-        String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
+    public ArrayList<EventBean> getLatestEvent(EventBean event) {
         ArrayList<EventBean> events = null;
         try {
-            events = new ArrayList<>();
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                try {
-                    EventType type = EventType.valueOf(rs.getString("type"));
-                    EventBean eventBean = new EventBean(
-                            rs.getString("name"), rs.getString("description"),
-                            rs.getTimestamp("start"), rs.getInt("duration"),
-                            rs.getString("location"), type);
-                    events.add(eventBean);
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e);
-                }
-            }
+            events = AdminDao.I.getLatestEvent();
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
         return events;
     }
@@ -130,13 +83,11 @@ public class AdminResource {
     public void handleCreateNewEvent(FormBean form) throws SQLException {
         try {
             int client_id = ClientDao.I.addClient(form.getClientBean());
-            formBean.getEventBean().setClient_id(client_id);
+            form.getEventBean().setClient_id(client_id);
             int event_id = ClientDao.I.addEvent(form.getEventBean());
             for (RequiredCrewBean required : form.getRequiredCrewBeans()) {
                 required.setEvent_id(event_id);
                 ClientDao.I.addRequirement(required);
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();

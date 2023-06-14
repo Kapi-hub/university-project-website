@@ -15,6 +15,7 @@ public class CrewMemberBean extends AccountBean {
         this.team = team;
     }
 
+
     public CrewMemberBean(String username, String password, int id, Role role, Team team) {
         super(username, password);
         this.id = id;

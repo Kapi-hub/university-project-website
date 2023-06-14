@@ -2,19 +2,16 @@ package dao;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import misc.ConnectionFactory;
-import models.AccountType;
-import models.CrewMemberBean;
-import models.EventBean;
-import models.RequiredCrewBean;
-
+import models.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -86,5 +83,74 @@ public enum AdminDao {
         }
 
     }
+    public void addAnnouncement(AnnouncementBean announcement) {
+        String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public ArrayList<EventBean> getNotFullEvents() throws SQLException {
+        String insertQuery = "SELECT e.id, e.name" +
+                "FROM event e" +
+                "JOIN event_requirement er ON e.id = er.event_id" +
+                "LEFT JOIN (" +
+                "  SELECT event_id, COUNT(*) AS enrollments" +
+                "  FROM event_enrollment" +
+                "  GROUP BY event_id" +
+                ") ee ON e.id = ee.event_id" +
+                "WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; ";
 
+        ArrayList<EventBean> events =new ArrayList<>();
+        try {
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                EventBean eb = new EventBean(rs.getInt("id"), rs.getString("name"));
+                events.add(eb);
+            }
+        }catch (Exception e){
+        e.printStackTrace();
+        }
+       return events;
+    }
+
+    public ArrayList<AnnouncementBean> getAllAnnouncements() {
+        String insertQuery = "SELECT * FROM announcement";
+        ArrayList<AnnouncementBean> announcements = null;
+        try {
+            announcements = new ArrayList<>();
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
+                announcements.add(ab);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return announcements;
+    }
+    public ArrayList<EventBean> getLatestEvent() throws SQLException {
+        String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
+        ArrayList<EventBean> events = null;
+            events = new ArrayList<>();
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                    EventType type = EventType.valueOf(rs.getString("type"));
+                    EventBean eventBean = new EventBean(
+                            rs.getString("name"), rs.getString("description"),
+                            rs.getTimestamp("start"), rs.getInt("duration"),
+                            rs.getString("location"), type);
+                    events.add(eventBean);
+                }
+            return events;
+        }
 }
+
