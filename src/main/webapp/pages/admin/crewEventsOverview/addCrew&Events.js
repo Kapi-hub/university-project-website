@@ -5,7 +5,6 @@ function addEvent() {
     const clientFirstName = clientQuery.children[1].value;
     const clientLastName = clientQuery.children[4].value;
     const clientEmail = clientQuery.children[7].value;
-    const clientPhone = clientQuery.children[10].value;
 
     const eventTitle = document.getElementById('eventTitle').value;
     //get the checkbox elements
@@ -40,8 +39,21 @@ function addEvent() {
     } else if (clubPhotography.checked === false && festival.checked === false && product.checked === true) {
         eventType = "PHOTOSHOOT";
     }
-    var requiredCrew = {
-        requiredCrewBeans: [
+    var data = {
+        clientBean: {
+            forename: clientFirstName,
+            surname: clientLastName,
+            email_address: clientEmail
+        },
+        eventBean: {
+            name: eventTitle,
+            type: eventType,
+            start: eventDateTime,
+            duration: eventDuration,
+            location: eventLocation
+        },
+
+        requiredCrewBean: [
             {
                 crew_size: eventPhotographer,
                 role: "PHOTOGRAPHER"
@@ -72,29 +84,14 @@ function addEvent() {
             }
         ]
     }
-    sendHttpRequest("Post", "/api/admin/crewEvents/newEvent", {
-        eventTitle: eventTitle,
-        eventType: eventType,
-        eventDateTime: eventDateTime,
-        eventLocation: eventLocation,
-        eventDuration: eventDuration,
-        eventDescription: eventDescription,
-        eventCrew: requiredCrew
-    }).catch(err => {
-        console.log(err)
-    }) //TODO figure out what to do when fail
-
 
     sendHttpRequest("Post", "/api/admin/crewEvents/newEvent", {
-        firstName: clientFirstName,
-        lastName: clientLastName,
-        phone: clientPhone,
-        email: clientEmail
+        data
     }).catch(err => {
         console.log(err)
-    })//TODO figure out what to do when fail
+    })
+//TODO figure out what to do when fail
 }
-
 function addCrewMember() {
 
     //TODO: handle the checkbox - extract the selection
