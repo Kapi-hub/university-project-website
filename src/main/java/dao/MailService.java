@@ -65,7 +65,7 @@ public enum MailService {
                     HTTP_TRANSPORT, JSON_FACTORY, clientId, clientSecret, Collections.singleton(GmailScopes.GMAIL_SEND))
                     .setAccessType("offline")
                     .build();
-            String filename = "di-2023-project-password";
+            String filename = "mail_authentication_token";
             // Obtain the authorization URL
             System.out.println(flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build());
             System.out.printf("Please save the authentication token in %s\\%s\n", System.getProperty("user.dir"),filename);
