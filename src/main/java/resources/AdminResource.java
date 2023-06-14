@@ -76,7 +76,6 @@ public class AdminResource {
             e.printStackTrace();
         }
     }
-
     @POST
     @Path("crewEvents/")
     @Consumes(MediaType.APPLICATION_JSON)
