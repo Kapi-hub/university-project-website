@@ -2,11 +2,10 @@ package resources;
 
 import dao.AdminDao;
 import dao.ClientDao;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import models.*;
 
 import java.sql.SQLException;
@@ -19,25 +18,31 @@ public class AdminResource {
     @POST
     @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void handlePostAnnouncement(AnnouncementBean announcement) {
+    @RolesAllowed("admin")
+    public Response handlePostAnnouncement(AnnouncementBean announcement) {
         try {
             AdminDao.I.addAnnouncement(announcement);
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
         }
+        return Response.ok()
+                .build();
     }
 
 
     @GET
     @Path("/dashboard/all")
-    public ArrayList<AnnouncementBean> getAnnouncement() {
-        ArrayList<AnnouncementBean> announcements = new ArrayList<>();
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin", "crew_member"})
+    public AnnouncementBean[] getAnnouncement() {
         try {
-            announcements =  AdminDao.I.getAllAnnouncements();
-        }catch (Exception e){
-            e.printStackTrace();
+            return AdminDao.I.getAllAnnouncements();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
         }
-        return announcements;
     }
 
 
@@ -45,9 +50,9 @@ public class AdminResource {
     @Path("/dashboard/crewReq")
     public List<EventBean> showEventsWithoutCrew() {
         List<EventBean> events = null;
-        try{
+        try {
             events = AdminDao.I.getNotFullEvents();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return events;
@@ -76,6 +81,7 @@ public class AdminResource {
             e.printStackTrace();
         }
     }
+
     @POST
     @Path("crewEvents/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
