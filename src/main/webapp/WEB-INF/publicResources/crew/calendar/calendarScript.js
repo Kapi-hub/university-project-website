@@ -11,6 +11,7 @@ const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+
 // function to render the calendar for current month
 function renderCalendar() {
     // get prev, current, next month days
@@ -34,14 +35,14 @@ function renderCalendar() {
     let days = "";
 
     // previous month days
-    for(let i = firstDay.getDay() - 1; i > 0; i--) {
+    for (let i = firstDay.getDay() - 1; i > 0; i--) {
         days += `<div class="day prev">${prevLastDayDate - i + 1}</div>`;
     }
 
     // current month days
-    for(let x = 1; x <= lastDayDate; x++) {
+    for (let x = 1; x <= lastDayDate; x++) {
         //check if it's today then add today class
-        if( x === new Date().getDate() &&
+        if (x === new Date().getDate() &&
             currentMonth === new Date().getMonth() &&
             currentYear === new Date().getFullYear()) {
             // if date month year matches
@@ -52,7 +53,7 @@ function renderCalendar() {
         }
     }
     console.log(nextDays)
-    for( let j = 1; j <= nextDays + 1; j++) {
+    for (let j = 1; j <= nextDays + 1; j++) {
         days += `<div class="day next">${j}</div>`;
     }
     weekdaysNumberContainer.innerHTML = days;
@@ -62,21 +63,22 @@ function renderCalendar() {
 
     // MANDATORY to be here because the elements are loaded by renderCalendar().
     let day_items = document.querySelectorAll(".weekdaysNumber div");
-    day_items.forEach(function(item) {
-        item.addEventListener("click", function() {
-            day_items.forEach(function (div){
+    day_items.forEach(function (item) {
+        item.addEventListener("click", function () {
+            day_items.forEach(function (div) {
                 div.classList.remove("current");
             });
             item.classList.add("day", "current");
         });
     })
 }
+
 renderCalendar();
 
 nextBtn.addEventListener("click", () => {
     li_items[currentMonth].classList.remove("active");
     currentMonth++;
-    if ( currentMonth > 11 ) {
+    if (currentMonth > 11) {
         currentMonth = 0;
         currentYear++;
     }
@@ -86,7 +88,7 @@ nextBtn.addEventListener("click", () => {
 prevBtn.addEventListener("click", () => {
     li_items[currentMonth].classList.remove("active");
     currentMonth--;
-    if ( currentMonth < 0 ) {
+    if (currentMonth < 0) {
         currentMonth = 11;
         currentYear--;
     }
@@ -95,9 +97,9 @@ prevBtn.addEventListener("click", () => {
 })
 
 
-monthItem.forEach( function (item) {
+monthItem.forEach(function (item) {
     item.addEventListener("click", () => {
-        switch(event.target.id) {
+        switch (event.target.id) {
             case "Jan":
                 currentMonth = 0;
                 break;
@@ -146,14 +148,142 @@ monthItem.forEach( function (item) {
 
 let eventDayHandler = document.querySelector(".event-day");
 let eventDateHandler = document.querySelector(".event-date");
+let eventContainer = document.getElementById("event-accordion");
+
+function javaEnumToString(javaEnum) {
+    return javaEnum.split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
+
+function getEventsForDay(date) {
+    // Format the date as DD-MM-YYYY
+    const day = String(date.getDate()).padStart(2, '0'); // padding with 0s to make it 2 digits
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // JavaScript months are 0-11 apparently
+    const year = date.getFullYear(); // 4 digit year
+    const formattedDate = `${day}-${month}-${year}`;
+
+    return fetch('/api/event/getFromDate?date=' + formattedDate, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+            return response.json();
+        });
+}
 
 function updateTaskBar() {
     let newTaskBarDate = new Date();
     newTaskBarDate.setDate(
-        parseInt(document.querySelector(".day.current").textContent));
+        parseInt(document.querySelector(".day.current:not(.prev):not(.next)").textContent));
     newTaskBarDate.setMonth(currentMonth);
-    eventDayHandler.innerHTML = `${days[newTaskBarDate.getDate()]}`;
+    let dayIndex = newTaskBarDate.getDay() - 1;
+    if (dayIndex < 0) {
+        dayIndex = 6;
+    }
+    eventDayHandler.innerHTML = `${days[dayIndex]}`;
     eventDateHandler.innerHTML = `${newTaskBarDate.getDate()} ${months[currentMonth]}`
     console.log(newTaskBarDate.getDay(), newTaskBarDate.getMonth());
+
+    getEventsForDay(newTaskBarDate)
+        .then(eventList => {
+            if (eventList == null || eventList.length === 0) {
+                eventContainer.innerHTML = "<p>No events for today.</p>";
+            } else {
+                eventContainer.innerHTML = "";
+                eventList.forEach(event => {
+                    const {
+                        id,
+                        name,
+                        type,
+                        date,
+                        location,
+                        duration,
+                        client,
+                        bookingType,
+                        productManager,
+                        crew,
+                        enrolled,
+                        status,
+                        description
+                    } = event;
+
+                    const parsedDate = new Date(date);
+                    const startTime = String(parsedDate.getHours()).padStart(2, '0') + ":" + String(parsedDate.getMinutes()).padStart(2, '0');
+                    let crewString = "";
+                    crew.forEach(function (crewTypeAndPeople) {
+                        const crewType = crewTypeAndPeople[0];
+                        const crewAmount = crewTypeAndPeople[1];
+
+                        crewString += crewType + ": " + crewAmount + ", ";
+                    });
+
+                    if (crewString === "") {
+                        crewString = "All required crew is enrolled.";
+                    }
+
+                    let enrolledString = "";
+                    enrolled.forEach(function (roleAndPeople) {
+                        const role = roleAndPeople[0];
+                        const people = roleAndPeople[1];
+
+                        let peopleString = people.join(", ");
+                        let detailsId = "details-" + (name + role).replace(/\s/g, ""); // replace spaces with nothing to make it a valid id
+                        enrolledString += `<span class="hoverable" data-details="${detailsId}">${role}: ${people.length} <span id="${detailsId}" class="details">${peopleString}</span></span>, `;
+                    });
+
+                    if (enrolledString === "") {
+                        enrolledString = "No one is enrolled yet.";
+                    }
+
+                    eventContainer.innerHTML += `<div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#` + name.replace(/\s/g, "") + `" aria-expanded="true" aria-controls="` + name.replace(/\s/g, "") + `">
+                                <b>` + name + `</b>. Starting ` + startTime + `
+                            </button>
+                        </h2>
+                        <div id="` + name.replace(/\s/g, "") + `" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="halfOne">
+                                    <b>Name:</b> ` + name + `<br>
+                                    <b>Type:</b> ` + javaEnumToString(type) + `<br>
+                                    <b>Start time:</b> ` + startTime + `<br>
+                                    <b>Location:</b> ` + location + `<br>
+                                    <b>Duration:</b> ` + duration + ` hours<br>
+                                </div>
+                                <div class="halfTwo">
+                                    <b>Client:</b> ` + client + `<br>
+                                    <b>Booking Type:</b> ` + javaEnumToString(bookingType) + `<br>
+                                    <b>Product Manager:</b> ` + productManager + `<br>
+                                    <b>Missing Crew:</b> ` + crewString + `<br>
+                                    <b>Currently Enrolled:</b> ` + enrolledString + `<br>
+                                    <b>Status:</b> ` + javaEnumToString(status) + `<br>
+                                    <b>Description:</b> ` + description + `
+                                </div>
+                                <br>
+                                <button class="btn btn-primary" onclick="enroll(` + id + `)">Enroll</button>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+            document.querySelectorAll('.hoverable').forEach((item) => {
+                item.addEventListener('mousemove', (e) => {
+                    const detailsId = e.target.getAttribute('data-details');
+                    const details = document.getElementById(detailsId);
+                    details.style.left = (e.pageX + 10) + 'px';
+                    details.style.top = (e.pageY + 10) + 'px';
+                });
+            });
+        })
+        .catch(error => console.error('Error:', error));
 }
+
 updateTaskBar();
