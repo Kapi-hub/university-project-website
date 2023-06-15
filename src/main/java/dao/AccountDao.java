@@ -15,7 +15,6 @@ public enum AccountDao {
     private final Connection connection;
 
 
-
     AccountDao() {
         connection = ConnectionFactory.getConnection();
     }
@@ -41,7 +40,7 @@ public enum AccountDao {
             return false;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception in checkValidLogin: " + e.getMessage());
+            System.err.println("SQL Exception in checkValidLogin: " + e.getMessage());
             return false;
         }
     }
@@ -59,5 +58,29 @@ public enum AccountDao {
         }
 
         throw new SQLException("Account not found");
+    }
+
+    public String getName(int id) {
+        if (id == 0) {
+            return "No production manager defined yet.";
+        }
+        try {
+            String query = "SELECT forename, surname FROM account WHERE id = ?";
+
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setInt(1, id);
+
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString(1) + " " + rs.getString(2);
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            // No error handling as next statement is return null anyway
+        }
+
+        return null;
     }
 }

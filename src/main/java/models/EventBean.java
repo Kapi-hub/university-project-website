@@ -6,20 +6,6 @@ import java.sql.Timestamp;
 
 @XmlRootElement
 public class EventBean {
-    public EventBean(String name, String description, Timestamp start, int duration, String location, EventType type) {
-        this.name = name;
-        this.description = description;
-        this.start = start;
-        this.duration = duration;
-        this.location = location;
-        this.type = type;
-    }
-
-    public EventBean(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     private int id;
     private int client_id;
     private String name;
@@ -29,12 +15,49 @@ public class EventBean {
     private String location;
     private int production_manager_id;
     private EventType type;
+    private BookingType booking_type;
     private EventStatus status;
+
+    public EventBean(String name, String description, Timestamp start, int duration, String location, EventType type, BookingType booking_type) {
+        this.name = name;
+        this.description = description;
+        this.start = start;
+        this.duration = duration;
+        this.location = location;
+        this.type = type;
+        this.booking_type = booking_type;
+    }
+
+    public EventBean(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public EventBean() {
 
     }
 
+    public EventBean(int id, int client_id, String name, String description, Timestamp start, int duration, String location, int production_manager_id, EventType type, BookingType booking_type, EventStatus status) {
+        this.id = id;
+        this.client_id = client_id;
+        this.name = name;
+        this.description = description;
+        this.start = start;
+        this.duration = duration;
+        this.location = location;
+        this.production_manager_id = production_manager_id;
+        this.type = type;
+        this.booking_type = booking_type;
+        this.status = status;
+    }
+
+    public BookingType getBooking_type() {
+        return booking_type;
+    }
+
+    public void setBooking_type(BookingType booking_type) {
+        this.booking_type = booking_type;
+    }
 
     public int getId() {
         return id;

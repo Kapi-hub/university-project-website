@@ -32,7 +32,7 @@ public enum SessionDao {
             return rs.next();
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception in checkValidSession: " + e.getMessage());
+            System.err.println("SQL Exception in checkValidSession: " + e.getMessage());
             return false;
         }
     }
