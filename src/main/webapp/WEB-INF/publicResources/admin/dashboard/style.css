@@ -15,7 +15,7 @@ body{
     color:var(--bs-primary) ;
 }
 
-.announcementsContainer {
+.announcementContainer {
     width: 50%;
     height: fit-content;
     padding: 10px;
@@ -48,6 +48,12 @@ body{
     color: var(--bs-light);
     margin-left: auto;
 }
+.postAnnouncementBttn{
+    text-align: right;
+}
+.overflow-auto{
+    width : 100%;
+}
 
 .accordion-events-button, .crewButton{
     background-color: var(--bs-primary);
@@ -76,7 +82,7 @@ body{
     overflow-y: auto;
 }
 
-.announcementsContainer .row .col .flex-container{
+.announcementContainer .row .col .flex-container{
     display: flex;
     align-items: center;
     border-bottom: 1px solid;
@@ -90,7 +96,7 @@ body{
     border-color: var(--bs-primary);
 }
 
-.announcement1, .announcement2, .announcement3{
+.announcementsContainer1, .announcementsContainer2, .announcementsContainer3, .announcementsContainer4{
     border-bottom: 1px solid;
     border-color: var(--bs-primary);
 }
@@ -108,7 +114,7 @@ body{
     display: block;
 
 }
-.dateTime {
+.dateTime , .Author {
     font-size: 14px;
     display: block;
 }

@@ -1,13 +1,14 @@
 function saveAnnouncement() {
     const title = document.getElementById('inputTitle').value;
-    const descr = document.getElementById('inputDetail').value;
+    const descr = document.getElementById('inputDetails').value;
+    alert(`${title}\n${descr}`);
     if (!title) {
         alert("Title can't be null");
         return;
     }
-    sendHttpRequest("Post", "/api/admin/dashboard/new", {
-            Title: title,
-            Description: descr
+    sendHttpRequest("POST", "/api/admin/dashboard/new", {
+            title: title,
+            body: descr
         }
     ).catch(err => {
         console.log(err)
@@ -32,7 +33,7 @@ function sendHttpRequest(method, url, data) {
             if (data) {
                 XHR.setRequestHeader("Content-Type", "application/json");
             }
-            XHR.send(Json.stringify(data));
+            XHR.send(JSON.stringify(data));
         }
     );
     return promise;
@@ -40,18 +41,32 @@ function sendHttpRequest(method, url, data) {
 
 function setAnnouncements() {
     let announcements = []
-    sendHttpRequest('Get', "/api/admin/dashboard/all").then(responseData => {
-        responseData.accouncements.forEach(announcement => announcements.push(announcement));
+    sendHttpRequest('GET', "/api/admin/dashboard/all").then(responseData => {
+        console.log(responseData);
+        responseData.forEach(announcement => announcements.push(announcement));
         let o = 0;
-        var textHolders = document.querySelectorAll('[class^="announcement"]');
+        var textHolders = document.querySelectorAll('[class^="announcementsContainer"]');
         textHolders.forEach(announcement => {
-                const titleElement = announcement.querySelector(".announcementTitle");
-                const body = announcement.querySelector(".dateTime");
-                titleElement.textContent = announcement[o].title;
-                body.textContent = announcement[o].body;
+            console.log(announcement);
+            const titleElement = announcement.querySelector(".announcementTitle");
+            const body = announcement.querySelector(".content");
+            const dateTime = announcement.querySelector(".dateTime");
+            const datetemplate = new Date(announcements[o].announcement_timestamp);
+            const formattedDate = datetemplate.toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+            console.log(datetemplate);
+                console.log(announcements[o].announcement_id);
+                titleElement.textContent = announcements[o].announcement_title;
+                body.textContent = announcements[o].announcement_body;
+                dateTime.textContent = announcements[o].announcer.forename + " " + formattedDate;
                 o++;
-            }
-        )
+        })
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })

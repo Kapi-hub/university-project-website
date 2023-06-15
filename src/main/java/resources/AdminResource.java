@@ -2,10 +2,8 @@ package resources;
 
 import dao.AdminDao;
 import dao.ClientDao;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import models.*;
 
@@ -13,41 +11,41 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Path("/admin")
 public class AdminResource {
     @POST
     @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void handlePostAnnouncement(AnnouncementBean announcement) {
+    @RolesAllowed("admin")
+    public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
         try {
+            int accountId = Integer.parseInt(accountIdString);
+            announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
     @Path("/dashboard/all")
-    public ArrayList<AnnouncementBean> getAnnouncement() {
-        ArrayList<AnnouncementBean> announcements = new ArrayList<>();
+    @RolesAllowed("admin")
+    public String getAnnouncement() {
         try {
-            announcements =  AdminDao.I.getAllAnnouncements();
-        }catch (Exception e){
+            return AdminDao.I.getAllAnnouncements();
+        }catch (SQLException e){
             e.printStackTrace();
+            return null;
         }
-        return announcements;
     }
-
-
     @GET
     @Path("/dashboard/crewReq")
     public List<EventBean> showEventsWithoutCrew() {
         List<EventBean> events = null;
         try{
             events = AdminDao.I.getNotFullEvents();
-        }catch (Exception e){
+        }catch (SQLException e){
             e.printStackTrace();
         }
         return events;
@@ -64,8 +62,6 @@ public class AdminResource {
         }
         return events;
     }
-
-
     @POST
     @Path("/crewEvents/newMember") //TODO change the url
     @Consumes(MediaType.APPLICATION_JSON)

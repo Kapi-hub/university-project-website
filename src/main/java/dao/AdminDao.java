@@ -24,7 +24,7 @@ public enum AdminDao {
     }
 
     public Response createNewMember(CrewMemberBean crewMember) {
-        String insertCrewQuery =  "INSERT INTO crewMember(id, role, team) VALUES (?,?::Role,?::Team)" ;
+        String insertCrewQuery =  "INSERT INTO crewMember(id, role, team) VALUES (?,?::Role_enum,?::Team_enum)" ;
         try {
             PreparedStatement st = connection.prepareStatement(insertCrewQuery);
             st.setInt(1, crewMember.getId());
@@ -83,22 +83,18 @@ public enum AdminDao {
         }
 
     }
-    public void addAnnouncement(AnnouncementBean announcement) {
+    public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
-        try {
             PreparedStatement st = connection.prepareStatement(insertQuery);
             st.setInt(1, announcement.getAnnouncer());
             st.setString(2, announcement.getTitle());
             st.setString(3, announcement.getBody());
             st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
     }
     public ArrayList<EventBean> getNotFullEvents() throws SQLException {
-        String insertQuery = "SELECT e.id, e.name" +
-                "FROM event e" +
-                "JOIN event_requirement er ON e.id = er.event_id" +
+        String insertQuery = "SELECT e.id, e.name " +
+                "FROM event e " +
+                "JOIN event_requirement er ON e.id = er.event_id " +
                 "LEFT JOIN (" +
                 "  SELECT event_id, COUNT(*) AS enrollments" +
                 "  FROM event_enrollment" +
@@ -120,22 +116,37 @@ public enum AdminDao {
        return events;
     }
 
-    public ArrayList<AnnouncementBean> getAllAnnouncements() {
-        String insertQuery = "SELECT * FROM announcement";
-        ArrayList<AnnouncementBean> announcements = null;
-        try {
-            announcements = new ArrayList<>();
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                AnnouncementBean ab = new AnnouncementBean(rs.getInt("id"), rs.getInt("announcerid"), rs.getString("title"), rs.getString("body"), rs.getTimestamp("date_time"));
-                announcements.add(ab);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+    public String getAllAnnouncements() throws SQLException {
+        String insertQuery = """
+                SELECT json_agg(jsonb_build_object(
+                           'announcement_id', ann.id,
+                           'announcement_title', ann.title,
+                           'announcement_body', ann.body,
+                           'announcement_timestamp', ann.date_time,
+                           'announcer', json_build_object(                         
+                                            'forename', a.forename,
+                                            'surname', a.surname
+                                        )
+                           )
+                ) AS result
+                FROM announcement ann
+                JOIN account a ON ann.announcer_id = a.id;
+                """;
+
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            String result = rs.getString(1);
+            rs.close();
+            st.close();
+            return result;
         }
-        return announcements;
+
+        rs.close();
+        st.close();
+        return null; // Return null if no result is found
     }
+
     public ArrayList<EventBean> getLatestEvent() throws SQLException {
         String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
         ArrayList<EventBean> events = null;
