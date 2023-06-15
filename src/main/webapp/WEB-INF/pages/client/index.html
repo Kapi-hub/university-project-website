@@ -167,11 +167,11 @@
 // Add event listener for form submission
         $("form").submit(function (event) {
 
-            var requiredElements = ["forename", "surname", "phone", "email_address", // client
+            const requiredElements = ["forename", "surname", "phone", "email_address", // client
                 "name", "type", "start", "duration", "location", // event
                 "photographer", "assistant", "editor", "data_handler", "planner", "producer", "videographer"]; // requirements
 
-            var unfilledElements = [];
+            let unfilledElements = [];
             for (i = 0; i < requiredElements.length; i++) {
                 var el = $(`#${requiredElements[i]}`);
                 if (!single && i >= 4) {
@@ -194,7 +194,7 @@
                             forename: $("#forename").val(),
                             surname: $("#surname").val(),
                             phone_number: $("#phone").val(),
-                            email_address: $("#email_address").val()
+                            emailAddress: $("#email_address").val()
                         },
                         eventBean: {
                             name: $("#name").val(),
@@ -256,7 +256,7 @@
                         forename: $('#forename').val(),
                         surname: $('#surname').val(),
                         phone_number: $('#phone').val(),
-                        email_address: $('#email_address').val()
+                        emailAddress: $('#email_address').val()
                     };
                     const fileInput = $('#excel_template')[0];
                     formData.append('client_data', JSON.stringify(clientBean));
