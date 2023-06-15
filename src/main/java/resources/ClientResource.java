@@ -44,8 +44,8 @@ public class ClientResource {
                 ClientDao.I.addRequirement(required);
             }
             formBean.getEventBean().setId(event_id);
-            sendConfirmation(formBean);
-            sendConfirmationToMe(formBean.getClientBean());
+//            sendConfirmation(formBean);
+//            sendConfirmationToMe(formBean.getClientBean());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -161,7 +161,7 @@ public class ClientResource {
         int i = 1;
         while (true) {
             Row row = sheet.getRow(i);
-            for (int j = 0; j < 13; j++) {
+            for (int j = 0; j < 14; j++) {
                 if (row.getCell(j).getCellType() == CellType.BLANK) return;
             }
             EventBean eventBean = new EventBean(
@@ -170,13 +170,14 @@ public class ClientResource {
                     Timestamp.valueOf(row.getCell(2).getStringCellValue()+":00.000"),
                     (int) row.getCell(3).getNumericCellValue(),
                     row.getCell(4).getStringCellValue(),
-                    EventType.valueOf(row.getCell(1).getStringCellValue())
+                    EventType.valueOf(row.getCell(1).getStringCellValue()),
+                    BookingType.valueOf(row.getCell(6).getStringCellValue())
             );
             eventBean.setClient_id(client_id);
             int event_id = ClientDao.I.addEvent(eventBean);
             RoleType[] roles = {RoleType.PHOTOGRAPHER, RoleType.VIDEOGRAPHER, RoleType.EDITOR, RoleType.ASSISTANT,
                     RoleType.DATA_HANDLER, RoleType.PLANNER, RoleType.PRODUCER};
-            int j = 6;
+            int j = 7;
             for (RoleType role : roles) {
                 RequiredCrewBean requiredCrewBean = new RequiredCrewBean(
                         event_id, role, (int) row.getCell(j).getNumericCellValue()
@@ -197,7 +198,7 @@ public class ClientResource {
         line = br.readLine();
         while ((line = br.readLine()) != null) {
             String[] values = line.split(",");
-            if (values.length < 13) {
+            if (values.length < 14) {
                 break;
             }
             EventBean eventBean = new EventBean(
@@ -206,13 +207,14 @@ public class ClientResource {
                     Timestamp.valueOf(values[2]+":00.000"),
                     Integer.parseInt(values[3]),
                     values[4],
-                    EventType.valueOf(values[1])
+                    EventType.valueOf(values[1]),
+                    BookingType.valueOf(values[6])
             );
             eventBean.setClient_id(client_id);
             int event_id = ClientDao.I.addEvent(eventBean);
             RoleType[] roles = {RoleType.PHOTOGRAPHER, RoleType.VIDEOGRAPHER, RoleType.EDITOR, RoleType.ASSISTANT,
                     RoleType.DATA_HANDLER, RoleType.PLANNER, RoleType.PRODUCER};
-            int j = 6;
+            int j = 7;
             for (RoleType role : roles) {
                 RequiredCrewBean requiredCrewBean = new RequiredCrewBean(
                         event_id, role, Integer.parseInt(values[j])

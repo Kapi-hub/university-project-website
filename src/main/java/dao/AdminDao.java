@@ -58,7 +58,7 @@ public enum AdminDao {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void createNewEvent(EventBean event) {
-        String insertEventQuery = "INSERT INTO event(id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?::event_type_enum)";
+        String insertEventQuery = "INSERT INTO event(id, name, description, start, duration, location, type, booking_type) VALUES (?,?,?,?,?,?::event_type_enum, ?::booking_type_enum)";
         try {
             PreparedStatement st = connection.prepareStatement(insertEventQuery);
             st.setInt(1, event.getId());
@@ -67,6 +67,7 @@ public enum AdminDao {
             st.setTimestamp(4, event.getStart());
             st.setString(5, event.getLocation());
             st.setString(6, event.getType().toString());
+            st.setString(7, event.getBooking_type().toString());
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -134,17 +135,18 @@ public enum AdminDao {
     }
 
     public ArrayList<EventBean> getLatestEvent() throws SQLException {
-        String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
-        ArrayList<EventBean> events = null;
+        String insertQuery = "SELECT name, description,start,duration,location,type,booking_type FROM event  ORDER BY id DESC";
+        ArrayList<EventBean> events;
         events = new ArrayList<>();
         PreparedStatement st = connection.prepareStatement(insertQuery);
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
             EventType type = EventType.valueOf(rs.getString("type"));
+            BookingType booking_type = BookingType.valueOf(rs.getString("booking_type"));
             EventBean eventBean = new EventBean(
                     rs.getString("name"), rs.getString("description"),
                     rs.getTimestamp("start"), rs.getInt("duration"),
-                    rs.getString("location"), type);
+                    rs.getString("location"), type, booking_type);
             events.add(eventBean);
         }
         return events;

@@ -3,7 +3,7 @@ package models;
 public enum EventType {
     CLUB_PHOTOGRAPHY,
     FESTIVAL,
-    PHOTOSHOOT;
+    PRODUCT_SHOOT;
 
     @Override
     public String toString() {
@@ -11,10 +11,10 @@ public enum EventType {
     }
 
     public static EventType toEnum(String string) {
-        return switch(string.toLowerCase()) {
+        return string == null ? null : switch(string.toLowerCase()) {
             case "club_photography" -> CLUB_PHOTOGRAPHY;
             case "festival" -> FESTIVAL;
-            case "photoshoot" -> PHOTOSHOOT;
+            case "product_shoot" -> PRODUCT_SHOOT;
             default -> null;
         };
     }

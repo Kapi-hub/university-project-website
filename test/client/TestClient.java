@@ -1,5 +1,6 @@
 package client;
 
+import models.BookingType;
 import models.ClientBean;
 import models.EventBean;
 import models.EventType;
@@ -16,7 +17,7 @@ public class TestClient {
 
     @Test
     public void testSendingForm() throws SQLException {
-        EventBean event = new EventBean("De Reactie", "De reactie beschrijving", new Timestamp(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", EventType.CLUB_PHOTOGRAPHY);
+        EventBean event = new EventBean("De Reactie", "De reactie beschrijving", new Timestamp(System.currentTimeMillis()), 10, "Evenemenenten Terein Universiteit", EventType.CLUB_PHOTOGRAPHY, BookingType.PHOTOGRAPHY);
         ClientBean client = new ClientBean("Organisatie", "De Reactie", "organisatie_de_reactie", "organisatie@gmail.com","06123123123");
         assertTrue(event.getClient_id() <= 0);
         int id = I.addClient(client);

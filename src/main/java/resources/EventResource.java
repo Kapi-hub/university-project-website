@@ -1,5 +1,6 @@
 package resources;
 
+import dao.AccountDao;
 import dao.CrewMemberDao;
 import dao.EventDao;
 import jakarta.annotation.security.RolesAllowed;
@@ -10,6 +11,9 @@ import models.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Path("/event")
 public class EventResource {
@@ -25,6 +29,7 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("crew_member")
     public Response enrollSelf(EventBean event, @CookieParam("accountId") String accountIdString) {
+        System.out.println("Enrolling self in event " + event.getId());
         int accountId = Integer.parseInt(accountIdString);
         return enrol(accountId, event.getId());
     }
@@ -91,74 +96,90 @@ public class EventResource {
     @Path("/getFromDate")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
-    public Response getFromDate(@QueryParam("date") String date) {
-//        EventBean[] events = null;
-//        try {
-//            events = EventDao.instance.getFromDate(Timestamp.valueOf(date));
-//        } catch (SQLException e) {
-//            return Response.serverError()
-//                    .build();
-//        }
-//        if (events == null) {
-//            return Response.noContent()
-//                    .build();
-//        }
-        String finalReturn = """
-                [
-                  {
-                    "id": 1,
-                    "name": "Event 1",
-                    "type": "Type1",
-                    "date": "2023-06-15T00:00:00.000Z",
-                    "location": "Location1",
-                    "duration": 2,
-                    "client": "Client1",
-                    "bookingType": "BookingType1",
-                    "productManager": "ProductManager1",
-                    "crew": [
-                      ["CrewType1", 2],
-                      ["CrewType2", 3]
-                    ],
-                    "enrolled": [
-                      ["Role1", ["Person1", "Person2"]],
-                      ["Role2", ["Person3", "Person4"]]
-                    ],
-                    "status": "Status1",
-                    "description": "Description1"
-                  },
-                  {
-                    "id": 2,
-                    "name": "Event 2",
-                    "type": "Type2",
-                    "date": "2023-06-15T00:00:00.000Z",
-                    "location": "Location2",
-                    "duration": 3,
-                    "client": "Client2",
-                    "bookingType": "BookingType2",
-                    "productManager": "ProductManager2",
-                    "crew": [
-                      ["CrewType3", 4],
-                      ["CrewType4", 5]
-                    ],
-                    "enrolled": [
-                      ["Role3", ["Person5", "Person6"]],
-                      ["Role4", ["Person7", "Person8"]]
-                    ],
-                    "status": "Status2",
-                    "description": "Description2"
-                  }
-                ]""";
-        System.out.println("returning the events");
-        return Response.ok(finalReturn)
+    public Response getFromDate(@QueryParam("date") String QueryDate) {
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getFromDate(Timestamp.valueOf(QueryDate + " 00:00:00"));
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] returnValue = new EventResponseBean[events.length];
+        for (int i = 0; i < events.length; i++) {
+            int id = events[i].getId();
+            String name = events[i].getName();
+            EventType type = events[i].getType();
+            Timestamp date = events[i].getStart();
+            String location = events[i].getLocation();
+            int duration = events[i].getDuration();
+            String client = AccountDao.instance.getName(events[i].getClient_id());
+            BookingType bookingType = events[i].getBooking_type();
+            String productionManager = AccountDao.instance.getName(events[i].getProduction_manager_id());
+            Object[] crew = getMissingCrew(id);
+            Object[] enrolled = EventDao.instance.getEnrolled(id);
+            EventStatus status = events[i].getStatus();
+            String description = events[i].getDescription();
+            returnValue[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description);
+        }
+        return Response.ok(returnValue)
                 .build();
+    }
+
+    private Object[] getMissingCrew(int id) {
+        Map<RoleType, Integer> required;
+        try {
+            required = EventDao.instance.getRequiredMap(id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        Set<RoleType> requiredKeysCopy = new HashSet<>(required.keySet());
+        for (RoleType role : requiredKeysCopy) {
+            int currentEntry = required.get(role);
+            try {
+                int currentEnrolments = EventDao.instance.getCurrentEnrolmentsForRole(role, id);
+                required.replace(role, currentEntry - currentEnrolments);
+            } catch (SQLException ignored) {
+                // the sqlexception means nobody is enrolled for this role, we can therefore safely continue
+            }
+            if (required.get(role) <= 0) {
+                required.remove(role);
+            }
+        }
+
+        if (required.size() == 0) {
+            return null;
+        }
+
+        Object[] returnValue = new Object[required.size()];
+        int i = 0;
+        for (RoleType role : required.keySet()) {
+            Object[] roleRequiredPair = new Object[2];
+            roleRequiredPair[0] = role;
+            roleRequiredPair[1] = required.get(role);
+
+            returnValue[i] = roleRequiredPair;
+            i++;
+        }
+
+        return returnValue;
     }
 
     private Response enrol(int crewId, int eventId) {
         try {
+            if (EventDao.instance.isEnrolled(crewId, eventId)) {
+                return Response.notModified()
+                        .build();
+            }
             RoleType role = CrewMemberDao.I.getRole(crewId);
             int required = EventDao.instance.getRequiredCrewSize(role, eventId);
             int currentEnrolled = EventDao.instance.getCurrentEnrolmentsForRole(role, eventId);
-            if (required < currentEnrolled) {
+            if (required > currentEnrolled) {
                 EventDao.instance.addEnrolment(crewId, eventId);
                 return Response.ok()
                         .build();

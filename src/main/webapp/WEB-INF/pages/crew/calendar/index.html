@@ -16,16 +16,17 @@
             const XHR = new XMLHttpRequest();
             XHR.open("POST", "/api/event/enroll-self");
             XHR.setRequestHeader('Content-Type', 'application/json');
+            XHR.withCredentials = true;
             XHR.addEventListener("load", function () {
                 if (this.status === 200) {
                     alert("Enrolled successfully");
                     updateTaskBar();
                 } else {
-                    alert("An error occurred, enrolling unsuccessfull.");
+                    alert("An error occurred, enrolling unsuccessful.");
                 }
             });
             XHR.send(JSON.stringify({
-                eventId: eventId
+                id: eventId
             }));
         }
     </script>
@@ -34,7 +35,7 @@
 <body>
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img alt="Logo" class="d-inline-block align-text-middle" width="30"
                  src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 shotmaniacs-peal">Shotmaniacs</span>

@@ -151,7 +151,7 @@ let eventDateHandler = document.querySelector(".event-date");
 let eventContainer = document.getElementById("event-accordion");
 
 function javaEnumToString(javaEnum) {
-    return javaEnum.split('_')
+    return javaEnum == null ? "Not defined." : javaEnum.split('_')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 }
@@ -161,7 +161,7 @@ function getEventsForDay(date) {
     const day = String(date.getDate()).padStart(2, '0'); // padding with 0s to make it 2 digits
     const month = String(date.getMonth() + 1).padStart(2, '0'); // JavaScript months are 0-11 apparently
     const year = date.getFullYear(); // 4 digit year
-    const formattedDate = `${day}-${month}-${year}`;
+    const formattedDate = `${year}-${month}-${day}`;
 
     return fetch('/api/event/getFromDate?date=' + formattedDate, {
         method: 'GET',
@@ -171,8 +171,8 @@ function getEventsForDay(date) {
         }
     })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('HTTP error ' + response.status);
+            if (!response.ok || response.status === 204) {
+                throw new Error('No events returned ' + response.status);
             }
             return response.json();
         });
@@ -193,56 +193,53 @@ function updateTaskBar() {
 
     getEventsForDay(newTaskBarDate)
         .then(eventList => {
-            if (eventList == null || eventList.length === 0) {
-                eventContainer.innerHTML = "<p>No events for today.</p>";
-            } else {
-                eventContainer.innerHTML = "";
-                eventList.forEach(event => {
-                    const {
-                        id,
-                        name,
-                        type,
-                        date,
-                        location,
-                        duration,
-                        client,
-                        bookingType,
-                        productManager,
-                        crew,
-                        enrolled,
-                        status,
-                        description
-                    } = event;
+            eventContainer.innerHTML = "";
+            eventList.forEach(event => {
+                const {
+                    id,
+                    name,
+                    type,
+                    date,
+                    location,
+                    duration,
+                    client,
+                    bookingType,
+                    productManager,
+                    crew,
+                    enrolled,
+                    status,
+                    description
+                } = event;
 
-                    const parsedDate = new Date(date);
-                    const startTime = String(parsedDate.getHours()).padStart(2, '0') + ":" + String(parsedDate.getMinutes()).padStart(2, '0');
-                    let crewString = "";
-                    crew.forEach(function (crewTypeAndPeople) {
-                        const crewType = crewTypeAndPeople[0];
-                        const crewAmount = crewTypeAndPeople[1];
+                const parsedDate = new Date(date);
+                const startTime = String(parsedDate.getHours()).padStart(2, '0') + ":" + String(parsedDate.getMinutes()).padStart(2, '0');
+                let crewString = "";
+                crew.forEach(function (crewTypeAndPeople) {
+                    const crewType = crewTypeAndPeople[0];
+                    const crewAmount = crewTypeAndPeople[1];
 
-                        crewString += crewType + ": " + crewAmount + ", ";
-                    });
+                    crewString += crewType + ": " + crewAmount + ", ";
+                });
 
-                    if (crewString === "") {
-                        crewString = "All required crew is enrolled.";
-                    }
+                if (crewString === "") {
+                    crewString = "All required crew is enrolled.";
+                }
 
-                    let enrolledString = "";
-                    enrolled.forEach(function (roleAndPeople) {
-                        const role = roleAndPeople[0];
-                        const people = roleAndPeople[1];
+                let enrolledString = "";
+                enrolled.forEach(function (roleAndPeople) {
+                    const role = roleAndPeople[0];
+                    const people = roleAndPeople[1];
 
-                        let peopleString = people.join(", ");
-                        let detailsId = "details-" + (name + role).replace(/\s/g, ""); // replace spaces with nothing to make it a valid id
-                        enrolledString += `<span class="hoverable" data-details="${detailsId}">${role}: ${people.length} <span id="${detailsId}" class="details">${peopleString}</span></span>, `;
-                    });
+                    let peopleString = people.join(", ");
+                    let detailsId = "details-" + (name + role).replace(/\s/g, ""); // replace spaces with nothing to make it a valid id
+                    enrolledString += `<span class="hoverable" data-details="${detailsId}">${role}: ${people.length} <span id="${detailsId}" class="details">${peopleString}</span></span>, `;
+                });
 
-                    if (enrolledString === "") {
-                        enrolledString = "No one is enrolled yet.";
-                    }
+                if (enrolledString === "") {
+                    enrolledString = "No one is enrolled yet.";
+                }
 
-                    eventContainer.innerHTML += `<div class="accordion-item">
+                eventContainer.innerHTML += `<div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#` + name.replace(/\s/g, "") + `" aria-expanded="true" aria-controls="` + name.replace(/\s/g, "") + `">
@@ -272,8 +269,7 @@ function updateTaskBar() {
                             </div>
                         </div>
                     </div>`;
-                });
-            }
+            });
             document.querySelectorAll('.hoverable').forEach((item) => {
                 item.addEventListener('mousemove', (e) => {
                     const detailsId = e.target.getAttribute('data-details');
@@ -283,7 +279,10 @@ function updateTaskBar() {
                 });
             });
         })
-        .catch(error => console.error('Error:', error));
+        .catch(function (error) {
+            console.log(error);
+            eventContainer.innerHTML = "<p style='margin-left: 50px; margin-top: 20px'>No events for today.</p>";
+        });
 }
 
 updateTaskBar();
