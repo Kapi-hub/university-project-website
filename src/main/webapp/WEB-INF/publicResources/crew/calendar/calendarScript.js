@@ -336,10 +336,10 @@ const reloadEventsContainer = (date) => {
             ["Client", client],
             ["Booking type", javaEnumToString(bookingType)],
             ["Product manager", productManager || undefinedString],
-            ["Crew", crewString],
-            ["Enrolled", enrolledArray],
             ["Status", javaEnumToString(status)],
             ["Description", description || undefinedString],
+            ["Missing crew", crewString],
+            ["Enrolled crew", enrolledArray],
         ];
 
         halfTwoTags.forEach(([tagName, tagValue]) => {
