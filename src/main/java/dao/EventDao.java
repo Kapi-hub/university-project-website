@@ -75,16 +75,21 @@ public enum EventDao {
         st.executeUpdate();
     }
 
-    public EventBean[] getFromDate(Timestamp timestamp) throws SQLException {
+    public EventBean[] getFromMonth(Timestamp timestamp) throws SQLException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(timestamp);
-        Timestamp nextDayTimestamp = new Timestamp(timestamp.getTime() + TimeUnit.DAYS.toMillis(1));
-        String nextDayDateStr = sdf.format(nextDayTimestamp);
+        long timeToNextMonth = switch (dateStr.substring(5, 7)) {
+            case "02" -> TimeUnit.DAYS.toMillis(28);
+            case "04", "06", "09", "11" -> TimeUnit.DAYS.toMillis(30);
+            default -> TimeUnit.DAYS.toMillis(31);
+        };
+        Timestamp nextMonthTimestamp = new Timestamp(timestamp.getTime() + timeToNextMonth);
+        String nextMonthDateStr = sdf.format(nextMonthTimestamp);
 
         String query = "SELECT * FROM event WHERE DATE(start) >= TO_DATE(?, 'YYYY-MM-DD') AND DATE(start) < TO_DATE(?, 'YYYY-MM-DD')";
         PreparedStatement st = connection.prepareStatement(query);
         st.setString(1, dateStr);
-        st.setString(2, nextDayDateStr);
+        st.setString(2, nextMonthDateStr);
 
         ResultSet rs = st.executeQuery();
 
@@ -106,7 +111,6 @@ public enum EventDao {
             rowData.add(EventStatus.toEnum(rs.getString("status")));
             rsList.add(rowData);
         }
-        rs.close();
 
         if (count == 0) {
             return null;

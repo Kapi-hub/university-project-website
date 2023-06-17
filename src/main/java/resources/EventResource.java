@@ -93,13 +93,13 @@ public class EventResource {
     }
 
     @GET
-    @Path("/getFromDate")
+    @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
-    public Response getFromDate(@QueryParam("date") String QueryDate) {
+    public Response getFromMonth(@QueryParam("month") String QueryDate) {
         EventBean[] events;
         try {
-            events = EventDao.instance.getFromDate(Timestamp.valueOf(QueryDate + " 00:00:00"));
+            events = EventDao.instance.getFromMonth(Timestamp.valueOf(QueryDate + "-01 00:00:00"));
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError()
@@ -109,7 +109,7 @@ public class EventResource {
             return Response.noContent()
                     .build();
         }
-        EventResponseBean[] returnValue = new EventResponseBean[events.length];
+        EventResponseBean[] finalBeans = new EventResponseBean[events.length];
         for (int i = 0; i < events.length; i++) {
             int id = events[i].getId();
             String name = events[i].getName();
@@ -124,9 +124,9 @@ public class EventResource {
             Object[] enrolled = EventDao.instance.getEnrolled(id);
             EventStatus status = events[i].getStatus();
             String description = events[i].getDescription();
-            returnValue[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description);
+            finalBeans[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description);
         }
-        return Response.ok(returnValue)
+        return Response.ok(finalBeans)
                 .build();
     }
 

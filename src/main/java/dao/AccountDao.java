@@ -62,7 +62,8 @@ public enum AccountDao {
 
     public String getName(int id) {
         if (id == 0) {
-            return "No production manager defined yet.";
+            return null;
+            // returning null as this will be handled correctly by the JS on the client side.
         }
         try {
             String query = "SELECT forename, surname FROM account WHERE id = ?";
