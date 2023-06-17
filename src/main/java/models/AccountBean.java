@@ -46,7 +46,14 @@ public class AccountBean {
         this.password = password;
         this.accountType = accountType;
     }
-        public int getId() {
+
+    public AccountBean(int accountId, String forename, String surname) {
+        this.accountId = accountId;
+        this.forename = forename;
+        this.surname = surname;
+    }
+
+    public int getId() {
         return accountId;
     }
 

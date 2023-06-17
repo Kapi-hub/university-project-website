@@ -17,11 +17,10 @@ public enum AdminDao {
     }
 
     public void createNewMember(CrewMemberBean crewMember) {
+        //Create new account
         String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ?, ?::account_type_enum)";
-
         try {
             PreparedStatement st = connection.prepareStatement(insertAccountQuery);
-//            st.setInt(1, crewMember.getId());
             st.setString(1, crewMember.getForename());
             st.setString(2, crewMember.getSurname());
             st.setString(3, crewMember.getUsername());
@@ -34,7 +33,7 @@ public enum AdminDao {
             System.out.println("In insertion of account " + e);
         }
 
-
+        //Get the account's id so that it will be used for the foreign key of crew_member
         int accountId = 0;
         String getAccountId = "SELECT id FROM account WHERE username LIKE ?;";
 
@@ -53,25 +52,7 @@ public enum AdminDao {
             System.out.println("error getting the account id");
         }
 
-//        String insertAccountQuery =  " WITH new_account AS (INSERT INTO account(id, forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ?, ?, ?::account_type_enum) RETURNING id)" +
-//                "INSERT INTO crew_member(id, role, team) VALUES (?,?::role_enum,?::team_enum) " ;
-//            try {
-//                PreparedStatement st = connection.prepareStatement(insertAccountQuery);
-//                st.setInt(1, crewMember.getId());
-//                st.setString(2, crewMember.getForename());
-//                st.setString(3, crewMember.getSurname());
-//                st.setString(4, crewMember.getUsername());
-//                st.setString(5, crewMember.getEmailAddress());
-//                st.setString(6, crewMember.getPassword());
-//                st.setString(7, crewMember.getAccountType().toString());
-//                st.setInt(8,crewMember.getId());
-//                st.setString(9,crewMember.getRole().toString());
-//                st.setString(10, crewMember.getTeam().toString()) ;
-//                st.executeUpdate();
-//            } catch (SQLException e) {
-//                System.out.println("In insertion of account " + e);
-//            }
-//
+        //Create crew_member
         String insertCrewQuery = "INSERT INTO crew_member(id, role, team) VALUES(?, ?::role_enum, ?::team_enum)";
         try {
             PreparedStatement st = connection.prepareStatement(insertCrewQuery);
@@ -82,8 +63,6 @@ public enum AdminDao {
         } catch (SQLException e) {
             System.out.println("in insertion of crewMember " + e);
         }
-
-
     }
 
     public void createNewEvent(EventBean event) {
@@ -100,6 +79,22 @@ public enum AdminDao {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public List<CrewMemberBean> getAllCrewMembers() throws SQLException {
+        String query = "SELECT a.id, a.forename, a.surname FROM shotmaniacs1.account a WHERE a.type='crew_member'";
+        List<CrewMemberBean> result = new ArrayList<>();
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                CrewMemberBean crewMember = new CrewMemberBean(rs.getInt("id"), rs.getString("forename"), rs.getString("surname"));
+                result.add(crewMember);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public void addRequirement(List<RequiredCrewBean> required) throws SQLException {

@@ -13,6 +13,8 @@ import java.util.List;
 
 @Path("/admin")
 public class AdminResource {
+
+    /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
     @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -39,40 +41,9 @@ public class AdminResource {
             return null;
         }
     }
-    @GET
-    @Path("/dashboard/crewReq")
-    public List<EventBean> showEventsWithoutCrew() {
-        List<EventBean> events = null;
-        try{
-            events = AdminDao.I.getNotFullEvents();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return events;
-    }
 
-    @GET
-    @Path("/dashboard/latest")
-    public ArrayList<EventBean> getLatestEvent() {
-        ArrayList<EventBean> events = null;
-        try {
-            events = AdminDao.I.getLatestEvent();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return events;
-    }
-    @POST
-    @Path("/crewAssignments")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed("admin")
-    public void handleCreateNewMember(CrewMemberBean crewMember) {
-        try {
-            AdminDao.I.createNewMember(crewMember);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
+    /* METHODS RELATED TO EVENTS */
     @POST
     @Path("/crewEvents/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -88,6 +59,55 @@ public class AdminResource {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @GET
+    @Path("/dashboard/latest")
+    public ArrayList<EventBean> getLatestEvent() {
+        ArrayList<EventBean> events = null;
+        try {
+            events = AdminDao.I.getLatestEvent();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return events;
+    }
+
+    @GET
+    @Path("/dashboard/crewReq")
+    public List<EventBean> showEventsWithoutCrew() {
+        List<EventBean> events = null;
+        try{
+            events = AdminDao.I.getNotFullEvents();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    /* METHODS RELATED TO CREW-MEMBERS */
+    @POST
+    @Path("/crewAssignments")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public void handleCreateNewMember(CrewMemberBean crewMember) {
+        try {
+            AdminDao.I.createNewMember(crewMember);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GET
+    @Path("/crewAssignments")
+    @RolesAllowed("admin")
+    public List<CrewMemberBean> getAllCrewMembers() {
+        try {
+            return AdminDao.I.getAllCrewMembers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
