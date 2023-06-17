@@ -338,7 +338,7 @@ const reloadEventsContainer = (date) => {
             ["Product manager", productManager || undefinedString],
             ["Status", javaEnumToString(status)],
             ["Description", description || undefinedString],
-            ["Missing crew", crewString],
+            ["Open slots", crewString],
             ["Enrolled crew", enrolledArray],
         ];
 
