@@ -63,8 +63,9 @@ public class AdminResource {
         return events;
     }
     @POST
-    @Path("/crewEvents/newMember") //TODO change the url
+    @Path("/crewAssignments")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     public void handleCreateNewMember(CrewMemberBean crewMember) {
         try {
             AdminDao.I.createNewMember(crewMember);
@@ -75,6 +76,7 @@ public class AdminResource {
     @POST
     @Path("/crewEvents/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     public void handleCreateNewEvent(FormBean form) throws SQLException {
         try {
             int client_id = ClientDao.I.addClient(form.getClientBean());
