@@ -73,7 +73,7 @@ public class AdminResource {
         }
     }
     @POST
-    @Path("crewEvents/newEvent")
+    @Path("/crewEvents/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
     public void handleCreateNewEvent(FormBean form) throws SQLException {
         try {

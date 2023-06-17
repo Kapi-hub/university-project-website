@@ -39,7 +39,7 @@ function sendHttpRequest(method, url, data) {
     return promise;
 }
 
-function setAnnouncements() {
+function getAnnouncements() {
     let announcements = []
     sendHttpRequest('GET', "/api/admin/dashboard/all").then(responseData => {
         console.log(responseData);
@@ -72,7 +72,7 @@ function setAnnouncements() {
     })
 }
 
-function setLatestEvents() {
+function getLatestEvents() {
     let events = []
     sendHttpRequest('Get', "/api/admin/dashboard/latest").then(responseData => {
         responseData.events.forEach(event => events.push(event));
@@ -88,7 +88,7 @@ function setLatestEvents() {
     })
 }
 
-function setCrewNeeded(){
+function getCrewNeeded(){
     let events = []
     sendHttpRequest("Get","/api/admin/dashboard/crewReq").then(responseData => {
         responseData.events.forEach(event => {
