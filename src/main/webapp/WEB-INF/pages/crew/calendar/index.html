@@ -19,8 +19,8 @@
             XHR.withCredentials = true;
             XHR.addEventListener("load", function () {
                 if (this.status === 200) {
-                    alert("Enrolled successfully");
                     updateTaskBar();
+                    alert("Enrolled successfully");
                 } else {
                     alert("An error occurred, enrolling unsuccessful.");
                 }
