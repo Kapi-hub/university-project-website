@@ -108,8 +108,7 @@ public enum AdminDao {
         }
 
     }
-
-    public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
+    public void addAnnouncement(AnnouncementBean announcement) {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
         PreparedStatement st = connection.prepareStatement(insertQuery);
         st.setInt(1, announcement.getAnnouncer());

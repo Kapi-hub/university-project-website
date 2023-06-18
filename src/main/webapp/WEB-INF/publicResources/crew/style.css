@@ -11,21 +11,11 @@
 }
 
 @keyframes navbarFadeInAnimation {
-    0% {
-        opacity: 0
-    }
-    60% {
-        opacity: 0
-    }
-    80% {
-        opacity: 0.8
-    }
-    90% {
-        opacity: 0.9
-    }
-    100% {
-        opacity: 1
-    }
+    0% { opacity: 0}
+    60% { opacity: 0}
+    80% { opacity: 0.8}
+    90% { opacity: 0.9}
+    100% { opacity: 1}
 }
 
 .navbar-custom .navbar-brand {
@@ -41,10 +31,9 @@ doesn't get in the way of building / maintaining the website*/
 .container.welcome-container {
     display: flex;
     min-height: 0 !important;
-    height: 15vh !important;
-/ / TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS
-    /*height: 92vh;*/
-flex-wrap: wrap;
+    /*height: 15vh !important; // TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS*/
+    height: 92vh;
+    flex-wrap: wrap;
     flex-direction: column;
     color: white;
     opacity: 1;
@@ -55,9 +44,7 @@ flex-wrap: wrap;
 }
 
 @keyframes shrinkAnimation {
-    to {
-        height: 19vh;
-    }
+    to { height: 19vh;}
 }
 
 .container.welcome-container .welcomeMessageName {
@@ -79,25 +66,13 @@ flex-wrap: wrap;
 }
 
 @keyframes welcomeMessageNameAnimation {
-    0% {
-        left: -180px;
-        opacity: 0
-    }
-    100% {
-        left: 0;
-        opacity: 1;
-    }
+    0% { left: -180px; opacity: 0}
+    100% { left: 0; opacity: 1;}
 }
 
 @keyframes welcomeMessageEventsAnimation {
-    0% {
-        left: 180px;
-        opacity: 0
-    }
-    100% {
-        left: 0;
-        opacity: 1;
-    }
+    0% { left: 180px; opacity: 0}
+    100% { left: 0; opacity: 1;}
 }
 
 /* ************************** */
@@ -160,7 +135,6 @@ flex-wrap: wrap;
 .content-container .tab_content.tab_current .carousel.slide .carousel-control-next .carousel.icon {
     font-size: 30px;
 }
-
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
@@ -184,7 +158,7 @@ flex-wrap: wrap;
     left: 0;
     width: 100%;
     height: 80px;
-    background-image: linear-gradient(to right, var(--bs-dark), var(--bs-secondary));
+    background-image: linear-gradient(to right, var(--bs-dark), var(--bs-secondary)) ;
     transition: transform 0.3s ease-in-out; /* Add transition for sliding effect */
     /*z-index: -1;*/
 }
@@ -231,18 +205,25 @@ flex-wrap: wrap;
 
 .container {
     width: 100%;
-    min-height: 100vh;
-    max-width: 90%;
+    max-width: 95%;
+    max-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .calendar {
-    width: 100%;
+    width: 80%;
+    max-height: 90vh;
     padding: 30px 20px;
     border-radius: 20px;
     background-color: var(--bs-light);
+    overflow: scroll;
+
+}
+
+.container .calendar::-webkit-scrollbar {
+    display: none;
 }
 
 .calendar .header {
@@ -255,11 +236,40 @@ flex-wrap: wrap;
 }
 
 .calendar .header .month {
-    display: flex;
+    display: flex ;
     align-items: center;
     font-size: 30px;
-    font-weight: 1000;
-    color: #1F1F1F;
+    font-weight:1000;
+    color: var(--bs-dark);
+}
+
+.calendar .header .btns {
+    display: flex;
+    gap: 10px;
+}
+
+.calendar .header .btns .btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar .header .btns .btn.prev .icon,
+.calendar .header .btns .btn.next .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.calendar .header .btns .btn:hover {
+    background-color: var(--bs-primary-bg-subtle);
+    transition: 0.3s;
+    border-radius: 5px;
 }
 
 .weekdaysName {
@@ -285,7 +295,7 @@ flex-wrap: wrap;
     display: flex;
     width: calc(100% / 7 - 40px);
     margin: 15px;
-    height: 60px;
+    height: 4vw;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
@@ -296,7 +306,7 @@ flex-wrap: wrap;
     transition: all 0.3s;
 }
 
-.weekdaysNumber .day:hover {
+.weekdaysNumber .day:not(.next):not(.prev):hover {
     color: var(--bs-light);
     background-color: #1696D2;
     transform: scale(1.10);
@@ -305,6 +315,19 @@ flex-wrap: wrap;
 .weekdaysNumber .day.current {
     color: var(--bs-light);
     background-color: #1696D2;
+}
+
+.weekdaysNumber .day.prev,
+.weekdaysNumber .day.next {
+    background-color: #ccc;
+    color: var(--bs-dark);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
 }
 
 /* ********************** LEFT SIDE BAR ***************** */
@@ -321,13 +344,12 @@ flex-wrap: wrap;
     list-style: none;
     text-align: center;
     padding-left: 0;
-    margin-bottom: 0;
-!important;
+    margin-bottom: 0; !important;
 }
 
 .left_side_bar ul li a {
     display: block;
-    color: var(--bs-light);
+    color: var(--bs-light) !important;
     font-size: 20px;
     outline: none;
     padding: 8px;
@@ -336,9 +358,9 @@ flex-wrap: wrap;
     cursor: pointer;
 }
 
-.left_side_bar ul li.active a {
+.left_side_bar ul li.active a{
     background: var(--bs-light);
-    color: var(--bs-dark);
+    color: var(--bs-dark) !important;
     padding-bottom: 15px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -347,6 +369,7 @@ flex-wrap: wrap;
 /* ************************************************** */
 /* ***************** RIGHT SIDE BAR ***************** */
 /* ************************************************** */
+
 .container .right_side_bar {
     position: relative;
     width: 60%;
@@ -354,11 +377,37 @@ flex-wrap: wrap;
     padding: 20px 0;
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
-    background-color: ghostwhite;
+    background-color: var(--bs-light);
+    border-left: px solid var(--bs-dark);
+    overflow: scroll;
 }
 
+.container .right_side_bar::-webkit-scrollbar {
+    display: none;
+}
+
+.right_side_bar .btn {
+    transition: 0.3s;
+    border-style: none;
+}
+
+.right_side_bar .btn:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+
+
+/*.container .right_side_bar::-webkit-scrollbar-track {*/
+/*    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+/*}*/
+
+/*.container .right_side_bar::-webkit-scrollbar-thumb {*/
+/*    background-color: darkgrey;*/
+/*    outline: 1px solid slategrey;*/
+/*}*/
+
 .right_side_bar .today-date {
-    width: 100%;
+    width:100%;
     height: 50px;
     display: flex;
     flex-wrap: wrap;
@@ -369,16 +418,32 @@ flex-wrap: wrap;
     text-transform: capitalize;
 }
 
-.today-date .event-day {
-    font-size: 2rem;
+.right_side_bar .today-date .event-day {
+    font-size: 2em;
     font-weight: 800;
     color: var(--bs-dark);
 }
 
-.today-date .event-date {
-    font-size: 1rem;
+.right_side_bar .today-date .event-date {
+    font-size: 1.1em;
     font-weight: 300;
     color: var(--bs-dark);
+}
+
+
+.details {
+    display: none;
+    position: fixed;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.hoverable:hover .details {
+    display: block;
 }
 
 /* ************************************************** */
@@ -401,7 +466,21 @@ body {
     border-radius: 20px !important;
 }
 
-.accordion-item + .accordion-item {
-    margin-top: 10px;
+.accordion-button {
+    transition: 0.3s;
 }
 
+.accordion-button:not(.collapsed) {
+    color: white  !important;
+    background-color: var(--bs-primary) !important;
+}
+
+.accordion-button:link, .accordion-button:visited, .accordion-button:hover, .accordion-button:active, .accordion-button:focus {
+    border: hidden !important;
+    box-shadow: none !important;
+    outline: 0;
+}
+
+.accordion-item + .accordion-item{
+    margin-top: 10px;
+}

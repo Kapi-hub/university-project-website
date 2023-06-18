@@ -47,7 +47,7 @@ public enum ClientDao {
     }
 
     public int addEvent(EventBean event) throws SQLException {
-        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?, ?::event_type_enum) RETURNING id";
+        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type, booking_type) VALUES (?,?,?,?,?,?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, event.getClient_id());
         st.setString(2, event.getName());
@@ -56,6 +56,7 @@ public enum ClientDao {
         st.setInt(5, event.getDuration());
         st.setString(6, event.getLocation());
         st.setString(7, event.getType().toString());
+        st.setString(8, event.getBooking_type().toString());
 
 
         ResultSet rs = st.executeQuery();
@@ -76,5 +77,6 @@ public enum ClientDao {
         System.out.printf("===SQL=== ADDED A ROLE REQUIREMENT WITH VALUES %s, %s, %s\n",
                 required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
     }
+
 }
 

@@ -23,17 +23,17 @@
 
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img alt="Logo" class="d-inline-block align-text-middle" width="30"
                  src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
             <li class="nav-item me-2">
-                <a class="nav-link text-white" href="/admin/dashboard/"><strong>Dashboard</strong></a>
+                <a class="nav-link text-white" href="/static/admin/dashboard/index.html"><strong>Dashboard</strong></a>
             </li>
             <li class="nav-item border bg-white border-white rounded-pill">
-                <a class="nav-link text-dark" href="/admin/crewAssignment"><strong>Crew&Events</strong></a>
+                <a class="nav-link text-dark" href="/static/admin/crewEventsOverview/index.html"><strong>Crew&Events</strong></a>
             </li>
             <li class="nav-item me-2">
                 <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
@@ -90,6 +90,30 @@
                         <label class="productBox">
                             <input type="radio" name="flexRadioDefault" id="productBox">
                             <span class="checkmark">Product Shoot</span>
+                        </label>
+                    </div>
+
+                    <label for="bookingType" class="bookingTypeText">Booking Type</label>
+                    <br>
+                    <div id="bookingType">
+                        <label class="photographyBox">
+                            <input type="radio" name="flexRadioDefault" id="photographyBox">
+                            <span class="checkmark">Photography</span>
+                        </label>
+
+                        <label class="filmBox">
+                            <input type="radio" name="flexRadioDefault" id="filmBox">
+                            <span class="checkmark">Film</span>
+                        </label>
+
+                        <label class="marketingBox">
+                            <input type="radio" name="flexRadioDefault" id="marketingBox">
+                            <span class="checkmark">Marketing</span>
+                        </label>
+
+                        <label class="otherBox">
+                            <input type="radio" name="flexRadioDefault" id="otherBox">
+                            <span class="checkmark">Other</span>
                         </label>
                     </div>
 

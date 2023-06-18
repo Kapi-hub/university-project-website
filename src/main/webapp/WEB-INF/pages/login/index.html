@@ -11,22 +11,87 @@
     <link href="/static/general.css" rel="stylesheet">
     <link href="/static/login/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
-
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
+        let path = null;
 
-        const path = urlParams.get('path');
-        const loginRequired = urlParams.get('loginRequired');
-        if (loginRequired) {
-            alert("Please log in with an account that has the required permission to access this page");
-        }
-        const logout = urlParams.get('logout');
-        if (logout) {
-            alert("You have been logged out");
-        }
-        const sessionExpired = urlParams.get('sessionExpired');
-        if (sessionExpired) {
-            alert("Your session has expired");
+        function pageMechanics() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const loggedIn = document.cookie.includes("sessionId");
+            path = urlParams.get('path');
+            const loginRequired = urlParams.get('loginRequired');
+            if (loginRequired) {
+                alert("Please log in with an account that has the required permission to access this page");
+            }
+            const logout = urlParams.get('logout');
+            if (logout) {
+                if (!loggedIn) {
+                    alert("You have been logged out");
+                }
+            }
+            const sessionExpired = urlParams.get('sessionExpired');
+            if (sessionExpired) {
+                alert("Your session has expired");
+                return;
+            }
+            if (!loggedIn) {
+                // if the user is not logged in, we exit the function so that the login box is displayed
+                return;
+            }
+            const loginBox = document.getElementsByClassName("login")[0];
+            // instead of displaying the login box's children, we show a 'stay logged in' button and a 'logout' button
+            loginBox.innerHTML = "";
+            const loggedInMessage = document.createElement("h3");
+            loggedInMessage.innerText = "You are already logged in";
+            loggedInMessage.style.color = "white";
+            loggedInMessage.style.fontSize = "1rem";
+            loginBox.appendChild(loggedInMessage);
+            const buttonBox = document.createElement("div");
+            buttonBox.classList.add("mt-3");
+            const stayLoggedInButton = document.createElement("a");
+            stayLoggedInButton.innerText = "Stay logged in";
+            stayLoggedInButton.classList.add("btn", "btn-primary", "login-btn");
+            stayLoggedInButton.style.color = "white";
+            stayLoggedInButton.style.marginRight = "5px";
+            stayLoggedInButton.onclick = function () {
+                // we send a request to an admin page to check if the user is an admin
+                const XHR = new XMLHttpRequest();
+                XHR.open("GET", "/admin/dashboard");
+                XHR.withCredentials = true;
+                XHR.addEventListener("load", function () {
+                    if (this.status === 200) {
+                        // if the user is an admin, we redirect them to the admin page
+                        window.location.href = "/admin/dashboard";
+                    } else if (this.status === 403) {
+                        // if the user is not an admin, we redirect them to the crew page
+                        window.location.href = "/crew/dashboard";
+                    } else {
+                        alert("An error occurred: " + this.status);
+                    }
+                });
+                XHR.send();
+            }
+            buttonBox.appendChild(stayLoggedInButton);
+            const logoutButton = document.createElement("a");
+            logoutButton.innerText = "Logout";
+            logoutButton.classList.add("btn", "btn-primary", "login-btn");
+            logoutButton.style.color = "white";
+            logoutButton.style.marginLeft = "5px";
+            logoutButton.onclick = function () {
+                const XHR = new XMLHttpRequest();
+                XHR.open("POST", "/api/login/logout");
+                XHR.addEventListener("load", function () {
+                    if (this.status === 200) {
+                        document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+                        document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+                        window.location.href = "/login?logout=true"
+                    } else {
+                        alert("Logout failed due to internal server error, please try again.")
+                    }
+                });
+                XHR.send();
+            };
+            buttonBox.appendChild(logoutButton);
+            loginBox.appendChild(buttonBox);
         }
 
         function sendLogin() {
@@ -61,10 +126,10 @@
     </script>
 
 </head>
-<body>
+<body onload="pageMechanics()">
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img alt="Logo" class="d-inline-block align-text-middle" src="/static/img/Shotmaniacs_Logo_White_ZT.png"
                  width="30">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
@@ -81,14 +146,16 @@
         <div class="email">
             <ion-icon class="sign" name="mail-outline"></ion-icon>
             <label class="form-label" for="username"></label>
-            <input class="form-control" id="username" placeholder="Enter email or username" style="font-family: 'Roboto Thin',sans-serif !important;"
+            <input class="form-control" id="username" placeholder="Enter email or username"
+                   style="font-family: 'Roboto Thin',sans-serif !important;"
                    type="text">
         </div>
 
         <div class="password">
             <ion-icon class="sign" name="lock-closed-outline"></ion-icon>
             <label class="form-label" for="password"></label>
-            <input class="form-control" id="password" placeholder="Enter password" style="font-family: 'Roboto Thin',sans-serif !important;"
+            <input class="form-control" id="password" placeholder="Enter password"
+                   style="font-family: 'Roboto Thin',sans-serif !important;"
                    type="password">
         </div>
         <div class="mt-3">

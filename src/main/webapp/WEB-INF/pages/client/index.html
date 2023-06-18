@@ -6,15 +6,16 @@
     <title>Shotmaniacs</title>
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" rel="stylesheet">
-    <link href="../general.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <link href="/static/general.css" rel="stylesheet">
+    <link href="/static/client/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="/static/img/Shotmaniacs_Logo_White_ZT.png">
+        <a class="navbar-brand" href="/">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30"
+                 src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color kiona">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
@@ -74,10 +75,19 @@
                 </div>
                 <div class="form-group">
                     <label for="type">Event Type</label>
-                    <select style ="background-color: #1696D2" class="form-control select" id="type">
+                    <select style="background-color: #1696D2" class="form-control select" id="type">
                         <option value="CLUB_PHOTOGRAPHY">Club Photography</option>
                         <option value="FESTIVAL">Festival</option>
-                        <option value="PHOTOSHOOT">Photoshoot</option>
+                        <option value="PRODUCT_SHOOT">Product shoot</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-booking-type">Booking Type</label>
+                    <select style="background-color: #1696D2" class="form-control select" id="event-booking-type">
+                        <option value="PHOTOGRAPHY">Photography</option>
+                        <option value="FILM">Film</option>
+                        <option value="MARKETING">Marketing</option>
+                        <option value="OTHER">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -167,20 +177,19 @@
 // Add event listener for form submission
         $("form").submit(function (event) {
 
-            var requiredElements = ["forename", "surname", "phone", "email_address", // client
-                "name", "type", "start", "duration", "location", // event
+            const requiredElements = ["forename", "surname", "phone", "email_address", // client
+                "name", "type", "event-booking-type", "start", "duration", "location", // event
                 "photographer", "assistant", "editor", "data_handler", "planner", "producer", "videographer"]; // requirements
 
-            var unfilledElements = [];
-            for (i = 0; i < requiredElements.length; i++) {
-                var el = $(`#${requiredElements[i]}`);
+            let unfilledElements = [];
+            for (let i = 0; i < requiredElements.length; i++) {
+                const el = $(`#${requiredElements[i]}`);
                 if (!single && i >= 4) {
                     break;
                 }
                 if (el.val().length === 0) {
                     unfilledElements.push(requiredElements[i]);
                     el.css("border-bottom", "2px solid red");
-
                 }
             }
             event.preventDefault(); // Prevent the default form submission
@@ -189,16 +198,17 @@
             } else {
                 if (single) {
 // Get the form data
-                    var formData = {
+                    const formData = {
                         clientBean: {
                             forename: $("#forename").val(),
                             surname: $("#surname").val(),
                             phone_number: $("#phone").val(),
-                            email_address: $("#email_address").val()
+                            emailAddress: $("#email_address").val()
                         },
                         eventBean: {
                             name: $("#name").val(),
                             type: $("#type").val(),
+                            booking_type: $("#event-booking-type").val(),
                             start: $("#start").val(),
                             duration: $("#duration").val(),
                             location: $("#location").val()
@@ -236,7 +246,7 @@
                     };
                     // Make the POST request
                     $.ajax({
-                        url: "../../api/client/submit-form/",
+                        url: "/api/client/submit-form/",
                         method: "POST",
                         dataType: "json",
                         contentType: "application/json",
@@ -256,7 +266,7 @@
                         forename: $('#forename').val(),
                         surname: $('#surname').val(),
                         phone_number: $('#phone').val(),
-                        email_address: $('#email_address').val()
+                        emailAddress: $('#email_address').val()
                     };
                     const fileInput = $('#excel_template')[0];
                     formData.append('client_data', JSON.stringify(clientBean));
@@ -265,15 +275,15 @@
                         console.log(entry);
                     }
                     $.ajax({
-                        url: '../../api/client/submit-form-multiple/',
+                        url: '/api/client/submit-form-multiple/',
                         type: 'POST',
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function() {
+                        success: function () {
                             alert('File uploaded successfully');
                         },
-                        error: function() {
+                        error: function () {
                             alert('File upload failed');
                         }
                     });

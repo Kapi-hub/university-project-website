@@ -23,6 +23,7 @@ public class JerseyAuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        System.out.println("Filtering request");
         Cookie sessionIdCookie = headers.getCookies() != null ? headers.getCookies().get("sessionId") : null;
         Cookie accountIdCookie = headers.getCookies() != null ? headers.getCookies().get("accountId") : null;
         String sessionId = null;
@@ -39,28 +40,36 @@ public class JerseyAuthenticationFilter implements ContainerRequestFilter {
             accountType = AccountType.CLIENT;
         }
 
-        AccountType finalAccountType = accountType;
-        requestContext.setSecurityContext(new SecurityContext() {
-            @Override
-            public Principal getUserPrincipal() {
-                return finalAccountType::toString;
-            }
+        System.out.println("Assigning security context: " + accountType);
+        requestContext.setSecurityContext(new SecurityContextImpl(accountType));
+    }
 
-            @Override
-            public boolean isUserInRole(String role) {
-                return finalAccountType.toString().equals(role);
-            }
+    static class SecurityContextImpl implements SecurityContext {
 
-            @Override
-            public boolean isSecure() {
-                return requestContext.getSecurityContext().isSecure();
-            }
+        private final AccountType accountType;
 
-            @Override
-            public String getAuthenticationScheme() {
-                return null;
-            }
-        });
+        public SecurityContextImpl(AccountType accountType) {
+            this.accountType = accountType;
+        }
 
+        @Override
+        public Principal getUserPrincipal() {
+            return accountType::toString;
+        }
+
+        @Override
+        public boolean isUserInRole(String role) {
+            return role.equals(accountType.toString());
+        }
+
+        @Override
+        public boolean isSecure() {
+            return true;
+        }
+
+        @Override
+        public String getAuthenticationScheme() {
+            return null;
+        }
     }
 }
