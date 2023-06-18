@@ -1,8 +1,10 @@
 const weekdaysNumberContainer = document.querySelector(".weekdaysNumber"),
+    prevYrBtn = document.querySelector(".btn.prevYr"),
     prevBtn = document.querySelector(".btn.prev"),
     nextBtn = document.querySelector(".btn.next"),
-    month = document.querySelector(".month");
-let monthItem = document.querySelectorAll(".monthItem");
+    nextYrBtn = document.querySelector(".btn.nextYr");
+
+month = document.querySelector(".month");
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -27,7 +29,9 @@ function renderCalendar() {
     const lastDayDate = lastDay.getDate();
     const prevLastDay = new Date(currentYear, currentMonth, 0);
     const prevLastDayDate = prevLastDay.getDate();
-    const nextDays = 7 - lastDayIndex - 1;
+    console.log("prevday: " + prevLastDay);
+    console.log("prevdate: " + prevLastDayDate);
+    let nextDays = 7 - (lastDayIndex || 7);
     // console.log(prevLastDay);
     // console.log(prevLastDayDate);
     // console.log(lastDay);
@@ -37,7 +41,7 @@ function renderCalendar() {
     let days = "";
 
     // previous month days
-    for (let i = firstDay.getDay() - 1; i > 0; i--) {
+    for (let i = (firstDay.getDay() || 7) - 1; i > 0; i--) {
         days += `<div class="day prev">${prevLastDayDate - i + 1}</div>`;
     }
 
@@ -48,15 +52,14 @@ function renderCalendar() {
             currentMonth === new Date().getMonth() &&
             currentYear === new Date().getFullYear()) {
             // if date month year matches
-            days += `<div class="day current">${x}</div>`;
+            days += `<div class="day current">${x.toString().padStart(2, "0")}</div>`;
         } else {
             // don't add today
-            days += `<div class="day ">${x}</div>`;
+            days += `<div class="day ">${x.toString().padStart(2, "0")}</div>`;
         }
     }
-    console.log(nextDays)
-    for (let j = 1; j <= nextDays + 1; j++) {
-        days += `<div class="day next">${j}</div>`;
+    for (j = 0; j < nextDays; j++) {
+        days += `<div class="day next">${(j + 1).toString().padStart(2, "0")}</div>`;
     }
     weekdaysNumberContainer.innerHTML = days;
 
@@ -75,7 +78,10 @@ function renderCalendar() {
     })
 }
 
-renderCalendar();
+function setCurrentMonth(index) {
+    currentMonth = index;
+    renderCalendar();
+}
 
 nextBtn.addEventListener("click", () => {
     li_items[currentMonth].classList.remove("active");
@@ -85,6 +91,10 @@ nextBtn.addEventListener("click", () => {
         currentYear++;
     }
     li_items[currentMonth].classList.add("active");
+    renderCalendar();
+})
+nextYrBtn.addEventListener("click", () => {
+    currentYear++;
     renderCalendar();
 })
 prevBtn.addEventListener("click", () => {
@@ -98,55 +108,18 @@ prevBtn.addEventListener("click", () => {
     renderCalendar();
 })
 
+prevYrBtn.addEventListener("click", () => {
+    currentYear--;
+    renderCalendar();
+})
 
-monthItem.forEach(function (item) {
-    item.addEventListener("click", () => {
-        switch (event.target.id) {
-            case "Jan":
-                currentMonth = 0;
-                break;
-            case "Feb":
-                currentMonth = 1;
-                break;
-            case "Mar":
-                currentMonth = 2;
-                break;
-            case "Apr":
-                currentMonth = 3;
-                break;
-            case "May":
-                currentMonth = 4;
-                break;
-            case "Jun":
-                currentMonth = 5;
-                break;
-            case "Jul":
-                currentMonth = 6;
-                break;
-            case "Aug":
-                currentMonth = 7;
-                break;
-            case "Sep":
-                currentMonth = 8;
-                break;
-            case "Oct":
-                currentMonth = 9;
-                break;
-            case "Nov":
-                currentMonth = 10;
-                break;
-            case "Dec":
-                currentMonth = 11;
-                break;
-        }
-        renderCalendar();
-    })
-});
+renderCalendar();
 
 
 // /**************************************/
 // /********* SIDE BAR FUNCTIONS *********/
 // /**************************************/
+let activeDate = new Date();
 
 const eventDayHandler = document.querySelector(".event-day");
 const eventDateHandler = document.querySelector(".event-date");
@@ -213,7 +186,6 @@ const updateEvents = (date) => {
         .then(eventList => {
             let eventsPerDay = new Map();
             eventList.forEach(event => {
-                console.log("is enrolled: ", event.isEnrolled);
                 const eventDate = new Date(event.date);
                 const eventDay = eventDate.getDate();
                 if (eventsPerDay.has(eventDay)) {
@@ -232,15 +204,17 @@ const updateEvents = (date) => {
         });
 }
 
-const reloadEventsContainer = (date) => {
-    const eventListMonth = monthsEventMap.get(`${date.getMonth()}-${date.getFullYear()}`);
+const reloadEventsContainer = () => {
+    const eventListMonth = monthsEventMap.get(`${activeDate.getMonth()}-${activeDate.getFullYear()}`);
 
-    if (!eventListMonth || !eventListMonth.has(date.getDate())) {
+    if (!eventListMonth || !eventListMonth.has(activeDate.getDate())) {
         eventContainer.innerHTML = "<p style='margin-left: 50px; margin-top: 20px'>No events for today.</p>";
         return;
     }
 
-    const eventList = eventListMonth.get(date.getDate());
+    const eventList = eventListMonth.get(activeDate.getDate());
+
+    const wasCollapsed = !document.querySelector(".accordion-button:not(.collapsed)");
 
     eventContainer.innerHTML = "";
     eventList.forEach(event => {
@@ -261,7 +235,6 @@ const reloadEventsContainer = (date) => {
             isEnrolled,
             canEnrol,
         } = event;
-        console.log("IsEnrolled: " + isEnrolled);
 
         const parsedDate = new Date(date);
         const startTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(parsedDate.getMinutes()).padStart(2, '0')}`;
@@ -285,6 +258,9 @@ const reloadEventsContainer = (date) => {
         buttonDiv.setAttribute("data-bs-target", `#${safeNameId}`);
         buttonDiv.setAttribute("aria-expanded", "true");
         buttonDiv.setAttribute("aria-controls", `${safeNameId}`);
+        if (!wasCollapsed) {
+            buttonDiv.classList.remove("collapsed");
+        }
         let boldButtonText = document.createElement("b");
         boldButtonText.textContent = `${name}`;
         let italicButtonText = document.createElement("i");
@@ -304,6 +280,9 @@ const reloadEventsContainer = (date) => {
         // Create the collapse div.
         let collapseDiv = document.createElement("div");
         collapseDiv.classList.add("accordion-collapse", "collapse");
+        if (!wasCollapsed) {
+            collapseDiv.classList.add("show");
+        }
         collapseDiv.setAttribute("id", `${safeNameId}`);
         collapseDiv.setAttribute("data-bs-parent", "#accordionExample");
         let bodyDiv = document.createElement("div");
@@ -360,7 +339,6 @@ const reloadEventsContainer = (date) => {
         bodyDiv.appendChild(halfTwoDiv);
 
         // Add missing br and enroll or unenroll button / no button if we cannot enroll.
-        console.log("Is enrolled: " + isEnrolled);
         if (canEnrol) {
             bodyDiv.innerHTML += `<br><button class="btn btn-primary" style="background-color: var(--bs-primary)" onclick="enroll(${id})">Enroll</button>`;
         } else if (isEnrolled) {
@@ -399,21 +377,37 @@ const reloadEventsContainer = (date) => {
     });
 }
 
-const updateTaskBar = () => {
-    const newTaskBarDate = new Date();
-    newTaskBarDate.setDate(
-        parseInt(document.querySelector(".day.current:not(.prev):not(.next)").textContent));
-    newTaskBarDate.setMonth(currentMonth);
-    let dayIndex = newTaskBarDate.getDay() - 1;
-    dayIndex = dayIndex < 0 ? 6 : dayIndex;
+function updateTaskBar() {
+    if (document.querySelector(".day.current").classList.contains("prev")) {
+        li_items[currentMonth].classList.remove("active");
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        li_items[currentMonth].classList.add("active");
+        renderCalendar();
+        return;
+    } else if (document.querySelector(".day.current").classList.contains("next")) {
+        li_items[currentMonth].classList.remove("active");
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        li_items[currentMonth].classList.add("active");
+        renderCalendar();
+        return;
+    }
+    activeDate.setDate(
+        parseInt(document.querySelector(".day.current").textContent));
+    activeDate.setMonth(currentMonth);
+    const dayIndex = (activeDate.getDay() || 7) - 1;
     eventDayHandler.textContent = `${days[dayIndex]}`;
-    eventDateHandler.textContent = `${newTaskBarDate.getDate()} ${months[currentMonth]}`;
+    eventDateHandler.textContent = `${activeDate.getDate().toString().padStart(2, "0")} ${months[currentMonth]}`;
 
-    // update Events will start working on getting the events for the new date.
-    updateEvents(newTaskBarDate);
-    // while it is still working, we will load into the event container the cached events.
-    reloadEventsContainer(newTaskBarDate);
-    // when update Events is done, it will call reloadEventsContainer again, but this time it will load the new events.
+    reloadEventsContainer();
+    updateEvents(activeDate);
 }
 
 updateTaskBar();
