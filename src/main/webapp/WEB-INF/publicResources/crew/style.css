@@ -323,6 +323,13 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+}
+
 /* ********************** LEFT SIDE BAR ***************** */
 .container .left_side_bar {
     width: 70px;
@@ -342,7 +349,7 @@ doesn't get in the way of building / maintaining the website*/
 
 .left_side_bar ul li a {
     display: block;
-    color: var(--bs-light);
+    color: var(--bs-light) !important;
     font-size: 20px;
     outline: none;
     padding: 8px;
@@ -353,7 +360,7 @@ doesn't get in the way of building / maintaining the website*/
 
 .left_side_bar ul li.active a{
     background: var(--bs-light);
-    color: var(--bs-dark);
+    color: var(--bs-dark) !important;
     padding-bottom: 15px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
