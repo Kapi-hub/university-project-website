@@ -16,14 +16,14 @@ function saveAnnouncement() {
 }
 
 function sendHttpRequest(method, url, data) {
-    const promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
             let XHR = new XMLHttpRequest();
 
             XHR.open(method, url);
             XHR.responseType = 'json';
 
             XHR.onload = () => {
-                if (XHR.status == 200) {
+                if (XHR.status === 200) {
                     resolve(XHR.response)
                 } else {
                     reject(XHR.response)
@@ -36,7 +36,6 @@ function sendHttpRequest(method, url, data) {
             XHR.send(JSON.stringify(data));
         }
     );
-    return promise;
 }
 
 function getAnnouncements() {
@@ -45,8 +44,8 @@ function getAnnouncements() {
         console.log(responseData);
         responseData.forEach(announcement => announcements.push(announcement));
         let o = 0;
-        var announcementsList = document.querySelector('.announcementsList');
-        var child = document.getElementById("announcementPlaceholder");
+        const announcementsList = document.querySelector('.announcementsList');
+        const child = document.getElementById("announcementPlaceholder");
         announcementsList.removeChild(child);
         announcements.forEach(announcement =>{
             const datetemplate = new Date(announcement.announcement_timestamp);

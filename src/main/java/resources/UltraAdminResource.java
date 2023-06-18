@@ -2,6 +2,8 @@ package resources;
 
 import dao.MailService;
 import jakarta.annotation.security.PermitAll;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import misc.ConnectionFactory;
@@ -14,6 +16,8 @@ import models.UltraEmailBean;
 public class UltraAdminResource {
 
     @Path("/set-id-and-secret")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response setIdAndSecret(UltraEmailBean emailBean) {
         String adminKey = emailBean.getAdminKey();
@@ -28,6 +32,8 @@ public class UltraAdminResource {
     }
 
     @Path("/activate-email")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response activateEmail(UltraEmailBean emailBean) {
         String adminKey = emailBean.getAdminKey();
@@ -42,6 +48,8 @@ public class UltraAdminResource {
     }
 
     @Path("/disable-email")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response disableEmail(UltraAdminBean adminBean) {
         String adminKey = adminBean.getAdminKey();
@@ -54,6 +62,8 @@ public class UltraAdminResource {
     }
 
     @Path("/reconnect-mail")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response reconnectMail(UltraAdminBean adminBean) {
         String adminKey = adminBean.getAdminKey();
@@ -66,6 +76,8 @@ public class UltraAdminResource {
     }
 
     @Path("/change-db")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response changeDb(UltraDbBean dbBean) {
         String adminKey = dbBean.getAdminKey();
@@ -82,6 +94,8 @@ public class UltraAdminResource {
     }
 
     @Path("/reconnect-db")
+    @Consumes("application/json")
+    @POST
     @PermitAll
     public Response reconnectDb(UltraAdminBean adminBean) {
         String adminKey = adminBean.getAdminKey();
