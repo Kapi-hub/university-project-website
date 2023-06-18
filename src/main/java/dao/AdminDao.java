@@ -119,15 +119,17 @@ public enum AdminDao {
     }
 
     public ArrayList<EventBean> getNotFullEvents() throws SQLException {
-        String insertQuery = "SELECT e.id, e.name " +
-                "FROM event e " +
-                "JOIN event_requirement er ON e.id = er.event_id " +
-                "LEFT JOIN (" +
-                "  SELECT event_id, COUNT(*) AS enrollments" +
-                "  FROM event_enrollment" +
-                "  GROUP BY event_id" +
-                ") ee ON e.id = ee.event_id" +
-                "WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; ";
+        String insertQuery = """
+                SELECT e.id, e.name 
+                FROM event e
+                JOIN event_requirement er ON e.id = er.event_id 
+                LEFT JOIN ( 
+                    SELECT event_id, COUNT(*) AS enrollments
+                    FROM event_enrollment
+                    GROUP BY event_id
+                ) ee ON e.id = ee.event_id
+                WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; 
+                """;
 
         ArrayList<EventBean> events = new ArrayList<>();
         try {
@@ -146,20 +148,43 @@ public enum AdminDao {
     public String getAllAnnouncements() throws SQLException {
         String insertQuery = """
                 SELECT json_agg(jsonb_build_object(
-                           'announcement_id', ann.id,
-                           'announcement_title', ann.title,
-                           'announcement_body', ann.body,
-                           'announcement_timestamp', ann.date_time,
-                           'announcer', json_build_object(                         
-                                            'forename', a.forename,
-                                            'surname', a.surname
-                                        )
-                           )
-                ) AS result
-                FROM announcement ann
-                JOIN account a ON ann.announcer_id = a.id;
+                    'announcement_id', subquery.id,
+                    'announcement_title', subquery.title,
+                    'announcement_body', subquery.body,
+                    'announcement_timestamp', subquery.date_time,
+                    'announcer', json_build_object(
+                        'forename', subquery.forename,
+                        'surname', subquery.surname
+                    )
+                )) AS result
+                FROM (
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname
+                    FROM announcement ann
+                    JOIN account a ON ann.announcer_id = a.id
+                    ORDER BY ann.id DESC
+                    LIMIT 10
+                ) subquery;
                 """;
 
+        return getSQLString(insertQuery);
+    }
+
+    public String getLatestEvent() throws SQLException {
+        String insertQuery = """
+                SELECT json_agg(json_build_object(
+                    'name',name,
+                    'description',description,
+                    'start',start,
+                    'duration',duration,
+                    'type',type
+                        ) 
+                     )AS result
+                    From event
+                    """;//TODO make it show latest as group by order by won't give one row
+        return getSQLString(insertQuery);
+    }
+
+    private String getSQLString(String insertQuery) throws SQLException {
         PreparedStatement st = connection.prepareStatement(insertQuery);
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
@@ -171,24 +196,7 @@ public enum AdminDao {
 
         rs.close();
         st.close();
-        return null; // Return null if no result is found
-    }
-
-    public ArrayList<EventBean> getLatestEvent() throws SQLException {
-        String insertQuery = "SELECT name, description,start,duration,location,type FROM event  ORDER BY id DESC";
-        ArrayList<EventBean> events = null;
-        events = new ArrayList<>();
-        PreparedStatement st = connection.prepareStatement(insertQuery);
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            EventType type = EventType.valueOf(rs.getString("type"));
-            EventBean eventBean = new EventBean(
-                    rs.getString("name"), rs.getString("description"),
-                    rs.getTimestamp("start"), rs.getInt("duration"),
-                    rs.getString("location"), type);
-            events.add(eventBean);
-        }
-        return events;
+        return null;
     }
 }
 

@@ -40,18 +40,16 @@ function sendHttpRequest(method, url, data) {
 }
 
 function getAnnouncements() {
-    let announcements = []
-    sendHttpRequest('GET', "/api/admin/dashboard/all").then(responseData => {
+    let announcements = [];
+    sendHttpRequest('GET', "/api/admin/announcements").then(responseData => {
         console.log(responseData);
         responseData.forEach(announcement => announcements.push(announcement));
         let o = 0;
-        var textHolders = document.querySelectorAll('[class^="announcementsContainer"]');
-        textHolders.forEach(announcement => {
-            console.log(announcement);
-            const titleElement = announcement.querySelector(".announcementTitle");
-            const body = announcement.querySelector(".content");
-            const dateTime = announcement.querySelector(".dateTime");
-            const datetemplate = new Date(announcements[o].announcement_timestamp);
+        var announcementsList = document.querySelector('.announcementsList');
+        var child = document.getElementById("announcementPlaceholder");
+        announcementsList.removeChild(child);
+        announcements.forEach(announcement =>{
+            const datetemplate = new Date(announcement.announcement_timestamp);
             const formattedDate = datetemplate.toLocaleString(undefined, {
                 year: 'numeric',
                 month: 'numeric',
@@ -60,13 +58,24 @@ function getAnnouncements() {
                 minute: 'numeric',
                 hour12: true
             });
-            console.log(datetemplate);
-                console.log(announcements[o].announcement_id);
-                titleElement.textContent = announcements[o].announcement_title;
-                body.textContent = announcements[o].announcement_body;
-                dateTime.textContent = announcements[o].announcer.forename + " " + formattedDate;
-                o++;
-        })
+            const announcementItem = document.createElement('div');
+            announcementItem.classList.add('announcementItem');
+
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('title');
+            titleElement.innerHTML = `<span class="announcementTitle">${announcement.announcement_title}</span>
+            <span class="dateTime">${announcement.announcer.forename + " " + formattedDate }</span>`;
+
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('content');
+            contentElement.innerHTML = `<p class="announcementContent">${announcement.announcement_body}</p>`;
+
+            announcementItem.appendChild(titleElement);
+            announcementItem.appendChild(contentElement);
+
+            announcementsList.appendChild(announcementItem);
+
+        });
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })
@@ -74,15 +83,19 @@ function getAnnouncements() {
 
 function getLatestEvents() {
     let events = []
-    sendHttpRequest('Get', "/api/admin/dashboard/latest").then(responseData => {
-        responseData.events.forEach(event => events.push(event));
+    sendHttpRequest('Get', "/api/admin/events").then(responseData => {
+        console.log(responseData);
+        responseData.forEach(event => events.push(event));
         let o = 0;
         var parent = document.getElementById("collapseThree");
-        const children = Array.from(parent.children);
-        while(o < children.length && o< events.length){
-            children[o].span.textContent = events[o].title;
-            o++;
-        }
+        events.forEach(event =>{
+        const titleElement = document.createElement('div');
+        titleElement.classList.add('accordion-body');
+        titleElement.innerHTML = `<button class="latestEvents" >${event.name}</button>`
+
+        parent.appendChild(titleElement);
+
+    })
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })
@@ -90,7 +103,7 @@ function getLatestEvents() {
 
 function getCrewNeeded(){
     let events = []
-    sendHttpRequest("Get","/api/admin/dashboard/crewReq").then(responseData => {
+    sendHttpRequest("Get","/api/admin/crewReq").then(responseData => {
         responseData.events.forEach(event => {
             events.push(event);
         });
@@ -100,6 +113,7 @@ function getCrewNeeded(){
             span = parent[o].querySelector('accordion-body span');
             span.textContent = events[o].id.toString();
         }
-    })
+    }
+    )
 }
 

@@ -41,7 +41,7 @@ body{
     background-color: var(--bs-dark);
 }
 
-.postAnnouncementBttn, .saveBttn, .closeBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
+.postAnnouncementBttn,.latestEvents , .saveBttn, .closeBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
     background-color: var(--bs-primary);
     border-radius: 20px;
     border-color: var(--bs-primary);
@@ -72,7 +72,7 @@ body{
     width: 100%;
 }
 
-.closeBttn{
+.closeBttn ,{
     background-color: red;
 }
 
@@ -96,7 +96,7 @@ body{
     border-color: var(--bs-primary);
 }
 
-.announcementsContainer1, .announcementsContainer2, .announcementsContainer3, .announcementsContainer4{
+.announcementItem{
     border-bottom: 1px solid;
     border-color: var(--bs-primary);
 }
@@ -112,7 +112,6 @@ body{
 .announcementTitle, .accordion-item {
     font-size: 18px;
     display: block;
-
 }
 .dateTime , .Author {
     font-size: 14px;

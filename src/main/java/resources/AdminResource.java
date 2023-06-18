@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.MediaType;
 import models.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/admin")
@@ -31,7 +30,7 @@ public class AdminResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/dashboard/all")
+    @Path("/announcements")
     @RolesAllowed("admin")
     public String getAnnouncement() {
         try {
@@ -63,19 +62,21 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/dashboard/latest")
-    public ArrayList<EventBean> getLatestEvent() {
-        ArrayList<EventBean> events = null;
+    @Path("/events")
+    @RolesAllowed("admin")
+    public String getLatestEvent() {
         try {
-            events = AdminDao.I.getLatestEvent();
+            return AdminDao.I.getLatestEvent();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+            return null;
         }
-        return events;
+
     }
 
     @GET
-    @Path("/dashboard/crewReq")
+    @Path("/crewReq")
+    @RolesAllowed("admin")
     public List<EventBean> showEventsWithoutCrew() {
         List<EventBean> events = null;
         try{

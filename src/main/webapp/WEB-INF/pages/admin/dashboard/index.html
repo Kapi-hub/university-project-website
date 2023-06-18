@@ -36,7 +36,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick=saveAnnouncement()>Save changes
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()">Save changes
                 </button>
             </div>
         </div>
@@ -94,39 +94,9 @@
                         Post New
                     </button>
                 </div>
-                <div class="announcementsContainer1">
-                        <span class="announcementTitle"></span>
-                        <span class="dateTime"></span>
-                    <div class="content"><p class="announcementContent">
-                    </p>
-                    </div>
-                </div>
-                <div class="announcementsContainer2">
-                    <div class="title">
-                        <span class="announcementTitle"></span>
-                        <span class="dateTime"></span>
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                    </p>
-                    </div>
-                </div>
-                <div class="announcementsContainer3">
-                    <div class="title">
-                        <span class="announcementTitle"></span>
-                        <span class="dateTime"></span>
-
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                    </p>
-                    </div>
-                </div>
-                <div class="announcementsContainer4">
-                    <div class="title">
-                        <span class="announcementTitle"></span>
-                        <span class="dateTime"></span>
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                    </p>
+                <div class="announcementsList">
+                    <div class = announcementItem id="announcementPlaceholder">
+                        <span class="Title" >There are No Announcements</span>
                     </div>
                 </div>
             </div>
@@ -227,21 +197,7 @@
                     </button>
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                          data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <span>idk what to put here</span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -262,7 +218,8 @@
         selectedCrewMember.textContent = name;
     }
     document.addEventListener('DOMContentLoaded', function() {
-        setAnnouncements();
+        getAnnouncements();
+        getLatestEvents();
     });
 
 </script>
