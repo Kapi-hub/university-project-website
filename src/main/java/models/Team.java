@@ -1,5 +1,7 @@
 package models;
 
+import java.lang.reflect.Type;
+
 public enum Team {
     CORE,
     CLUB,
@@ -7,6 +9,6 @@ public enum Team {
 
     @Override
     public String toString() {
-        return this.name();
+        return this.name().toLowerCase();
     }
 }

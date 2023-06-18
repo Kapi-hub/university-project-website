@@ -1,13 +1,14 @@
 function saveAnnouncement() {
     const title = document.getElementById('inputTitle').value;
-    const descr = document.getElementById('inputDetail').value;
+    const descr = document.getElementById('inputDetails').value;
+    alert(`${title}\n${descr}`);
     if (!title) {
         alert("Title can't be null");
         return;
     }
-    sendHttpRequest("Post", "/api/admin/dashboard/new", {
-            Title: title,
-            Description: descr
+    sendHttpRequest("POST", "/api/admin/dashboard/new", {
+            title: title,
+            body: descr
         }
     ).catch(err => {
         console.log(err)
@@ -32,50 +33,77 @@ function sendHttpRequest(method, url, data) {
             if (data) {
                 XHR.setRequestHeader("Content-Type", "application/json");
             }
-            XHR.send(Json.stringify(data));
+            XHR.send(JSON.stringify(data));
         }
     );
     return promise;
 }
 
-function setAnnouncements() {
-    let announcements = []
-    sendHttpRequest('Get', "/api/admin/dashboard/all").then(responseData => {
-        responseData.accouncements.forEach(announcement => announcements.push(announcement));
+function getAnnouncements() {
+    let announcements = [];
+    sendHttpRequest('GET', "/api/admin/announcements").then(responseData => {
+        console.log(responseData);
+        responseData.forEach(announcement => announcements.push(announcement));
         let o = 0;
-        var textHolders = document.querySelectorAll('[class^="announcement"]');
-        textHolders.forEach(announcement => {
-                const titleElement = announcement.querySelector(".announcementTitle");
-                const body = announcement.querySelector(".dateTime");
-                titleElement.textContent = announcement[o].title;
-                body.textContent = announcement[o].body;
-                o++;
-            }
-        )
+        var announcementsList = document.querySelector('.announcementsList');
+        var child = document.getElementById("announcementPlaceholder");
+        announcementsList.removeChild(child);
+        announcements.forEach(announcement =>{
+            const datetemplate = new Date(announcement.announcement_timestamp);
+            const formattedDate = datetemplate.toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+            const announcementItem = document.createElement('div');
+            announcementItem.classList.add('announcementItem');
+
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('title');
+            titleElement.innerHTML = `<span class="announcementTitle">${announcement.announcement_title}</span>
+            <span class="dateTime">${announcement.announcer.forename + " " + formattedDate }</span>`;
+
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('content');
+            contentElement.innerHTML = `<p class="announcementContent">${announcement.announcement_body}</p>`;
+
+            announcementItem.appendChild(titleElement);
+            announcementItem.appendChild(contentElement);
+
+            announcementsList.appendChild(announcementItem);
+
+        });
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })
 }
 
-function setLatestEvents() {
+function getLatestEvents() {
     let events = []
-    sendHttpRequest('Get', "/api/admin/dashboard/latest").then(responseData => {
-        responseData.events.forEach(event => events.push(event));
+    sendHttpRequest('Get', "/api/admin/events").then(responseData => {
+        console.log(responseData);
+        responseData.forEach(event => events.push(event));
         let o = 0;
         var parent = document.getElementById("collapseThree");
-        const children = Array.from(parent.children);
-        while(o < children.length && o< events.length){
-            children[o].span.textContent = events[o].title;
-            o++;
-        }
+        events.forEach(event =>{
+        const titleElement = document.createElement('div');
+        titleElement.classList.add('accordion-body');
+        titleElement.innerHTML = `<button class="latestEvents" >${event.name}</button>`
+
+        parent.appendChild(titleElement);
+
+    })
     }).catch(err => {
         console.log(err);//TODO figure out what to do when fail
     })
 }
 
-function setCrewNeeded(){
+function getCrewNeeded(){
     let events = []
-    sendHttpRequest("Get","/api/admin/dashboard/crewReq").then(responseData => {
+    sendHttpRequest("Get","/api/admin/crewReq").then(responseData => {
         responseData.events.forEach(event => {
             events.push(event);
         });
@@ -85,6 +113,7 @@ function setCrewNeeded(){
             span = parent[o].querySelector('accordion-body span');
             span.textContent = events[o].id.toString();
         }
-    })
+    }
+    )
 }
 

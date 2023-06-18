@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link href="/static/general.css" rel="stylesheet">
     <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/crewEventsOverview/style.css" rel="stylesheet">
@@ -29,10 +30,10 @@
         </a>
         <ul class="nav justify-content-end ">
             <li class="nav-item me-2">
-                <a class="nav-link text-white" href="/admin/dashboard"><strong>Dashboard</strong></a>
+                <a class="nav-link text-white" href="/static/admin/dashboard/index.html"><strong>Dashboard</strong></a>
             </li>
             <li class="nav-item border bg-white border-white rounded-pill">
-                <a class="nav-link text-dark" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
+                <a class="nav-link text-dark" href="/static/admin/crewEventsOverview/index.html"><strong>Crew&Events</strong></a>
             </li>
             <li class="nav-item me-2">
                 <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
@@ -182,7 +183,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toast">Save event
+                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save event
                 </button>
             </div>
         </div>
@@ -212,6 +213,10 @@
 
                     <label for="username" class="usernameText"><strong>Username</strong></label>
                     <input type="text" class="usernameText" id="username" placeholder="Enter member's username">
+                    <br>
+
+                    <label for="password" class="passwordText"><strong>Password</strong></label>
+                    <input type="password" class="passwordText" id="password" placeholder="Enter member's password">
                     <br>
                 </div>
                 <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
@@ -278,8 +283,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
-                <button type="button" class="saveMemberBttn" data-bs-dismiss="modal" onclick="addCrewMember()"
-                        data-bs-target="#successfulNewMember"><strong>Create new member</strong>
+                <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
+                        data-bs-target="toastMember"><strong>Create new member</strong>
                 </button>
             </div>
         </div>
@@ -422,14 +427,14 @@
 </div>
 
 
-<div class="toast" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toastEvent" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
         Event created successfully!
     </div>
 </div>
 
 
-<div class="toast" id="successfulNewMember" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toastMember" id="successfulNewMember" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
         New member created successfully!
     </div>
@@ -515,6 +520,7 @@
         toastMember.show();
     });
 </script>
+
 
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script src="/static/admin/crewEventsOverview/addCrew&Events.js"></script>
