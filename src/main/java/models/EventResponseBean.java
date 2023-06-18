@@ -20,11 +20,13 @@ public class EventResponseBean {
     Object[] enrolled;
     EventStatus status;
     String description;
+    boolean isEnrolled;
+    boolean canEnrol;
 
     public EventResponseBean() {
     }
 
-    public EventResponseBean(int id, String name, EventType type, Timestamp date, String location, int duration, String client, BookingType bookingType, String productionManager, Object[] crew, Object[] enrolled, EventStatus status, String description) {
+    public EventResponseBean(int id, String name, EventType type, Timestamp date, String location, int duration, String client, BookingType bookingType, String productionManager, Object[] crew, Object[] enrolled, EventStatus status, String description, boolean isEnrolled, boolean canEnrol) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -38,6 +40,24 @@ public class EventResponseBean {
         this.enrolled = enrolled;
         this.status = status;
         this.description = description;
+        this.isEnrolled = isEnrolled;
+        this.canEnrol = canEnrol;
+    }
+
+    public boolean getIsEnrolled() {
+        return isEnrolled;
+    }
+
+    public void setIsEnrolled(boolean isEnrolled) {
+        this.isEnrolled = isEnrolled;
+    }
+
+    public boolean getCanEnrol() {
+        return canEnrol;
+    }
+
+    public void setCanEnrol(boolean canEnrol) {
+        this.canEnrol = canEnrol;
     }
 
     public int getId() {
@@ -145,21 +165,23 @@ public class EventResponseBean {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "EventResponseBean{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", type=" + type +
-                    ", date=" + date +
-                    ", location='" + location + '\'' +
-                    ", duration=" + duration +
-                    ", client='" + client + '\'' +
-                    ", bookingType=" + bookingType +
-                    ", productionManager='" + productionManager + '\'' +
-                    ", crew=" + Arrays.toString(crew) +
-                    ", enrolled=" + Arrays.toString(enrolled) +
-                    ", status=" + status +
-                    ", description='" + description + '\'' +
-                    '}';
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", date=" + date +
+                ", location='" + location + '\'' +
+                ", duration=" + duration +
+                ", client='" + client + '\'' +
+                ", bookingType=" + bookingType +
+                ", productionManager='" + productionManager + '\'' +
+                ", crew=" + Arrays.toString(crew) +
+                ", enrolled=" + Arrays.toString(enrolled) +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                ", isEnrolled=" + isEnrolled +
+                ", canEnrol=" + canEnrol +
+                '}';
     }
 }

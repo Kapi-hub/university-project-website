@@ -29,6 +29,24 @@
                 id: eventId
             }));
         }
+
+        function unenroll(eventId) {
+            const XHR = new XMLHttpRequest();
+            XHR.open("POST", "/api/event/unenroll-self");
+            XHR.setRequestHeader('Content-Type', 'application/json');
+            XHR.withCredentials = true;
+            XHR.addEventListener("load", function () {
+                if (this.status === 200) {
+                    updateTaskBar();
+                    alert("Unenrolled successfully");
+                } else {
+                    alert("An error occurred, unenrolling unsuccessful.");
+                }
+            });
+            XHR.send(JSON.stringify({
+                id: eventId
+            }));
+        }
     </script>
 </head>
 

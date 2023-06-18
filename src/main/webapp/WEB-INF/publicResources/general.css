@@ -3,6 +3,7 @@
     --bs-primary-rgb: 22, 150, 210;
     --bs-primary: rgb(var(--bs-primary-rgb)) !important;
     --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+    --bs-primary-bg-75: rgba(var(--bs-primary-rgb), 0.75);
     --bs-secondary-rgb: 82, 82, 82;
     --bs-secondary: rgb(var(--bs-secondary-rgb)) !important;
     --bs-secondary-bg-subtle: rgba(var(--bs-secondary-rgb), 0.1);

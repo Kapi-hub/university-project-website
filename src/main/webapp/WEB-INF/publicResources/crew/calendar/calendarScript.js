@@ -14,8 +14,6 @@ let currentYear = currentDate.getFullYear();
 
 let monthsEventMap = new Map();
 
-let recursion = false;
-
 // function to render the calendar for current month
 function renderCalendar() {
     // get prev, current, next month days
@@ -159,7 +157,6 @@ const javaEnumToString = (javaEnum) => javaEnum
     : "Not defined.";
 
 const getEventsForMonth = (date) => {
-    console.log("request made");
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     const formattedMonth = `${year}-${month}`;
@@ -216,6 +213,7 @@ const updateEvents = (date) => {
         .then(eventList => {
             let eventsPerDay = new Map();
             eventList.forEach(event => {
+                console.log("is enrolled: ", event.isEnrolled);
                 const eventDate = new Date(event.date);
                 const eventDay = eventDate.getDate();
                 if (eventsPerDay.has(eventDay)) {
@@ -231,7 +229,6 @@ const updateEvents = (date) => {
         })
         .catch(error => {
             console.log(error);
-            // eventContainer.innerHTML = "<p style='margin-left: 50px; margin-top: 20px'>No events for today.</p>";
         });
 }
 
@@ -260,8 +257,11 @@ const reloadEventsContainer = (date) => {
             crew,
             enrolled,
             status,
-            description
+            description,
+            isEnrolled,
+            canEnrol,
         } = event;
+        console.log("IsEnrolled: " + isEnrolled);
 
         const parsedDate = new Date(date);
         const startTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(parsedDate.getMinutes()).padStart(2, '0')}`;
@@ -271,7 +271,6 @@ const reloadEventsContainer = (date) => {
         let crewString = formatCrewString(crew); // A string of the crew required for the event, already sanitised.
         let enrolledArray = formatEnrolled(enrolled); // An array of spans, each containing a role and the people enrolled for that role. Already sanitised.
 
-        console.log(enrolledArray);
         // Create the main div for the event.
         let mainDiv = document.createElement("div");
         mainDiv.classList.add("accordion-item");
@@ -360,8 +359,21 @@ const reloadEventsContainer = (date) => {
         bodyDiv.appendChild(halfOneDiv);
         bodyDiv.appendChild(halfTwoDiv);
 
-        // Add missing br and enroll button.
-        bodyDiv.innerHTML += `<br><button class="btn btn-primary" onclick="enroll(${id})">Enroll</button>`;
+        // Add missing br and enroll or unenroll button / no button if we cannot enroll.
+        console.log("Is enrolled: " + isEnrolled);
+        if (canEnrol) {
+            bodyDiv.innerHTML += `<br><button class="btn btn-primary" style="background-color: var(--bs-primary)" onclick="enroll(${id})">Enroll</button>`;
+        } else if (isEnrolled) {
+            bodyDiv.innerHTML += `<br><button class="btn btn-primary" style="background-color: red" onclick="unenroll(${id})">Unenroll</button>`;
+        } else {
+            bodyDiv.innerHTML +=
+                `
+                <br>
+                <button class="btn btn-primary unavailable" style="background-color: grey" disabled">
+                You cannot enroll for this event
+                </button>
+                `;
+        }
 
         // Append the body to the collapse div.
         collapseDiv.appendChild(bodyDiv);
@@ -396,13 +408,12 @@ const updateTaskBar = () => {
     dayIndex = dayIndex < 0 ? 6 : dayIndex;
     eventDayHandler.textContent = `${days[dayIndex]}`;
     eventDateHandler.textContent = `${newTaskBarDate.getDate()} ${months[currentMonth]}`;
-    console.log(newTaskBarDate.getDay(), newTaskBarDate.getMonth());
 
-    // display a temporary events container with the cached events.
-    reloadEventsContainer(newTaskBarDate);
-
-    // fetch updated events from the server and reload the events' container.
+    // update Events will start working on getting the events for the new date.
     updateEvents(newTaskBarDate);
+    // while it is still working, we will load into the event container the cached events.
+    reloadEventsContainer(newTaskBarDate);
+    // when update Events is done, it will call reloadEventsContainer again, but this time it will load the new events.
 }
 
 updateTaskBar();

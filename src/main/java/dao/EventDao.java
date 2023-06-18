@@ -29,6 +29,16 @@ public enum EventDao {
         st.executeUpdate();
     }
 
+    public void removeEnrolment(int accountId, int eventId) throws SQLException {
+        String query = "DELETE FROM event_enrollment WHERE event_id = ? AND crew_member_id = ?";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, eventId);
+        st.setInt(2, accountId);
+
+        st.executeUpdate();
+    }
+
     public int getRequiredCrewSize(RoleType role, int eventId) throws SQLException {
         String query = "SELECT crew_size FROM event_requirement WHERE event_id = ? AND role = ?::role_enum";
 
@@ -206,7 +216,6 @@ public enum EventDao {
             st.setInt(2, eventId);
 
             ResultSet rs = st.executeQuery();
-
             return rs.next();
 
         } catch (SQLException e) {
