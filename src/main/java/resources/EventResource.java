@@ -37,6 +37,22 @@ public class EventResource {
     /**
      * In JSON, use syntax:
      * "{
+     * "id": *the event id*
+     * }"
+     */
+    @Path("/unenroll-self")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("crew_member")
+    public Response unenrollSelf(EventBean event, @CookieParam("accountId") String accountIdString) {
+        System.out.println("Unenrolling self from event " + event.getId());
+        int accountId = Integer.parseInt(accountIdString);
+        return unenrol(accountId, event.getId());
+    }
+
+    /**
+     * In JSON, use syntax:
+     * "{
      * "crewMember": {
      * "id": *the crewMember's account id*
      * },
@@ -96,7 +112,7 @@ public class EventResource {
     @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
-    public Response getFromMonth(@QueryParam("month") String QueryDate) {
+    public Response getFromMonth(@QueryParam("month") String QueryDate, @CookieParam("accountId") String accountIdString) {
         EventBean[] events;
         try {
             events = EventDao.instance.getFromMonth(Timestamp.valueOf(QueryDate + "-01 00:00:00"));
@@ -124,7 +140,9 @@ public class EventResource {
             Object[] enrolled = EventDao.instance.getEnrolled(id);
             EventStatus status = events[i].getStatus();
             String description = events[i].getDescription();
-            finalBeans[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description);
+            boolean isEnrolled = EventDao.instance.isEnrolled(Integer.parseInt(accountIdString), id);
+            boolean canEnrol = canEnrol(id, Integer.parseInt(accountIdString));
+            finalBeans[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description, isEnrolled, canEnrol);
         }
         return Response.ok(finalBeans)
                 .build();
@@ -171,26 +189,46 @@ public class EventResource {
     }
 
     private Response enrol(int crewId, int eventId) {
+        if (!canEnrol(eventId, crewId)) {
+            return Response.notModified()
+                    .build();
+        }
+        try {
+            EventDao.instance.addEnrolment(crewId, eventId);
+            return Response.ok()
+                    .build();
+        } catch (SQLException e) {
+            return Response.serverError()
+                    .build();
+        }
+    }
+
+    private boolean canEnrol(int eventId, int crewId) {
         try {
             if (EventDao.instance.isEnrolled(crewId, eventId)) {
-                return Response.notModified()
-                        .build();
+                return false;
             }
             RoleType role = CrewMemberDao.I.getRole(crewId);
             int required = EventDao.instance.getRequiredCrewSize(role, eventId);
             int currentEnrolled = EventDao.instance.getCurrentEnrolmentsForRole(role, eventId);
-            if (required > currentEnrolled) {
-                EventDao.instance.addEnrolment(crewId, eventId);
-                return Response.ok()
-                        .build();
-            } else {
-                return Response.notModified()
-                        .build();
-            }
+            return required > currentEnrolled;
         } catch (SQLException ignored) {
-            // ignored as serverError is default anyway
+            return false;
         }
-        return Response.serverError()
-                .build();
+    }
+
+    private Response unenrol(int crewId, int eventId) {
+        if (!EventDao.instance.isEnrolled(crewId, eventId)) {
+            return Response.notModified()
+                    .build();
+        }
+        try {
+            EventDao.instance.removeEnrolment(crewId, eventId);
+            return Response.ok()
+                    .build();
+        } catch (SQLException e) {
+            return Response.serverError()
+                    .build();
+        }
     }
 }
