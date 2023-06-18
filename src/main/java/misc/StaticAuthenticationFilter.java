@@ -35,6 +35,12 @@ public class StaticAuthenticationFilter implements Filter {
         }
 
         String path = servletReq.getRequestURI();
+        AccountType requiredAccountType = PageMapping.getRequiredAccountType(path);
+
+        if (requiredAccountType == null) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         AccountType accountType = null;
 
@@ -44,9 +50,7 @@ public class StaticAuthenticationFilter implements Filter {
             sessionInvalidReason = e.getReason();
         }
 
-        AccountType requiredAccountType = PageMapping.getRequiredAccountType(path);
-
-        if (requiredAccountType == null || requiredAccountType == accountType) {
+        if (requiredAccountType == accountType) {
             chain.doFilter(request, response);
             return;
         } else if (accountType != null) {

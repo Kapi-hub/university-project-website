@@ -1,0 +1,64 @@
+body {
+    background-color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    color: #fff;
+}
+
+.admin-container {
+    width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    background-color: #222;
+}
+
+h1 {
+    text-align: center;
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+.admin-key, .admin-section {
+    margin-bottom: 20px;
+}
+
+.admin-section h2 {
+    margin-top: 30px;
+    color: #ff0000;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+}
+
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    background-color: #000;
+    color: #ff0000;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff0000;
+    color: #000;
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
