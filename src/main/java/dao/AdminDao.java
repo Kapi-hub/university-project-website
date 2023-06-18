@@ -88,8 +88,8 @@ public enum AdminDao {
             PreparedStatement st = connection.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                CrewMemberBean crewMember = new CrewMemberBean(rs.getInt("id"), rs.getString("forename"), rs.getString("surname"));
-                result.add(crewMember);
+//                CrewMemberBean crewMember = new CrewMemberBean(rs.getInt("id"), rs.getString("forename"), rs.getString("surname"));
+//                result.add(crewMember); TODO fix this
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public enum AdminDao {
         }
 
     }
-    public void addAnnouncement(AnnouncementBean announcement) {
+    public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
         PreparedStatement st = connection.prepareStatement(insertQuery);
         st.setInt(1, announcement.getAnnouncer());
