@@ -14,6 +14,8 @@ public class AnnouncementBean {
     private String body;
     private Timestamp dateTime;
 
+    public AnnouncementBean() {}
+
     public AnnouncementBean(int announcementID, int announcer, String title, String body, Timestamp dateTime) {
         this.announcementID = announcementID;
         this.announcer = announcer;
@@ -34,6 +36,11 @@ public class AnnouncementBean {
 
     public void setAnnouncementID(int announcementID) {
         this.announcementID = announcementID;
+    }
+
+    public AnnouncementBean(String title, String body) {
+        this.title = title;
+        this.body = body;
     }
 
     public int getAnnouncer() {
