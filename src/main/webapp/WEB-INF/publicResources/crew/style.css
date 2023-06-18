@@ -323,6 +323,13 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+}
+
 /* ********************** LEFT SIDE BAR ***************** */
 .container .left_side_bar {
     width: 70px;

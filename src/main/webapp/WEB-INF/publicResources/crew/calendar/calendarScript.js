@@ -29,8 +29,6 @@ function renderCalendar() {
     const lastDayDate = lastDay.getDate();
     const prevLastDay = new Date(currentYear, currentMonth, 0);
     const prevLastDayDate = prevLastDay.getDate();
-    console.log("prevday: " + prevLastDay);
-    console.log("prevdate: " + prevLastDayDate);
     let nextDays = 7 - (lastDayIndex || 7);
     // console.log(prevLastDay);
     // console.log(prevLastDayDate);
@@ -47,16 +45,17 @@ function renderCalendar() {
 
     // current month days
     for (let x = 1; x <= lastDayDate; x++) {
+        //check if date has an event
+        let classNames = "day";
         //check if it's today then add today class
         if (x === new Date().getDate() &&
             currentMonth === new Date().getMonth() &&
             currentYear === new Date().getFullYear()) {
-            // if date month year matches
-            days += `<div class="day current">${x.toString().padStart(2, "0")}</div>`;
-        } else {
-            // don't add today
-            days += `<div class="day ">${x.toString().padStart(2, "0")}</div>`;
+            classNames += " current";
         }
+        days += `<div class="${classNames}">${x.toString().padStart(2, "0")}`;
+        days += `<span class="dot-container" day="${x}"></span>`;
+        days += `</div>`;
     }
     for (j = 0; j < nextDays; j++) {
         days += `<div class="day next">${(j + 1).toString().padStart(2, "0")}</div>`;
@@ -196,7 +195,7 @@ const updateEvents = (date) => {
             });
             const currentMonth = date.getMonth();
             const currentYear = date.getFullYear();
-            monthsEventMap.set(`${currentMonth}-${currentYear}`, eventsPerDay);
+            monthsEventMap.set(currentMonth + "-" + currentYear, eventsPerDay);
             reloadEventsContainer(date);
         })
         .catch(error => {
@@ -205,7 +204,21 @@ const updateEvents = (date) => {
 }
 
 const reloadEventsContainer = () => {
-    const eventListMonth = monthsEventMap.get(`${activeDate.getMonth()}-${activeDate.getFullYear()}`);
+    const eventListMonth = monthsEventMap.get(activeDate.getMonth() + "-" + activeDate.getFullYear());
+    const dotContainer = document.querySelectorAll(".dot-container");
+
+    dotContainer.forEach(dot => {
+        dot.innerHTML = "";
+        let day = parseInt(dot.getAttribute("day"));
+        if (eventListMonth && eventListMonth.has(day)) {
+            eventListMonth.get(day).forEach(event => {
+                let dotElem = document.createElement("div");
+                dotElem.classList.add("dot");
+                dotElem.style.backgroundColor = event.canEnrol ? "#FFC107" : event.isEnrolled ? "#28A745" : "#DC3545";
+                dot.appendChild(dotElem);
+            });
+        }
+    });
 
     if (!eventListMonth || !eventListMonth.has(activeDate.getDate())) {
         eventContainer.innerHTML = "<p style='margin-left: 50px; margin-top: 20px'>No events for today.</p>";
@@ -269,8 +282,8 @@ const reloadEventsContainer = () => {
         statusBox.style.marginLeft = "5px";
         statusBox.style.padding = "5px";
         statusBox.style.borderRadius = "5px";
-        statusBox.style.backgroundColor = status === "TODO" ? "#FFC107" : status === "ENROLLED" ? "#28A745" : "#DC3545";
-        statusBox.textContent = javaEnumToString(status);
+        statusBox.style.backgroundColor = canEnrol ? "#FFC107" : isEnrolled ? "#28A745" : "#DC3545";
+        statusBox.textContent = canEnrol ? "Open" : isEnrolled ? "Enrolled" : "Unavailable";
         buttonDiv.appendChild(boldButtonText);
         buttonDiv.appendChild(italicButtonText);
         buttonDiv.appendChild(statusBox);
