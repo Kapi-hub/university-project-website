@@ -32,7 +32,6 @@ public class PageMapping {
         pageMap.put("/admin/crewAssignments/", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
         pageMap.put("/crew/dashboard/", new PageInfo("/crew/dashboard/index.html", AccountType.CREW_MEMBER));
         pageMap.put("/crew/calendar/", new PageInfo("/crew/calendar/index.html", AccountType.CREW_MEMBER));
-        pageMap.put("/super-ultra-mega-admin/super-secret-page/", new PageInfo("/super-mega-admin/index.html", null));
     }
 
     public static String getResourceLocation(String url) {

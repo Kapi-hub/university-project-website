@@ -17,7 +17,9 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -32,66 +34,56 @@ public enum MailService {
     public static final String SHOTMANIACS_MAIL = "shotmaniacs.photography@gmail.com";
     private static final String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
     private static final String APPLICATION_NAME = "Shotmaniacs Mail Service";
-    public static boolean success = false;
     private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private GoogleAuthorizationCodeFlow flow;
-    private String token;
+    public boolean success = false;
     private Gmail service;
-    private NetHttpTransport HTTP_TRANSPORT;
+
+    MailService() {
+        try {
+            System.out.println("MAIL SENDING CONSTRUCTOR HAS BEEN CALLED.");
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+            success = true;
+        } catch (GeneralSecurityException | IOException e) {
+            System.err.println("An error has occurred setting up the mail service.");
+            e.printStackTrace();
+
+        }
+    }
 
     public static void main(String[] args) throws MessagingException, IOException {
         MAIL.sendMessage("bfc.jonkhout@gmail.com", "TEST SUBJECT", "TEST BODY");
     }
 
-    public String printAuthURL(String clientId, String clientSecret) {
+    // Setting environment
+
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
         try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        } catch (GeneralSecurityException | IOException e) {
-            System.err.println("Could not create HTTP_TRANSPORT" + e.getMessage());
-            return null;
-        }
-        flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientId, clientSecret, Collections.singleton(GmailScopes.GMAIL_SEND))
-                .setAccessType("offline")
-                .build();
-        // Obtain the authorization URL
-        String authURL = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
-        System.out.println("\n\nPlease open the following URL to receive your cool token:");
-        System.out.println(authURL);
-        System.out.println("\n");
-        return authURL;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public void connect() {
-        service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials())
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-        success = true;
-    }
-
-    public boolean isConnected() {
-        return success;
-    }
-
-    public Credential getCredentials() {
-        try {
-            flow.newTokenRequest(token).setRedirectUri(REDIRECT_URI).execute();
+            String clientId = System.getenv("MAIL_CLIENT_ID");
+            String clientSecret = System.getenv("MAIL_CLIENT_SECRET");
+            // Set up OAuth 2.0 client credentials
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    HTTP_TRANSPORT, JSON_FACTORY, clientId, clientSecret, Collections.singleton(GmailScopes.GMAIL_SEND))
+                    .setAccessType("offline")
+                    .build();
+            String filename = "mail_authentication_token";
+            // Obtain the authorization URL
+            System.out.println(flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build());
+            System.out.printf("Please save the authentication token in %s\\%s\n", System.getProperty("user.dir"), filename);
+            Thread.sleep(1000 * 25);
+            // Print the authorization URL and ask the user to visit it and authorize the application
+            String authorizationCode = new BufferedReader(new FileReader(filename)).readLine().strip();
+            System.out.println(authorizationCode);
+            // Exchange the authorization code for access token
+            flow.newTokenRequest(authorizationCode).setRedirectUri(REDIRECT_URI).execute();
             LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
             return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-        } catch (IOException e) {
-            System.err.println("An error has occurred setting up the mail service.");
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void deactivate() {
-        success = false;
-        service = null;
     }
 
     private MimeMessage createEmail(String subject, String body)
@@ -130,4 +122,14 @@ public enum MailService {
         message.setRaw(encodedEmail);
         return message;
     }
+
+    public void setup() {
+
+    }
+
+    public boolean isConnected() {
+        return success;
+    }
+
 }
+
