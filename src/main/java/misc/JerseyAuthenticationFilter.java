@@ -23,7 +23,6 @@ public class JerseyAuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        System.out.println("Filtering request");
         Cookie sessionIdCookie = headers.getCookies() != null ? headers.getCookies().get("sessionId") : null;
         Cookie accountIdCookie = headers.getCookies() != null ? headers.getCookies().get("accountId") : null;
         String sessionId = null;
@@ -40,7 +39,6 @@ public class JerseyAuthenticationFilter implements ContainerRequestFilter {
             accountType = AccountType.CLIENT;
         }
 
-        System.out.println("Assigning security context: " + accountType);
         requestContext.setSecurityContext(new SecurityContextImpl(accountType));
     }
 

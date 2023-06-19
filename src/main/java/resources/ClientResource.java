@@ -12,7 +12,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import models.*;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -44,8 +47,10 @@ public class ClientResource {
                 ClientDao.I.addRequirement(required);
             }
             formBean.getEventBean().setId(event_id);
-//            sendConfirmation(formBean);
-//            sendConfirmationToMe(formBean.getClientBean());
+            if (MAIL.isConnected()) {
+                sendConfirmation(formBean);
+                sendConfirmationToMe(formBean.getClientBean());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,16 +61,16 @@ public class ClientResource {
         EventBean event = formBean.getEventBean();
         String subject = String.format("Confirmation Booking of event - %s", event.getName());
         String body = String.format(
-               """
-               Hi %s!
-               
-               This is a confirmation email based on the event you have booked on %s.
-               Your event id is %s. Your client_id is %s.
-               Shotmaniacs will get in contact with you.
-               
-               Sincerely,
-               The Shotmaniacs Team
-               """, client.getForename(), event.getStart(), event.getId() ,event.getClient_id());
+                """
+                        Hi %s!
+                                       
+                        This is a confirmation email based on the event you have booked on %s.
+                        Your event id is %s. Your client_id is %s.
+                        Shotmaniacs will get in contact with you.
+                                       
+                        Sincerely,
+                        The Shotmaniacs Team
+                        """, client.getForename(), event.getStart(), event.getId(), event.getClient_id());
         String recipient = client.getEmailAddress();
         try {
             MAIL.sendMessage(recipient, subject, body);
@@ -79,21 +84,21 @@ public class ClientResource {
         String subject = "Confirmation Booking of multiple events";
         String body = String.format(
                 """
-                Hi %s!
-                
-                This is a confirmation email based on the events you have booked.
-                
-                Your information.
-                - Client-id: %s
-                - Name: %s %s
-                - Telephone: %s
-                - Email: %s
-                
-                Shotmaniacs will get in contact with you.
-                
-                Sincerely,
-                The Shotmaniacs Team
-                """, client.getForename(), client.getId(), client.getForename(),
+                        Hi %s!
+                                        
+                        This is a confirmation email based on the events you have booked.
+                                        
+                        Your information.
+                        - Client-id: %s
+                        - Name: %s %s
+                        - Telephone: %s
+                        - Email: %s
+                                        
+                        Shotmaniacs will get in contact with you.
+                                        
+                        Sincerely,
+                        The Shotmaniacs Team
+                        """, client.getForename(), client.getId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmailAddress());
         String recipient = client.getEmailAddress();
         try {
@@ -108,19 +113,19 @@ public class ClientResource {
         String subject = "New Booking has arrived.";
         String body = String.format(
                 """
-                Dear Shotmaniacs Team!
-                
-                A client has signed up with bookings. Please consult the admin dashboard to edit the event.
-                
-                The client information:
-                - Client-id: %s
-                - Name: %s %s
-                - Telephone: %s
-                - Email: %s
+                        Dear Shotmaniacs Team!
+                                        
+                        A client has signed up with bookings. Please consult the admin dashboard to edit the event.
+                                        
+                        The client information:
+                        - Client-id: %s
+                        - Name: %s %s
+                        - Telephone: %s
+                        - Email: %s
 
-                Sincerely,
-                The computer behind Shotmaniacs.
-                """, client.getId(), client.getForename(),
+                        Sincerely,
+                        The computer behind Shotmaniacs.
+                        """, client.getId(), client.getForename(),
                 client.getSurname(), client.getPhone_number(), client.getEmailAddress());
         try {
             MAIL.sendMessage(MailService.SHOTMANIACS_MAIL, subject, body);
@@ -147,8 +152,10 @@ public class ClientResource {
                 default -> throw new IOException("Incorrect file has been uploaded.");
             }
             clientBean.setId(client_id);
-            sendConfirmationMultiple(clientBean);
-            sendConfirmationToMe(clientBean);
+            if (MAIL.isConnected()) {
+                sendConfirmationMultiple(clientBean);
+                sendConfirmationToMe(clientBean);
+            }
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -167,7 +174,7 @@ public class ClientResource {
             EventBean eventBean = new EventBean(
                     row.getCell(0).getStringCellValue(),
                     row.getCell(5).getStringCellValue(),
-                    Timestamp.valueOf(row.getCell(2).getStringCellValue()+":00.000"),
+                    Timestamp.valueOf(row.getCell(2).getStringCellValue() + ":00.000"),
                     (int) row.getCell(3).getNumericCellValue(),
                     row.getCell(4).getStringCellValue(),
                     EventType.valueOf(row.getCell(1).getStringCellValue()),
@@ -188,8 +195,6 @@ public class ClientResource {
             i++;
 
         }
-
-
     }
 
     private void handleCsvFile(InputStream csv, int client_id) throws SQLException, IOException {
@@ -204,7 +209,7 @@ public class ClientResource {
             EventBean eventBean = new EventBean(
                     values[0],
                     values[5],
-                    Timestamp.valueOf(values[2]+":00.000"),
+                    Timestamp.valueOf(values[2] + ":00.000"),
                     Integer.parseInt(values[3]),
                     values[4],
                     EventType.valueOf(values[1]),
