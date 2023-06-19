@@ -15,7 +15,10 @@ public class UltraAdmin {
             int index = random.nextInt(possibleChars.length());
             adminKeyBuilder.append(possibleChars.charAt(index));
         }
-        adminKey = adminKeyBuilder.toString();
+        adminKey = System.getenv("ULTRA_PASSWORD");
+        if (adminKey == null) {
+            adminKey = adminKeyBuilder.toString();
+        }
         String green = "\u001B[32m";
         String reset = "\u001B[0m";
         System.out.println("\n\n\n" + green + "---ULTRA-MEGA-KEY---" + reset);

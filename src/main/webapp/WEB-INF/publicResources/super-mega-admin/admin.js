@@ -9,14 +9,20 @@ function fetchPost(url, data) {
     });
 }
 
-function setIdAndSecret(adminKey, mailClientId, mailClientSecret) {
+function setIdAndSecret(adminKey, mailClientId, mailClientSecret, tokenResponseField) {
     fetchPost('/api/ultra-admin/set-id-and-secret', {
         adminKey: adminKey,
         mailClientId: mailClientId,
         mailClientSecret: mailClientSecret
     }).then(function (response) {
         if (response.ok) {
-            alert('Id and secret is set!');
+            let tokenURL = document.createElement('a');
+            tokenURL.href = response.headers.get('Location');
+            tokenURL.target = '_blank';
+            tokenURL.textContent = "Link to get token";
+            tokenResponseField.innerHTML = '';
+            tokenResponseField.appendChild(tokenURL);
+            alert('Id and secret are set!');
         } else if (response.status === 403) {
             alert('Wrong admin key!');
         } else {
@@ -113,6 +119,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const mailClientIdInput = document.getElementById('mailClientId');
     const mailClientSecretInput = document.getElementById('mailClientSecret');
 
+    const tokenResponseField = document.getElementById('tokenResponse');
+
     function checkTokenInputs() {
         activateEmailButton.disabled = !emailTokenInput.value;
     }
@@ -144,5 +152,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     reconnectDBButton.addEventListener('click', function () {
         reconnectDB(adminKeyInput.value);
+    });
+
+    setIdAndSecretButton.addEventListener('click', function () {
+        setIdAndSecret(adminKeyInput.value, mailClientIdInput.value, mailClientSecretInput.value, tokenResponseField);
     });
 });

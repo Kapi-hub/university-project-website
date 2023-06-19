@@ -12,6 +12,10 @@ import models.UltraAdminBean;
 import models.UltraDbBean;
 import models.UltraEmailBean;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Objects;
+
 @Path("/ultra-admin")
 public class UltraAdminResource {
 
@@ -27,8 +31,16 @@ public class UltraAdminResource {
         }
         String mailClientId = emailBean.getMailClientId();
         String mailClientSecret = emailBean.getMailClientSecret();
-        MailService.MAIL.printAuthURL(mailClientId, mailClientSecret);
-        return Response.ok().build();
+        URI authURL;
+        try {
+            authURL = new URI(Objects.requireNonNull(MailService.MAIL.printAuthURL(mailClientId, mailClientSecret)));
+        } catch (URISyntaxException | NullPointerException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+        return Response.ok()
+                .header("Location", authURL)
+                .build();
     }
 
     @Path("/activate-email")
