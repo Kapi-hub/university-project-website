@@ -4,19 +4,45 @@ function addEvent() {
     let clientQuery = document.querySelector('#clientInfo');
     const clientFirstName = clientQuery.children[1].value;
     const clientLastName = clientQuery.children[4].value;
-    const clientEmail = clientQuery.children[7].value;
+    const clientPhone = clientQuery.children[7].value;
+    const clientEmail = clientQuery.children[10].value;
+
 
     const eventTitle = document.getElementById('eventTitle').value;
-    //get the checkbox elements
-    let eventTypeHandlerQuery = document.querySelector("#eventType");
-    const clubPhotography = eventTypeHandlerQuery.children[0].children[0].value;
-    const festival = eventTypeHandlerQuery.children[1].children[0].value;
-    const product = eventTypeHandlerQuery.children[2].children[0].value
-
+    const eventDescription = document.getElementById('eventDescription').value;
     const eventDateTime = document.getElementById("eventDate&Time").value;
     const eventLocation = document.getElementById('eventLocation').value;
     const eventDuration = document.getElementById('eventDuration').value;
-    const eventDescription = document.getElementById('eventDescription').value;
+
+
+    const club_photo = document.getElementById('photoBox');
+    const festival = document.getElementById('festivalBox');
+    const product = document.getElementById('productBox');
+
+    let eventType = '';
+    if (club_photo.checked) {
+        eventType = club_photo.value;
+    } else if (festival.checked) {
+        eventType = festival.value;
+    } else if (product.checked) {
+        eventType = product.value;
+    }
+
+    const photography = document.getElementById('photographyBox');
+    const film = document.getElementById('filmBox');
+    const marketing = document.getElementById('marketingBox');
+    const other = document.getElementById('otherBox');
+
+    let bookingType = '';
+    if (photography.checked) {
+        bookingType = photography.value;
+    } else if (film.checked) {
+        bookingType = film.value;
+    } else if (marketing.checked) {
+        bookingType = marketing.value;
+    } else if (other.checked) {
+        bookingType = other.value;
+    }
 
     let eventCrewQuery = document.querySelector("#requiredCrew");
     const eventPhotographer = eventCrewQuery.children[1].value;
@@ -30,30 +56,24 @@ function addEvent() {
     //TODO: check how to do with the drop down list - how do i extract the name that is selected
     // const eventProducer;
 
-
-    let eventType = ' ';
-    if (clubPhotography.checked === true && festival.checked === false && product.checked === false) {
-        eventType = "CLUB_PHOTOGRAPHY";
-    } else if (clubPhotography.checked === false && festival.checked === true && product.checked === false) {
-        eventType = "FESTIVAL";
-    } else if (clubPhotography.checked === false && festival.checked === false && product.checked === true) {
-        eventType = "PHOTOSHOOT";
-    }
     var data = {
         clientBean: {
             forename: clientFirstName,
             surname: clientLastName,
-            email_address: clientEmail
+            phone_number: clientPhone,
+            emailAddress: clientEmail
         },
         eventBean: {
             name: eventTitle,
-            type: eventType,
+            description: eventDescription,
             start: eventDateTime,
             duration: eventDuration,
-            location: eventLocation
+            location: eventLocation,
+            type: eventType,
+            booking_type: bookingType
         },
 
-        requiredCrewBean: [
+        requiredCrewBeans: [
             {
                 crew_size: eventPhotographer,
                 role: "PHOTOGRAPHER"
@@ -75,7 +95,7 @@ function addEvent() {
                 role: "PLANNER"
             },
             {
-                crew_size: eventProducer,
+                crew_size: 0,
                 role: "PRODUCER"
             },
             {
@@ -85,13 +105,23 @@ function addEvent() {
         ]
     }
 
-    sendHttpRequest("POST", "/api/admin/crewEvents/newEvent", {
-        data
-    }).catch(err => {
-        console.log(err)
-    })
-//TODO figure out what to do when fail
+    console.log(JSON.stringify(data), null, 2);
+    $.ajax({
+        url: "../api/admin/crewAssignments",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function () {
+            alert("Event successfully sent!");
+        },
+        error: function () {
+            alert("Error creating a new event!");
+
+        }
+    });
 }
+
 function addCrewMember() {
 
     //TODO: handle the checkbox - extract the selection
@@ -103,19 +133,22 @@ function addCrewMember() {
     const memberPassword = memberQuery.children[13].value;
 
     //get member's permissions
-    // let permissionQuery = document.querySelector('#permissionType');
-    // const clubTeam = permissionQuery.children[0].children[0].value;
-    // const coreTeam = permissionQuery.children[1].children[0].value;
-    // const clubAndCoreTeam = permissionQuery.children[2].children[0].value;
-    //
-    // let permissionType = ' ';
-    // if (clubTeam.checked === true && coreTeam.checked === false && clubAndCoreTeam.checked === false) {
-    //     permissionType = "CLUB";
-    // } else if (clubTeam.checked === false && coreTeam.checked === true && clubAndCoreTeam.checked === false) {
-    //     permissionType = "CORE";
-    // } else if (clubTeam.checked === false && coreTeam.checked === false && clubAndCoreTeam.checked === true) {
-    //     permissionType = clubAndCoreTeam;
-    // }
+
+    let permissionType = '';
+    const clubTeam = document.getElementById('clubTeam');
+    const coreTeam = document.getElementById('coreTeam');
+    const clubAndCore = document.getElementById('club&core');
+
+    if (clubTeam.checked) {
+        permissionType = clubTeam.value;
+        console.log(permissionType);
+    } else if (coreTeam.checked) {
+        permissionType = coreTeam.value;
+        console.log(permissionType);
+    } else if (clubAndCore.checked) {
+        permissionType = clubAndCore.value;
+        console.log(permissionType);
+    }
 
     //get member's roles
     var roles = '';
@@ -150,16 +183,17 @@ function addCrewMember() {
         roles = editor.value;
     }
     var data = {
-            forename: memberFirstName,
-            surname: memberLastName,
-            username: memberUsername,
-            emailAddress: memberEmail,
-            password: memberPassword,
-            accountType: "CREW_MEMBER",
-            role: roles,
-            team: "CORE"
+        forename: memberFirstName,
+        surname: memberLastName,
+        username: memberUsername,
+        emailAddress: memberEmail,
+        password: memberPassword,
+        accountType: "CREW_MEMBER",
+        role: roles,
+        team: permissionType
     }
 
+    console.log(JSON.stringify(data));
     $.ajax({
         url: "../api/admin/crewAssignments",
         method: "POST",
@@ -169,11 +203,10 @@ function addCrewMember() {
         success: function () {
             alert("Member successfully sent!");
         },
-        error:function () {
+        error: function () {
             alert("Error creating a new member!");
 
         }
 
     });
-    //TODO figure out what to do when fail
 }
