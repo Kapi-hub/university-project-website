@@ -314,6 +314,7 @@ doesn't get in the way of building / maintaining the website*/
     height: 4vw;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     border-radius: 10px;
     font-size: 20px;
     font-weight: 500;
@@ -339,11 +340,19 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
+.weekdaysNumber .day .dot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+}
+
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    position: absolute;
+    position: relative;
 }
 
 /* ********************** LEFT SIDE BAR ***************** */
@@ -368,7 +377,7 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-light) !important;
     font-size: 20px;
     outline: none;
-    padding: 8px;
+    padding: 10px;
     text-decoration: none;
     transition: all 0.5s;
     cursor: pointer;
@@ -377,7 +386,6 @@ doesn't get in the way of building / maintaining the website*/
 .left_side_bar ul li.active a{
     background: var(--bs-light);
     color: var(--bs-dark) !important;
-    padding-bottom: 15px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
@@ -390,12 +398,13 @@ doesn't get in the way of building / maintaining the website*/
     position: relative;
     width: 60%;
     height: 30rem;
-    padding: 20px 0;
+    padding: 20px;
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
     background-color: var(--bs-light);
     border-left: px solid var(--bs-dark);
     overflow: scroll;
+    scrollbar-width: none;
 }
 
 .container .right_side_bar::-webkit-scrollbar {
@@ -430,7 +439,6 @@ doesn't get in the way of building / maintaining the website*/
     gap: 10px;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
     text-transform: capitalize;
 }
 
@@ -446,6 +454,9 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
+.right_side_bar #event-accordion .accordion-item .accordion-header .accordion-button.collapsed{
+    background-color: var(--bs-primary-bg-subtle);
+}
 
 .details {
     display: none;
