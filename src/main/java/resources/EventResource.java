@@ -208,11 +208,15 @@ public class EventResource {
             if (EventDao.instance.isEnrolled(crewId, eventId)) {
                 return false;
             }
+            EventStatus status = EventDao.instance.getEventStatus(eventId);
+            if (status != EventStatus.REVIEW) {
+                return false;
+            }
             RoleType role = CrewMemberDao.I.getRole(crewId);
             int required = EventDao.instance.getRequiredCrewSize(role, eventId);
             int currentEnrolled = EventDao.instance.getCurrentEnrolmentsForRole(role, eventId);
             return required > currentEnrolled;
-        } catch (SQLException ignored) {
+        } catch (SQLException e) {
             return false;
         }
     }
