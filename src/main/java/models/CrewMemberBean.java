@@ -2,7 +2,7 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Crew member")
+@XmlRootElement()
 public class CrewMemberBean extends AccountBean {
     private int id;
     private RoleType role;

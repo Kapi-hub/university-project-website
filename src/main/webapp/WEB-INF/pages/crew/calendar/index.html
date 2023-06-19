@@ -10,12 +10,50 @@
     <link href="/static/crew/style.css" rel="stylesheet" type="text/css">
 
     <script src="/static/logout.js"></script>
+
+    <script>
+        function enroll(eventId) {
+            const XHR = new XMLHttpRequest();
+            XHR.open("POST", "/api/event/enroll-self");
+            XHR.setRequestHeader('Content-Type', 'application/json');
+            XHR.withCredentials = true;
+            XHR.addEventListener("load", function () {
+                if (this.status === 200) {
+                    updateTaskBar();
+                    alert("Enrolled successfully");
+                } else {
+                    alert("An error occurred, enrolling unsuccessful.");
+                }
+            });
+            XHR.send(JSON.stringify({
+                id: eventId
+            }));
+        }
+
+        function unenroll(eventId) {
+            const XHR = new XMLHttpRequest();
+            XHR.open("POST", "/api/event/unenroll-self");
+            XHR.setRequestHeader('Content-Type', 'application/json');
+            XHR.withCredentials = true;
+            XHR.addEventListener("load", function () {
+                if (this.status === 200) {
+                    updateTaskBar();
+                    alert("Unenrolled successfully");
+                } else {
+                    alert("An error occurred, unenrolling unsuccessful.");
+                }
+            });
+            XHR.send(JSON.stringify({
+                id: eventId
+            }));
+        }
+    </script>
 </head>
 
 <body>
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img alt="Logo" class="d-inline-block align-text-middle" width="30"
                  src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 shotmaniacs-peal">Shotmaniacs</span>
@@ -39,63 +77,63 @@
     <div class="left_side_bar">
         <ul id="monthsList">
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Jan">Jan</span>
+                <a onclick="setCurrentMonth(0)">
+                    <span class="monthItem">Jan</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Feb">Feb</span>
+                <a onclick="setCurrentMonth(1)">
+                    <span class="monthItem">Feb</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Mar">Mar</span>
+                <a onclick="setCurrentMonth(2)">
+                    <span class="monthItem">Mar</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Apr">Apr</span>
+                <a onclick="setCurrentMonth(3)">
+                    <span class="monthItem">Apr</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="May">May</span>
+                <a onclick="setCurrentMonth(4)">
+                    <span class="monthItem">May</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Jun">Jun</span>
+                <a onclick="setCurrentMonth(5)">
+                    <span class="monthItem">Jun</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Jul">Jul</span>
+                <a onclick="setCurrentMonth(6)">
+                    <span class="monthItem">Jul</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Aug">Aug</span>
+                <a onclick="setCurrentMonth(7)">
+                    <span class="monthItem">Aug</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Sep">Sep</span>
+                <a onclick="setCurrentMonth(8)">
+                    <span class="monthItem">Sep</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Oct">Oct</span>
+                <a onclick="setCurrentMonth(9)">
+                    <span class="monthItem">Oct</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Nov">Nov</span>
+                <a onclick="setCurrentMonth(10)">
+                    <span class="monthItem">Nov</span>
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <span class="monthItem" id="Dec">Dec</span>
+                <a onclick="setCurrentMonth(11)">
+                    <span class="monthItem">Dec</span>
                 </a>
             </li>
         </ul>
@@ -104,10 +142,16 @@
         <div class="header">
             <div class="month"></div>
             <div class="btns">
-                <div class="btn prev">
+                <div class="btn prevYr">
                     <span class="icon"><ion-icon name="chevron-back-outline"></ion-icon></span>
                 </div>
+                <div class="btn prev">
+                    <span class="icon"><ion-icon name="caret-back-outline"></ion-icon></span>
+                </div>
                 <div class="btn next">
+                    <span class="icon"><ion-icon name="caret-forward-outline"></ion-icon></span>
+                </div>
+                <div class="btn nextYr">
                     <span class="icon"><ion-icon name="chevron-forward-outline"></ion-icon></span>
                 </div>
             </div>
@@ -131,69 +175,7 @@
             <div class="event-date"></div>
         </div>
         <div class="accordion" id="event-accordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Event #1
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="halfOne">
-                            Name: <br>
-                            Type: <br>
-                            Date: <br>
-                            Location: <br>
-                            Duration: <br>
-                        </div>
-                        <div class="halfTwo">
-                            Client: <br>
-                            Booking Type: <br>
-                            Product Manager: <br>
-                            Crew: <br>
-                            Status: <br>
-                            Description:
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Event #2
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the
-                        collapse plugin adds the appropriate classes that we use to style each element. These classes
-                        control the overall appearance, as well as the showing and hiding via CSS transitions. You can
-                        modify any of this with custom CSS or overriding our default variables. It's also worth noting
-                        that just about any HTML can go within the <code>.accordion-body</code>, though the transition
-                        does limit overflow.
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Event #3
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the
-                        collapse plugin adds the appropriate classes that we use to style each element. These classes
-                        control the overall appearance, as well as the showing and hiding via CSS transitions. You can
-                        modify any of this with custom CSS or overriding our default variables. It's also worth noting
-                        that just about any HTML can go within the <code>.accordion-body</code>, though the transition
-                        does limit overflow.
-                    </div>
-                </div>
-            </div>
+            <!-- Added using JavaScript -->
         </div>
     </div>
 </div>

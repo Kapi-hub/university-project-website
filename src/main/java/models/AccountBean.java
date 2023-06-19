@@ -2,7 +2,7 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement()
+@XmlRootElement(name = "account")
 public class AccountBean {
     private int accountId;
     private String forename;
@@ -37,6 +37,20 @@ public class AccountBean {
         this.emailAddress = emailAddress;
         this.password = password;
         this.accountType = accountType;
+    }
+    public AccountBean(String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
+        this.forename = forename;
+        this.surname = surname;
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+        this.accountType = accountType;
+    }
+
+    public AccountBean(int accountId, String forename, String surname) {
+        this.accountId = accountId;
+        this.forename = forename;
+        this.surname = surname;
     }
 
     public String getSalt() {

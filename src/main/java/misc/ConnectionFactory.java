@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Factory Pattern
  */
 public class ConnectionFactory {
-    private static final boolean USE_PREVIDER_DB = false;
+    private static boolean USE_PREVIDER_DB = false;
 
     private static final String BRONTO_HOST = "bronto.ewi.utwente.nl";
     private static final String BRONTO_DB_NAME = "dab_di22232b_249";
@@ -18,7 +18,9 @@ public class ConnectionFactory {
     private static final String PREVIDER_DB_NAME = "postgres";
     private static final String PREVIDER_USERNAME = "webadmin";
 
-    private static final String DEFAULT_URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs%s";
+    private static final String DEFAULT_URL = "jdbc:postgresql://%s:5432/%s?currentSchema=shotmaniacs1";
+
+    private static String password;
 
     private static Connection connection;
     private static boolean connected = false;
@@ -33,12 +35,14 @@ public class ConnectionFactory {
         String dbName = USE_PREVIDER_DB ? PREVIDER_DB_NAME : BRONTO_DB_NAME;
         String username = USE_PREVIDER_DB ? PREVIDER_USERNAME : BRONTO_USERNAME;
 
-        String URL = String.format(DEFAULT_URL, host, dbName, USE_PREVIDER_DB ? "" : "1");
+        String URL = String.format(DEFAULT_URL, host, dbName);
 
         try {
             Class.forName("org.postgresql.Driver");
-            String password = readPassword();
-            if (password == null) throw new NullPointerException("Password env variable could not be found.");
+            if (password == null) {
+                readPassword();
+                return;
+            }
             connection = DriverManager.getConnection(URL, username, password);
             connected = true;
             System.out.println("Connection to database successfully setup.");
@@ -51,7 +55,30 @@ public class ConnectionFactory {
         }
     }
 
-    private static String readPassword() {
-        return System.getenv("DB_PASSWORD");
+    private static void readPassword() {
+        password = System.getenv("DB_PASSWORD");
+        if (password == null) {
+            System.out.println("No password environment variable found, please set via Ultra-Admin dashboard.");
+            return;
+        }
+        setup();
+    }
+
+    public static void reconnect() {
+        try {
+            connection.close();
+            connected = false;
+            setup();
+        } catch (SQLException e) {
+            System.err.printf("Oops: %s\n", e.getMessage());
+        }
+    }
+
+    public static void setPreviderBool (boolean bool) {
+        USE_PREVIDER_DB = bool;
+    }
+
+    public static void setDbPassword (String pass) {
+        password = pass;
     }
 }

@@ -36,7 +36,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick=saveAnnouncement()>Save changes
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()">Save changes
                 </button>
             </div>
         </div>
@@ -58,7 +58,7 @@
 <!--Navigation bar-->
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+
             <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
@@ -83,7 +83,7 @@
 </div>
 
 <!--Announcements-->
-<div class="announcementsContainer">
+<div class="announcementContainer">
     <div class="row">
         <div class="overflow-auto p-1 mb-1 mb-md-1 mr-md-1" style="max-height: 300px">
             <div class="col">
@@ -91,51 +91,12 @@
                     <p class="announcementText">Announcements</p>
                     <button type="button" class="postAnnouncementBttn" data-bs-toggle="modal"
                             data-bs-target="#postAnnouncementModal">
-                        Post +
+                        Post New
                     </button>
                 </div>
-                <div class="announcement1">
-                    <div class="title">
-                        <span class="announcementTitle">Test announcement</span>
-                        <span class="dateTime">Posted by: Raluca on 22 May 2023, 10:25</span>
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                        This is a test, i hope it will work.
-                    </p>
-                    </div>
-                </div>
-                <div class="announcement2">
-                    <div class="title">
-                        <span class="announcementTitle">Test announcement 1</span>
-                        <span class="dateTime">Posted by: Alex on 6 May 2023, 14:56</span>
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                        This is a test again, i hope it will work.
-                    </p>
-                    </div>
-                </div>
-                <div class="announcement3">
-                    <div class="title">
-                        <span class="announcementTitle">Team meeting cancelled</span>
-                        <span class="dateTime">Posted by: Scrum master on 5 May 2023, 17:40</span>
-
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                        Due to some unexpected events in my family that require me to fly back to Greece asap, I have to
-                        cancel the meeting tomorrow. I will announce you later when is it going to be rescheduled.
-                    </p>
-                    </div>
-                </div>
-                <div class="announcement4">
-                    <div class="title">
-                        <span class="announcementTitle">Let's have a team meeting</span>
-                        <span class="dateTime">Posted by: Scrum master on 5 May 2023, 10:36</span>
-
-                    </div>
-                    <div class="content"><p class="announcementContent">
-                        Let's meet tomorrow at 11.00 to discuss some managerial problems. We will also discuss if anyone
-                        needs some new gear and also the progress on the edit of the after party.
-                    </p>
+                <div class="announcementsList">
+                    <div class = announcementItem id="announcementPlaceholder">
+                        <span class="Title" >There are No Announcements</span>
                     </div>
                 </div>
             </div>
@@ -236,21 +197,7 @@
                     </button>
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                          data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <span>idk what to put here</span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
-                        <div class="accordion-body">
-                            <span></span>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -270,6 +217,10 @@
         const selectedCrewMember = document.getElementById('selectedCrewMember');
         selectedCrewMember.textContent = name;
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        getAnnouncements();
+        getLatestEvents();
+    });
 
 </script>
 
