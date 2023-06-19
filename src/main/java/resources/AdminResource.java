@@ -43,23 +43,23 @@ public class AdminResource {
 
 
     /* METHODS RELATED TO EVENTS */
-//    @POST
-//    @Path("/crewAssignments")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @RolesAllowed("admin")
-//    public void handleCreateNewEvent(FormBean form) throws SQLException {
-//        try {
-//            int client_id = AdminDao.I.addClient(form.getClientBean());
-//            form.getEventBean().setClient_id(client_id);
-//            int event_id = AdminDao.I.addEvent(form.getEventBean());
-//            for (RequiredCrewBean required : form.getRequiredCrewBeans()) {
-//                required.setEvent_id(event_id);
-//                AdminDao.I.addRequirement(required);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @POST
+    @Path("/crewAssignments/newEvent")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public void handleCreateNewEvent(FormBean form) throws SQLException {
+        try {
+            int client_id = AdminDao.I.addClient(form.getClientBean());
+            form.getEventBean().setClient_id(client_id);
+            int event_id = AdminDao.I.addEvent(form.getEventBean());
+            for (RequiredCrewBean required : form.getRequiredCrewBeans()) {
+                required.setEvent_id(event_id);
+                AdminDao.I.addRequirement(required);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @GET
     @Path("/events")
@@ -89,7 +89,7 @@ public class AdminResource {
 
     /* METHODS RELATED TO CREW-MEMBERS */
     @POST
-    @Path("/crewAssignments")
+    @Path("/crewAssignments/newMember")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handleCreateNewMember(CrewMemberBean crewMember) {
@@ -100,20 +100,20 @@ public class AdminResource {
         }
     }
 
-    @GET
-    @Path("/crewAssignments")
-    @RolesAllowed("admin")
-    public String getAllCrewMembers() {
-        try {
-            return AdminDao.I.getAllCrewMembers();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @GET
+//    @Path("/crewAssignments")
+//    @RolesAllowed("admin")
+//    public String getAllCrewMembers() {
+//        try {
+//            return AdminDao.I.getAllCrewMembers();
+//        }  catch (SQLException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     @GET
-    @Path("/crewAssignments")
+    @Path("/crewAssignments/newEvent")
     @RolesAllowed("admin")
     public String getProducers() {
         try {

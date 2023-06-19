@@ -147,9 +147,10 @@ public enum AdminDao {
     }
 
     public String getProducers() throws SQLException {
-        String query = "SELECT a.forename, a.surname " +
-                "FROM account a, crew_member" +
-                "WHERE a.id = c.id AND c.role = 'producer'";
+        String query = """
+                SELECT json_agg(json_build_object('forename',a.forename, 'surname', a.surname) ) 
+                FROM account a, crew_member c 
+                WHERE a.id = c.id AND c.role = 'producer'""";
         return getSQLString(query);
 
     }

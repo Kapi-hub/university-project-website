@@ -49,7 +49,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createEventModal">Create new event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">X</button>
             </div>
 
             <div class="modal-body">
@@ -144,16 +144,12 @@
                     <label for="eventProducer" class="eventDurationText"> Event Producer</label>
                     <div id="eventProducer">
                         <button class="crewButton" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                aria-expanded="false" onclick=getProducers()>
                             <span id="selectedCrewMember"> Select crew member </span>
                         </button>
                         <ul class="dropdown-menu" id="dropdown-menu" onclick="">
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry
-                                Smith</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a>
+                            <li><a id="dropdown-item" href="#"></a>
+<!--                                onclick="selectCrewMember()-->
                             </li>
                         </ul>
                     </div>
@@ -189,7 +185,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()">Close</button>
                 <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save
                     event
                 </button>
@@ -203,7 +199,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createMemberModalText">Create new member account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">X</button>
             </div>
             <div class="modal-body">
                 <div class="memberInfo" id="memberInfo">
@@ -290,7 +286,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()"><strong>Close</strong></button>
                 <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
                         data-bs-target="toastMember"><strong>Create new member</strong>
                 </button>
@@ -318,7 +314,7 @@
                         <div class="card-body Crew">
                             Crew-members
                             <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
-                                    data-bs-target="#createMemberModal">
+                                    data-bs-target="#createMemberModal" onclick="setUrl('/newMember')">
                                 New member +
                             </button>
                         </div>
@@ -386,7 +382,7 @@
                     <div class="card-body Booking">
                         Bookings
                         <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                                data-bs-target="#postEventsModal">
+                                data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
                             Event +
                         </button>
                     </div>
@@ -530,7 +526,27 @@
 </script>
 
 
+<script>
+    function setUrl(url) {
+        window.history.pushState("", "", "/admin/crewAssignments" + (url === undefined ? "" : url));
+    }
+
+    window.onload = () => {
+        const urlExtra = window.location.pathname.split("/").pop();
+        console.log(urlExtra);
+
+        if (urlExtra === "newMember") {
+            $("#bookingGroup").collapse("show");
+            $("#createMemberModal").modal("show");
+        } else if (urlExtra === "newEvent") {
+            $("#crewGroup").collapse("show");
+            $("#postEventsModal").modal("show");
+        }
+    };
+</script>
+
+
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-<script src="/static/admin/crewEventsOverview/addCrew&Events.js"></script>
+<script src="/static/admin/crewEventsOverview/crew&Events.js"></script>
 </body>
 </html>
