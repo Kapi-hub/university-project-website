@@ -13,9 +13,22 @@ import java.util.List;
 @Path("/admin")
 public class AdminResource {
 
+    @GET
+    @Path("/user")
+    @RolesAllowed("admin")
+    public String getUser(@CookieParam("accountId") String accountIdString){
+        int accountId = Integer.parseInt(accountIdString);
+        try {
+            return AdminDao.I.getUser(accountId);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
-    @Path("newAnnouncement")
+    @Path("/newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
@@ -79,7 +92,7 @@ public class AdminResource {
     @RolesAllowed("admin")
     public String showEventsWithoutCrew() {
         try{
-            AdminDao.I.getNotFullEvents();
+            return AdminDao.I.getNotFullEvents();
         }catch (SQLException e){
             System.err.println(e.getMessage());
         }
@@ -110,4 +123,6 @@ public class AdminResource {
         }
         return null;
     }
+
+
 }

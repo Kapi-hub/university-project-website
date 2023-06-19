@@ -72,7 +72,6 @@ function getAnnouncements() {
     sendHttpRequest('GET', "/api/admin/announcements").then(responseData => {
         console.log(responseData);
         responseData.forEach(announcement => announcements.push(announcement));
-        let o = 0;
         const announcementsList = document.querySelector('.announcementsList');
         announcementsList.innerHTML= '';
         announcements.forEach(announcement =>{
@@ -113,7 +112,6 @@ function getLatestEvents() {
     sendHttpRequest('Get', "/api/admin/events").then(responseData => {
         console.log(responseData);
         responseData.forEach(event => events.push(event));
-        let o = 0;
         var parent = document.getElementById("collapseThree");
         events.forEach(event =>{
         const titleElement = document.createElement('div');
@@ -128,19 +126,37 @@ function getLatestEvents() {
     })
 }
 
-function getCrewNeeded(){
-    let events = []
-    sendHttpRequest("Get","/api/admin/crewReq").then(responseData => {
-        responseData.events.forEach(event => {
-            events.push(event);
-        });
-        const parent = document.getElementsByClassName('eventsList-item');
-        for(let o = 0; o<events.length && o<4;o++ ){
-            parent[o].button.textContent = events[o].name;
-            span = parent[o].querySelector('accordion-body span');
-            span.textContent = events[o].id.toString();
-        }
-    }
-    )
+function getCrewNeeded() {
+    $.ajax({
+        url: "/api/admin/crewReq",
+        method: "GET"
+    }).done(function (responseData) {
+        let events = JSON.parse(responseData);
+        console.log(responseData);
+        console.log(typeof responseData);
+        var parent = document.getElementById("collapseOne");
+        events.forEach(event =>{
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('accordion-body');
+            titleElement.innerHTML = `<button class="latestEvents" >${escapeHtml(event.event_title)}</button>`
+
+            parent.appendChild(titleElement);
+        })
+    }).fail(function (err) {
+        console.log(err);
+    })
+}
+
+function getUser(){
+    $.ajax({
+        url: "/api/admin/User",
+        method: "GET"
+    }).done(function (responseData){
+        var welcome = document.getElementById("welcome")
+        welcome.textContent = responseData;
+    }).fail(function (err) {
+        console.log(err);
+    })
+
 }
 

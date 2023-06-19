@@ -120,8 +120,8 @@ public enum AdminDao {
         String insertQuery =
                 """
                 SELECT json_agg(DISTINCT jsonb_build_object(
-                    'announcement_id', e.id,
-                    'announcement_title', e.name
+                    'event_id', e.id,
+                    'event_title', e.name
                 )) AS result
                 FROM event e
                 JOIN event_requirement er ON e.id = er.event_id
@@ -133,7 +133,6 @@ public enum AdminDao {
                 WHERE (ee.enrollments < er.crew_size OR ee.enrollments IS NULL)
                   AND e.id IS NOT NULL
                   AND e.name IS NOT NULL;
-                
                 """;
         return getSQLString(insertQuery);
     }
@@ -179,6 +178,26 @@ public enum AdminDao {
 
     private String getSQLString(String insertQuery) throws SQLException {
         PreparedStatement st = connection.prepareStatement(insertQuery);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            String result = rs.getString(1);
+            rs.close();
+            st.close();
+            return result;
+        }
+        rs.close();
+        st.close();
+        return null;
+    }
+
+    public String getUser(int accountId) throws SQLException {
+        String insertQuery = """
+                Select forename 
+                From account
+                Where id = ?;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery) ;
+        st.setInt(1,accountId);
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
             String result = rs.getString(1);
