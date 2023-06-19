@@ -43,21 +43,23 @@ public enum MailService {
         MAIL.sendMessage("bfc.jonkhout@gmail.com", "TEST SUBJECT", "TEST BODY");
     }
 
-    public void printAuthURL(String clientId, String clientSecret) {
+    public String printAuthURL(String clientId, String clientSecret) {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         } catch (GeneralSecurityException | IOException e) {
             System.err.println("Could not create HTTP_TRANSPORT" + e.getMessage());
-            return;
+            return null;
         }
         flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientId, clientSecret, Collections.singleton(GmailScopes.GMAIL_SEND))
                 .setAccessType("offline")
                 .build();
         // Obtain the authorization URL
+        String authURL = flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build();
         System.out.println("\n\nPlease open the following URL to receive your cool token:");
-        System.out.println(flow.newAuthorizationUrl().setRedirectUri(REDIRECT_URI).build());
+        System.out.println(authURL);
         System.out.println("\n");
+        return authURL;
     }
 
     public void setToken(String token) {
