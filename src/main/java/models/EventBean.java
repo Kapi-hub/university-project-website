@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.sql.Timestamp;
 
-@XmlRootElement
+@XmlRootElement(name = "event")
 public class EventBean {
     private int id;
     private int client_id;
