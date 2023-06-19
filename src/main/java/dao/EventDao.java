@@ -96,7 +96,7 @@ public enum EventDao {
         Timestamp nextMonthTimestamp = new Timestamp(timestamp.getTime() + timeToNextMonth);
         String nextMonthDateStr = sdf.format(nextMonthTimestamp);
 
-        String query = "SELECT * FROM event WHERE DATE(start) >= TO_DATE(?, 'YYYY-MM-DD') AND DATE(start) < TO_DATE(?, 'YYYY-MM-DD') AND status = ('done'::status_enum OR 'review'::status_enum) ORDER BY start";
+        String query = "SELECT * FROM event WHERE DATE(start) >= TO_DATE(?, 'YYYY-MM-DD') AND DATE(start) < TO_DATE(?, 'YYYY-MM-DD') AND (status = 'done'::status OR status = 'review'::status) ORDER BY start";
         PreparedStatement st = connection.prepareStatement(query);
         st.setString(1, dateStr);
         st.setString(2, nextMonthDateStr);
