@@ -368,7 +368,7 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-light) !important;
     font-size: 20px;
     outline: none;
-    padding: 8px;
+    padding: 10px;
     text-decoration: none;
     transition: all 0.5s;
     cursor: pointer;
@@ -377,7 +377,6 @@ doesn't get in the way of building / maintaining the website*/
 .left_side_bar ul li.active a{
     background: var(--bs-light);
     color: var(--bs-dark) !important;
-    padding-bottom: 15px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
