@@ -12,6 +12,7 @@
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
     <script src="/static/admin/dashboard/Dashboard.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="/static/general.css" rel="stylesheet">
     <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/dashboard/style.css" rel="stylesheet">
@@ -36,7 +37,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()">Save changes
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick=saveAnnouncement()>Save changes
                 </button>
             </div>
         </div>

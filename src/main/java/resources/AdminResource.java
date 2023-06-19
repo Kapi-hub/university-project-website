@@ -15,7 +15,7 @@ public class AdminResource {
 
     /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
-    @Path("/dashboard/new")
+    @Path("newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
@@ -23,8 +23,8 @@ public class AdminResource {
             int accountId = Integer.parseInt(accountIdString);
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
         }
     }
 
@@ -77,14 +77,13 @@ public class AdminResource {
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
-    public List<EventBean> showEventsWithoutCrew() {
-        List<EventBean> events = null;
+    public String showEventsWithoutCrew() {
         try{
-            events = AdminDao.I.getNotFullEvents();
+            AdminDao.I.getNotFullEvents();
         }catch (SQLException e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-        return events;
+        return null;
     }
 
     /* METHODS RELATED TO CREW-MEMBERS */
@@ -96,7 +95,7 @@ public class AdminResource {
         try {
             AdminDao.I.createNewMember(crewMember);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
@@ -107,8 +106,8 @@ public class AdminResource {
         try {
             return AdminDao.I.getAllCrewMembers();
         }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
+            System.err.println(e.getMessage());
         }
+        return null;
     }
 }
