@@ -135,6 +135,19 @@ doesn't get in the way of building / maintaining the website*/
 .content-container .tab_content.tab_current .carousel.slide .carousel-control-next .carousel.icon {
     font-size: 30px;
 }
+
+.content-container .tab_content.tab_past {
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+.content-container .tab_content.tab_past::-webkit-scrollbar {
+    display: none;
+}
+
+/*.content-container .tab_content.tab_past {*/
+/*    overflow: scroll;*/
+/*}*/
 /* ************************** */
 /* ** SIDEBAR OF DASHBOARD ** */
 /* ************************** */
@@ -219,10 +232,10 @@ doesn't get in the way of building / maintaining the website*/
     border-radius: 20px;
     background-color: var(--bs-light);
     overflow: scroll;
-
+    scrollbar-width: none; /* for firefox */
 }
 
-.container .calendar::-webkit-scrollbar {
+.container .calendar::-webkit-scrollbar { /* for chrome */
     display: none;
 }
 
@@ -256,8 +269,11 @@ doesn't get in the way of building / maintaining the website*/
     justify-content: center;
 }
 
-.calendar .header .btns .btn.prev .icon,
-.calendar .header .btns .btn.next .icon {
+.calendar .header .btns .btn.prev .icon{
+    transform: rotate(180deg);
+}
+
+.calendar .header .btns .icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -464,6 +480,7 @@ body {
 
 .accordion-item, .accordion-button {
     border-radius: 20px !important;
+    border: 0 !important;
 }
 
 .accordion-button {
