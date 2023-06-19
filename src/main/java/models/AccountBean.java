@@ -10,6 +10,7 @@ public class AccountBean {
     private String username;
     private String emailAddress;
     private String password;
+    private String salt;
     private AccountType accountType;
 
     public AccountBean(String forename, String surname, String username, String emailAddress, AccountType accountType) {
@@ -19,8 +20,6 @@ public class AccountBean {
         this.emailAddress = emailAddress;
         this.accountType = accountType;
     }
-
-
     public AccountBean(String username, String password) {
         this.username = username;
         this.password = password;
@@ -28,6 +27,7 @@ public class AccountBean {
 
     public AccountBean() {
     }
+
 
     public AccountBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
         this.accountId = accountId;
@@ -37,6 +37,14 @@ public class AccountBean {
         this.emailAddress = emailAddress;
         this.password = password;
         this.accountType = accountType;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public int getId() {

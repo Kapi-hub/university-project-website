@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import misc.InvalidSessionException;
+import misc.Security;
 import misc.SessionInvalidReason;
 import misc.SessionVerifier;
 import models.AccountBean;
@@ -32,9 +33,6 @@ public class LoginResource {
             // Unused, unless user accounts are implemented later
             AccountType.CLIENT, "submit"
     );
-    // All possible characters for the sessionId generator
-    private static final String possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
-            "0123456789!@#$%^&*()[]{}_+:.<>?|~-";
 
     @Path("/submit-form")
     @POST
@@ -54,7 +52,7 @@ public class LoginResource {
                     .build();
         }
 
-        String sessionId = sessionIdGenerator();
+        String sessionId = Security.generateSessionId();
 
         try {
             SessionDao.instance.putSessionId(account.getId(), sessionId);
@@ -114,15 +112,5 @@ public class LoginResource {
         cookieBuilder.path("/");
         cookieBuilder.sameSite(NewCookie.SameSite.STRICT);
         return cookieBuilder.build();
-    }
-
-    public String sessionIdGenerator() {
-        Random random = new Random();
-        StringBuilder sessionId = new StringBuilder(20);
-        for (int i = 0; i < 20; i++) {
-            int index = random.nextInt(possibleChars.length());
-            sessionId.append(possibleChars.charAt(index));
-        }
-        return sessionId.toString();
     }
 }

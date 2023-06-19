@@ -5,14 +5,18 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import misc.ConnectionFactory;
+import misc.Security;
 import models.*;
 
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static misc.Security.encodeSalt;
 
 
 public enum AdminDao {
@@ -24,7 +28,7 @@ public enum AdminDao {
     }
 
     public Response createNewMember(CrewMemberBean crewMember) {
-        String insertCrewQuery =  "INSERT INTO crewMember(id, role, team) VALUES (?,?::Role,?::Team)" ;
+        String insertCrewQuery =  "INSERT INTO crewMember(id, role, team) VALUES (?,?::Role_Enum,?::Team_Enum)" ;
         try {
             PreparedStatement st = connection.prepareStatement(insertCrewQuery);
             st.setInt(1, crewMember.getId());
@@ -35,7 +39,7 @@ public enum AdminDao {
             System.out.println(e);
         }
 
-        String insertAccountQuery =  "INSERT INTO account(id, forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ? ?, ?::AccountType)" ;
+        String insertAccountQuery =  "INSERT INTO account(id, forename, surname, username, email_address, password, salt, type) VALUES (?,?, ?, ?, ? ?, ?, ?::AccountType)" ;
         try {
             PreparedStatement st = connection.prepareStatement(insertAccountQuery);
             st.setInt(1, crewMember.getId());
@@ -43,11 +47,17 @@ public enum AdminDao {
             st.setString(3, crewMember.getSurname()) ;
             st.setString(4, crewMember.getUsername()) ;
             st.setString(5, crewMember.getEmailAddress());
-            st.setString(6, crewMember.getPassword());
-            st.setString(7, AccountType.CREW_MEMBER.toString());
+
+            String password = crewMember.getPassword();
+            String[] encoded = Security.encodeSalt(password);
+            st.setString(6,encoded[0]);
+            st.setString(7,encoded[1]);
+            st.setString(8, AccountType.CREW_MEMBER.toString());
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
         }
 
         //TODO handle responses
