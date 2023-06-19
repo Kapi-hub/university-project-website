@@ -96,7 +96,7 @@ public enum EventDao {
         Timestamp nextMonthTimestamp = new Timestamp(timestamp.getTime() + timeToNextMonth);
         String nextMonthDateStr = sdf.format(nextMonthTimestamp);
 
-        String query = "SELECT * FROM event WHERE DATE(start) >= TO_DATE(?, 'YYYY-MM-DD') AND DATE(start) < TO_DATE(?, 'YYYY-MM-DD')";
+        String query = "SELECT * FROM event WHERE DATE(start) >= TO_DATE(?, 'YYYY-MM-DD') AND DATE(start) < TO_DATE(?, 'YYYY-MM-DD') AND status = ('done'::status_enum OR 'review'::status_enum) ORDER BY start";
         PreparedStatement st = connection.prepareStatement(query);
         st.setString(1, dateStr);
         st.setString(2, nextMonthDateStr);
@@ -133,6 +133,21 @@ public enum EventDao {
             i++;
         }
         return events;
+    }
+
+    public EventStatus getEventStatus(int eventId) throws SQLException {
+        String query = "SELECT status FROM event WHERE id = ?";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, eventId);
+
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            return EventStatus.toEnum(rs.getString(1));
+        }
+
+        throw new SQLException("Event not found");
     }
 
     public Object[] getEnrolled(int eventId) {
