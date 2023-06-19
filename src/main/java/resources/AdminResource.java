@@ -100,15 +100,27 @@ public class AdminResource {
         }
     }
 
-//    @GET
-//    @Path("/crewAssignments")
-//    @RolesAllowed("admin")
-//    public List<CrewMemberBean> getAllCrewMembers() {
-//        try {
-//            return AdminDao.I.getAllCrewMembers();
-//        }  catch (SQLException e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
+    @GET
+    @Path("/crewAssignments")
+    @RolesAllowed("admin")
+    public String getAllCrewMembers() {
+        try {
+            return AdminDao.I.getAllCrewMembers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GET
+    @Path("/crewAssignments")
+    @RolesAllowed("admin")
+    public String getProducers() {
+        try {
+            return AdminDao.I.getProducers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -138,20 +138,20 @@ public enum AdminDao {
 
 
 
-    public List<CrewMemberBean> getAllCrewMembers() throws SQLException {
-        String query = "SELECT a.id, a.forename, a.surname FROM shotmaniacs1.account a WHERE a.type='crew_member'";
-        List<CrewMemberBean> result = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-//                CrewMemberBean crewMember = new CrewMemberBean(rs.getInt("id"), rs.getString("forename"), rs.getString("surname"));
-//                result.add(crewMember); TODO fix this
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+    public String getAllCrewMembers() throws SQLException {
+        String query = "SELECT json_agg(jsonb_build_object('member_id', a.id, 'member_forename', " +
+                "a.forename, 'member_surname', a.surname) FROM account a " +
+                "WHERE a.type='crew_member') AS crews";
+
+        return getSQLString(query);
+    }
+
+    public String getProducers() throws SQLException {
+        String query = "SELECT a.forename, a.surname " +
+                "FROM account a, crew_member" +
+                "WHERE a.id = c.id AND c.role = 'producer'";
+        return getSQLString(query);
+
     }
 
     public void addRequirement(List<RequiredCrewBean> required) throws SQLException {

@@ -123,8 +123,6 @@ function addEvent() {
 }
 
 function addCrewMember() {
-
-    //TODO: handle the checkbox - extract the selection
     let memberQuery = document.querySelector('#memberInfo');
     const memberFirstName = memberQuery.children[1].value;
     const memberLastName = memberQuery.children[4].value;
@@ -209,4 +207,8 @@ function addCrewMember() {
         }
 
     });
+}
+
+function getProducers() {
+
 }
