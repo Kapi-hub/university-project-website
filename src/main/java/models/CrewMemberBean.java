@@ -36,6 +36,12 @@ public class CrewMemberBean extends AccountBean {
         this.team = team;
     }
 
+    public CrewMemberBean(String forename, String surname, String username, String email, RoleType role, Team team) {
+        super(forename, surname, username, email, AccountType.CREW_MEMBER);
+        this.role = role;
+        this.team = team;
+    }
+
     public int getId() {
         return id;
     }
