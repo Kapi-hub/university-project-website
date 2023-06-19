@@ -116,7 +116,8 @@ public class EventResource {
         EventBean[] events;
         try {
             events = EventDao.instance.getFromMonth(Timestamp.valueOf(QueryDate + "-01 00:00:00"));
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println("Timestamp: " + QueryDate + "-01 00:00:00");
             System.err.println(e.getMessage());
             return Response.serverError()
                     .build();
@@ -209,7 +210,7 @@ public class EventResource {
                 return false;
             }
             EventStatus status = EventDao.instance.getEventStatus(eventId);
-            if (status != EventStatus.REVIEW) {
+            if (status != EventStatus.REVIEW || EventDao.instance.isEventInPast(eventId)) {
                 return false;
             }
             RoleType role = CrewMemberDao.I.getRole(crewId);

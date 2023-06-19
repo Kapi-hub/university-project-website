@@ -238,4 +238,13 @@ public enum EventDao {
             return false;
         }
     }
+
+    public boolean isEventInPast(int eventId) throws SQLException {
+        String query = "SELECT 1 FROM event WHERE id = ? AND start < NOW()";
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, eventId);
+
+        ResultSet rs = st.executeQuery();
+        return rs.next();
+    }
 }

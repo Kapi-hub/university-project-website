@@ -78,38 +78,48 @@ function renderCalendar() {
 }
 
 function setCurrentMonth(index) {
+    li_items[currentMonth].classList.remove("active");
+    while (index < 0) {
+        currentYear--;
+        index = 12 + index;
+    }
+    while (index > 11) {
+        currentYear++;
+        index = index - 12;
+    }
     currentMonth = index;
+    li_items[currentMonth].classList.add("active");
+    activeDate.setFullYear(currentYear);
+    activeDate.setMonth(currentMonth);
+    activeDate.setDate(1);
     renderCalendar();
+    let days = document.getElementsByClassName("day");
+    for (i = 0; i < days.length; i++) {
+        if (days[i].textContent.includes("01")) {
+            days[i].classList.add("current");
+        } else {
+            days[i].classList.remove("current");
+        }
+    }
+    reloadSidePanelHeader();
+    reloadEventsContainer();
+    updateEvents(activeDate);
 }
 
 nextBtn.addEventListener("click", () => {
-    li_items[currentMonth].classList.remove("active");
-    currentMonth++;
-    if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    li_items[currentMonth].classList.add("active");
-    renderCalendar();
+    setCurrentMonth(currentMonth + 1);
 })
 nextYrBtn.addEventListener("click", () => {
     currentYear++;
-    renderCalendar();
+    setCurrentMonth(currentMonth);
 })
 prevBtn.addEventListener("click", () => {
-    li_items[currentMonth].classList.remove("active");
-    currentMonth--;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    li_items[currentMonth].classList.add("active");
-    renderCalendar();
+    setCurrentMonth(currentMonth - 1);
 })
 
 prevYrBtn.addEventListener("click", () => {
     currentYear--;
-    renderCalendar();
+    setCurrentMonth(currentMonth);
 })
 
 renderCalendar();
@@ -151,7 +161,7 @@ const getEventsForMonth = (date) => {
 const formatCrewString = (crew) => {
     let crewString = "";
     crew.forEach(([crewType, crewAmount]) => {
-        crewString += `${crewType}: ${crewAmount}, `;
+        crewString += `${javaEnumToString(crewType)}: ${crewAmount}, `;
     });
     return crewString || "All required crew is enrolled.";
 }
@@ -171,7 +181,7 @@ const formatEnrolled = (enrolled) => {
         let dottedUnderline = document.createElement("u");
         dottedUnderline.style.borderBottom = "1px dotted #000";
         dottedUnderline.style.textDecoration = "none";
-        dottedUnderline.textContent = `${role}`;
+        dottedUnderline.textContent = `${javaEnumToString(role)}`;
         enrolledSpan.appendChild(dottedUnderline);
         enrolledSpan.appendChild(document.createTextNode(`: ${people.length} `))
         enrolledSpan.appendChild(detailsSpan);
@@ -226,8 +236,10 @@ const reloadEventsContainer = () => {
     }
 
     const eventList = eventListMonth.get(activeDate.getDate());
-
-    const wasCollapsed = !document.querySelector(".accordion-button:not(.collapsed)");
+    let wasUnCollapsedIds = [];
+    document.querySelectorAll(".accordion-button:not(.collapsed)").forEach(button => {
+        wasUnCollapsedIds.push(button.getAttribute("aria-controls"));
+    })
 
     eventContainer.innerHTML = "";
     eventList.forEach(event => {
@@ -251,7 +263,7 @@ const reloadEventsContainer = () => {
 
         const parsedDate = new Date(date);
         const startTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(parsedDate.getMinutes()).padStart(2, '0')}`;
-        const safeNameId = name.replace(/\s/g, "");
+        const safeNameId = id.toString();
         const undefinedString = `Not defined for this event.`;
 
         let crewString = formatCrewString(crew); // A string of the crew required for the event, already sanitised.
@@ -271,7 +283,7 @@ const reloadEventsContainer = () => {
         buttonDiv.setAttribute("data-bs-target", `#${safeNameId}`);
         buttonDiv.setAttribute("aria-expanded", "true");
         buttonDiv.setAttribute("aria-controls", `${safeNameId}`);
-        if (!wasCollapsed) {
+        if (wasUnCollapsedIds.includes(safeNameId)) {
             buttonDiv.classList.remove("collapsed");
         }
         let boldButtonText = document.createElement("b");
@@ -293,7 +305,7 @@ const reloadEventsContainer = () => {
         // Create the collapse div.
         let collapseDiv = document.createElement("div");
         collapseDiv.classList.add("accordion-collapse", "collapse");
-        if (!wasCollapsed) {
+        if (wasUnCollapsedIds.includes(safeNameId)) {
             collapseDiv.classList.add("show");
         }
         collapseDiv.setAttribute("id", `${safeNameId}`);
@@ -360,7 +372,7 @@ const reloadEventsContainer = () => {
             bodyDiv.innerHTML +=
                 `
                 <br>
-                <button class="btn btn-primary unavailable" style="background-color: grey" disabled">
+                <button class="btn btn-primary inactive-btn" style="background-color: grey" disabled">
                 You cannot enroll for this event
                 </button>
                 `;
@@ -390,35 +402,25 @@ const reloadEventsContainer = () => {
     });
 }
 
+function reloadSidePanelHeader() {
+    const dayIndex = (activeDate.getDay() || 7) - 1;
+    eventDayHandler.textContent = `${days[dayIndex]}`;
+    eventDateHandler.textContent = `${activeDate.getDate().toString().padStart(2, "0")} ${months[currentMonth]}`;
+}
+
 function updateTaskBar() {
     if (document.querySelector(".day.current").classList.contains("prev")) {
-        li_items[currentMonth].classList.remove("active");
-        currentMonth--;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
-        li_items[currentMonth].classList.add("active");
-        renderCalendar();
+        setCurrentMonth(currentMonth - 1);
         return;
     } else if (document.querySelector(".day.current").classList.contains("next")) {
-        li_items[currentMonth].classList.remove("active");
-        currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        li_items[currentMonth].classList.add("active");
-        renderCalendar();
+        setCurrentMonth(currentMonth + 1);
         return;
     }
     activeDate.setDate(
         parseInt(document.querySelector(".day.current").textContent));
     activeDate.setMonth(currentMonth);
-    const dayIndex = (activeDate.getDay() || 7) - 1;
-    eventDayHandler.textContent = `${days[dayIndex]}`;
-    eventDateHandler.textContent = `${activeDate.getDate().toString().padStart(2, "0")} ${months[currentMonth]}`;
 
+    reloadSidePanelHeader();
     reloadEventsContainer();
     updateEvents(activeDate);
 }
