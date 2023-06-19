@@ -40,8 +40,7 @@ public class ConnectionFactory {
         try {
             Class.forName("org.postgresql.Driver");
             if (password == null) {
-                readPassword();
-                return;
+                password = readPassword();
             }
             connection = DriverManager.getConnection(URL, username, password);
             connected = true;
@@ -55,13 +54,8 @@ public class ConnectionFactory {
         }
     }
 
-    private static void readPassword() {
-        password = System.getenv("DB_PASSWORD");
-        if (password == null) {
-            System.out.println("No password environment variable found, please set via Ultra-Admin dashboard.");
-            return;
-        }
-        setup();
+    private static String readPassword() {
+        return System.getenv("DB_PASSWORD");
     }
 
     public static void reconnect() {
