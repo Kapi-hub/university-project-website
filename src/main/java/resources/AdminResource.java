@@ -1,21 +1,33 @@
 package resources;
 
 import dao.AdminDao;
-import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import models.*;
+import models.AnnouncementBean;
+import models.CrewMemberBean;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Path("/admin")
 public class AdminResource {
 
+    @GET
+    @Path("/user")
+    @RolesAllowed("admin")
+    public String getUser(@CookieParam("accountId") String accountIdString){
+        int accountId = Integer.parseInt(accountIdString);
+        try {
+            return AdminDao.I.getUser(accountId);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
-    @Path("/dashboard/new")
+    @Path("/newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
@@ -23,8 +35,8 @@ public class AdminResource {
             int accountId = Integer.parseInt(accountIdString);
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
         }
     }
 
@@ -77,29 +89,28 @@ public class AdminResource {
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
-    public List<EventBean> showEventsWithoutCrew() {
-        List<EventBean> events = null;
+    public String showEventsWithoutCrew() {
         try{
-            events = AdminDao.I.getNotFullEvents();
+            return AdminDao.I.getNotFullEvents();
         }catch (SQLException e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-        return events;
+        return null;
     }
 
     /* METHODS RELATED TO CREW-MEMBERS */
-//    @POST
-//    @Path("/crewAssignments")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @RolesAllowed("admin")
-//    public void handleCreateNewMember(CrewMemberBean crewMember) {
-//        try {
-//            AdminDao.I.createNewMember(crewMember);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
+    @POST
+    @Path("/crewAssignments")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public void handleCreateNewMember(CrewMemberBean crewMember) {
+        try {
+            AdminDao.I.createNewMember(crewMember);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 //    @GET
 //    @Path("/crewAssignments")
 //    @RolesAllowed("admin")
@@ -111,16 +122,16 @@ public class AdminResource {
 //            return null;
 //        }
 //    }
-//
-//    @GET
-//    @Path("/crewAssignments")
-//    @RolesAllowed("admin")
-//    public String getProducers() {
-//        try {
-//            return AdminDao.I.getProducers();
-//        }  catch (SQLException e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
+
+    @GET
+    @Path("/crewAssignments")
+    @RolesAllowed("admin")
+    public String getProducers() {
+        try {
+            return AdminDao.I.getProducers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

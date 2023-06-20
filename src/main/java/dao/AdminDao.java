@@ -4,7 +4,6 @@ import misc.ConnectionFactory;
 import models.*;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -163,7 +162,6 @@ public enum AdminDao {
             st.setString(3, requiredCrewBean.getRole().toString());
             st.executeUpdate();
         }
-
     }
     public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
@@ -174,31 +172,25 @@ public enum AdminDao {
         st.executeUpdate();
     }
 
-    public ArrayList<EventBean> getNotFullEvents() throws SQLException {
-        String insertQuery = """
-                SELECT e.id, e.name 
+    public String getNotFullEvents() throws SQLException {
+        String insertQuery =
+                """
+                SELECT json_agg(DISTINCT jsonb_build_object(
+                    'event_id', e.id,
+                    'event_title', e.name
+                )) AS result
                 FROM event e
-                JOIN event_requirement er ON e.id = er.event_id 
-                LEFT JOIN ( 
+                JOIN event_requirement er ON e.id = er.event_id
+                LEFT JOIN (
                     SELECT event_id, COUNT(*) AS enrollments
                     FROM event_enrollment
                     GROUP BY event_id
                 ) ee ON e.id = ee.event_id
-                WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; 
+                WHERE (ee.enrollments < er.crew_size OR ee.enrollments IS NULL)
+                  AND e.id IS NOT NULL
+                  AND e.name IS NOT NULL;
                 """;
-
-        ArrayList<EventBean> events = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                EventBean eb = new EventBean(rs.getInt("id"), rs.getString("name"));
-                events.add(eb);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return events;
+        return getSQLString(insertQuery);
     }
 
     public String getAllAnnouncements() throws SQLException {
@@ -249,7 +241,26 @@ public enum AdminDao {
             st.close();
             return result;
         }
+        rs.close();
+        st.close();
+        return null;
+    }
 
+    public String getUser(int accountId) throws SQLException {
+        String insertQuery = """
+                Select forename 
+                From account
+                Where id = ?;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery) ;
+        st.setInt(1,accountId);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            String result = rs.getString(1);
+            rs.close();
+            st.close();
+            return result;
+        }
         rs.close();
         st.close();
         return null;
