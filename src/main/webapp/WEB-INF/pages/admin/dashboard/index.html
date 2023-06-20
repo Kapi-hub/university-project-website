@@ -44,9 +44,10 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Post announcement</h5>
                 <div class="btns">
-                    <ion-icon name="close-outline" data-bs-dismiss="modal" id="cancelBtn"></ion-icon>
-                    <ion-icon name="add-outline" data-bs-dismiss="modal"
-                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBtn"></ion-icon>
+                    <ion-icon name="close-outline"
+                              data-bs-dismiss="modal" id="cancelBttn" style="cursor: pointer"></ion-icon>
+                    <ion-icon name="add-outline" data-bs-dismiss="modal" style="cursor: pointer"
+                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBttn"></ion-icon>
                 </div>
             </div>
             <div class="modal-body">
@@ -66,12 +67,15 @@
     </div>
 </div>
 
-
-<!--Post Events Manually Modal-->
-
-<div class="toast" id="successful" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-body">
-        Announcement posted successfully!
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Congratulations</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Announcement posted successfully!
+        </div>
     </div>
 </div>
 
@@ -207,14 +211,23 @@
     </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.7.0.slim.js" integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script>
-    const savePostButton = document.querySelector('.saveBttn');
-    const toast = new bootstrap.Toast(document.querySelector('#successful'));
+    const toastTrigger = document.getElementById('saveBttn');
+    const toastLive = document.getElementById('liveToast');
 
-    savePostButton.addEventListener('click', function () {
-        toast.show();
-    });
+    if (toastTrigger) {
+        toastTrigger.addEventListener('click', () => {
+            const toast = new bootstrap.Toast(toastLive)
+            toast.show()
+        })
+    }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         getAnnouncements();
@@ -222,11 +235,5 @@
     });
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
-<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

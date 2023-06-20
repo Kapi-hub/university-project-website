@@ -1,7 +1,6 @@
 function saveAnnouncement() {
     const title = document.getElementById('inputTitle').value;
     const descr = document.getElementById('inputDetails').value;
-    alert(`${title}\n${descr}`);
     if (!title) {
         alert("Title can't be null");
         return;
