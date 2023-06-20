@@ -11,6 +11,7 @@
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
     <link href="/static/crew/style.css" rel="stylesheet" type="text/css">
     <script src="/static/logout.js"></script>
+    <script src="/static/crew/utils.js"></script>
 </head>
 <body>
 
@@ -71,13 +72,6 @@
     <div class="sidebar-container">
         <ul class="sidebar-list">
             <li class="slider"></li>
-            <li class="sidebar-list-item" data-list="tab_anno">
-                <a href="#">
-                        <span class="icon">
-                            <ion-icon name="megaphone-outline"></ion-icon>
-                        </span>
-                </a>
-            </li>
             <li class="sidebar-list-item" data-list="tab_current">
                 <a href="#">
                     <span class="icon"><ion-icon name="play-outline"></ion-icon></span>
@@ -88,6 +82,13 @@
                     <span class="icon"><ion-icon name="checkmark-done-outline"></ion-icon></span>
                 </a>
             </li>
+            <li class="sidebar-list-item" data-list="tab_anno">
+                <a href="#">
+                        <span class="icon">
+                            <ion-icon name="megaphone-outline"></ion-icon>
+                        </span>
+                </a>
+            </li>
             <li class="sidebar-list-item" data-list="tab_stats">
                 <a href="#">
                     <span class="icon"><ion-icon name="stats-chart-outline"></ion-icon></span>
@@ -96,33 +97,11 @@
         </ul>
     </div>
     <div class="content-container">
-        <div class="tab_content tab_anno container-fluid">
-            <h3 class="text-white sticky-top">
-                <span id="numberOfAnno">0</span> Announcements</h3>
-        </div>
         <div class="tab_content tab_current container-fluid">
-            <h3> Currently enrolled events (2)</h3>
+            <h3></h3>
             <div id="carouselContainer" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        Name: <br>
-                        Type: <br>
-                        Date: <br>
-                        Location: <br>
-                        Duration: <br>
-                        Client: <br>
-                        Booking Type: <br>
-                        Supervisor: <br>
-                        Crew: <br>
-                        Status: <br>
-                        Description:
-                    </div>
-                    <div class="carousel-item">
-                        <h3> Test 2</h3>
-                    </div>
-                    <div class="carousel-item">
-                        <h3> Test 3</h3>
-                    </div>
+                    <!-- Added by JS -->
                 </div>
                 <a class="carousel-control-prev" href="#carouselContainer" role="button" data-bs-slide="prev">
                     <ion-icon name="chevron-back-outline" class="carousel icon"></ion-icon>
@@ -133,36 +112,9 @@
             </div>
         </div>
         <div class="tab_content tab_past container-fluid">
-            <h3> Past events (2)</h3>
+            <h3></h3>
             <div class="accordion" id="pastEvents">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button aria-controls="collapseOnePast" aria-expanded="false"
-                                class="accordion-button collapsed"
-                                data-bs-target="#collapseOnePast" data-bs-toggle="collapse" type="button">
-                            Past event #1
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" data-bs-parent="#pastEvents" id="collapseOnePast">
-                        <div class="accordion-body">
-                            <div class="halfOne">
-                                Name: <br>
-                                Type: <br>
-                                Date: <br>
-                                Location: <br>
-                                Duration: <br>
-                            </div>
-                            <div class="halfTwo">
-                                Client: <br>
-                                Booking Type: <br>
-                                Product Manager: <br>
-                                Crew: <br>
-                                Status: <br>
-                                Description:
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Added by JS -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button aria-controls="collapseTwoPast" aria-expanded="false"
@@ -178,6 +130,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="tab_content tab_anno container-fluid">
+            <h3 class="text-white sticky-top">
+                <span id="numberOfAnno">0</span> Announcements</h3>
         </div>
         <div class="tab_content tab_stats container-fluid">
             <p>something here so it has some text.

@@ -134,10 +134,6 @@ const eventDayHandler = document.querySelector(".event-day");
 const eventDateHandler = document.querySelector(".event-date");
 const eventContainer = document.getElementById("event-accordion");
 
-const javaEnumToString = (javaEnum) => javaEnum
-    ? javaEnum.split('_').map(word => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`).join(' ')
-    : "Not defined.";
-
 const getEventsForMonth = (date) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
@@ -156,38 +152,6 @@ const getEventsForMonth = (date) => {
             }
             return response.json();
         });
-}
-
-const formatCrewString = (crew) => {
-    let crewString = "";
-    crew.forEach(([crewType, crewAmount]) => {
-        crewString += `${javaEnumToString(crewType)}: ${crewAmount}, `;
-    });
-    return crewString || "All required crew is enrolled.";
-}
-
-const formatEnrolled = (enrolled) => {
-    let enrolledArray = [];
-    enrolled.forEach(([role, people]) => {
-        const peopleString = people.join(", ");
-        const detailsId = `details-${(name + role).replace(/\s/g, "")}`;
-        let enrolledSpan = document.createElement("span");
-        enrolledSpan.classList.add("hoverable");
-        enrolledSpan.setAttribute("data-details", detailsId);
-        let detailsSpan = document.createElement("span");
-        detailsSpan.classList.add("details");
-        detailsSpan.setAttribute("id", detailsId);
-        detailsSpan.textContent = peopleString;
-        let dottedUnderline = document.createElement("u");
-        dottedUnderline.style.borderBottom = "1px dotted #000";
-        dottedUnderline.style.textDecoration = "none";
-        dottedUnderline.textContent = `${javaEnumToString(role)}`;
-        enrolledSpan.appendChild(dottedUnderline);
-        enrolledSpan.appendChild(document.createTextNode(`: ${people.length} `))
-        enrolledSpan.appendChild(detailsSpan);
-        enrolledArray.push(enrolledSpan);
-    });
-    return enrolledArray.length === 0 ? "No one is enrolled yet." : enrolledArray;
 }
 
 const updateEvents = (date) => {
@@ -209,7 +173,7 @@ const updateEvents = (date) => {
             reloadEventsContainer(date);
         })
         .catch(error => {
-            console.log(error);
+            console.error(error);
         });
 }
 
@@ -243,31 +207,8 @@ const reloadEventsContainer = () => {
 
     eventContainer.innerHTML = "";
     eventList.forEach(event => {
-        const {
-            id,
-            name,
-            type,
-            date,
-            location,
-            duration,
-            client,
-            bookingType,
-            productManager,
-            crew,
-            enrolled,
-            status,
-            description,
-            isEnrolled,
-            canEnrol,
-        } = event;
-
-        const parsedDate = new Date(date);
-        const startTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(parsedDate.getMinutes()).padStart(2, '0')}`;
-        const safeNameId = id.toString();
-        const undefinedString = `Not defined for this event.`;
-
-        let crewString = formatCrewString(crew); // A string of the crew required for the event, already sanitised.
-        let enrolledArray = formatEnrolled(enrolled); // An array of spans, each containing a role and the people enrolled for that role. Already sanitised.
+        const startTime = getFormattedTime(event.date);
+        const safeNameId = event.id.toString();
 
         // Create the main div for the event.
         let mainDiv = document.createElement("div");
@@ -287,15 +228,15 @@ const reloadEventsContainer = () => {
             buttonDiv.classList.remove("collapsed");
         }
         let boldButtonText = document.createElement("b");
-        boldButtonText.textContent = `${name}`;
+        boldButtonText.textContent = `${event.name}`;
         let italicButtonText = document.createElement("i");
         italicButtonText.textContent = `. Starting ${startTime}`;
         let statusBox = document.createElement("span");
         statusBox.style.marginLeft = "5px";
         statusBox.style.padding = "5px";
         statusBox.style.borderRadius = "5px";
-        statusBox.style.backgroundColor = canEnrol ? "#FFC107" : isEnrolled ? "#28A745" : "#DC3545";
-        statusBox.textContent = canEnrol ? "Open" : isEnrolled ? "Enrolled" : "Unavailable";
+        statusBox.style.backgroundColor = event.canEnrol ? "#FFC107" : event.isEnrolled ? "#28A745" : "#DC3545";
+        statusBox.textContent = event.canEnrol ? "Open" : event.isEnrolled ? "Enrolled" : "Unavailable";
         buttonDiv.appendChild(boldButtonText);
         buttonDiv.appendChild(italicButtonText);
         buttonDiv.appendChild(statusBox);
@@ -310,73 +251,8 @@ const reloadEventsContainer = () => {
         }
         collapseDiv.setAttribute("id", `${safeNameId}`);
         collapseDiv.setAttribute("data-bs-parent", "#accordionExample");
-        let bodyDiv = document.createElement("div");
+        let bodyDiv = getHtmlElement(event);
         bodyDiv.classList.add("accordion-body");
-
-        // Create the first half of the body.
-        let halfOneDiv = document.createElement("div");
-        halfOneDiv.classList.add("halfOne");
-
-        let halfOneTags = [
-            ["Name", name],
-            ["Type", javaEnumToString(type)],
-            ["Start time", startTime],
-            ["Location", location],
-            ["Duration", `${duration} hours`],
-        ];
-
-        halfOneTags.forEach(([tagName, tagValue]) => {
-            let tagSpan = document.createElement("span");
-            tagSpan.innerHTML = `<b>${tagName}:</b> ${tagValue}<br>`;
-            halfOneDiv.appendChild(tagSpan);
-        });
-
-        // Create the second half of the body.
-        let halfTwoDiv = document.createElement("div");
-        halfTwoDiv.classList.add("halfTwo");
-
-        let halfTwoTags = [
-            ["Client", client],
-            ["Booking type", javaEnumToString(bookingType)],
-            ["Product manager", productManager || undefinedString],
-            ["Status", javaEnumToString(status)],
-            ["Description", description || undefinedString],
-            ["Open slots", crewString],
-            ["Enrolled crew", enrolledArray],
-        ];
-
-        halfTwoTags.forEach(([tagName, tagValue]) => {
-            let tagSpan = document.createElement("span");
-            if (tagValue instanceof Array) {
-                tagSpan.innerHTML = `<b>${tagName}: </b>`;
-                tagValue.forEach(tag => {
-                    tagSpan.appendChild(tag);
-                });
-                tagSpan.innerHTML += `<br>`;
-            } else {
-                tagSpan.innerHTML = `<b>${tagName}:</b> ${tagValue}<br>`;
-            }
-            halfTwoDiv.appendChild(tagSpan);
-        });
-
-        // Append the two halves to the body.
-        bodyDiv.appendChild(halfOneDiv);
-        bodyDiv.appendChild(halfTwoDiv);
-
-        // Add missing br and enroll or unenroll button / no button if we cannot enroll.
-        if (canEnrol) {
-            bodyDiv.innerHTML += `<br><button class="btn btn-primary" style="background-color: var(--bs-primary)" onclick="enroll(${id})">Enroll</button>`;
-        } else if (isEnrolled) {
-            bodyDiv.innerHTML += `<br><button class="btn btn-primary" style="background-color: red" onclick="unenroll(${id})">Unenroll</button>`;
-        } else {
-            bodyDiv.innerHTML +=
-                `
-                <br>
-                <button class="btn btn-primary inactive-btn" style="background-color: grey" disabled">
-                You cannot enroll for this event
-                </button>
-                `;
-        }
 
         // Append the body to the collapse div.
         collapseDiv.appendChild(bodyDiv);
@@ -387,19 +263,7 @@ const reloadEventsContainer = () => {
         // Append the main div to the event container.
         eventContainer.appendChild(mainDiv);
     });
-    document.querySelectorAll('.hoverable').forEach((item) => {
-        item.addEventListener('mousemove', (e) => {
-            let hoverable = e.target;
-            while (!hoverable.classList.contains('hoverable')) {
-                hoverable = hoverable.parentNode;
-                if (!hoverable) return;
-            }
-            const detailsId = hoverable.getAttribute('data-details');
-            const details = document.getElementById(detailsId);
-            details.style.left = (e.pageX + 10) + 'px';
-            details.style.top = (e.pageY + 10) + 'px';
-        });
-    });
+    addHover();
 }
 
 function reloadSidePanelHeader() {

@@ -88,39 +88,39 @@ public class AdminResource {
     }
 
     /* METHODS RELATED TO CREW-MEMBERS */
-    @POST
-    @Path("/crewAssignments")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed("admin")
-    public void handleCreateNewMember(CrewMemberBean crewMember) {
-        try {
-            AdminDao.I.createNewMember(crewMember);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @GET
-    @Path("/crewAssignments")
-    @RolesAllowed("admin")
-    public String getAllCrewMembers() {
-        try {
-            return AdminDao.I.getAllCrewMembers();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @GET
-    @Path("/crewAssignments")
-    @RolesAllowed("admin")
-    public String getProducers() {
-        try {
-            return AdminDao.I.getProducers();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @POST
+//    @Path("/crewAssignments")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @RolesAllowed("admin")
+//    public void handleCreateNewMember(CrewMemberBean crewMember) {
+//        try {
+//            AdminDao.I.createNewMember(crewMember);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @GET
+//    @Path("/crewAssignments")
+//    @RolesAllowed("admin")
+//    public String getAllCrewMembers() {
+//        try {
+//            return AdminDao.I.getAllCrewMembers();
+//        }  catch (SQLException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//
+//    @GET
+//    @Path("/crewAssignments")
+//    @RolesAllowed("admin")
+//    public String getProducers() {
+//        try {
+//            return AdminDao.I.getProducers();
+//        }  catch (SQLException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 }

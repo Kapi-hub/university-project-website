@@ -208,7 +208,7 @@ public enum EventDao {
     }
 
     public EventBean[] getEnrolledEvents(int accountId) throws SQLException {
-        String query = "SELECT event_id FROM event_enrollment WHERE crew_member_id = ?";
+        String query = "SELECT e.id, e.client_id, e.name, e.description, e.start, e.duration, e.location, e.production_manager_id, e.type, e.booking_type, e.status FROM event e, event_enrollment ee WHERE ee.crew_member_id = ? AND ee.event_id = e.id";
 
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, accountId);
@@ -280,12 +280,10 @@ public enum EventDao {
 
     public int getEventCount(int accountId, AccountType type) {
         String query;
-        // Admin: get all events with to do status
-        // Crew member: get all events they are enrolled in and that have start timestamp between now and midnight
         switch (type) {
             case ADMIN -> query = "SELECT COUNT(*) FROM event WHERE status = 'to do'::status";
             case CREW_MEMBER ->
-                    query = "SELECT COUNT(*) FROM event_enrollment ee, event e WHERE ee.event_id = e.id AND ee.crew_member_id = ? AND e.start BETWEEN NOW() AND NOW()::date + '1 day'::interval";
+                    query = "SELECT COUNT(*) FROM event_enrollment ee, event e WHERE ee.event_id = e.id AND ee.crew_member_id = ? AND e.start::date BETWEEN NOW()::date AND NOW()::date + '1 day'::interval";
             default -> {
                 return -1;
             }

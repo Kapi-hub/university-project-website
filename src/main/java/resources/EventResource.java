@@ -109,7 +109,7 @@ public class EventResource {
     }
 
     @GET
-    @Path("/getFromMonth")
+    @Path("/getFromMonth/")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
     public Response getFromMonth(@QueryParam("month") String QueryDate, @CookieParam("accountId") String accountIdString) {
