@@ -1,14 +1,13 @@
 package resources;
 
 import dao.AdminDao;
-import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import models.*;
+import models.AnnouncementBean;
+import models.CrewMemberBean;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Path("/admin")
 public class AdminResource {
@@ -112,17 +111,17 @@ public class AdminResource {
         }
     }
 
-    @GET
-    @Path("/crewAssignments")
-    @RolesAllowed("admin")
-    public String getAllCrewMembers() {
-        try {
-            return AdminDao.I.getAllCrewMembers();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @GET
+//    @Path("/crewAssignments")
+//    @RolesAllowed("admin")
+//    public String getAllCrewMembers() {
+//        try {
+//            return AdminDao.I.getAllCrewMembers();
+//        }  catch (SQLException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     @GET
     @Path("/crewAssignments")
