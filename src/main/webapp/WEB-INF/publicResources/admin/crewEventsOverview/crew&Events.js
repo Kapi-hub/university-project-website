@@ -235,6 +235,7 @@ function getProducers() {
     // <li><a className="dropdown-item" href="#" onClick="selectCrewMember('Jack John')">Jack John</a>
     // </li>
 
+    let id = 0;
     //TODO fix bug that appends the list for each click
     sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
         console.log(responseData);
@@ -246,14 +247,15 @@ function getProducers() {
             producerItem.classList.add('dropdown-item');
             producerItem.onclick = function() {
                 selectCrewMember(producer.forename + ' ' + producer.surname);
+                id = producer.id;
             };
-            // producerItem.classList.add('onClick=selectCrewMember(')
             producerItem.innerHTML = `<span class="producerName" id="producerName">${producer.forename} ${producer.surname}</span>`;
 
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
         })
     });
+    return id;
 }
 
 function sendHttpRequest(method, url, data) {
