@@ -2,11 +2,15 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement()
+@XmlRootElement(name="crew_member")
 public class CrewMemberBean extends AccountBean {
     private int id;
     private RoleType role;
     private Team team;
+
+    public CrewMemberBean() {
+
+    }
 
     public CrewMemberBean(String forename, String surname, String username, String emailAddress, AccountType accountType, int id, RoleType role, Team team) {
         super(forename, surname, username, emailAddress, accountType);
@@ -32,6 +36,12 @@ public class CrewMemberBean extends AccountBean {
     public CrewMemberBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType, int id, RoleType role, Team team) {
         super(accountId, forename, surname, username, emailAddress, password, accountType);
         this.id = id;
+        this.role = role;
+        this.team = team;
+    }
+
+    public CrewMemberBean(String forename, String surname, String username, String email, RoleType role, Team team) {
+        super(forename, surname, username, email, AccountType.CREW_MEMBER);
         this.role = role;
         this.team = team;
     }

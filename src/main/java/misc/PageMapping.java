@@ -30,9 +30,11 @@ public class PageMapping {
         pageMap.put("/admin/", new PageInfo("/admin/mainPage/index.html", AccountType.ADMIN));
         pageMap.put("/admin/dashboard/", new PageInfo("/admin/dashboard/index.html", AccountType.ADMIN));
         pageMap.put("/admin/crewAssignments/", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
+        pageMap.put("/admin/crewAssignments/newMember", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
+        pageMap.put("/admin/crewAssignments/newEvent", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
+
         pageMap.put("/crew/dashboard/", new PageInfo("/crew/dashboard/index.html", AccountType.CREW_MEMBER));
         pageMap.put("/crew/calendar/", new PageInfo("/crew/calendar/index.html", AccountType.CREW_MEMBER));
-        pageMap.put("/super-ultra-mega-admin/super-secret-page/", new PageInfo("/super-mega-admin/index.html", null));
     }
 
     public static String getResourceLocation(String url) {

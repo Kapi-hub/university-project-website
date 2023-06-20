@@ -56,11 +56,17 @@
                 <div class="clientInfo" id="clientInfo">
                     <!--Client information-->
                     <label for="clientFirstName" class="clientFirstNameText">Client First Name</label>
-                    <input type="text" class="clientFirstNameText" id="clientFirstName" placeholder="Enter client's first name">
+                    <input type="text" class="clientFirstNameText" id="clientFirstName"
+                           placeholder="Enter client's first name">
                     <br>
 
                     <label for="clientLastName" class="clientLastNameText">Client Last Name</label>
-                    <input type="text" class="clientLastName" id="clientLastName" placeholder="Enter client's last name">
+                    <input type="text" class="clientLastName" id="clientLastName"
+                           placeholder="Enter client's last name">
+                    <br>
+
+                    <label for="clientPhone" class="clientPhoneText">Client Phone Number</label>
+                    <input type="text" class="clientPhone" id="clientPhone" placeholder="Enter client's phone">
                     <br>
 
                     <label for="clientEmail" class="clientEmailText">Client Email</label>
@@ -74,21 +80,39 @@
                     <input type="text" class="eventTitle" id="eventTitle" placeholder="Enter event's name">
                     <br>
 
+                    <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
+                    <input type="text" class="eventTime" id="eventDescription" placeholder="Enter event's description">
+                    <br>
+
+                    <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
+                    <input type="datetime-local" class="eventTime" id="eventDate&Time"
+                           placeholder="Enter event's date and time">
+                    <br>
+
+                    <label for="eventLocation" class="eventLocationText"> Event Location</label>
+                    <input type="text" class="eventTime" id="eventLocation" placeholder="Enter event's location">
+                    <br>
+
+                    <label for="eventDuration" class="eventDurationText"> Event Duration</label>
+                    <input type="number" min="0" class="eventTime" id="eventDuration"
+                           placeholder="Enter event's duration">
+                    <br>
+
                     <label for="eventType" class="eventTypeText">Event Type</label>
                     <br>
                     <div id="eventType">
                         <label class="photoBox">
-                            <input type="radio" name="flexRadioDefault" id="photoBox">
+                            <input type="radio" name="eventRadio" id="photoBox" value="CLUB_PHOTOGRAPHY">
                             <span class="checkmark">Club Photography</span>
                         </label>
 
                         <label class="festivalBox">
-                            <input type="radio" name="flexRadioDefault" id="festivalBox">
+                            <input type="radio" name="eventRadio" id="festivalBox" value="FESTIVAL">
                             <span class="checkmark">Festival</span>
                         </label>
 
                         <label class="productBox">
-                            <input type="radio" name="flexRadioDefault" id="productBox">
+                            <input type="radio" name="eventRadio" id="productBox" value="PRODUCT_SHOOT">
                             <span class="checkmark">Product Shoot</span>
                         </label>
                     </div>
@@ -97,37 +121,25 @@
                     <br>
                     <div id="bookingType">
                         <label class="photographyBox">
-                            <input type="radio" name="flexRadioDefault" id="photographyBox">
+                            <input type="radio" name="bookingRadio" value="PHOTOGRAPHY" id="photographyBox">
                             <span class="checkmark">Photography</span>
                         </label>
 
                         <label class="filmBox">
-                            <input type="radio" name="flexRadioDefault" id="filmBox">
+                            <input type="radio" name="bookingRadio" id="filmBox" value="FILM">
                             <span class="checkmark">Film</span>
                         </label>
 
                         <label class="marketingBox">
-                            <input type="radio" name="flexRadioDefault" id="marketingBox">
+                            <input type="radio" name="bookingRadio" id="marketingBox" value="MARKETING">
                             <span class="checkmark">Marketing</span>
                         </label>
 
                         <label class="otherBox">
-                            <input type="radio" name="flexRadioDefault" id="otherBox">
+                            <input type="radio" name="bookingRadio" id="otherBox" value="OTHER">
                             <span class="checkmark">Other</span>
                         </label>
                     </div>
-
-                    <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
-                    <input type="datetime-local" class="eventTime" id="eventDate&Time" placeholder="Enter event's date and time">
-                    <br>
-
-                    <label for="eventLocation" class="eventLocationText"> Event Location</label>
-                    <input type="text" class="eventTime" id="eventLocation" placeholder="Enter event's location">
-                    <br>
-
-                    <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                    <input type="number" min="0" class="eventTime" id="eventDuration" placeholder="Enter event's duration">
-                    <br>
 
                     <label for="eventProducer" class="eventDurationText"> Event Producer</label>
                     <div id="eventProducer">
@@ -135,7 +147,7 @@
                                 aria-expanded="false">
                             <span id="selectedCrewMember"> Select crew member </span>
                         </button>
-                        <ul class="dropdown-menu" id="dropdown-menu">
+                        <ul class="dropdown-menu" id="dropdown-menu" onclick="">
                             <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a>
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry
@@ -174,16 +186,12 @@
                         <br>
                     </div>
 
-
-                    <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
-                    <input type="text" class="eventTime" id="eventDescription" placeholder="Enter event's description">
-                    <br>
-
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save event
+                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save
+                    event
                 </button>
             </div>
         </div>
@@ -223,17 +231,17 @@
                 <br>
                 <div id="permissionType">
                     <label class="clubTeam">
-                        <input type="radio" name="flexRadioDefault">
+                        <input type="radio" name="flexRadioDefault" id="clubTeam" value="CLUB">
                         <span class="checkmark">Club Team</span>
                     </label>
 
                     <label class="coreTeam">
-                        <input type="radio" name="flexRadioDefault">
+                        <input type="radio" name="flexRadioDefault" id="coreTeam" value="CORE">
                         <span class="checkmark">Core Team</span>
                     </label>
 
                     <label class="both">
-                        <input type="radio" name="flexRadioDefault">
+                        <input type="radio" name="flexRadioDefault" id="club&core" value = "CORE_AND_CLUB">
                         <span class="checkmark">Core&Club Team</span>
                     </label>
                 </div>
@@ -244,8 +252,8 @@
 
                 <div id="roleType">
                     <label id="photographer">
-                        <input type="checkbox" value = "PHOTOGRAPHER">
-                        <span class="checkmark" >Photographer</span>
+                        <input type="checkbox" value="PHOTOGRAPHER">
+                        <span class="checkmark">Photographer</span>
                     </label>
 
                     <label id="videographer">
@@ -507,7 +515,7 @@
     const saveMemberButton = document.querySelector('.saveMemberBttn');
 
     const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
-    const toastMember= new bootstrap.Toast(document.querySelector('#successfulNewMember'));
+    const toastMember = new bootstrap.Toast(document.querySelector('#successfulNewMember'));
 
 
     saveEventButton.addEventListener('click', function () {

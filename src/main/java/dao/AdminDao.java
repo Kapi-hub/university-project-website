@@ -65,36 +65,93 @@ public enum AdminDao {
         }
     }
 
-    public void createNewEvent(EventBean event) {
-        String insertEventQuery = "INSERT INTO event(id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?::event_type_enum)";
-        try {
-            PreparedStatement st = connection.prepareStatement(insertEventQuery);
-            st.setInt(1, event.getId());
-            st.setString(2, event.getName());
-            st.setString(3, event.getDescription());
-            st.setTimestamp(4, event.getStart());
-            st.setString(5, event.getLocation());
-            st.setString(6, event.getType().toString());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+    public int addClient(ClientBean client) throws SQLException {
+        String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setString(1, client.getForename());
+        st.setString(2, client.getSurname());
+        st.setString(3, client.getUsername());
+        st.setString(4, client.getEmailAddress());
+        ResultSet rs = st.executeQuery();
+
+        int client_id = -1;
+        if (rs.next()) {
+            client_id = rs.getInt(1);
         }
+        System.out.printf("===SQL=== ADDED A CLIENT TO ACCOUNT TABLE, RETURNED ID %s.\n", client_id);
+        query = "INSERT INTO client (id, phone_number) VALUES (?, ?)";
+        st = connection.prepareStatement(query);
+        st.setInt(1, client_id);
+        st.setString(2, client.getPhone_number());
+        st.executeUpdate();
+        System.out.printf("===SQL=== ADDED A CLIENT TO CLIENT TABLE WITH ID %s\n", client_id);
+        return client_id;
     }
 
-    public List<CrewMemberBean> getAllCrewMembers() throws SQLException {
-        String query = "SELECT a.id, a.forename, a.surname FROM shotmaniacs1.account a WHERE a.type='crew_member'";
-        List<CrewMemberBean> result = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-//                CrewMemberBean crewMember = new CrewMemberBean(rs.getInt("id"), rs.getString("forename"), rs.getString("surname"));
-//                result.add(crewMember); TODO fix this
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+    public int addEvent(EventBean event) throws SQLException {
+        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type, booking_type) VALUES (?,?,?,?,?,?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, event.getClient_id());
+        st.setString(2, event.getName());
+        st.setString(3, event.getDescription());
+        st.setTimestamp(4, event.getStart());
+        st.setInt(5, event.getDuration());
+        st.setString(6, event.getLocation());
+        st.setString(7, event.getType().toString());
+        st.setString(8, event.getBooking_type().toString());
+
+
+        ResultSet rs = st.executeQuery();
+        int event_id = -1;
+        if (rs.next())
+            event_id = rs.getInt(1);
+        System.out.printf("===SQL=== ADDED AN EVENT TO DATABASE RETURNING ID %s\n", event_id);
+        return event_id;
+    }
+
+    public void addRequirement(RequiredCrewBean required) throws SQLException {
+        String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, required.getEvent_id());
+        st.setInt(2, required.getCrew_size());
+        st.setString(3, required.getRole().toString());
+        st.executeUpdate();
+        System.out.printf("===SQL=== ADDED A ROLE REQUIREMENT WITH VALUES %s, %s, %s\n",
+                required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
+    }
+
+//    public void createNewEvent(EventBean event) {
+//        String insertEventQuery = "INSERT INTO event(id, name, description, start, duration, location, type) VALUES (?,?,?,?,?,?::event_type_enum)";
+//        try {
+//            PreparedStatement st = connection.prepareStatement(insertEventQuery);
+//            st.setInt(1, event.getId());
+//            st.setString(2, event.getName());
+//            st.setString(3, event.getDescription());
+//            st.setTimestamp(4, event.getStart());
+//            st.setString(5, event.getLocation());
+//            st.setString(6, event.getType().toString());
+//            st.executeUpdate();
+//        } catch (SQLException e) {
+//            System.out.println(e);
+//        }
+//    }
+
+
+
+    public String getAllCrewMembers() throws SQLException {
+        String query = "SELECT json_agg(jsonb_build_object('member_id', a.id, 'member_forename', " +
+                "a.forename, 'member_surname', a.surname) FROM account a " +
+                "WHERE a.type='crew_member') AS crews";
+
+        return getSQLString(query);
+    }
+
+    public String getProducers() throws SQLException {
+        String query = "SELECT a.forename, a.surname " +
+                "FROM account a, crew_member" +
+                "WHERE a.id = c.id AND c.role = 'producer'";
+        return getSQLString(query);
+
     }
 
     public void addRequirement(List<RequiredCrewBean> required) throws SQLException {
