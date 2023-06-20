@@ -28,16 +28,9 @@ public class AccountBean {
     public AccountBean() {
     }
 
-
-    public AccountBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
-        this.accountId = accountId;
-        this.forename = forename;
-        this.surname = surname;
-        this.username = username;
-        this.emailAddress = emailAddress;
-        this.password = password;
-        this.accountType = accountType;
-    }
+    /**
+     * Account creation (for staff, since it has username, emailaddress, and password)
+     */
     public AccountBean(String forename, String surname, String username, String emailAddress, String password, AccountType accountType) {
         this.forename = forename;
         this.surname = surname;

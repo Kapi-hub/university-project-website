@@ -1,7 +1,6 @@
 package resources;
 
 import dao.AdminDao;
-import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -9,6 +8,7 @@ import models.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Path("/admin")
 public class AdminResource {
@@ -94,12 +94,69 @@ public class AdminResource {
     @RolesAllowed("admin")
     public void handleCreateNewMember(CrewMemberBean crewMember) {
         try {
-            AdminDao.I.createNewMember(crewMember);
+            if (validEmail(crewMember) && validPassword(crewMember)) {
+                AdminDao.I.createNewMember(crewMember);
+            } else{
+                //TODO handle this part if the crewmember doesn't have the valid credentials
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * user stories
+     * 33 The password must contain at least 8 characters.
+     * 34 The password must contain capital letters, symbols and at least a digit.
+     *  -> for better security, changed to at least one symbol, one digit, one capital letter, and one small letter + no spacebars.
+     * @param crewMember
+     * @return
+     */
+    public static boolean validPassword(CrewMemberBean crewMember) {
+        boolean hasDigit = false;
+        boolean hasSymbol = false;
+        boolean hasUpperCase = false;
+        boolean hasLowerCase = false;
+        boolean hasSpacebar = false;
+        char[] passwordChar = crewMember.getPassword().toCharArray();
+        for (char c : passwordChar) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+                continue;
+            }
+            if (Character.isUpperCase(c)) {
+                hasUpperCase = true;
+                continue;
+            }
+            if (Character.isLowerCase(c)) {
+                hasLowerCase = true;
+                continue;
+            }
+            if (Character.isSpaceChar(c)){
+                hasSpacebar = true;
+                continue;
+            }
+                hasSymbol = true;
+
+        }
+        return crewMember.getPassword().length() >= 8 && !hasSpacebar && hasDigit && hasSymbol && hasUpperCase && hasLowerCase;
+    }
+
+    /**
+     * Only checks for valid syntax of email according to official guidelines of valid emails.
+     * It does not check if the email actually exists as well.
+     * @param crewMember
+     * @return
+     */
+    public static boolean validEmail(CrewMemberBean crewMember) {
+        if (Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
+                .matcher(crewMember.getEmailAddress())
+                .matches()){
+                    return true;
+        }
+        return false;
+    }
     @GET
     @Path("/crewAssignments")
     @RolesAllowed("admin")

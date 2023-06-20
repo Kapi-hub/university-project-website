@@ -12,9 +12,8 @@ public class CrewMemberBean extends AccountBean {
 
     }
 
-    public CrewMemberBean(String forename, String surname, String username, String emailAddress, AccountType accountType, int id, RoleType role, Team team) {
+    public CrewMemberBean(String forename, String surname, String username, String emailAddress, AccountType accountType, RoleType role, Team team) {
         super(forename, surname, username, emailAddress, accountType);
-        this.id = id;
         this.role = role;
         this.team = team;
     }
@@ -33,12 +32,15 @@ public class CrewMemberBean extends AccountBean {
         this.team = team;
     }
 
-    public CrewMemberBean(int accountId, String forename, String surname, String username, String emailAddress, String password, AccountType accountType, int id, RoleType role, Team team) {
-        super(accountId, forename, surname, username, emailAddress, password, accountType);
-        this.id = id;
+    /**
+     * creation of account CrewMember by admin
+     */
+    public CrewMemberBean(String forename, String surname, String username, String emailAddress, String password, RoleType role, Team team) {
+        super(forename, surname, username, emailAddress, password, AccountType.CREW_MEMBER);
         this.role = role;
         this.team = team;
     }
+
 
     public CrewMemberBean(String forename, String surname, String username, String email, RoleType role, Team team) {
         super(forename, surname, username, email, AccountType.CREW_MEMBER);
