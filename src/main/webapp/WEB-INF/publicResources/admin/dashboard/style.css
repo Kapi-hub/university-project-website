@@ -1,3 +1,40 @@
+/*
+        MODAL CONTAINER
+*/
+.modal.fade .modal-dialog .modal-content {
+    background-color: var(--bs-light);
+}
+
+.modal.fade .modal-dialog .modal-content .modal-header{
+    border-bottom: #1F1F1F 1px;
+    justify-content: space-between; /* container is flex by default */
+    margin: 5px;
+}
+
+.modal.fade .modal-dialog .modal-content .modal-header .btns ion-icon{
+    font-size: 20px;
+}
+
+.modal.fade .modal-dialog .modal-content .modal-body {
+    padding: 0 16px 5px; /* 0 top, 16 sides, 5 bottom */
+    margin-bottom: 16px;
+}
+
+.modal.fade .modal-dialog .modal-content .modal-body #inputTitle {
+    margin-bottom: 10px;
+}
+
+.modal.fade .modal-dialog .modal-content .modal-body #inputTitle,
+.modal.fade .modal-dialog .modal-content .modal-body #inputDetails {
+    border-radius: 5px;
+    border-width: 0;
+    background: lightgray;
+}
+
+/*
+
+*/
+
 .welcome-message {
     text-align: center;
     font-weight: bolder;
@@ -137,12 +174,9 @@ body{
 * {
     font-family: 'Kiona', sans-serif;
 }
-.navbar{
+.navbar-custom,
+.navbar-custom .navbar-brand,
+.navbar-custom .container-fluid .modal-content{
+    color: var(--bs-light);
     background-color: var(--bs-dark) ;
-    border-bottom: 1px solid  ;
-    border-bottom-color: var(--bs-primary);
 }
- .modal-content{
-     color: var(--bs-light);
-     background-color: var(--bs-dark);
- }
