@@ -3,8 +3,11 @@ package dao;
 import misc.ConnectionFactory;
 import models.*;
 
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
+
+import static misc.Security.encodeSalt;
 
 
 public enum AdminDao {
@@ -131,20 +134,32 @@ public enum AdminDao {
         }
     }
 
+    public void deleteEvent(EventBean event) {
+        String query = "DELETE FROM event" +
+                "WHERE id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setInt(1, event.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /*METHODS RELATED TO CREW MEMBERS*/
 
-    public void createNewMember(CrewMemberBean crewMember) {
+    public void createNewMember(CrewMemberBean crewMember) throws GeneralSecurityException {
+        String[] passwords = encodeSalt(crewMember.getPassword());
         //Create new account
-        String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ?, ?::account_type_enum)";
+        String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type, salt) VALUES (?,?, ?, ?, ?,  ?::account_type_enum, ?)";
         try {
             PreparedStatement st = connection.prepareStatement(insertAccountQuery);
             st.setString(1, crewMember.getForename());
             st.setString(2, crewMember.getSurname());
             st.setString(3, crewMember.getUsername());
             st.setString(4, crewMember.getEmailAddress());
-            st.setString(5, crewMember.getPassword());
+            st.setString(5, passwords[0]);
             st.setString(6, crewMember.getAccountType().toString());
-
+            st.setString(7, passwords[1]);
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println("In insertion of account " + e);

@@ -155,7 +155,6 @@ function addCrewMember() {
     }
 
 
-
     //get member's roles
     var roles = '';
     let photographer = document.querySelector('#photographer input[type="checkbox"]');
@@ -166,7 +165,7 @@ function addCrewMember() {
     let planner = document.querySelector('#planner input[type="checkbox"]');
     let editor = document.querySelector('#editor input[type="checkbox"]');
 
-        if (photographer.checked) {
+    if (photographer.checked) {
         roles = photographer.value;
     }
     if (videographer.checked) {
@@ -194,8 +193,9 @@ function addCrewMember() {
         emailAddress: memberEmail,
         password: memberPassword,
         accountType: "CREW_MEMBER",
+        salt: memberPassword,
         role: roles,
-        team: permissionType
+        team: permissionType,
     }
 
     console.log(JSON.stringify(data));
@@ -245,7 +245,7 @@ function getProducers() {
             const producerItem = document.createElement('li');
             const buttonElement = document.createElement('a');
             producerItem.classList.add('dropdown-item');
-            producerItem.onclick = function() {
+            producerItem.onclick = function () {
                 selectCrewMember(producer.forename + ' ' + producer.surname);
                 id = producer.id;
             };
