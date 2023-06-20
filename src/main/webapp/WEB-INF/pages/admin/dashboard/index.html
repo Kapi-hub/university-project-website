@@ -19,17 +19,19 @@
 
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="/static/img/Shotmaniacs_Logo_White_ZT.png">
-        <span class="ps-3 LogoText color">Shotmaniacs</span>
+        <a href="/" class="navbar-brand">
+            <img alt="Logo" class="d-inline-block align-text-middle" width="30"
+                 src="/static/img/Shotmaniacs_Logo_White_ZT.png">
+            <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
         <ul class="nav justify-content-end ">
-            <li class="nav-item border bg-white border-white rounded-pill">
+            <li class="nav-item me-2 border border-2 bg-white border-white rounded-pill">
                 <a class="nav-link text-dark" href="/admin/dashboard"><strong>Dashboard</strong></a>
             </li>
-            <li class="nav-item me-2">
+            <li class="nav-item">
                 <a class="nav-link text-white" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
             </li>
-            <li class="nav-item me-2">
+            <li class="nav-item">
                 <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
             </li>
             <!--leave this in case we add another buttons-->
@@ -53,7 +55,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()">Save changes
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast"
+                        onclick="saveAnnouncement();getAnnouncements()">Save changes
                 </button>
             </div>
         </div>
@@ -68,8 +71,6 @@
         Announcement posted successfully!
     </div>
 </div>
-
-
 
 
 <!--Navigation bar-->
@@ -93,8 +94,8 @@
                     </button>
                 </div>
                 <div class="announcementsList">
-                    <div class = announcementItem id="announcementPlaceholder">
-                        <span class="Title" >There are No Announcements</span>
+                    <div class=announcementItem id="announcementPlaceholder">
+                        <span class="Title">There are No Announcements</span>
                     </div>
                 </div>
             </div>
@@ -175,18 +176,18 @@
                     </div>
                 </div>
                 <!--Events that dont need crew assigned anymore-->
-<!--                <div class="accordion-item">-->
-<!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
-<!--                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
-<!--                        Events that dont need crew anymore-->
-<!--                    </button>-->
-<!--                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"-->
-<!--                         data-bs-parent="#accordionExample">-->
-<!--                        <div class="accordion-body">-->
-<!--                            <span>we dont need crew asap</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="accordion-item">-->
+                <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+                <!--                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
+                <!--                        Events that dont need crew anymore-->
+                <!--                    </button>-->
+                <!--                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"-->
+                <!--                         data-bs-parent="#accordionExample">-->
+                <!--                        <div class="accordion-body">-->
+                <!--                            <span>we dont need crew asap</span>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
                 <!--Latest upcoming events-->
                 <div class="accordion-item">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -212,13 +213,15 @@
         toast.show();
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         getAnnouncements();
         getLatestEvents();
     });
 
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 </body>
 </html>
