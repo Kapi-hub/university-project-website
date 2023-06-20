@@ -106,11 +106,12 @@
             XHR.withCredentials = true;
             XHR.addEventListener("load", function () {
                 if (this.status === 200) {
-                    console.log(XHR.getAllResponseHeaders())
+                    window.sessionStorage.setItem("forename", this.getResponseHeader("forename"));
+                    window.sessionStorage.setItem("eventCount", this.getResponseHeader("eventCount"));
                     if (path == null) {
-                        window.location.href = XHR.getResponseHeader("Location");
+                        window.location.href = XHR.getResponseHeader("Location") + "?fromLogin=true";
                     } else {
-                        window.location.href = path;
+                        window.location.href = path + "?fromLogin=true";
                     }
                 } else if (this.status === 401) {
                     alert("Wrong username/password");

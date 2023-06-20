@@ -126,26 +126,38 @@ public class EventResource {
             return Response.noContent()
                     .build();
         }
-        EventResponseBean[] finalBeans = new EventResponseBean[events.length];
-        for (int i = 0; i < events.length; i++) {
-            int id = events[i].getId();
-            String name = events[i].getName();
-            EventType type = events[i].getType();
-            Timestamp date = events[i].getStart();
-            String location = events[i].getLocation();
-            int duration = events[i].getDuration();
-            String client = AccountDao.instance.getName(events[i].getClient_id());
-            BookingType bookingType = events[i].getBooking_type();
-            String productionManager = AccountDao.instance.getName(events[i].getProduction_manager_id());
-            Object[] crew = getMissingCrew(id);
-            Object[] enrolled = EventDao.instance.getEnrolled(id);
-            EventStatus status = events[i].getStatus();
-            String description = events[i].getDescription();
-            boolean isEnrolled = EventDao.instance.isEnrolled(Integer.parseInt(accountIdString), id);
-            boolean canEnrol = canEnrol(id, Integer.parseInt(accountIdString));
-            finalBeans[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description, isEnrolled, canEnrol);
+        EventResponseBean[] finalBeans = beansToBeans(events);
+        for(EventResponseBean bean : finalBeans) {
+            bean.setCanEnrol(canEnrol(bean.getId(), Integer.parseInt(accountIdString)));
+            bean.setIsEnrolled(EventDao.instance.isEnrolled(Integer.parseInt(accountIdString), bean.getId()));
         }
         return Response.ok(finalBeans)
+                .build();
+    }
+
+    @GET
+    @Path("/getEnrolled")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"crew_member"})
+    public Response getEnrolled(@CookieParam("accountId") String accountIdString) {
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString));
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] returnValue = beansToBeans(events);
+        for(EventResponseBean bean : returnValue) {
+            bean.setCanEnrol(false);
+            bean.setIsEnrolled(true);
+        }
+        return Response.ok(returnValue)
                 .build();
     }
 
@@ -235,5 +247,26 @@ public class EventResource {
             return Response.serverError()
                     .build();
         }
+    }
+
+    private EventResponseBean[] beansToBeans(EventBean[] oldBeans) {
+        EventResponseBean[] newBeans = new EventResponseBean[oldBeans.length];
+        for (int i = 0; i < oldBeans.length; i++) {
+            int id = oldBeans[i].getId();
+            String name = oldBeans[i].getName();
+            EventType type = oldBeans[i].getType();
+            Timestamp date = oldBeans[i].getStart();
+            String location = oldBeans[i].getLocation();
+            int duration = oldBeans[i].getDuration();
+            String client = AccountDao.instance.getName(oldBeans[i].getClient_id());
+            BookingType bookingType = oldBeans[i].getBooking_type();
+            String productionManager = AccountDao.instance.getName(oldBeans[i].getProduction_manager_id());
+            Object[] crew = getMissingCrew(id);
+            Object[] enrolled = EventDao.instance.getEnrolledMembers(id);
+            EventStatus status = oldBeans[i].getStatus();
+            String description = oldBeans[i].getDescription();
+            newBeans[i] = new EventResponseBean(id, name, type, date, location, duration, client, bookingType, productionManager, crew, enrolled, status, description);
+        }
+        return newBeans;
     }
 }

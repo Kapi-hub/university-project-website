@@ -28,37 +28,54 @@
 
 /* To edit the height of the welcome container, so the animation
 doesn't get in the way of building / maintaining the website*/
-.container.welcome-container {
+.container.welcome-container{
     display: flex;
     min-height: 0 !important;
-    /*height: 15vh !important; // TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS*/
-    height: 92vh;
+    /*height: 15vh !important; !* TO BE DELETED WHEN DONE WITH PAGE SO ANIMATION WORKS *!*/
+    height: 100vh;
     flex-wrap: wrap;
     flex-direction: column;
     color: white;
     opacity: 1;
+}
+
+.container.welcome-container.animate{
     animation-name: shrinkAnimation;
     animation-duration: 1.5s;
     animation-delay: 2.5s;
     animation-fill-mode: forwards;
 }
 
+.container.welcome-container.still{
+    display: flex;
+    height: 19vh !important;
+    flex-wrap: wrap;
+    flex-direction: column;
+    color: white;
+}
+
 @keyframes shrinkAnimation {
     to { height: 19vh;}
 }
 
-.container.welcome-container .welcomeMessageName {
+.container.welcome-container .welcomeMessageName{
     font-size: 60px;
     position: relative;
+    }
+
+.container.welcome-container .welcomeMessageName.animate{
     animation: linear;
     animation-name: welcomeMessageNameAnimation;
     animation-duration: 2.3s;
     animation-timing-function: ease-out, ease-in;
 }
 
-.container.welcome-container .welcomeMessageEvents {
+.container.welcome-container .welcomeMessageEvents{
     font-size: 30px;
     position: relative;
+}
+
+.container.welcome-container .welcomeMessageEvents.animate{
     animation: linear;
     animation-name: welcomeMessageEventsAnimation;
     animation-duration: 2.3s;

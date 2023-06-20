@@ -150,7 +150,7 @@ public enum EventDao {
         throw new SQLException("Event not found");
     }
 
-    public Object[] getEnrolled(int eventId) {
+    public Object[] getEnrolledMembers(int eventId) {
         String query = "SELECT crew_member_id FROM event_enrollment WHERE event_id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
@@ -207,6 +207,36 @@ public enum EventDao {
         return null;
     }
 
+    public EventBean[] getEnrolledEvents(int accountId) throws SQLException {
+        String query = "SELECT event_id FROM event_enrollment WHERE crew_member_id = ?";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, accountId);
+
+        ResultSet rs = st.executeQuery();
+
+        ArrayList<EventBean> eventList = new ArrayList<>();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            int client_id = rs.getInt("client_id");
+            String name = rs.getString("name");
+            String description = rs.getString("description");
+            Timestamp start = rs.getTimestamp("start");
+            int duration = rs.getInt("duration");
+            String location = rs.getString("location");
+            int production_manager_id = rs.getInt("production_manager_id");
+            EventType type = EventType.toEnum(rs.getString("type"));
+            BookingType booking_type = BookingType.toEnum(rs.getString("booking_type"));
+            EventStatus status = EventStatus.toEnum(rs.getString("status"));
+
+            eventList.add(new EventBean(id, client_id, name, description, start, duration, location, production_manager_id, type, booking_type, status));
+        }
+
+        EventBean[] returnValue = new EventBean[eventList.size()];
+        return eventList.size() == 0 ? null : eventList.toArray(returnValue);
+    }
+
     public Map<RoleType, Integer> getRequiredMap(int id) throws SQLException {
         String query = "SELECT role, crew_size FROM event_requirement WHERE event_id = ?";
 
@@ -246,5 +276,32 @@ public enum EventDao {
 
         ResultSet rs = st.executeQuery();
         return rs.next();
+    }
+
+    public int getEventCount(int accountId, AccountType type) {
+        String query;
+        // Admin: get all events with to do status
+        // Crew member: get all events they are enrolled in and that have start timestamp between now and midnight
+        switch (type) {
+            case ADMIN -> query = "SELECT COUNT(*) FROM event WHERE status = 'to do'::status";
+            case CREW_MEMBER ->
+                    query = "SELECT COUNT(*) FROM event_enrollment ee, event e WHERE ee.event_id = e.id AND ee.crew_member_id = ? AND e.start BETWEEN NOW() AND NOW()::date + '1 day'::interval";
+            default -> {
+                return -1;
+            }
+        }
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            if (type == AccountType.CREW_MEMBER) {
+                st.setInt(1, accountId);
+            }
+
+            ResultSet rs = st.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return -1;
+        }
     }
 }
