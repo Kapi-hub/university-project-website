@@ -44,16 +44,17 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Post announcement</h5>
                 <div class="btns">
-                    <ion-icon name="close-outline" data-bs-dismiss="modal"></ion-icon>
+                    <ion-icon name="close-outline" data-bs-dismiss="modal" id="cancelBtn"></ion-icon>
                     <ion-icon name="add-outline" data-bs-dismiss="modal"
-                              data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()"></ion-icon>
+                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBtn"></ion-icon>
                 </div>
             </div>
             <div class="modal-body">
                 <label for="inputTitle" class="inputTitle"></label>
                 <input type="text" class="inputTitle" id="inputTitle" placeholder="Title" autofocus>
                 <label for="inputDetails" class="inputTitle"></label>
-                <textarea class="inputTitle" id="inputDetails" placeholder="Description" rows="3" cols="60"></textarea>
+                <textarea class="inputTitle" id="inputDetails"
+                          placeholder="Description" rows="3" cols="60"></textarea>
             </div>
             <!--            <div class="modal-footer">-->
             <!--                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>-->

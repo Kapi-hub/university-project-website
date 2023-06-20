@@ -2,13 +2,14 @@
         MODAL CONTAINER
 */
 .modal.fade .modal-dialog .modal-content {
-    background-color: var(--bs-light);
+    background-color: var(--bs-dark);
 }
 
 .modal.fade .modal-dialog .modal-content .modal-header{
     border-bottom: #1F1F1F 1px;
     justify-content: space-between; /* container is flex by default */
     margin: 5px;
+    color: var(--bs-light);
 }
 
 .modal.fade .modal-dialog .modal-content .modal-header .btns ion-icon{
