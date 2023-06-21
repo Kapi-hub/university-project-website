@@ -62,7 +62,7 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/events")
+    @Path("/crewAssignments")
     @RolesAllowed("admin")
     public String getLatestEvent() {
         try {
@@ -123,7 +123,7 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/crewAssignments")
+    @Path("/crewAssignments/smth")
     @RolesAllowed("admin")
     public String getAllCrewMembers() {
         try {

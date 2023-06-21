@@ -103,16 +103,34 @@ public enum AdminDao {
 
     public String getLatestEvent() throws SQLException {
         String insertQuery = """
-                SELECT json_agg(json_build_object(
-                    'name',name,
-                    'description',description,
-                    'start',start,
-                    'duration',duration,
-                    'type',type
-                        ) 
-                     )AS result
-                    From event
-                    """;//TODO make it show latest as group by order by won't give one row
+                SELECT json_agg(
+                               json_build_object(
+                                       'eventDetails', json_build_object(
+                                       'name', e.name,
+                                       'description', e.description,
+                                       'start', e.start,
+                                       'duration', e.duration,
+                                       'location', e.location,
+                                       'type', e.type,
+                                       'booking_type', e.booking_type,
+                                       'clients', (SELECT json_agg(
+                                                                  json_build_object(
+                                                                          'forename', a.forename,
+                                                                          'surname', a.surname,
+                                                                          'emailAddress', a.email_address,
+                                                                          'phone_number', c.phone_number
+                                                                      )
+                                                              )
+                                                   FROM shotmaniacs1.account a
+                                                            JOIN shotmaniacs1.client c ON a.id = c.id
+                                                   WHERE a.type = 'client'
+                                                     AND c.id = e.client_id)
+                                   )
+                                   )
+                           ) AS result
+                FROM shotmaniacs1.event e
+                 """;
+//TODO make it show latest as group by order by won't give one row
         return getSQLString(insertQuery);
     }
 

@@ -285,3 +285,101 @@ function selectCrewMember(name) {
     const selectedCrewMember = document.getElementById('selectedCrewMember');
     selectedCrewMember.textContent = name;
 }
+
+function getAllEvents() {
+    let events = [];
+    sendHttpRequest('GET', "/api/admin/crewAssignments")
+        .then(responseData => {
+            console.log(responseData);
+            responseData.forEach(event => events.push(event));
+            console.log("show all events");
+            responseData.forEach((event) => {
+                const {
+                    name,
+                    description,
+                    start,
+                    duration,
+                    location,
+                    type,
+                    booking_type
+                } = event.eventDetails;
+
+                const container = document.querySelector('.container.content-container');
+
+                let card = document.createElement("div");
+                card.setAttribute('class', 'card');
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute('class', 'card-body');
+
+                let eventDetails = document.createElement("div");
+                eventDetails.setAttribute('class', 'event-details');
+
+                let eventName = document.createElement("div");
+                eventName.setAttribute('class', 'event-name');
+                eventName.textContent = name; // Use the extracted "name" property
+
+                let eventOtherDetails = document.createElement("div");
+                let detailsList = document.createElement("ul");
+                let dateTime = document.createElement("li");
+                dateTime.setAttribute('class', 'date-time');
+                dateTime.innerHTML = `<span>${start}</span>`;
+                //TODO add icons
+
+                let eventDuration = document.createElement("li");
+                eventDuration.setAttribute('class', 'duration');
+                eventDuration.innerHTML = `<span>${duration}</span>`;
+
+                let eventLocation = document.createElement("li");
+                eventLocation.setAttribute('class', 'location');
+                eventLocation.innerHTML = `<span>${location}</span>`;
+
+                let eventDescription = document.createElement("li");
+                eventDescription.setAttribute('class', 'location');
+                eventDescription.innerHTML = `<span>${description}</span>`;
+
+                let eventType = document.createElement("div");
+                eventType.setAttribute('class', 'event-type');
+                eventType.innerHTML = `<span>${type}</span>`;
+
+
+                let bookingType = document.createElement("div");
+                bookingType.setAttribute('class', 'booking-type');
+                bookingType.innerHTML = `<span>${booking_type}</span>`;
+
+                let clientDetails = document.createElement("div");
+                clientDetails.setAttribute('class', 'client-details');
+                //TODO fetch the client details
+
+                let eventProducer = document.createElement("div");
+                eventProducer.setAttribute('class', 'event-producer-crew-staff');
+
+                let actionIcons = document.createElement("div");
+                actionIcons.setAttribute('class', 'action-icons');
+
+                detailsList.appendChild(eventDescription);
+                detailsList.appendChild(eventLocation);
+                detailsList.appendChild(eventDuration);
+                detailsList.appendChild(dateTime);
+
+                eventOtherDetails.appendChild(detailsList);
+
+
+                cardBody.appendChild(actionIcons);
+                cardBody.appendChild(eventProducer);
+                cardBody.appendChild(clientDetails);
+                cardBody.appendChild(bookingType);
+                cardBody.appendChild(eventType);
+                eventDetails.appendChild(eventOtherDetails);
+                eventDetails.appendChild(eventName);
+                cardBody.appendChild(eventDetails);
+
+                card.appendChild(cardBody);
+
+                container.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching events:", error);
+        });
+}
