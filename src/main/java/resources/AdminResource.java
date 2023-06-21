@@ -87,6 +87,28 @@ public class AdminResource {
         return events;
     }
 
+    @PUT
+    @Path("/crewAssignments/events?id=smth") //TODO change paths
+    @RolesAllowed("admin")
+    public void handleChangeEvent(EventBean event) {
+        try{
+            AdminDao.I.changeEventDetails(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @DELETE
+    @Path("/crewAssignments/event?id=smth") //TODO change path
+    @RolesAllowed("admin")
+    public void handleDeleteEvent(EventBean event) {
+        try {
+            AdminDao.I.changeEventDetails(event);
+        }  catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /* METHODS RELATED TO CREW-MEMBERS */
     @POST
     @Path("/crewAssignments/newMember")
@@ -100,17 +122,17 @@ public class AdminResource {
         }
     }
 
-//    @GET
-//    @Path("/crewAssignments")
-//    @RolesAllowed("admin")
-//    public String getAllCrewMembers() {
-//        try {
-//            return AdminDao.I.getAllCrewMembers();
-//        }  catch (SQLException e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
+    @GET
+    @Path("/crewAssignments")
+    @RolesAllowed("admin")
+    public String getAllCrewMembers() {
+        try {
+            return AdminDao.I.getAllCrewMembers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @GET
     @Path("/crewAssignments/newEvent")
@@ -123,4 +145,29 @@ public class AdminResource {
             return null;
         }
     }
+
+//    //TODO: test with postman
+//    @PUT
+//    @Path("/crewAssignments/Member") //TODO change the url with the member id
+//    @RolesAllowed("admin")
+//    public void changeRole(CrewMemberBean crewMember, String newRole) {
+//        try {
+//            AdminDao.I.changeRole(crewMember, newRole);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    //TODO: test with postman
+//    @PUT
+//    @Path("/crewAssignments/Member") //TODO change the url with the member id
+//    @RolesAllowed("admin")
+//    public void changeTeam(CrewMemberBean crewMember, String newTeam) {
+//        try {
+//            AdminDao.I.changeTeam(crewMember, newTeam);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
 }

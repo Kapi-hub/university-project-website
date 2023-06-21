@@ -155,7 +155,6 @@ function addCrewMember() {
     }
 
 
-
     //get member's roles
     var roles = '';
     let photographer = document.querySelector('#photographer input[type="checkbox"]');
@@ -166,7 +165,7 @@ function addCrewMember() {
     let planner = document.querySelector('#planner input[type="checkbox"]');
     let editor = document.querySelector('#editor input[type="checkbox"]');
 
-        if (photographer.checked) {
+    if (photographer.checked) {
         roles = photographer.value;
     }
     if (videographer.checked) {
@@ -194,8 +193,9 @@ function addCrewMember() {
         emailAddress: memberEmail,
         password: memberPassword,
         accountType: "CREW_MEMBER",
+        salt: memberPassword,
         role: roles,
-        team: permissionType
+        team: permissionType,
     }
 
     console.log(JSON.stringify(data));
@@ -235,6 +235,7 @@ function getProducers() {
     // <li><a className="dropdown-item" href="#" onClick="selectCrewMember('Jack John')">Jack John</a>
     // </li>
 
+    let id = 0;
     //TODO fix bug that appends the list for each click
     sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
         console.log(responseData);
@@ -244,16 +245,17 @@ function getProducers() {
             const producerItem = document.createElement('li');
             const buttonElement = document.createElement('a');
             producerItem.classList.add('dropdown-item');
-            producerItem.onclick = function() {
+            producerItem.onclick = function () {
                 selectCrewMember(producer.forename + ' ' + producer.surname);
+                id = producer.id;
             };
-            // producerItem.classList.add('onClick=selectCrewMember(')
             producerItem.innerHTML = `<span class="producerName" id="producerName">${producer.forename} ${producer.surname}</span>`;
 
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
         })
     });
+    return id;
 }
 
 function sendHttpRequest(method, url, data) {
