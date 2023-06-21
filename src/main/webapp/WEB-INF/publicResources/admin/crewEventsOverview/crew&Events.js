@@ -201,11 +201,14 @@ function addCrewMember() {
         success: function () {
             alert("Member successfully sent!");
         },
-        error: function () {
-            alert("Error creating a new member!");
-
+        // error: function () {
+        //     alert("Error creating a new member!");
+        // }
+ //TODO this error ^^ and this .always function underneath. idk which one but it is used to handle the part when account cannot be added.
+    }).always(function(jqXHR){
+        if (jqXHR.status === 400) {
+            alert("bananacredentials")
         }
-
     });
 }
 

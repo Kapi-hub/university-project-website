@@ -19,7 +19,7 @@ public class TestAdmin {
     }
 
     @Test
-    public void testValidEmail() {
+    void testValidEmail() {
         CrewMemberBean badCrew = new CrewMemberBean("Forename", "Surname", "Username",
                 "b.yilmaz-1@", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CORE_AND_CLUB);
         CrewMemberBean badCrew1 = new CrewMemberBean("Forename", "Surname", "Username",
@@ -36,7 +36,7 @@ public class TestAdmin {
         assertFalse(AdminResource.validEmail(badCrew3));
     }
     @Test
-    public void testValidPassword() {
+    void testValidPassword() {
         CrewMemberBean badCrewSpace = new CrewMemberBean("Forename", "Surname", "Username",
                 "b.yilmaz-1@student.utwente.nl", "N0t My R34L Pa$$WoRd", RoleType.EDITOR, Team.CORE_AND_CLUB);
         CrewMemberBean badCrewNoDigit = new CrewMemberBean("Forename", "Surname", "Username",

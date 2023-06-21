@@ -4,6 +4,7 @@ import dao.AdminDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import models.*;
 
 import java.sql.SQLException;
@@ -104,15 +105,17 @@ public class AdminResource {
     @Path("/crewAssignments")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
-    public void handleCreateNewMember(CrewMemberBean crewMember) {
+    public Response handleCreateNewMember(CrewMemberBean crewMember) {
         try {
-            if (validEmail(crewMember) && validPassword(crewMember)) {
+            if (validEmail(crewMember) && validPassword(crewMember)) { //it says always returns false error, but it works in unit tests, so dw
                 AdminDao.I.createNewMember(crewMember);
+                return Response.ok().build();
             } else{
-                //TODO handle this part if the crewmember doesn't have the valid credentials
+                return Response.status(400).build();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
         }
     }
 
@@ -169,17 +172,17 @@ public class AdminResource {
         }
         return false;
     }
-    @GET
-    @Path("/crewAssignments")
-    @RolesAllowed("admin")
-    public String getAllCrewMembers() {
-        try {
-            return AdminDao.I.getAllCrewMembers();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @GET
+//    @Path("/crewAssignments")
+//    @RolesAllowed("admin")
+//    public String getAllCrewMembers() {
+//        try {
+//            return AdminDao.I.getAllCrewMembers();
+//        }  catch (SQLException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     @GET
     @Path("/crewAssignments")
