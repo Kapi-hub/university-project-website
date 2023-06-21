@@ -1,12 +1,12 @@
 package login;
 
+import jakarta.ws.rs.core.Response;
 import models.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import resources.AdminResource;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestAdmin {
 
@@ -59,6 +59,14 @@ public class TestAdmin {
         assertFalse(AdminResource.validPassword(badCrewSpace));
     }
     @Test
-    public void addNewCrewMember() {
+    void testHandleCreateNewMember() {
+        AdminResource admin = new AdminResource();
+        CrewMemberBean badCrewInvalidPassword = new CrewMemberBean("Forename", "Surname", "Username",
+                "b.yilmaz-1@student.utwente.nl", "N0t My R34L Pa$$WoRd", RoleType.EDITOR, Team.CORE_AND_CLUB);
+        CrewMemberBean badCrewInvalidEmail = new CrewMemberBean("Forename", "Surname", "Username",
+                ".yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CORE_AND_CLUB);
+        assertEquals(Response.ok().build(), admin.handleCreateNewMember(goodCrew));
+        assertEquals(Response.status(400).build(), admin.handleCreateNewMember(badCrewInvalidPassword));
+        assertEquals(Response.status(400).build(), admin.handleCreateNewMember(badCrewInvalidEmail));
     }
 }

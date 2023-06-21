@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import models.*;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Path("/admin")
