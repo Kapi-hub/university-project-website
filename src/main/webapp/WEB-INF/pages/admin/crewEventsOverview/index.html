@@ -8,10 +8,8 @@
     <title>Admin Overview</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link href="/static/general.css" rel="stylesheet">
-    <link href="/static/admin/crewEventsOverview/style.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
-    <script src="/static/logout.js"></script>
 </head>
 <body>
 
@@ -49,7 +47,11 @@
         <div class="card-body">
             <div class="event-details">
                 <div class="event-name">
-                    FESTIVAL UNTOLD NEVERSEA
+                    <div class="text">FESTIVAL UNTOLD NEVERSEA</div>
+                    <div class="buttons">
+                        <ion-icon name="pencil-outline" id="pencil-outline-icon"></ion-icon>
+                        <ion-icon name="trash-outline" id="trash-outline-icon"></ion-icon>
+                    </div>
                 </div>
                 <div class="event-other-details">
                     <ul>
@@ -67,7 +69,7 @@
                         </li>
                         <li class="description">
                             <ion-icon name="document-outline"></ion-icon>
-                            <span>A very nice description that for is not going to have repeating words
+                            <span>A very nice description that for sure is not going to have repeating words
                             repeating words repeating words repeating words repeating words repeating words
                             repeating words repeating words repeating words repeating words repeating words </span>
                         </li>
@@ -75,18 +77,66 @@
                 </div>
             </div>
             <div class="event-type">
-                .
+                <div class="card-event-type club-photography">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>
             </div>
             <div class="booking-type">
-
+                <div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>
             </div>
             <div class="client-details">
+                <div class="last-first-name">
+
+                </div>
+                <div class="phone">
+
+                </div>
+                <div class="email">
+
+                </div>
+            </div>
+            <div class="event-staff">
 
             </div>
-            <div class="event-producer-crew-staff">
-
-            </div>
-            <div class="action-icons">
+            <div class="event-producer">
 
             </div>
         </div>
@@ -105,7 +155,7 @@
                         </li>
                         <li class="duration">
                             <ion-icon name="time-outline"></ion-icon>
-                            <span>30 hours</span>
+                            <span>30 hours and 2 seconds</span>
                         </li>
                         <li class="location">
                             <ion-icon name="pin-outline"></ion-icon>
@@ -149,16 +199,14 @@
 </div>
 
 
-
-
-
-
 <div class="modal fade" id="postEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createEventModal">Create new event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">
+                    X
+                </button>
             </div>
 
             <div class="modal-body">
@@ -258,7 +306,7 @@
                         </button>
                         <ul class="dropdown-menu" id="dropdown-menu" onclick="">
                             <li><a id="dropdown-item" href="#"></a>
-<!--                                onclick="selectCrewMember()-->
+                                <!--                                onclick="selectCrewMember()-->
                             </li>
                         </ul>
                     </div>
@@ -307,7 +355,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createMemberModalText">Create new member account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">
+                    X
+                </button>
             </div>
             <div class="modal-body">
                 <div class="memberInfo" id="memberInfo">
@@ -345,7 +395,7 @@
                     </label>
 
                     <label class="both">
-                        <input type="radio" name="flexRadioDefault" id="club&core" value = "CORE_AND_CLUB">
+                        <input type="radio" name="flexRadioDefault" id="club&core" value="CORE_AND_CLUB">
                         <span class="checkmark">Core&Club Team</span>
                     </label>
                 </div>
@@ -394,7 +444,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()"><strong>Close</strong></button>
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()">
+                    <strong>Close</strong></button>
                 <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
                         data-bs-target="toastMember"><strong>Create new member</strong>
                 </button>
@@ -402,7 +453,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div class="flex-container">
@@ -413,7 +463,6 @@
             <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>
         </div>
     </div>
-
 
 
     <!--crewmember and popup -->
@@ -555,113 +604,13 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.0.slim.js" integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.slim.js"
+        integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script>
-    // Get all collapse buttons for Crew
-    const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
-
-    // Add click event listener to each button
-    collapseButtonsCrew.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.crew');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtons = document.querySelectorAll('.collapse-button.booking');
-
-    // Add click event listener to each button
-    collapseButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.booking');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
-
-    // Add click event listener to each button
-    collapseButtonsNavC.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-
-    const saveEventButton = document.querySelector('.saveEventBttn');
-    const saveMemberButton = document.querySelector('.saveMemberBttn');
-
-    const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
-    const toastMember = new bootstrap.Toast(document.querySelector('#successfulNewMember'));
-
-
-    saveEventButton.addEventListener('click', function () {
-        addEvent();
-        toastEvent.show();
-    });
-
-    saveMemberButton.addEventListener('click', function () {
-        addCrewMember();
-        toastMember.show();
-    });
-</script>
-
-
-<script>
-    function setUrl(url) {
-        window.history.pushState("", "", "/admin/crewAssignments" + (url === undefined ? "" : url));
-    }
-
-    window.onload = () => {
-        const urlExtra = window.location.pathname.split("/").pop();
-        console.log(urlExtra);
-
-        if (urlExtra === "newMember") {
-            $("#bookingGroup").collapse("show");
-            $("#createMemberModal").modal("show");
-        } else if (urlExtra === "newEvent") {
-            $("#crewGroup").collapse("show");
-            $("#postEventsModal").modal("show");
-        }
-    };
-</script>
-<script src="/static/admin/crewEventsOverview/crew&Events.js"></script>
 </body>
 </html>

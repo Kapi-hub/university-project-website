@@ -1,3 +1,38 @@
+/*
+    ADDED BY ALEX
+ */
+
+/*
+    A pill where you can choose what to display,
+    crew members or bookings
+ */
+:root {
+    font-size: 16px;
+    --bs-primary-rgb: 22, 150, 210;
+    --bs-primary: rgb(var(--bs-primary-rgb)) !important;
+    --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
+    --bs-primary-bg-75: rgba(var(--bs-primary-rgb), 0.75);
+    --bs-secondary-rgb: 82, 82, 82;
+    --bs-secondary: rgb(var(--bs-secondary-rgb)) !important;
+    --bs-secondary-bg-subtle: rgba(var(--bs-secondary-rgb), 0.1);
+    --bs-dark-rgb: 31, 31, 31;
+    --bs-dark: rgb(var(--bs-dark-rgb)) !important;
+    --bs-dark-bg-subtle: rgba(var(--bs-dark-rgb), 0.8);
+    --bs-light-rgb: 241, 241, 241;
+    --bs-light: rgb(var(--bs-light-rgb)) !important;
+    --bs-light-bg-subtle: rgba(var(--bs-light-rgb), 0.1);
+
+}
+
+/*
+    ADDED BY ALEX
+ */
+
+/*
+    A pill where you can choose what to display,
+    crew members or bookings
+ */
+
 .choose-crew-booking-container {
     display: flex;
     align-items: center;
@@ -33,88 +68,90 @@
     height: 80vh;
     width: 100vw;
     margin-top: 30px;
-    border: 1px white solid;
     gap: 4vw;
 }
 
 .container.content-container .card {
     width: 50rem !important;
-    height: 80vh;
-    flex-basis: calc(47%); /* 2 items per row */
+    flex-basis: calc(47%); /* 2 cards per row */
     background-color: var(--bs-dark) !important; /* important to override */
-    transition: all .3s ease-in-out;
-}
-.container.content-container .card:hover {
-    transform: scale(1.02);
+    border-radius: 20px;
 }
 
 .container.content-container .card .card-body {
-    display: flex;
-    flex-flow: row wrap; /* flex-direction & flex-wrap */
-    justify-content: flex-start;
-    align-items: flex-start;
-    align-content: flex-start;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /*grid-template-rows: repeat(3, 1fr);*/
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
     border-radius: 20px;
-    background-color: var(--bs-primary);
 }
 
 /* we refer to the card-body's children */
 .container.content-container .card .card-body > div {
-    display: flex;
-    flex: 1 1 100%;
     height: 16vh;
     background-color: var(--bs-light);
     border-radius: 20px;
-    box-shadow: 0 7px 30px -10px rgba(150,170,180,0.5);
-    padding: 5px;
-}
-
-.container.content-container .card .card-body > div:nth-child(2),
-.container.content-container .card .card-body > div:nth-child(3) {
-    flex: 1 1 calc((100% / 2) - 10px);
-}
-
-.container.content-container .card .card-body > div:nth-child(5) {
-    height: 10vh;
-}
-
-.container.content-container .card .card-body > div:nth-child(6) {
-    height: 5vh;
+    padding: 10px;
 }
 
 .container.content-container .card .card-body .event-details {
+    grid-area: 1 / 1 / 2 / 5;
     height: 22vh;
-    order: 1;
     display: grid;
-    grid-template-rows: 20% 80%;
+    grid-template-rows: 20% 80%; /* Needed for scroll */
 }
 
 .container.content-container .card .card-body .event-details .event-name{
     grid-row: 1;
-    color: var(--bs-dark);
-    text-align: center;
-    font-weight: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--bs-dark)
+}
+
+.container.content-container .card .card-body .event-details .event-name .text{
     font-size: 20px;
+    width: 100%;
+    text-align: right;
+}
+
+.container.content-container .card .card-body .event-details .event-name .buttons{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container.content-container .card .card-body .event-details .event-name .buttons ion-icon{
+    font-size: 1.3em;
+    margin: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.container.content-container .card .card-body .event-details .event-name .buttons ion-icon#pencil-outline-icon:hover {
+    border-radius: 5px;
+    background-color: #ffe93d;
+    transform: scale(1.30);
+    transition: all 0.3s ease-in-out;
+}
+
+.container.content-container .card .card-body .event-details .event-name .buttons ion-icon#trash-outline-icon:hover {
+    border-radius: 5px;
+    background-color: red;
+    transform: scale(1.30);
+    transition: all 0.3s ease-in-out;
 }
 
 .container.content-container .card .card-body .event-details .event-other-details{
     grid-row: 2;
-    /*background-color: blue;*/
 }
 
-
 .container.content-container .card .card-body .event-details .event-other-details ul {
-    list-style: none;
     padding: 0 !important;
     margin: 0 !important;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: scroll;
-}
-
-.container.content-container .card .card-body .event-details .event-other-details ul li{
 }
 
 .container.content-container .card .card-body .event-details .event-other-details ul li ion-icon{
@@ -131,23 +168,176 @@
 }
 
 .container.content-container .card .card-body .event-type {
-    order: 2;
+    grid-area: 2 / 1 / 3 / 3;
+    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 0;
+    color: var(--bs-dark);
+}
+
+.container.content-container .card .card-body .event-type .card-event-type{
+    perspective: 1000px;
+    background-color: transparent;
+    margin: 15px 0;
+}
+
+.container.content-container .card .card-body .event-type .card-event-type .inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.container.content-container .card .card-body .event-type .card-event-type:hover .inner {
+    transform: rotateY(180deg);
+}
+
+.container.content-container .card .card-body .event-type .card-event-type .inner .front-side,
+.container.content-container .card .card-body .event-type .card-event-type .inner .back-side {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+}
+
+.container.content-container .card .card-body .event-type .front-side {
+    background: var(--bs-primary);
+}
+
+.container.content-container .card .card-body .event-type .back-side {
+    transform: rotateY(180deg);
+    background: var(--bs-primary);
+}
+
+.container.content-container .card .card-body .event-type .back-side .card-description{
+    font-size: 15px;
+    margin: 0 3px!important;
+    font-weight: 1000;
+}
+
+.container.content-container .card .card-body .event-type .card-event-type.club-photography {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.container.content-container .card .card-body .event-type .card-event-type.festival {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.container.content-container .card .card-body .event-type .card-event-type.product-shot {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.container.content-container .card .card-body ion-icon{
+    font-size: 25px;
 }
 
 .container.content-container .card .card-body .booking-type {
-    order: 3;
+    grid-area: 2 / 3 / 3 / 5;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    gap: 5px;
+    color: var(--bs-dark);
+    padding: 10px 20px;
 }
 
+
+.container.content-container .card .card-body .booking-type .booking-type-card{
+    perspective: 1000px;
+    background-color: transparent;
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card:hover .booking-type-card-inner {
+    transform: rotateY(180deg);
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card .booking-type-card-inner .front-side,
+.container.content-container .card .card-body .booking-type .booking-type-card .booking-type-card-inner .back-side {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card .booking-type-card-inner .front-side {
+    background: var(--bs-primary);
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card .booking-type-card-inner .back-side {
+    transform: rotateY(180deg);
+    background: var(--bs-primary);
+}
+
+.container.content-container .card .card-body .booking-type .booking-type-card .booking-type-card-inner .back-side .card-description{
+    font-size: 15px;
+    margin: 0 3px!important;
+    font-weight: 1000;
+}
+
+
+
+.container.content-container .card .card-body .booking-type .photography{
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+
+.container.content-container .card .card-body .booking-type .film{
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+
+.container.content-container .card .card-body .booking-type .marketing {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+
+.container.content-container .card .card-body .booking-type .other{
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+
+
 .container.content-container .card .card-body .client-details {
-    order: 4;
+    grid-area: 3 / 1 / 4 / 3;
+    display: flex;
+    /*alig*/
+
 }
 
 .container.content-container .card .card-body .event-producer-crew-staff {
-    order: 5;
+    grid-area: 3 / 3 / 4 / 4;
 }
 
 .container.content-container .card .card-body .action-icons {
-    order: 6;
+    grid-area: 3 / 4 / 4 / 5;
 }
 .sidenav {
     height: auto; /* Full-height: remove this if you want "auto" height */
@@ -217,6 +407,7 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Kiona', sans-serif;
+    list-style: none;
 }
 
 .container.Booking, .container.Crew {
