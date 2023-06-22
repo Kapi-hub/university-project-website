@@ -290,9 +290,7 @@ function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments")
         .then(responseData => {
-            console.log(responseData);
             responseData.forEach(event => events.push(event));
-            console.log("show all events");
             responseData.forEach((event) => {
                 const {
                     id,
@@ -387,9 +385,11 @@ function getAllEvents() {
 
                 let actionIcons = document.createElement("div");
                 actionIcons.setAttribute('class', 'action-icons');
-                actionIcons.innerHTML = `<button type="button" class="change-details">Change details</button>
-//onclick="deleteEvent(${id})
-<button type="button" class="delete-event" id = "delete-event" data-bs-dismiss="modal" data-bs-target="#deleteBooking">Delete event</button>`;
+                console.log(id);
+                actionIcons.innerHTML = `
+<button type="button" class="change-details">Change details</button>
+<button type="button" class="delete-event" onclick="confirmationToast(` + id + `)">
+Delete event</button>`;
 
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -409,13 +409,9 @@ function getAllEvents() {
 }
 
 function deleteEvent(eventID) {
-    let data = {eventID};
     $.ajax({
-        url: `../api/admin/crewAssignments/deleteEvent/${eventID}`,
+        url: `/api/admin/crewAssignments/deleteEvent/${eventID}`,
         method: "DELETE",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
         success: function () {
             alert("Successfully deleted this event");
         },
@@ -451,8 +447,16 @@ function crewButton() {
             crewContainer.style.display = 'flex';
             bookingContainer.style.display = 'none';
         } else {
-            // If the bookingContainer is already visible, do nothing or perform any desired action
         }
     }
 }
 
+function confirmationToast(id) {
+    console.log(id);
+    let toastDeleteEvent = document.getElementById("deleteEventDialog");
+    toastDeleteEvent.showModal();
+    let deleteButton = document.getElementById('deleteButton')
+    deleteButton.addEventListener('click', function () {
+        deleteEvent(id)
+    });
+}

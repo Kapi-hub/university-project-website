@@ -106,6 +106,7 @@ public enum AdminDao {
                 SELECT json_agg(
                                json_build_object(
                                        'eventDetails', json_build_object(
+                                       'id', e.id,
                                        'name', e.name,
                                        'description', e.description,
                                        'start', e.start,
@@ -152,15 +153,14 @@ public enum AdminDao {
         }
     }
 
-    public void deleteEvent(int id) {
-        String query = "DELETE FROM event" +
-                "WHERE id = ?";
-        try {
+    public void deleteEvent(int id) throws SQLException {
+        String query = """
+                DELETE FROM event" +
+                "WHERE id = ?""";
             PreparedStatement st = connection.prepareStatement(query);
             st.setInt(1, id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+            st.executeUpdate();
     }
 
     /*METHODS RELATED TO CREW MEMBERS*/
@@ -180,7 +180,7 @@ public enum AdminDao {
             st.setString(7, passwords[1]);
             st.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("In insertion of account " + e);
+            System.err.println("In insertion of account " + e);
         }
 
         //Get the account's id so that it will be used for the foreign key of crew_member

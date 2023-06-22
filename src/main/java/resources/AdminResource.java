@@ -5,6 +5,7 @@ import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import models.*;
 
 import java.sql.SQLException;
@@ -101,11 +102,13 @@ public class AdminResource {
     @DELETE
     @Path("/crewAssignments/deleteEvent/{eventID}")
     @RolesAllowed("admin")
-    public void handleDeleteEvent(@PathParam("eventID") int id) {
+    public Response handleDeleteEvent(@PathParam("eventID") int id) {
         try {
             AdminDao.I.deleteEvent(id);
-        }  catch (Exception e) {
-            e.printStackTrace();
+            return Response.ok().build();
+        }  catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
         }
     }
 
