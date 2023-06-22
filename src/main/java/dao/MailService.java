@@ -130,4 +130,7 @@ public enum MailService {
         message.setRaw(encodedEmail);
         return message;
     }
+
+    public void setup() {
+    }
 }
