@@ -233,10 +233,10 @@ public class EventResource {
     }
 
     private boolean canEnrol(int eventId, int crewId) {
+        if (EventDao.instance.isEnrolled(crewId, eventId)) {
+            return false;
+        }
         try {
-            if (EventDao.instance.isEnrolled(crewId, eventId)) {
-                return false;
-            }
             EventStatus status = EventDao.instance.getEventStatus(eventId);
             if (status != EventStatus.REVIEW || EventDao.instance.isEventInPast(eventId)) {
                 return false;
@@ -256,6 +256,11 @@ public class EventResource {
                     .build();
         }
         try {
+            EventStatus status = EventDao.instance.getEventStatus(eventId);
+            if (status == EventStatus.DONE) {
+                return Response.notModified()
+                        .build();
+            }
             EventDao.instance.removeEnrolment(crewId, eventId);
             return Response.ok()
                     .build();

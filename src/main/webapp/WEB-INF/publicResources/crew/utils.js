@@ -197,7 +197,10 @@ function getHtmlElement(event) {
     });
 
     returnDiv.appendChild(innerDiv);
-    returnDiv.innerHTML += getBottomButton(canEnrol, isEnrolled, id);
+
+    if (status !== "done") {
+        returnDiv.innerHTML += getBottomButton(canEnrol, isEnrolled, id);
+    }
 
     return returnDiv;
 }
