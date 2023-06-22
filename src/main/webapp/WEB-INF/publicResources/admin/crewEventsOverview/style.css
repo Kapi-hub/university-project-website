@@ -1,3 +1,6 @@
+h1, p {
+    color: aqua;
+}
 .choose-crew-booking-container {
     display: flex;
     align-items: center;
@@ -182,7 +185,7 @@ body {
     padding-bottom: 20px;
 }
 
-.toast {
+.toastDelete {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -191,7 +194,7 @@ body {
     color: var(--bs-light);
 }
 
-.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn {
+.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details {
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -199,7 +202,7 @@ body {
     margin-left: auto;
 }
 
-.closeBttn {
+.closeBttn, .delete-event {
     background-color: red;
 }
 

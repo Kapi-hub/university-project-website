@@ -152,12 +152,12 @@ public enum AdminDao {
         }
     }
 
-    public void deleteEvent(EventBean event) {
+    public void deleteEvent(int id) {
         String query = "DELETE FROM event" +
                 "WHERE id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
-            st.setInt(1, event.getId());
+            st.setInt(1, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

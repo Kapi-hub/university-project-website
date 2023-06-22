@@ -99,11 +99,11 @@ public class AdminResource {
     }
 
     @DELETE
-    @Path("/crewAssignments/event?id=smth") //TODO change path
+    @Path("/crewAssignments/deleteEvent/{eventID}")
     @RolesAllowed("admin")
-    public void handleDeleteEvent(EventBean event) {
+    public void handleDeleteEvent(@PathParam("eventID") int id) {
         try {
-            AdminDao.I.changeEventDetails(event);
+            AdminDao.I.deleteEvent(id);
         }  catch (Exception e) {
             e.printStackTrace();
         }

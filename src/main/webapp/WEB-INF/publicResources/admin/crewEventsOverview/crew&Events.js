@@ -295,6 +295,7 @@ function getAllEvents() {
             console.log("show all events");
             responseData.forEach((event) => {
                 const {
+                    id,
                     name,
                     description,
                     start,
@@ -346,6 +347,12 @@ function getAllEvents() {
                 eventDescription.setAttribute('class', 'location');
                 eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${description}</span>`;
 
+                detailsList.appendChild(eventDescription);
+                detailsList.appendChild(eventLocation);
+                detailsList.appendChild(eventDuration);
+                detailsList.appendChild(dateTime);
+                eventOtherDetails.appendChild(detailsList);
+
                 let eventType = document.createElement("div");
                 eventType.setAttribute('class', 'event-type');
                 eventType.innerHTML = `<span>${type}</span>`;
@@ -380,13 +387,10 @@ function getAllEvents() {
 
                 let actionIcons = document.createElement("div");
                 actionIcons.setAttribute('class', 'action-icons');
+                actionIcons.innerHTML = `<button type="button" class="change-details">Change details</button>
+//onclick="deleteEvent(${id})
+<button type="button" class="delete-event" id = "delete-event" data-bs-dismiss="modal" data-bs-target="#deleteBooking">Delete event</button>`;
 
-                detailsList.appendChild(eventDescription);
-                detailsList.appendChild(eventLocation);
-                detailsList.appendChild(eventDuration);
-                detailsList.appendChild(dateTime);
-
-                eventOtherDetails.appendChild(detailsList);
                 container.appendChild(card);
                 card.appendChild(cardBody);
                 cardBody.appendChild(eventDetails);
@@ -397,10 +401,58 @@ function getAllEvents() {
                 cardBody.appendChild(clientDetails);
                 cardBody.appendChild(eventProducer);
                 cardBody.appendChild(actionIcons);
-
             });
         })
         .catch(error => {
             console.error("Error fetching events:", error);
         });
 }
+
+function deleteEvent(eventID) {
+    let data = {eventID};
+    $.ajax({
+        url: `../api/admin/crewAssignments/deleteEvent/${eventID}`,
+        method: "DELETE",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function () {
+            alert("Successfully deleted this event");
+        },
+        error: function () {
+            alert("Error deleting this event");
+        }
+
+    });
+}
+
+function bookingButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+
+    if (bookingContainer && crewContainer) {
+        if (bookingContainer.style.display === 'none') {
+            bookingContainer.style.display = 'flex';
+            crewContainer.style.display = 'none';
+            getAllEvents();
+        } else {
+            // If the bookingContainer is already visible, do nothing or perform any desired action
+        }
+    }
+}
+
+
+function crewButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+
+    if (bookingContainer && crewContainer) {
+        if (crewContainer.style.display === 'none') {
+            crewContainer.style.display = 'flex';
+            bookingContainer.style.display = 'none';
+        } else {
+            // If the bookingContainer is already visible, do nothing or perform any desired action
+        }
+    }
+}
+
