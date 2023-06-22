@@ -302,4 +302,35 @@ public enum EventDao {
             return -1;
         }
     }
+
+    public Object[] getHoursWorked(int crewId) throws SQLException {
+        String query = """
+                SELECT SUM(e.duration), CONCAT(m.month, '-', m.year)
+                FROM event e, event_enrollment ee, (
+                    SELECT id, EXTRACT (MONTH FROM start) AS month, EXTRACT (YEAR FROM start) AS year
+                    FROM event
+                ) AS m
+                WHERE (
+                    e.id = ee.event_id AND
+                    ee.crew_member_id = ? AND
+                    e.start < NOW() AND
+                    m.id = e.id
+                )
+                GROUP BY (m.month, m.year)""";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, crewId);
+
+        ResultSet rs = st.executeQuery();
+
+        ArrayList<Object[]> resultList = new ArrayList<>();
+
+        while (rs.next()) {
+            String date = rs.getString(2);
+            int hours = rs.getInt(1);
+            resultList.add(new Object[] {date, hours});
+        }
+
+        return resultList.size() == 0 ? null : resultList.toArray(new Object[0]);
+    }
 }

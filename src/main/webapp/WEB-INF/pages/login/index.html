@@ -11,6 +11,7 @@
     <link href="/static/general.css" rel="stylesheet">
     <link href="/static/login/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
+    <script src="/static/logout.js"></script>
     <script>
         let path = null;
 
@@ -22,8 +23,8 @@
             if (loginRequired) {
                 alert("Please log in with an account that has the required permission to access this page");
             }
-            const logout = urlParams.get('logout');
-            if (logout) {
+            const isLogout = urlParams.get('logout');
+            if (isLogout) {
                 if (!loggedIn) {
                     alert("You have been logged out");
                 }
@@ -76,20 +77,9 @@
             logoutButton.classList.add("btn", "btn-primary", "login-btn");
             logoutButton.style.color = "white";
             logoutButton.style.marginLeft = "5px";
-            logoutButton.onclick = function () {
-                const XHR = new XMLHttpRequest();
-                XHR.open("POST", "/api/login/logout");
-                XHR.addEventListener("load", function () {
-                    if (this.status === 200) {
-                        document.cookie = "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-                        document.cookie = "accountId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-                        window.location.href = "/login?logout=true"
-                    } else {
-                        alert("Logout failed due to internal server error, please try again.")
-                    }
-                });
-                XHR.send();
-            };
+            logoutButton.onclick = () => {
+                logout();
+            }
             buttonBox.appendChild(logoutButton);
             loginBox.appendChild(buttonBox);
         }
@@ -111,7 +101,7 @@
                     if (path == null) {
                         window.location.href = XHR.getResponseHeader("Location") + "?fromLogin=true";
                     } else {
-                        window.location.href = path + "?fromLogin=true";
+                        window.location.href = path;
                     }
                 } else if (this.status === 401) {
                     alert("Wrong username/password");

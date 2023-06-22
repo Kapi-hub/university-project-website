@@ -11,6 +11,7 @@
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
     <link href="/static/crew/style.css" rel="stylesheet" type="text/css">
     <script src="/static/logout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/static/crew/utils.js"></script>
 </head>
 <body>
@@ -56,15 +57,14 @@
             let eventBox = document.getElementsByClassName("welcomeMessageEvents");
             let welcomeBox = document.getElementsByClassName("welcome-container");
             let navBar = document.getElementsByClassName("navbar-animated");
+            eventBox[0].remove();
             // deactivate the animation
             navBar[0].classList.remove("navbar-animated");
             nameBox[0].classList.remove("animate");
-            eventBox[0].classList.remove("animate");
             welcomeBox[0].classList.add("still");
             welcomeBox[0].classList.remove("animate");
             // set the text
             nameBox[0].innerHTML = "Welcome back!";
-            eventBox[0].innerHTML = "Here are your upcoming events:";
         }
     </script>
 </div>
@@ -98,7 +98,7 @@
     </div>
     <div class="content-container">
         <div class="tab_content tab_current container-fluid">
-            <h3></h3>
+            <h3 class="section-title"></h3>
             <div id="carouselContainer" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <!-- Added by JS -->
@@ -112,32 +112,30 @@
             </div>
         </div>
         <div class="tab_content tab_past container-fluid">
-            <h3></h3>
+            <h3 class="section-title"></h3>
             <div class="accordion" id="pastEvents">
                 <!-- Added by JS -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button aria-controls="collapseTwoPast" aria-expanded="false"
-                                class="accordion-button collapsed"
-                                data-bs-target="#collapseTwoPast" data-bs-toggle="collapse" type="button">
-                            Past event #2
-                        </button>
-                    </h2>
-                    <div class="accordion-collapse collapse" data-bs-parent="#pastEvents" id="collapseTwoPast">
-                        <div class="accordion-body">
-                            <strong>Second body.</strong> Testing to see how it goes.
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="tab_content tab_anno container-fluid">
-            <h3 class="text-white sticky-top">
-                <span id="numberOfAnno">0</span> Announcements</h3>
+            <h3 class="section-title"></h3>
+            <div class="accordion" id="announcements">
+                <!-- Added by JS -->
+            </div>
         </div>
         <div class="tab_content tab_stats container-fluid">
-            <p>something here so it has some text.
-                Later on, stats will be shown here using the allowed library</p>
+            <h3 class="section-title">Statistics</h3>
+            <div id="statsCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                        <canvas id="hoursWorked"></canvas>
+                </div>
+                <a class="carousel-control-prev" href="#statsCarousel" role="button" data-bs-slide="prev">
+                    <ion-icon name="chevron-back-outline" class="carousel icon"></ion-icon>
+                </a>
+                <a class="carousel-control-next" href="#statsCarousel" role="button" data-bs-slide="next">
+                    <ion-icon name="chevron-forward-outline" class="carousel icon"></ion-icon>
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -156,41 +154,6 @@
             $("." + currentTabValue).show();
         });
     });
-</script>
-<script>
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-    const appendAlert = (message, type) => {
-        const wrapper = document.createElement('div')
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" onclick="countAnnouncementsDesc()" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('')
-
-        alertPlaceholder.append(wrapper)
-    }
-
-    const alertTrigger = document.getElementById('liveAlertBtn')
-    if (alertTrigger) {
-        alertTrigger.addEventListener('click', () => {
-            appendAlert('Nice, you triggered this alert message!', 'success')
-        })
-    }
-</script>
-<script>
-    let annoCounter = 0;
-    let numberOfAnnoHandler = document.getElementById('numberOfAnno');
-
-    function countAnnouncementsAsc() {
-        annoCounter++;
-        numberOfAnnoHandler.innerHTML = annoCounter;
-    }
-
-    function countAnnouncementsDesc() {
-        annoCounter--;
-        numberOfAnnoHandler.innerHTML = annoCounter;
-    }
 </script>
 <script>
     // This is used in the animation that greets the crew member

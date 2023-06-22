@@ -120,9 +120,44 @@ doesn't get in the way of building / maintaining the website*/
 /* MAIN BODY OF THE DASHBOARD */
 /* ************************** */
 
+.section-title {
+    font-size: 1.5rem;
+}
+
+.personalTag {
+    margin-left: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+}
+
+.announcement-date-span {
+    margin-left: auto;
+}
+
+.tab_content {
+    overflow: scroll;
+}
+
+.tab_anno .accordion-button::after {
+    margin-left: 1rem !important;
+}
+
+.event-title {
+    background-color: var(--bs-primary);
+    color: var(--bs-light);
+    padding: 1.25rem 1rem;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
 .eventBody {
     padding: 2%;
     position: relative;
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 1rem;
 }
 
 .main-container {
@@ -165,8 +200,8 @@ doesn't get in the way of building / maintaining the website*/
     overflow: scroll;
 }
 
-/*  Small button in bottom left corner of parent  */
 .content-container .tab_content.tab_current .carousel.slide .carousel-control-prev {
+    color: var(--bs-dark);
     position: absolute !important;
     height: 10%;
     width: 6%;
@@ -177,8 +212,8 @@ doesn't get in the way of building / maintaining the website*/
     margin-left: 0;
 }
 
-/*  Small button in bottom right corner of parent  */
 .content-container .tab_content.tab_current .carousel.slide .carousel-control-next {
+    color: var(--bs-dark);
     position: absolute !important;
     height: 10%;
     width: 6%;
@@ -396,14 +431,7 @@ doesn't get in the way of building / maintaining the website*/
     background-color: white;
     color: var(--bs-dark);
     border: 2px solid var(--bs-dark);
-}
-
-.weekdaysNumber .day.prev {
-    cursor: url("/static/img/reverse.png"), auto;
-}
-
-.weekdaysNumber .day.next {
-    cursor: url("/static/img/play.png"), auto;
+    cursor: pointer;
 }
 
 .weekdaysNumber .day .dot-container {
@@ -560,8 +588,9 @@ doesn't get in the way of building / maintaining the website*/
     color: var(--bs-dark);
 }
 
-.right_side_bar #event-accordion .accordion-item .accordion-header .accordion-button.collapsed {
+.accordion-button.collapsed {
     background-color: var(--bs-primary-bg-subtle);
+    display: flex;
 }
 
 .details {

@@ -10,7 +10,7 @@ function fetchEvents() {
     fetch("/api/event/getEnrolled", {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Accept": "application/json"
         }
     }).then(response => {
         if (response.status === 200) {
@@ -42,7 +42,7 @@ fetchEvents();
 
 if (isFromLogin()) {
     const nameContainer = document.getElementsByClassName("welcomeMessageName");
-    nameContainer[0].textContent = "Welcome, " + window.sessionStorage.getItem("forename") || "user" + "!";
+    nameContainer[0].textContent = "Welcome, " + (window.sessionStorage.getItem("forename") || "user") + "!";
 
     const eventMessageContainer = document.getElementsByClassName("welcomeMessageEvents");
     const eventCount = window.sessionStorage.getItem("eventCount");
@@ -58,7 +58,7 @@ if (isFromLogin()) {
         eventMessageContainer[0].appendChild(br);
         eventMessageContainer[0].appendChild(i);
     } else {
-        eventMessageContainer[0].textContent = "You have " + (eventCount || "no") + " event" + (eventCount === "1" ? "" : "s") + " today.";
+        eventMessageContainer[0].textContent = "You have " + (eventCount === '0' ? "no" : eventCount) + " event" + (eventCount === "1" ? "" : "s") + " today.";
     }
 }
 
@@ -85,7 +85,8 @@ function loadCurrentEvents() {
             carouselItem.className = "carousel-item";
             let titleSpan = document.createElement("span");
             titleSpan.classList.add("titleSpan");
-            let title = document.createElement("h3");
+            let title = document.createElement("h4");
+            title.classList.add("event-title");
             let b = document.createElement("b");
             let i = document.createElement("i");
             b.textContent = event.name + " - ";
@@ -110,7 +111,7 @@ function loadPastEvents() {
 
     let eventsPast = eventMap.get("past");
     if (eventsPast === undefined) {
-        accordion.innerHTML = "<h3>You have no past events yet.</h3>";
+        accordion.innerHTML = "<h4 class='event-title'>You have no past events yet.</h4>";
         let subtitle = document.createElement("h5");
         subtitle.textContent = "Once you have participated in some events, you can view them here.";
         accordion.appendChild(subtitle);
@@ -129,49 +130,156 @@ function loadPastEvents() {
             button.setAttribute("data-bs-target", "#collapse" + event.id);
             button.setAttribute("aria-expanded", "false");
             button.setAttribute("aria-controls", "collapse" + event.id);
-            button.textContent = event.name;
+            let b = document.createElement("b");
+            b.textContent = event.name;
+            let i = document.createElement("i");
+            i.textContent = getFormattedDate(event.date);
+            button.appendChild(b);
+            button.innerHTML += "&ensp;-&ensp;";
+            button.appendChild(i);
             accordionHeader.appendChild(button);
             accordionItem.appendChild(accordionHeader);
             let accordionCollapse = document.createElement("div");
             accordionCollapse.className = "accordion-collapse collapse";
             accordionCollapse.id = "collapse" + event.id;
             accordionCollapse.setAttribute("data-bs-parent", "#pastEvents");
-            let accordionBody = document.createElement("div");
-            accordionBody.className = "accordion-body";
-            let eventBody = getHtmlElement(event);
-            eventBody.classList.add("eventBody");
-            accordionBody.appendChild(eventBody);
+            let accordionBody = getHtmlElement(event);
+            accordionBody.classList.add("accordion-body", "eventBody");
             accordionCollapse.appendChild(accordionBody);
             accordionItem.appendChild(accordionCollapse);
             accordion.appendChild(accordionItem);
         });
+        addHover()
     }
-//     <div className="accordion-item">
-//         <h2 className="accordion-header">
-//             <button aria-controls="collapseOnePast" aria-expanded="false"
-//                     className="accordion-button collapsed"
-//                     data-bs-target="#collapseOnePast" data-bs-toggle="collapse" type="button">
-//                 Past event #1
-//             </button>
-//         </h2>
-//         <div className="accordion-collapse collapse" data-bs-parent="#pastEvents" id="collapseOnePast">
-//             <div className="accordion-body">
-//                 <div className="halfOne">
-//                     Name: <br>
-//                     Type: <br>
-//                     Date: <br>
-//                     Location: <br>
-//                     Duration: <br>
-//                 </div>
-//                 <div className="halfTwo">
-//                     Client: <br>
-//                     Booking Type: <br>
-//                     Product Manager: <br>
-//                     Crew: <br>
-//                     Status: <br>
-//                     Description:
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
 }
+
+
+let announcementList = [];
+let title = document.getElementsByClassName("tab_content tab_anno container-fluid")[0].children[0];
+let container = document.getElementById("announcements")
+function fetchAnnouncements() {
+    fetch("/api/announcement/forCrew", {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+        }
+    }).then(response => {
+        if (response.status === 200) {
+            console.log("Announcements fetched successfully.")
+            let data = response.json();
+            data.then(parsedData => {
+                parsedData.forEach(announcement => {
+                    announcementList.push(announcement);
+                });
+                loadAnnouncements();
+            });
+        } else {
+            if (response.status !== 204) {
+                console.log("Error while fetching announcements: " + response.status);
+            }
+            title.textContent = "You have no announcements yet.";
+            let subtitle = document.createElement("h5");
+            subtitle.textContent = "Once you have received some announcements, you can view them here.";
+            container.appendChild(subtitle);
+        }
+    });
+
+}
+
+function loadAnnouncements() {
+    title.innerHTML = "";
+    title.textContent = "You have " + numberToString(announcementList.length) + " announcement" + (announcementList.length === 1 ? "" : "s") + ".";
+    announcementList.forEach(announcement => {
+        let accordionItem = document.createElement("div");
+        accordionItem.className = "accordion-item";
+        let accordionHeader = document.createElement("h2");
+        accordionHeader.className = "accordion-header";
+        let button = document.createElement("button");
+        button.className = "accordion-button collapsed";
+        button.type = "button";
+        button.setAttribute("data-bs-toggle", "collapse");
+        button.setAttribute("data-bs-target", "#collapse" + announcement.id);
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-controls", "collapse" + announcement.id);
+        let b = document.createElement("b");
+        b.textContent = announcement.title;
+        let i = document.createElement("i");
+        i.textContent = announcement.announcer;
+        button.appendChild(b);
+        button.innerHTML += "&ensp;-&ensp;";
+        button.appendChild(i);
+        if (announcement.isPersonal) {
+            let personalTag = document.createElement("span");
+            personalTag.classList.add("personalTag")
+            personalTag.textContent = "Personal Message";
+            button.appendChild(personalTag);
+        }
+        let date = document.createElement("span");
+        date.textContent = getFormattedDate(announcement.dateTime) + " " + getFormattedTime(announcement.dateTime);
+        date.classList.add("announcement-date-span")
+        button.appendChild(date);
+        accordionHeader.appendChild(button);
+        accordionItem.appendChild(accordionHeader);
+        let accordionCollapse = document.createElement("div");
+        accordionCollapse.className = "accordion-collapse collapse";
+        accordionCollapse.id = "collapse" + announcement.id;
+        accordionCollapse.setAttribute("data-bs-parent", "#announcements");
+        let accordionBody = document.createElement("div");
+        accordionBody.className = "accordion-body";
+        accordionBody.textContent = announcement.body;
+        accordionCollapse.appendChild(accordionBody);
+        accordionItem.appendChild(accordionCollapse);
+        container.appendChild(accordionItem);
+    })
+}
+fetchAnnouncements();
+
+
+
+function fetchHoursWorked() {
+    fetch("/api/event/getHoursWorked", {
+        headers: {
+            "Accept": "application/json"
+        }
+    }).then(response => {
+        if (!response.status === 200) {
+            throw new Error("HTTP error " + response.status)
+        }
+        console.log(response.body)
+        return response.json();
+    }).then(parsedData => {
+        let hoursWorkedPerMonth = new Map();
+        parsedData.forEach(month => {
+            hoursWorkedPerMonth.set(month[0], month[1]);
+        })
+        createHoursWorkedGraph(hoursWorkedPerMonth);
+    }).catch(error => {
+        console.error("Error retrieving data for statistics: " + error);
+    });
+}
+
+function createHoursWorkedGraph(hoursWorkedPerMonth) {
+    const ctx = document.getElementById('hoursWorked').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Array.from(hoursWorkedPerMonth.keys()),
+            datasets: [{
+                label: 'Amount of hours worked',
+                data: Array.from(hoursWorkedPerMonth.values()),
+                backgroundColor: 'rgba(22, 150, 210, 0.1)',
+                borderColor: 'rgba(22, 150, 210)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+fetchHoursWorked();

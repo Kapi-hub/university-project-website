@@ -109,7 +109,7 @@ public class EventResource {
     }
 
     @GET
-    @Path("/getFromMonth/")
+    @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
     public Response getFromMonth(@QueryParam("month") String QueryDate, @CookieParam("accountId") String accountIdString) {
@@ -159,6 +159,22 @@ public class EventResource {
         }
         return Response.ok(returnValue)
                 .build();
+    }
+
+    @Path("/getHoursWorked")
+    @RolesAllowed("crew_member")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public Response getHoursWorked(@CookieParam("accountId") String accountIdString) {
+        int accountId = Integer.parseInt(accountIdString);
+        try {
+            return Response.ok(EventDao.instance.getHoursWorked(accountId))
+                    .build();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
     }
 
     private Object[] getMissingCrew(int id) {

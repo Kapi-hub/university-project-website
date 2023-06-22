@@ -86,11 +86,11 @@ const formatCrewString = (crew) => {
     return crewString || "All required crew is enrolled.";
 }
 
-const formatEnrolled = (enrolled) => {
+const formatEnrolled = (enrolled, eventName) => {
     let enrolledArray = [];
     enrolled.forEach(([role, people]) => {
         const peopleString = people.join(", ");
-        const detailsId = `details-${(name + role).replace(/\s/g, "")}`;
+        const detailsId = `details-${(eventName + role).replace(/\s/g, "")}`;
         let enrolledSpan = document.createElement("span");
         enrolledSpan.classList.add("hoverable");
         enrolledSpan.setAttribute("data-details", detailsId);
@@ -172,7 +172,7 @@ function getHtmlElement(event) {
     const undefinedString = `Not defined for this event.`;
 
     let crewString = formatCrewString(crew); // A string of the crew required for the event, already sanitised.
-    let enrolledArray = formatEnrolled(enrolled); // An array of spans, each containing a role and the people enrolled for that role. Already sanitised.
+    let enrolledArray = formatEnrolled(enrolled, name); // An array of spans, each containing a role and the people enrolled for that role. Already sanitised.
 
     let returnDiv = document.createElement("div");
 
