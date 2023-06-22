@@ -40,8 +40,10 @@
 ## Sprint 4
 #### General
 + Many finishing touches to the structure.
++ Redesign of the admin side.
 + Security now includes password hashing.
 + Testing also includes the use of sonarQube now.
 #### Features
 + Crew can now enroll and un-enroll in the calendar dashboard.
 + Admins can create new members. 
++ Admins can manually add events.
