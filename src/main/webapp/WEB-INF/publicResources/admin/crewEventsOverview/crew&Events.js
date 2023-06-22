@@ -304,6 +304,13 @@ function getAllEvents() {
                     booking_type
                 } = event.eventDetails;
 
+                const {
+                    forename,
+                    surname,
+                    emailAddress,
+                    phone_number
+                } = event.eventDetails.clients[0]
+
                 const container = document.querySelector('.container.content-container');
 
                 let card = document.createElement("div");
@@ -317,26 +324,27 @@ function getAllEvents() {
 
                 let eventName = document.createElement("div");
                 eventName.setAttribute('class', 'event-name');
-                eventName.textContent = name; // Use the extracted "name" property
+                eventName.textContent = name;
 
                 let eventOtherDetails = document.createElement("div");
                 let detailsList = document.createElement("ul");
                 let dateTime = document.createElement("li");
                 dateTime.setAttribute('class', 'date-time');
-                dateTime.innerHTML = `<span>${start}</span>`;
-                //TODO add icons
+                let date = new Date(start);
+                let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + date.getMinutes();
+                dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${dateFormat}</span>`;
 
                 let eventDuration = document.createElement("li");
                 eventDuration.setAttribute('class', 'duration');
-                eventDuration.innerHTML = `<span>${duration}</span>`;
+                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${duration}</span>`;
 
                 let eventLocation = document.createElement("li");
                 eventLocation.setAttribute('class', 'location');
-                eventLocation.innerHTML = `<span>${location}</span>`;
+                eventLocation.innerHTML = `<ion-icon name="pin-outline"></ion-icon> <span>${location}</span>`;
 
                 let eventDescription = document.createElement("li");
                 eventDescription.setAttribute('class', 'location');
-                eventDescription.innerHTML = `<span>${description}</span>`;
+                eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${description}</span>`;
 
                 let eventType = document.createElement("div");
                 eventType.setAttribute('class', 'event-type');
@@ -349,7 +357,23 @@ function getAllEvents() {
 
                 let clientDetails = document.createElement("div");
                 clientDetails.setAttribute('class', 'client-details');
-                //TODO fetch the client details
+                let clientList = document.createElement("ul");
+                let clientName = document.createElement("li");
+                clientName.setAttribute('class', 'client-name');
+                clientName.innerHTML = `<span>${forename} ${surname}</span>`;
+
+                let clientEmail = document.createElement("li");
+                clientEmail.setAttribute('class', 'client-email');
+                clientEmail.innerHTML = `<span>${emailAddress}</span>`;
+
+                let clientPhone = document.createElement("li");
+                clientPhone.setAttribute('class', 'client-phone');
+                clientPhone.innerHTML = `<span>${phone_number}</span>`;
+
+                clientList.appendChild(clientEmail);
+                clientList.appendChild(clientPhone);
+                clientList.appendChild(clientName);
+                clientDetails.appendChild(clientList);
 
                 let eventProducer = document.createElement("div");
                 eventProducer.setAttribute('class', 'event-producer-crew-staff');
@@ -363,20 +387,17 @@ function getAllEvents() {
                 detailsList.appendChild(dateTime);
 
                 eventOtherDetails.appendChild(detailsList);
-
-
-                cardBody.appendChild(actionIcons);
-                cardBody.appendChild(eventProducer);
-                cardBody.appendChild(clientDetails);
-                cardBody.appendChild(bookingType);
-                cardBody.appendChild(eventType);
-                eventDetails.appendChild(eventOtherDetails);
-                eventDetails.appendChild(eventName);
-                cardBody.appendChild(eventDetails);
-
-                card.appendChild(cardBody);
-
                 container.appendChild(card);
+                card.appendChild(cardBody);
+                cardBody.appendChild(eventDetails);
+                eventDetails.appendChild(eventName);
+                eventDetails.appendChild(eventOtherDetails);
+                cardBody.appendChild(eventType);
+                cardBody.appendChild(bookingType);
+                cardBody.appendChild(clientDetails);
+                cardBody.appendChild(eventProducer);
+                cardBody.appendChild(actionIcons);
+
             });
         })
         .catch(error => {

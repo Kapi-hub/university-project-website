@@ -44,67 +44,8 @@
     </div>
 </div>
 
-<!--const markup = `<li>${user.name}</li>`;-->
-<!--document.querySelector('ul').insertAdjacentHTML()-->
 <div class="container content-container">
-        <div class="card">
-            <div class="card-body">
-                <div class="event-details">
-                    <div class="event-name">
-                        FESTIVAL UNTOLD NEVERSEA
-                    </div>
-                    <div class="event-other-details">
-                        <ul>
-                            <li class="date-time">
-                                <ion-icon name="calendar-outline"></ion-icon>
-                                <span>24/8/2023 18:00</span>
-                            </li>
-                            <li class="duration">
-                                <ion-icon name="time-outline"></ion-icon>
-                                <span>30 hours</span>
-                            </li>
-                            <li class="location">
-                                <ion-icon name="pin-outline"></ion-icon>
-                                <span>Van Heutzstraat 420, 7535ZD, Enschede, Netherlands</span>
-                            </li>
-                            <li class="description">
-                                <ion-icon name="document-outline"></ion-icon>
-                                <span>A very nice description that for is not going to have repeating words
-                                repeating words repeating words repeating words repeating words repeating words
-                                repeating words repeating words repeating words repeating words repeating words </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="event-type">
-                    .
-                </div>
-                <div class="booking-type">
 
-                </div>
-                <div class="client-details">
-
-                </div>
-                <div class="event-producer-crew-staff">
-
-                </div>
-                <div class="action-icons">
-
-                </div>
-            </div>
-</div>
-<div class="card">
-
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                    content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
 </div>
 
 
@@ -364,140 +305,16 @@
 </div>
 
 
-<!--<div class="flex-container">-->
-<!--    &lt;!&ndash;Side bar &ndash;&gt;-->
-<!--    <div class="sidenav">-->
-<!--        <div class="col">-->
-<!--            <button class="collapse-button NavC" data-target="crewGroup" type="button">Crew members</button>-->
-<!--            <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>-->
-<!--        </div>-->
-<!--    </div>-->
+<button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
+        data-bs-target="#createMemberModal" onclick="setUrl('/newMember')">
+    New member +
+</button>
 
 
-<!--crewmember and popup -->
-<div class="container Crew">
-    <div class="collapse hide" id="crewGroup">
-        <div class="row">
-            <div class="col-4">
-                <div class="list-group ">
-                    <div class="card-body Crew">
-                        Crew-members
-                        <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
-                                data-bs-target="#createMemberModal" onclick="setUrl('/newMember')">
-                            New member +
-                        </button>
-                    </div>
-                    <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
-                    <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
-                    <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
-                    <button class="collapse-button Crew" data-target="crew4" type="button">Crew member 4</button>
-                </div>
-            </div>
-
-            <!--pop-up-->
-            <div class="col-4">
-                <div class="list-group">
-                    <div class="card pop-up bg-primary text-light">
-                        <div class="collapse crew" id="crew1">
-                            <div class="card-body">
-                                <h5>Crewmember 1</h5>
-                                <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                    bookings</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                            </div>
-                        </div>
-                        <div class="collapse crew" id="crew2">
-                            <div class="card-body">
-                                <h5>Crewmember 2</h5>
-                                <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                    bookings</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                            </div>
-                        </div>
-                        <div class="collapse crew" id="crew3">
-                            <div class="card-body">
-                                <h5>Crewmember 3</h5>
-                                <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                    bookings</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                            </div>
-                        </div>
-                        <div class="collapse crew" id="crew4">
-                            <div class="card-body">
-                                <h5>Crewmember 4</h5>
-                                <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                    bookings</a>
-                                <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<!--booking and pop-up-->
-<div class="container Booking">
-    <div class="collapse hide" id="bookingGroup">
-        <div class="row">
-            <div class="col-4 ">
-                <div class="list-group">
-                    <div class="card-body Booking">
-                        Bookings
-                        <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                                data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
-                            Event +
-                        </button>
-                    </div>
-                    <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
-                    <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
-                    <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
-                    <button class="collapse-button booking" data-target="booking4" type="button">Booking 4</button>
-                </div>
-            </div>
-
-            <!--pup-up -->
-            <div class="col-4">
-                <div class="list-group">
-                    <div class="collapse booking" id="booking1">
-                        <div class="card-body">
-                            <h5>Booking 1</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking2">
-                        <div class="card-body">
-                            <h5>Booking 2</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking3">
-                        <div class="card-body">
-                            <h5>Booking 3</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking4">
-                        <div class="card-body">
-                            <h5>Booking 4</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<button type="button" class="createEventBttn" data-bs-toggle="modal"
+        data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
+    Event +
+</button>
 
 
 <div class="toastEvent" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
@@ -521,68 +338,8 @@
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 <script>
-    // Get all collapse buttons for Crew
-    const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
-
-    // Add click event listener to each button
-    collapseButtonsCrew.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.crew');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtons = document.querySelectorAll('.collapse-button.booking');
-
-    // Add click event listener to each button
-    collapseButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.booking');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
-
-    // Add click event listener to each button
-    collapseButtonsNavC.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
 
     const saveEventButton = document.querySelector('.saveEventBttn');
     const saveMemberButton = document.querySelector('.saveMemberBttn');
@@ -626,8 +383,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         getAllEvents();
     });
-
-
 </script>
 <script src="/static/admin/crewEventsOverview/crew&Events.js"></script>
 </body>
