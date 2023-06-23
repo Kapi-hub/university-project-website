@@ -1,38 +1,3 @@
-/*
-    ADDED BY ALEX
- */
-
-/*
-    A pill where you can choose what to display,
-    crew members or bookings
- */
-:root {
-    font-size: 16px;
-    --bs-primary-rgb: 22, 150, 210;
-    --bs-primary: rgb(var(--bs-primary-rgb)) !important;
-    --bs-primary-bg-subtle: rgba(var(--bs-primary-rgb), 0.1);
-    --bs-primary-bg-75: rgba(var(--bs-primary-rgb), 0.75);
-    --bs-secondary-rgb: 82, 82, 82;
-    --bs-secondary: rgb(var(--bs-secondary-rgb)) !important;
-    --bs-secondary-bg-subtle: rgba(var(--bs-secondary-rgb), 0.1);
-    --bs-dark-rgb: 31, 31, 31;
-    --bs-dark: rgb(var(--bs-dark-rgb)) !important;
-    --bs-dark-bg-subtle: rgba(var(--bs-dark-rgb), 0.8);
-    --bs-light-rgb: 241, 241, 241;
-    --bs-light: rgb(var(--bs-light-rgb)) !important;
-    --bs-light-bg-subtle: rgba(var(--bs-light-rgb), 0.1);
-
-}
-
-/*
-    ADDED BY ALEX
- */
-
-/*
-    A pill where you can choose what to display,
-    crew members or bookings
- */
-
 .choose-crew-booking-container {
     display: flex;
     align-items: center;
@@ -143,15 +108,21 @@
 
 .container.content-container .card .card-body .event-details .event-other-details{
     grid-row: 2;
+    /*background-color: blue;*/
 }
 
+
 .container.content-container .card .card-body .event-details .event-other-details ul {
+    list-style: none;
     padding: 0 !important;
     margin: 0 !important;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: scroll;
+}
+
+.container.content-container .card .card-body .event-details .event-other-details ul li{
 }
 
 .container.content-container .card .card-body .event-details .event-other-details ul li ion-icon{
@@ -372,16 +343,20 @@ body {
     padding-bottom: 20px;
 }
 
-.toast {
-    position: fixed;
+.deleteEventDialog {
+    position: absolute ;
     top: 50%;
     left: 50%;
+    border-radius: 10px;
+    border-color: var(--bs-primary-bg-subtle);
     transform: translate(-50%, -50%);
-    background-color: green;
-    color: var(--bs-light);
+    color: var(--bs-dark-bg-subtle);
+    background-color: rgba(255,255,255,0.5);
 }
+.deleteEventDialog::backdrop {
+    background: var(--bs-primary-bg-subtle);}
 
-.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn {
+.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details, .delete-event, .closeDialogBttn{
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -389,8 +364,11 @@ body {
     margin-left: auto;
 }
 
-.closeBttn {
+.closeBttn, .actualDelete{
     background-color: red;
+    border-radius: 10px;
+    color: var(--bs-light);
+    margin-left: auto;
 }
 
 .crewButton {

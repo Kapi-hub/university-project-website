@@ -5,6 +5,7 @@ import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import models.*;
 
 import java.sql.SQLException;
@@ -62,7 +63,7 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/events")
+    @Path("/crewAssignments/bookings")
     @RolesAllowed("admin")
     public String getLatestEvent() {
         try {
@@ -87,6 +88,43 @@ public class AdminResource {
         return events;
     }
 
+    @GET
+    @Path("/crewAssignments/changeEvent/{eventId}")
+    @RolesAllowed("admin")
+    public String handleGetEventWithId(@PathParam("eventId") int id) {
+        String event = null;
+        try{
+            event = AdminDao.I.getEventWithId(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return event;
+    }
+
+    @PUT
+    @Path("/crewAssignments/changeEvent")
+    @RolesAllowed("admin")
+    public void handleChangeEvent(EventBean event) {
+        try{
+            AdminDao.I.changeEventDetails(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @DELETE
+    @Path("/crewAssignments/deleteEvent/{eventID}")
+    @RolesAllowed("admin")
+    public Response handleDeleteEvent(@PathParam("eventID") int id) {
+        try {
+            AdminDao.I.deleteEvent(id);
+            return Response.ok().build();
+        }  catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
+    }
+
     /* METHODS RELATED TO CREW-MEMBERS */
     @POST
     @Path("/crewAssignments/newMember")
@@ -100,17 +138,17 @@ public class AdminResource {
         }
     }
 
-//    @GET
-//    @Path("/crewAssignments")
-//    @RolesAllowed("admin")
-//    public String getAllCrewMembers() {
-//        try {
-//            return AdminDao.I.getAllCrewMembers();
-//        }  catch (SQLException e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
+    @GET
+    @Path("/crewAssignments/members")
+    @RolesAllowed("admin")
+    public String getAllCrewMembers() {
+        try {
+            return AdminDao.I.getAllCrewMembers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @GET
     @Path("/crewAssignments/newEvent")
@@ -123,4 +161,29 @@ public class AdminResource {
             return null;
         }
     }
+
+//    //TODO: test with postman
+//    @PUT
+//    @Path("/crewAssignments/Member") //TODO change the url with the member id
+//    @RolesAllowed("admin")
+//    public void changeRole(CrewMemberBean crewMember, String newRole) {
+//        try {
+//            AdminDao.I.changeRole(crewMember, newRole);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    //TODO: test with postman
+//    @PUT
+//    @Path("/crewAssignments/Member") //TODO change the url with the member id
+//    @RolesAllowed("admin")
+//    public void changeTeam(CrewMemberBean crewMember, String newTeam) {
+//        try {
+//            AdminDao.I.changeTeam(crewMember, newTeam);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
 }

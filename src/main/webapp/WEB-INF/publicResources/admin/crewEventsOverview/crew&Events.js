@@ -113,7 +113,7 @@ function addEvent() {
 
     console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: "a pi/admin/crewAssignments/newEvent",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -155,7 +155,6 @@ function addCrewMember() {
     }
 
 
-
     //get member's roles
     var roles = '';
     let photographer = document.querySelector('#photographer input[type="checkbox"]');
@@ -166,7 +165,7 @@ function addCrewMember() {
     let planner = document.querySelector('#planner input[type="checkbox"]');
     let editor = document.querySelector('#editor input[type="checkbox"]');
 
-        if (photographer.checked) {
+    if (photographer.checked) {
         roles = photographer.value;
     }
     if (videographer.checked) {
@@ -194,13 +193,14 @@ function addCrewMember() {
         emailAddress: memberEmail,
         password: memberPassword,
         accountType: "CREW_MEMBER",
+        salt: memberPassword,
         role: roles,
-        team: permissionType
+        team: permissionType,
     }
 
     console.log(JSON.stringify(data));
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: "/api/admin/crewAssignments/newMember",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -235,6 +235,7 @@ function getProducers() {
     // <li><a className="dropdown-item" href="#" onClick="selectCrewMember('Jack John')">Jack John</a>
     // </li>
 
+    let id = 0;
     //TODO fix bug that appends the list for each click
     sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
         console.log(responseData);
@@ -244,16 +245,17 @@ function getProducers() {
             const producerItem = document.createElement('li');
             const buttonElement = document.createElement('a');
             producerItem.classList.add('dropdown-item');
-            producerItem.onclick = function() {
+            producerItem.onclick = function () {
                 selectCrewMember(producer.forename + ' ' + producer.surname);
+                id = producer.id;
             };
-            // producerItem.classList.add('onClick=selectCrewMember(')
             producerItem.innerHTML = `<span class="producerName" id="producerName">${producer.forename} ${producer.surname}</span>`;
 
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
         })
     });
+    return id;
 }
 
 function sendHttpRequest(method, url, data) {
@@ -282,4 +284,419 @@ function sendHttpRequest(method, url, data) {
 function selectCrewMember(name) {
     const selectedCrewMember = document.getElementById('selectedCrewMember');
     selectedCrewMember.textContent = name;
+}
+
+function getAllMembers() {
+    let members = [];
+    sendHttpRequest('GET', "/api/admin/crewAssignment/members")
+        .then(responseData => {
+            responseData.forEach(member => members.push(member));
+            responseData.forEach((member) => {
+                const {
+                    id, forename, surname,
+
+                } = member;
+
+                //TODO: complete the html code
+            })
+        })
+}
+
+function getAllEvents() {
+    let events = [];
+    sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
+        .then(responseData => {
+            responseData.forEach(event => events.push(event));
+            responseData.forEach((event) => {
+                const {
+                    id,
+                    name,
+                    description,
+                    start,
+                    duration,
+                    location,
+                    type,
+                    booking_type
+                    //TODO integrate type and booking type
+                } = event.eventDetails;
+
+                const {
+                    forename,
+                    surname,
+                    emailAddress,
+                    phone_number
+                } = event.eventDetails.clients[0]
+
+                const container = document.querySelector('.container.content-container');
+
+                let card = document.createElement("div");
+                card.setAttribute('class', 'card');
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute('class', 'card-body');
+
+                let eventDetails = document.createElement("div");
+                eventDetails.setAttribute('class', 'event-details');
+
+                let eventName = document.createElement("div");
+                eventName.setAttribute('class', 'event-name');
+                eventName.textContent = name;
+
+                let eventOtherDetails = document.createElement("div");
+                let detailsList = document.createElement("ul");
+                let dateTime = document.createElement("li");
+                dateTime.setAttribute('class', 'date-time');
+                let date = new Date(start);
+                let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + date.getMinutes();
+                dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${dateFormat}</span>`;
+
+                let eventDuration = document.createElement("li");
+                eventDuration.setAttribute('class', 'duration');
+                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${duration}</span>`;
+
+                let eventLocation = document.createElement("li");
+                eventLocation.setAttribute('class', 'location');
+                eventLocation.innerHTML = `<ion-icon name="pin-outline"></ion-icon> <span>${location}</span>`;
+
+                let eventDescription = document.createElement("li");
+                eventDescription.setAttribute('class', 'location');
+                eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${description}</span>`;
+
+                detailsList.appendChild(eventDescription);
+                detailsList.appendChild(eventLocation);
+                detailsList.appendChild(eventDuration);
+                detailsList.appendChild(dateTime);
+                eventOtherDetails.appendChild(detailsList);
+
+                let eventType = document.createElement("div");
+                eventType.setAttribute('class', 'event-type');
+
+                eventType.innerHTML = `<div class="card-event-type club-photography">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+
+
+                let bookingType = document.createElement("div");
+                bookingType.setAttribute('class', 'booking-type');
+                bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+
+                let clientDetails = document.createElement("div");
+                clientDetails.setAttribute('class', 'client-details');
+                let clientList = document.createElement("ul");
+                let clientName = document.createElement("li");
+                clientName.setAttribute('class', 'client-name');
+                clientName.innerHTML = `<span>${forename} ${surname}</span>`;
+
+                let clientEmail = document.createElement("li");
+                clientEmail.setAttribute('class', 'client-email');
+                clientEmail.innerHTML = `<span>${emailAddress}</span>`;
+
+                let clientPhone = document.createElement("li");
+                clientPhone.setAttribute('class', 'client-phone');
+                clientPhone.innerHTML = `<span>${phone_number}</span>`;
+
+                clientList.appendChild(clientEmail);
+                clientList.appendChild(clientPhone);
+                clientList.appendChild(clientName);
+                clientDetails.appendChild(clientList);
+
+                let eventProducer = document.createElement("div");
+                eventProducer.setAttribute('class', 'event-producer-crew-staff');
+
+                let actionIcons = document.createElement("div");
+                actionIcons.setAttribute('class', 'action-icons');
+                actionIcons.innerHTML = `
+<button type="button" class="change-details" onclick="changeDetails(` + id + `)">Change details</button>
+<button type="button" class="delete-event" onclick="confirmationToast(` + id + `)">
+Delete event</button>`;
+
+                container.appendChild(card);
+                card.appendChild(cardBody);
+                cardBody.appendChild(eventDetails);
+                eventDetails.appendChild(eventName);
+                eventDetails.appendChild(eventOtherDetails);
+                cardBody.appendChild(eventType);
+                cardBody.appendChild(bookingType);
+                cardBody.appendChild(clientDetails);
+                cardBody.appendChild(eventProducer);
+                cardBody.appendChild(actionIcons);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching events:", error);
+        });
+}
+
+function changeDetails(eventID) {
+    sendHttpRequest('GET', "/api/admin/crewAssignments/bookings/${eventID}")
+        .then(responseData => {
+            const event = {
+                id,
+                name,
+                description,
+                start,
+                duration,
+                location,
+                type,
+                booking_type
+                //TODO integrate type and booking type
+            } = responseData
+            const modalBody = document.querySelector('.modal-body');
+            let eventInfo = document.createElement("div");
+            eventInfo.setAttribute("class", "eventInfo");
+            eventInfo.setAttribute("id", "eventDetails");
+            eventInfo.innerHTML = ` <label for="eventTitle" class="eventTitleText">Event Title</label>
+                    <input type="text" class="eventTitle" id="editEventTitle" >
+                    <br>
+
+                    <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
+                    <input type="text" class="eventTime" id="editEventDescription" >
+                    <br>
+
+                    <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
+                    <input type="datetime-local" class="eventTime" id="editEventDate_Time">
+                    <br>
+
+                    <label for="eventLocation" class="eventLocationText"> Event Location</label>
+                    <input type="text" class="eventTime" id="editEventLocation">
+                    <br>
+
+                    <label for="eventDuration" class="eventDurationText"> Event Duration</label>
+                    <input type="number" min="0" class="eventTime" id="editEventDuration"
+                           >
+                    <br>
+
+                    <label for="eventType" class="eventTypeText">Event Type</label>
+                    <br>`;
+            // Set the textContent of elements
+            eventInfo.querySelector('#editEventTitle').textContent = event.name;
+            eventInfo.querySelector('#editEventDescription').textContent = event.description;
+            eventInfo.querySelector('#editEventDate_Time').textContent = event.start;
+            eventInfo.querySelector('#editEventLocation').textContent = event.location;
+            eventInfo.querySelector('#editEventDuration').textContent = event.duration;
+            // Set the textContent for eventType
+            let editEventType = document.createElement("div");
+            editEventType.setAttribute("id", "editEventType");
+            editEventType.innerHTML = ` <label class="photoBox">
+                            <input type="radio" name="eventRadio" id="editPhotoBox" value="CLUB_PHOTOGRAPHY">
+                            <span class="checkmark">Club Photography</span>
+                        </label>
+
+                        <label class="festivalBox">
+                            <input type="radio" name="eventRadio" id="editFestivalBox" value="FESTIVAL">
+                            <span class="checkmark">Festival</span>
+                        </label>
+
+                        <label class="productBox">
+                            <input type="radio" name="eventRadio" id="editProductBox" value="PRODUCT_SHOOT">
+                            <span class="checkmark">Product Shoot</span>
+                        </label>`
+
+            if (type === "club_photography") {
+                document.getElementById("editPhotoBox").checked = true;
+            } else if (type === "festival") {
+                document.getElementById("editFestivalBox").checked = true;
+            } else {
+                document.getElementById("editProductBox").checked = true;
+            }
+
+            let editBookingType = document.createElement("div");
+            editBookingType.innerHTML = `<label for="bookingType" class="bookingTypeText">Booking Type</label>
+                    <br>
+                    <label class="photographyBox">
+                            <input type="radio" name="bookingRadio" value="PHOTOGRAPHY" id="editPhotographyBox">
+                            <span class="checkmark">Photography</span>
+                        </label>
+
+                        <label class="filmBox">
+                            <input type="radio" name="bookingRadio" id="editFilmBox" value="FILM">
+                            <span class="checkmark">Film</span>
+                        </label>
+
+                        <label class="marketingBox">
+                            <input type="radio" name="bookingRadio" id="editMarketingBox" value="MARKETING">
+                            <span class="checkmark">Marketing</span>
+                        </label>
+
+                        <label class="otherBox">
+                            <input type="radio" name="bookingRadio" id="editOtherBox" value="OTHER">
+                            <span class="checkmark">Other</span>
+                        </label>`
+            if (booking_type === "photography") {
+                document.getElementById("editPhotographyBox").checked = true;
+
+            } else if (booking_type === "videography") {
+                document.getElementById("editFilmBox").checked = true;
+
+            } else if (booking_type === "marketing") {
+                document.getElementById("editMarkteingBox").checked = true;
+
+            } else {
+                document.getElementById("editOtherBox").checked = true;
+            }
+            // let editEventProducer = document.createElement("div");
+            // let editRequiredCrew = document.createElement("div");
+
+            eventInfo.appendChild(editRequiredCrew);
+            eventInfo.appendChild(editEventProducer);
+            eventInfo.appendChild(editBookingType);
+            eventInfo.appendChild(editEventType);
+            modalBody.appendChild(eventInfo);
+
+        })
+
+    const eventTitle = document.getElementById('eventTitle').value;
+    const eventDescription = document.getElementById('eventDescription').value;
+    const eventDateTime = document.getElementById("eventDate&Time").value;
+    const eventLocation = document.getElementById('eventLocation').value;
+    const eventDuration = document.getElementById('eventDuration').value;
+
+
+    const club_photo = document.getElementById('photoBox');
+    const festival = document.getElementById('festivalBox');
+    const product = document.getElementById('productBox');
+
+    let eventType = '';
+    if (club_photo.checked) {
+        eventType = club_photo.value;
+    } else if (festival.checked) {
+        eventType = festival.value;
+    } else if (product.checked) {
+        eventType = product.value;
+    }
+
+    const photography = document.getElementById('photographyBox');
+    const film = document.getElementById('filmBox');
+    const marketing = document.getElementById('marketingBox');
+    const other = document.getElementById('otherBox');
+
+    let bookingType = '';
+    if (photography.checked) {
+        bookingType = photography.value;
+    } else if (film.checked) {
+        bookingType = film.value;
+    } else if (marketing.checked) {
+        bookingType = marketing.value;
+    } else if (other.checked) {
+        bookingType = other.value;
+    }
+
+    var data = {
+        eventBean: {
+            name: eventTitle,
+            description: eventDescription,
+            start: eventDateTime,
+            duration: eventDuration,
+            location: eventLocation,
+            type: eventType,
+            booking_type: bookingType
+        }
+    }
+    $.ajax({
+        url: "../api/admin/crewAssignments/{eventId}",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function () {
+            alert("Event successfully edited!");
+        },
+        error: function () {
+            alert("Error editing this event!");
+
+        }
+    });
+
+}
+
+function deleteEvent(eventID) {
+    $.ajax({
+        url: `/api/admin/crewAssignments/deleteEvent/${eventID}`,
+        method: "DELETE",
+        success: function () {
+            alert("Successfully deleted this event");
+            location.reload();
+        },
+        error: function () {
+            alert("Error deleting this event");
+        }
+
+    });
+}
+
+function bookingButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+
+    if (bookingContainer && crewContainer) {
+        if (bookingContainer.style.display === 'none') {
+            bookingContainer.style.display = 'flex';
+            crewContainer.style.display = 'none';
+            getAllEvents();
+        } else {
+            // If the bookingContainer is already visible, do nothing or perform any desired action
+        }
+    }
+}
+
+
+function crewButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+
+    if (bookingContainer && crewContainer) {
+        if (crewContainer.style.display === 'none') {
+            crewContainer.style.display = 'flex';
+            bookingContainer.style.display = 'none';
+        } else {
+        }
+    }
+}
+
+function confirmationToast(id) {
+    console.log(id);
+    let toastDeleteEvent = document.getElementById("deleteEventDialog");
+    toastDeleteEvent.showModal();
+    let deleteButton = document.getElementById('deleteButton')
+    deleteButton.addEventListener('click', function () {
+        deleteEvent(id)
+    });
 }
