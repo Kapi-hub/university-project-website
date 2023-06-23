@@ -8,7 +8,7 @@ public class CrewMemberBean extends AccountBean {
     private Team team;
 
     public CrewMemberBean(int id){
-        this.id = id;
+        super(id);
     }
     public CrewMemberBean() {
         super();
