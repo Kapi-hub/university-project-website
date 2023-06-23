@@ -153,16 +153,25 @@ public enum AdminDao {
 
     }
 
+    /**
+     * CREATE OR REPLACE FUNCTION insert_requirements(event_id_input int, crew_size_input int, role_input role_enum) RETURNS void AS
+     * $$
+     * BEGIN
+     * INSERT INTO event_requirement (event_id, crew_size, role) VALUES (event_id_input, crew_size_input, role_input::role_enum);
+     * END;
+     * $$ language plpgsql;
+     */ //TODO handle for loop within function instead of having for loop in java.
     public void addRequirement(List<RequiredCrewBean> required) throws SQLException {
         for (RequiredCrewBean requiredCrewBean : required) {
-            String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
-            PreparedStatement st = connection.prepareStatement(query);
+//            String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
+            PreparedStatement st = connection.prepareStatement("SELECT insert_requirements(?, ?, ?::role_enum)" );
             st.setInt(1, requiredCrewBean.getEvent_id());
             st.setInt(2, requiredCrewBean.getCrew_size());
             st.setString(3, requiredCrewBean.getRole().toString());
             st.executeUpdate();
         }
     }
+
     public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
         PreparedStatement st = connection.prepareStatement(insertQuery);

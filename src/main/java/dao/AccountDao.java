@@ -46,6 +46,17 @@ public enum AccountDao {
             return false;
         }
     }
+//    create or replace function checkValidLogin(username_or_email text)
+//    returns setof account as $$
+//            begin
+//--first get the account
+//    SELECT id, type, salt, password
+//    FROM account
+//    WHERE (username=username_or_email OR email_address=username_or_email)
+//
+//--second, set the
+//    end;
+//    $$ language plpgsql;
 
     public AccountType determineAccountType(int id) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";

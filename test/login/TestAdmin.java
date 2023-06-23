@@ -9,11 +9,11 @@ public class TestAdmin {
 
     CrewMemberBean crew;
     @BeforeEach
-    public void setCrew() {
-        crew = new CrewMemberBean(
-                "Crew",  "member", "crewmember123", "crew_member123@gmail.com",
-                RoleType.PHOTOGRAPHER,Team.CORE_AND_CLUB);
-    }
+//    public void setCrew() {
+//        crew = new CrewMemberBean(
+//                "Crew",  "member", "crewmember123", "crew_member123@gmail.com",
+//                RoleType.PHOTOGRAPHER,Team.CORE_AND_CLUB);
+//    }
 
     @Test
     public void addNewCrewMember() {
