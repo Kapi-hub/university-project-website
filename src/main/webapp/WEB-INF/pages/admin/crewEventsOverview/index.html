@@ -45,10 +45,7 @@
 </div>
 
 <div class="container content-container" id='bookingContainer'>
-        <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
-            Event +
-        </button>
+
 
 </div>
 
@@ -59,16 +56,14 @@
         New member +
     </button>
 
+    <button type="button" class="createEventBttn" data-bs-toggle="modal"
+            data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
+        Event +
+    </button>
+
 </div>
 
-<div class="choose-crew-booking-container">
-    <div class="btns">
-        <div class="btn-crew-member">Members</div>
-        <div class="btn-booking">Events</div>
-    </div>
-</div>
-
-<div class="container content-container">
+<!--<div class="container content-container">-->
 <!--    <div class="card">-->
 <!--        <div class="card-body">-->
 <!--            <div class="event-details">-->
@@ -263,7 +258,7 @@
 <!--            <a href="#" class="btn btn-primary">Go somewhere</a>-->
 <!--        </div>-->
 <!--    </div>-->
-</div>
+<!--</div>-->
 
 
 <div class="modal fade" id="editEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -588,6 +583,7 @@
 
     saveEventButton.addEventListener('click', function () {
         addEvent();
+        console.log("aaaaaaaaaaaaaaa")
         toastEvent.show();
     });
 

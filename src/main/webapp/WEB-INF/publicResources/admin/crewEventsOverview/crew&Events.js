@@ -340,7 +340,11 @@ function getAllEvents() {
 
                 let eventName = document.createElement("div");
                 eventName.setAttribute('class', 'event-name');
-                eventName.textContent = name;
+                eventName.innerHTML = `<span>${name}</span>
+                        <div class="buttons">
+                        <ion-icon name="pencil-outline" id="pencil-outline-icon"></ion-icon>
+                        <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
+                    </div>`
 
                 let eventOtherDetails = document.createElement("div");
                 let detailsList = document.createElement("ul");
@@ -421,32 +425,77 @@ function getAllEvents() {
                 let clientDetails = document.createElement("div");
                 clientDetails.setAttribute('class', 'client-details');
                 let clientList = document.createElement("ul");
-                let clientName = document.createElement("li");
-                clientName.setAttribute('class', 'client-name');
-                clientName.innerHTML = `<span>${forename} ${surname}</span>`;
+                let clientName = document.createElement("div");
+                clientName.setAttribute('class', 'last-first-name');
+                clientName.innerHTML = `<ion-icon name="person-outline"></ion-icon>
+<p>${forename} ${surname}</p>`;
 
-                let clientEmail = document.createElement("li");
-                clientEmail.setAttribute('class', 'client-email');
-                clientEmail.innerHTML = `<span>${emailAddress}</span>`;
+                let clientEmail = document.createElement("div");
+                clientEmail.setAttribute('class', 'email');
+                clientEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
+<p>${emailAddress}</p>`;
 
-                let clientPhone = document.createElement("li");
-                clientPhone.setAttribute('class', 'client-phone');
-                clientPhone.innerHTML = `<span>${phone_number}</span>`;
+                let clientPhone = document.createElement("div");
+                clientPhone.setAttribute('class', 'phone');
+                clientPhone.innerHTML = `<ion-icon name="call-outline"></ion-icon>
+<p>${phone_number}</p>`;
 
                 clientList.appendChild(clientEmail);
                 clientList.appendChild(clientPhone);
                 clientList.appendChild(clientName);
                 clientDetails.appendChild(clientList);
 
-                let eventProducer = document.createElement("div");
-                eventProducer.setAttribute('class', 'event-producer-crew-staff');
+                let eventStaff = document.createElement("div");
+                eventStaff.setAttribute('class', 'event-staff');
+                eventStaff.innerHTML = `<div class="slide photographer">
+                    <div class="icon" id="photographer-icon">
+                        <ion-icon name="person-outline"></ion-icon>
+                    </div>
+                    <div class="text" id="photographer-text">
+                        <p>Photographer</p>
+                    </div>
+                    <div class="counter" id="photographer-counter">
+                        <p>3</p>
+                    </div>
+                </div>
+                <div class="slide assistant">
+                    <div class="icon" id="assistant-icon"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="text" id="assistant-text"><p>Assistant</p></div>
+                    <div class="counter" id="assistant-counter">10</div>
+                </div>
+                <div class="slide editor">
+                    <div class="icon" id="editor-icon"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="text" id="editor-text">Editor</div>
+                    <div class="counter" id="editor-counter">0</div>
+                </div>
+                <div class="slide data-handler">
+                    <div class="icon" id="data-handler-icon"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="text" id="data-handler-text">Data Handler</div>
+                    <div class="counter" id="data-handler-counter">10</div>
+                </div>
+                <div class="slide event-planner">
+                    <div class="icon" id="event-planner-icon"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="text" id="event-planner-text">Event Planner</div>
+                    <div class="counter" id="event-planner-counter">6</div>
+                </div>
+                <div class="slide videographer">
+                    <div class="icon" id="videographer-icon"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="text" id="videographer-text">Videographer</div>
+                    <div class="counter" id="videographer-counter">11</div>
+                </div>`;
 
-                let actionIcons = document.createElement("div");
-                actionIcons.setAttribute('class', 'action-icons');
-                actionIcons.innerHTML = `
-<button type="button" class="change-details" onclick="changeDetails(` + id + `)">Change details</button>
-<button type="button" class="delete-event" onclick="confirmationToast(` + id + `)">
-Delete event</button>`;
+                let eventProducer = document.createElement("div");
+                eventProducer.setAttribute('class', 'event-producer');
+                eventProducer.innerHTML = ` <div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
+                <div class="text">Event Prod</div>
+                <div class="producer-name">Antoine Moghadar</div>`;
+//
+//                 let actionIcons = document.createElement("div");
+//                 actionIcons.setAttribute('class', 'action-icons');
+//                 actionIcons.innerHTML = `
+// <button type="button" class="change-details" onclick="changeDetails(` + id + `)">Change details</button>
+// <button type="button" class="delete-event" onclick="confirmationToast(` + id + `)">
+// Delete event</button>`;
 
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -457,7 +506,8 @@ Delete event</button>`;
                 cardBody.appendChild(bookingType);
                 cardBody.appendChild(clientDetails);
                 cardBody.appendChild(eventProducer);
-                cardBody.appendChild(actionIcons);
+                cardBody.appendChild(eventStaff);
+                // cardBody.appendChild(actionIcons);
             });
         })
         .catch(error => {
