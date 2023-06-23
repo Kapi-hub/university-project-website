@@ -189,15 +189,16 @@ body {
     position: absolute ;
     top: 50%;
     left: 50%;
+    border-radius: 10px;
+    border-color: var(--bs-primary-bg-subtle);
     transform: translate(-50%, -50%);
-    background-color: green;
-    color: var(--bs-light);
+    color: var(--bs-dark-bg-subtle);
+    background-color: rgba(255,255,255,0.5);
 }
 .deleteEventDialog::backdrop {
-    background: var(--bs-dark);
-}
+    background: var(--bs-primary-bg-subtle);}
 
-.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details {
+.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details, .delete-event, .closeDialogBttn{
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -205,8 +206,11 @@ body {
     margin-left: auto;
 }
 
-.closeBttn, .delete-event {
+.closeBttn, .actualDelete{
     background-color: red;
+    border-radius: 10px;
+    color: var(--bs-light);
+    margin-left: auto;
 }
 
 .crewButton {

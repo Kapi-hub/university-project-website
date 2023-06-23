@@ -1,5 +1,6 @@
 package dao;
 
+import jdk.jfr.Event;
 import misc.ConnectionFactory;
 import models.*;
 
@@ -135,6 +136,18 @@ public enum AdminDao {
         return getSQLString(insertQuery);
     }
 
+    public String getEventWithId(int id) throws SQLException {
+        String query = "SELECT * FROM event WHERE id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return getSQLString(query);
+    }
+
+
     public void changeEventDetails(EventBean event) {
         String updateQuery = "UPDATE event SET name=?, description=?, start=?, duration=?, location=?, type=?, " +
                 "booking_type=? WHERE id=?";
@@ -217,8 +230,8 @@ public enum AdminDao {
 
     public String getAllCrewMembers() throws SQLException {
         String query = """
-                SELECT json_agg(jsonb_build_object('member_id', a.id, 'member_forename',
-                a.forename, 'member_surname', a.surname)) FROM shotmaniacs1.account a
+                SELECT json_agg(jsonb_build_object('id', a.id, 'forename',
+                a.forename, 'surname', a.surname)) FROM shotmaniacs1.account a
                 WHERE a.type='crew_member'""";
 
         return getSQLString(query);

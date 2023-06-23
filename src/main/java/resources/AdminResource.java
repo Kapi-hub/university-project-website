@@ -63,7 +63,7 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/crewAssignments")
+    @Path("/crewAssignments/bookings")
     @RolesAllowed("admin")
     public String getLatestEvent() {
         try {
@@ -88,8 +88,21 @@ public class AdminResource {
         return events;
     }
 
+    @GET
+    @Path("/crewAssignments/changeEvent/{eventId}")
+    @RolesAllowed("admin")
+    public String handleGetEventWithId(@PathParam("eventId") int id) {
+        String event = null;
+        try{
+            event = AdminDao.I.getEventWithId(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return event;
+    }
+
     @PUT
-    @Path("/crewAssignments/events?id=smth") //TODO change paths
+    @Path("/crewAssignments/changeEvent")
     @RolesAllowed("admin")
     public void handleChangeEvent(EventBean event) {
         try{
@@ -126,7 +139,7 @@ public class AdminResource {
     }
 
     @GET
-    @Path("/crewAssignments/smth")
+    @Path("/crewAssignments/members")
     @RolesAllowed("admin")
     public String getAllCrewMembers() {
         try {
