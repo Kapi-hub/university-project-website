@@ -41,6 +41,9 @@
     flex-basis: calc(47%); /* 2 cards per row */
     background-color: var(--bs-dark) !important; /* important to override */
     border-radius: 20px;
+    height: fit-content !important;
+    box-shadow: 15px 15px 30px rgb(60, 60, 60),
+    -15px -15px 30px rgb(60, 60, 60);
 }
 
 .container.content-container .card .card-body {
@@ -58,6 +61,7 @@
     background-color: var(--bs-light);
     border-radius: 20px;
     padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .container.content-container .card .card-body .event-details {
@@ -149,6 +153,10 @@
     padding: 3px 0;
 }
 
+.container.content-container .card .card-body .event-details .event-other-details ul li.description {
+    border-bottom: none;
+}
+
 .container.content-container .card .card-body .event-details .event-other-details ul li ion-icon{
     color: var(--bs-dark);
     margin-right: 5px;
@@ -186,7 +194,7 @@
 .container.content-container .card .card-body .event-type .card-event-type{
     perspective: 1000px;
     background-color: transparent;
-    margin: 20px 0;
+    margin: 15px 0;
 }
 
 .container.content-container .card .card-body .event-type .card-event-type .inner {
@@ -534,7 +542,6 @@ p {
 .card-body, .collapse.booking, .collapse.crew {
     background-color: var(--bs-dark);
     color: var(--bs-primary);
-    border: 1px solid var(--bs-primary);
     border-radius: 10px;
 }
 
