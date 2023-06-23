@@ -164,6 +164,16 @@ public enum AdminDao {
         }
     }
     public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
+        if (announcement.getRecipient() == 0){
+            String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.executeUpdate();
+
+        }
+        else {
         String insertQuery = "INSERT INTO announcement(announcer_id,title,body,recipient) VALUES (?,?,?,?)";
         PreparedStatement st = connection.prepareStatement(insertQuery);
         st.setInt(1, announcement.getAnnouncer());
@@ -171,6 +181,7 @@ public enum AdminDao {
         st.setString(3, announcement.getBody());
         st.setInt(4, announcement.getRecipient());
         st.executeUpdate();
+        }
     }
 
     public String getNotFullEvents() throws SQLException {

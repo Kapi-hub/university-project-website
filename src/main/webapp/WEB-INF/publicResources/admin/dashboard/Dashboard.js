@@ -11,7 +11,8 @@
         if (isNaN(parsed)){
             parsed = null;
         }
-        console.log(parsed);
+
+        console.log("this is the parsed data : " + parsed);
         $.ajax({
             url: "/api/admin/newAnnouncement",
             type: "POST",
