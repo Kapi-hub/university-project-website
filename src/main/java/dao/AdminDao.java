@@ -163,8 +163,8 @@ public enum AdminDao {
      */ //TODO handle for loop within function instead of having for loop in java.
     public void addRequirement(List<RequiredCrewBean> required) throws SQLException {
         for (RequiredCrewBean requiredCrewBean : required) {
-//            String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
-            PreparedStatement st = connection.prepareStatement("SELECT insert_requirements(?, ?, ?::role_enum)" );
+            String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
+            PreparedStatement st = connection.prepareStatement(query);
             st.setInt(1, requiredCrewBean.getEvent_id());
             st.setInt(2, requiredCrewBean.getCrew_size());
             st.setString(3, requiredCrewBean.getRole().toString());
