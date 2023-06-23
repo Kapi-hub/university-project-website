@@ -91,6 +91,7 @@ function getAnnouncements() {
                 minute: 'numeric',
                 hour12: true
             });
+
             const announcementItem = document.createElement('div');
             announcementItem.classList.add('announcementItem');
 
@@ -103,8 +104,14 @@ function getAnnouncements() {
             contentElement.classList.add('content');
             contentElement.innerHTML = `<p class="announcementContent">${escapeHtml(announcement.announcement_body)}</p>`;
 
+            if (announcement.recipient===null){}
+            else {
+                contentElement.innerText = contentElement.innerText + " -" + 'Sent to id: ' + announcement.recipient;
+            }
+
             announcementItem.appendChild(titleElement);
             announcementItem.appendChild(contentElement);
+
 
             announcementsList.appendChild(announcementItem);
 

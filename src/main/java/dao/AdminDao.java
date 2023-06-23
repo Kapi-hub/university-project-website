@@ -201,13 +201,14 @@ public enum AdminDao {
                     'announcement_title', subquery.title,
                     'announcement_body', subquery.body,
                     'announcement_timestamp', subquery.date_time,
+                    'recipient', subquery.recipient,
                     'announcer', json_build_object(
                         'forename', subquery.forename,
                         'surname', subquery.surname
                     )
                 )) AS result
                 FROM (
-                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname ,ann.recipient
                     FROM announcement ann
                     JOIN account a ON ann.announcer_id = a.id
                     ORDER BY ann.id DESC
