@@ -121,14 +121,17 @@ public enum AdminDao {
                                                                           'surname', a.surname,
                                                                           'emailAddress', a.email_address,
                                                                           'phone_number', c.phone_number
-                                                                      )
-                                                              )
+                                                                      ))
                                                    FROM shotmaniacs1.account a
                                                             JOIN shotmaniacs1.client c ON a.id = c.id
                                                    WHERE a.type = 'client'
-                                                     AND c.id = e.client_id)
-                                   )
-                                   )
+                                                     AND c.id = e.client_id),
+                                       'requirements',
+                                       (SELECT json_agg(json_build_object('role', role, 'crew_size', crew_size)) AS json_data
+                                        FROM shotmaniacs1.event_requirement r
+                                        WHERE e.id = r.event_id
+                                        GROUP BY r.event_id)
+                ))
                            ) AS result
                 FROM shotmaniacs1.event e
                  """;

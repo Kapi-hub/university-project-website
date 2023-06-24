@@ -469,18 +469,18 @@ body {
     padding-bottom: 20px;
 }
 
-.dialog{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-radius: 10px;
-    border-color: var(--bs-primary-bg-subtle);
-    transform: translate(-50%, -50%);
-    color: var(--bs-dark-bg-subtle);
-    background-color: rgba(255,255,255,0.5);
+.deleteEventDialog{
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    border-radius: 10px !important;
+    border-color: var(--bs-primary-bg-subtle) !important;
+    transform: translate(-50%, -50%) !important;
+    color: var(--bs-dark-bg-subtle) !important;
+    background-color: rgba(255,255,255,0.5) !important;
 }
 .deleteEventDialog::backdrop {
-    background: var(--bs-primary-bg-subtle);}
+    background: var(--bs-primary-bg-subtle)!important;}
 
 .closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details, .delete-event, .closeDialogBttn{
     background-color: var(--bs-primary);

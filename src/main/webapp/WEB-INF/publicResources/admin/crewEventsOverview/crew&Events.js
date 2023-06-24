@@ -218,23 +218,6 @@ function addCrewMember() {
 
 function getProducers() {
     let producers = [];
-    // $.ajax({
-    //     url: "../api/admin/crewAssignments/newEvent",
-    //     method: "GET",
-    //     dataType: "json",
-    //     success: function (response) {
-    //         console.log(response)
-    //         alert("Producers successfully get!")
-    //     },
-    //     error: function (jqXHR, textStatus, errorThrown) {
-    //
-    //         console.log("An error occurred:", errorThrown);
-    //     }
-    // })
-
-    // <li><a className="dropdown-item" href="#" onClick="selectCrewMember('Jack John')">Jack John</a>
-    // </li>
-
     let id = 0;
     //TODO fix bug that appends the list for each click
     sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
@@ -306,6 +289,7 @@ function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
         .then(responseData => {
+            console.log(responseData);
             responseData.forEach(event => events.push(event));
             responseData.forEach((event) => {
                 const {
@@ -340,18 +324,23 @@ function getAllEvents() {
 
                 let eventName = document.createElement("div");
                 eventName.setAttribute('class', 'event-name');
-                eventName.innerHTML = `<span>${name}</span>
+                eventName.innerHTML = `
+                        <span>${name}</span>
                         <div class="buttons">
-                        <ion-icon name="pencil-outline" id="pencil-outline-icon"></ion-icon>
-                        <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
-                    </div>`
+                            <ion-icon name="pencil-outline" id="pencil-outline-icon"></ion-icon>
+                            <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
+                        </div>`
 
                 let eventOtherDetails = document.createElement("div");
+                eventOtherDetails.setAttribute('class', 'event-other-details');
+
                 let detailsList = document.createElement("ul");
+
                 let dateTime = document.createElement("li");
                 dateTime.setAttribute('class', 'date-time');
                 let date = new Date(start);
-                let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + date.getMinutes();
+                let minutes = date.getMinutes().toString().padStart(2, '0');
+                let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + minutes;
                 dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${dateFormat}</span>`;
 
                 let eventDuration = document.createElement("li");
@@ -375,7 +364,9 @@ function getAllEvents() {
                 let eventType = document.createElement("div");
                 eventType.setAttribute('class', 'event-type');
 
-                eventType.innerHTML = `<div class="card-event-type club-photography">
+                //TODO: for alex to change the appearance when smth is selected
+                if (type === 'club_photography') {
+                    eventType.innerHTML = `<div class="card-event-type club-photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
                     <div class="inner club-photography-inner">
                         <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
                         <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
@@ -393,11 +384,50 @@ function getAllEvents() {
                         <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
                     </div>
                 </div>`;
-
+                } else if (type === 'festival') {
+                    eventType.innerHTML = `<div class="card-event-type club-photography">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+                } else {
+                    eventType.innerHTML = `<div class="card-event-type club-photography" style="background-color: red; color: white;">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+                }
 
                 let bookingType = document.createElement("div");
                 bookingType.setAttribute('class', 'booking-type');
-                bookingType.innerHTML = `<div class="booking-type-card photography">
+                if(booking_type === 'photography') {
+                    bookingType.innerHTML = `<div class="booking-type-card photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
                     <div class="booking-type-card-inner">
                         <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
                         <div class="back-side"><p class="card-description">Photo</p></div>
@@ -421,81 +451,136 @@ function getAllEvents() {
                         <div class="back-side"><p class="card-description">Other</p></div>
                     </div>
                 </div>`;
+                } else if (booking_type === 'film') {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                } else if (booking_type === "marketing") {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                } else {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                }
 
                 let clientDetails = document.createElement("div");
                 clientDetails.setAttribute('class', 'client-details');
-                let clientList = document.createElement("ul");
                 let clientName = document.createElement("div");
                 clientName.setAttribute('class', 'last-first-name');
                 clientName.innerHTML = `<ion-icon name="person-outline"></ion-icon>
-<p>${forename} ${surname}</p>`;
+                                        <p>${forename} ${surname}</p>`;
 
                 let clientEmail = document.createElement("div");
                 clientEmail.setAttribute('class', 'email');
                 clientEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
-<p>${emailAddress}</p>`;
+                                        <p>${emailAddress}</p>`;
 
                 let clientPhone = document.createElement("div");
                 clientPhone.setAttribute('class', 'phone');
                 clientPhone.innerHTML = `<ion-icon name="call-outline"></ion-icon>
-<p>${phone_number}</p>`;
+                                           <p>${phone_number}</p>`;
 
-                clientList.appendChild(clientEmail);
-                clientList.appendChild(clientPhone);
-                clientList.appendChild(clientName);
-                clientDetails.appendChild(clientList);
+                clientDetails.appendChild(clientName);
+                clientDetails.appendChild(clientPhone);
+                clientDetails.appendChild(clientEmail);
+
 
                 let eventStaff = document.createElement("div");
+                const requirementsArray = event.eventDetails.requirements;
+                console.log(id + " lista de crew " + requirementsArray);
                 eventStaff.setAttribute('class', 'event-staff');
-                eventStaff.innerHTML = `<div class="slide photographer">
-                    <div class="icon" id="photographer-icon">
-                        <ion-icon name="person-outline"></ion-icon>
-                    </div>
-                    <div class="text" id="photographer-text">
-                        <p>Photographer</p>
-                    </div>
-                    <div class="counter" id="photographer-counter">
-                        <p>3</p>
-                    </div>
-                </div>
-                <div class="slide assistant">
-                    <div class="icon" id="assistant-icon"><ion-icon name="person-outline"></ion-icon></div>
-                    <div class="text" id="assistant-text"><p>Assistant</p></div>
-                    <div class="counter" id="assistant-counter">10</div>
-                </div>
-                <div class="slide editor">
-                    <div class="icon" id="editor-icon"><ion-icon name="person-outline"></ion-icon></div>
-                    <div class="text" id="editor-text">Editor</div>
-                    <div class="counter" id="editor-counter">0</div>
-                </div>
-                <div class="slide data-handler">
-                    <div class="icon" id="data-handler-icon"><ion-icon name="person-outline"></ion-icon></div>
-                    <div class="text" id="data-handler-text">Data Handler</div>
-                    <div class="counter" id="data-handler-counter">10</div>
-                </div>
-                <div class="slide event-planner">
-                    <div class="icon" id="event-planner-icon"><ion-icon name="person-outline"></ion-icon></div>
-                    <div class="text" id="event-planner-text">Event Planner</div>
-                    <div class="counter" id="event-planner-counter">6</div>
-                </div>
-                <div class="slide videographer">
-                    <div class="icon" id="videographer-icon"><ion-icon name="person-outline"></ion-icon></div>
-                    <div class="text" id="videographer-text">Videographer</div>
-                    <div class="counter" id="videographer-counter">11</div>
-                </div>`;
+                eventStaff.innerHTML = '';
+                if (requirementsArray === null) {
+                    eventStaff.innerHTML = `<span>There is no crew</span>`
+                } else {
+                    requirementsArray.forEach(requirement => {
+                        const {role, crew_size} = requirement;
 
+                        let roleHtml = `<div class="slide ${role}">
+                        <div class="icon" id="${role}-icon">
+                            <ion-icon name="person-outline"></ion-icon>
+                        </div>
+                        <div class="text" id="${role}-text">
+                            <p>${role}</p>
+                        </div>
+                        <div class="counter" id="${role}-counter">
+                            <p>${crew_size}</p>
+                        </div>
+                    </div>`
+                        eventStaff.innerHTML += roleHtml;
+
+                    })
+                }
                 let eventProducer = document.createElement("div");
                 eventProducer.setAttribute('class', 'event-producer');
                 eventProducer.innerHTML = ` <div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
                 <div class="text">Event Prod</div>
                 <div class="producer-name">Antoine Moghadar</div>`;
-//
-//                 let actionIcons = document.createElement("div");
-//                 actionIcons.setAttribute('class', 'action-icons');
-//                 actionIcons.innerHTML = `
-// <button type="button" class="change-details" onclick="changeDetails(` + id + `)">Change details</button>
-// <button type="button" class="delete-event" onclick="confirmationToast(` + id + `)">
-// Delete event</button>`;
 
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -507,7 +592,6 @@ function getAllEvents() {
                 cardBody.appendChild(clientDetails);
                 cardBody.appendChild(eventProducer);
                 cardBody.appendChild(eventStaff);
-                // cardBody.appendChild(actionIcons);
             });
         })
         .catch(error => {
