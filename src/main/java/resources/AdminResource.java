@@ -49,7 +49,7 @@ public class AdminResource {
         try {
             return AdminDao.I.getAllAnnouncements();
         }catch (SQLException e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
     }

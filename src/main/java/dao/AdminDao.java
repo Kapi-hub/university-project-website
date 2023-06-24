@@ -173,12 +173,24 @@ public enum AdminDao {
     }
 
     public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
-        String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+        if (announcement.getRecipient() == 0){
+            String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.executeUpdate();
+
+        }
+        else {
+        String insertQuery = "INSERT INTO announcement(announcer_id,title,body,recipient) VALUES (?,?,?,?)";
         PreparedStatement st = connection.prepareStatement(insertQuery);
         st.setInt(1, announcement.getAnnouncer());
         st.setString(2, announcement.getTitle());
         st.setString(3, announcement.getBody());
+        st.setInt(4, announcement.getRecipient());
         st.executeUpdate();
+        }
     }
 
     public String getNotFullEvents() throws SQLException {
@@ -209,13 +221,14 @@ public enum AdminDao {
                     'announcement_title', subquery.title,
                     'announcement_body', subquery.body,
                     'announcement_timestamp', subquery.date_time,
+                    'recipient', subquery.recipient,
                     'announcer', json_build_object(
                         'forename', subquery.forename,
                         'surname', subquery.surname
                     )
                 )) AS result
                 FROM (
-                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname ,ann.recipient
                     FROM announcement ann
                     JOIN account a ON ann.announcer_id = a.id
                     ORDER BY ann.id DESC

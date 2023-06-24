@@ -50,8 +50,12 @@
             <div class="modal-body">
                 <label for="inputTitle" class="inputTitle">Announcement Title</label>
                 <input type="text" class="inputTitle" id="inputTitle">
+
                 <label for="inputDetails" class="inputTitle">Announcement Details</label>
                 <input type="text" class="inputTitle" id="inputDetails">
+
+                <label for="inputRecipients" class="inputRecipients">Recipients</label>
+                <input type="text" class="inputRecipients" id="inputRecipients">
             </div>
             <div class="modal-footer">
                 <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
@@ -79,7 +83,7 @@
 
 <!--Welcome message-->
 <div class="welcome-message" id="welcome">
-    Welcome, Raluca!
+    Welcome, admin!
 </div>
 
 <!--Announcements-->
@@ -152,10 +156,10 @@
 
 <script>
     const savePostButton = document.querySelector('.saveBttn');
-    const toast = new bootstrap.Toast(document.querySelector('#successful'));
+    // const toast = new bootstrap.Toast(document.querySelector('#successful'));
 
     savePostButton.addEventListener('click', function () {
-        toast.show();
+        // toast.show();
     });
     function selectCrewMember(name) {
         const selectedCrewMember = document.getElementById('selectedCrewMember');
@@ -165,6 +169,7 @@
         getAnnouncements();
         getLatestEvents();
         getCrewNeeded();
+        getUser();
     });
 
 </script>

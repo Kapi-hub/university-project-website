@@ -8,6 +8,9 @@ public class CrewMemberBean extends AccountBean {
     private RoleType role;
     private Team team;
 
+    public CrewMemberBean(int id){
+        super(id);
+    }
     public CrewMemberBean() {
 
     }

@@ -79,8 +79,13 @@ body{
     margin-left: auto;
     background-color: red;
 }
+.inputRecipients{
+    display: compact;
+    width: 100%;
+    overflow-y: auto;
+}
 
-.inputTitle{
+.inputTitle {
     display: block;
     width: 100%;
     overflow-y: auto;

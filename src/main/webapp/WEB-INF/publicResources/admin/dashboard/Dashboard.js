@@ -1,11 +1,18 @@
  function saveAnnouncement() {
         const title = document.getElementById('inputTitle').value;
         const descr = document.getElementById('inputDetails').value;
+        let recipient = document.getElementById('inputRecipients').value;
         if (!title) {
             alert("Title can't be null");
             return;
         }
+        var parsed= parseInt(recipient);
 
+        if (isNaN(parsed)){
+            parsed = null;
+        }
+
+        console.log("this is the parsed data : " + parsed);
         $.ajax({
             url: "/api/admin/newAnnouncement",
             type: "POST",
@@ -13,7 +20,8 @@
             contentType: "application/json",
             data: JSON.stringify({
                 title: title,
-                body: descr
+                body: descr,
+                recipient: parsed
             }),
             success: function () {
                 console.log("Announcement saved successfully");
@@ -84,6 +92,7 @@ function getAnnouncements() {
                 minute: 'numeric',
                 hour12: true
             });
+
             const announcementItem = document.createElement('div');
             announcementItem.classList.add('announcementItem');
 
@@ -96,8 +105,14 @@ function getAnnouncements() {
             contentElement.classList.add('content');
             contentElement.innerHTML = `<p class="announcementContent">${escapeHtml(announcement.announcement_body)}</p>`;
 
+            if (announcement.recipient===null){}
+            else {
+                contentElement.innerText = contentElement.innerText + " -" + 'Sent to id: ' + announcement.recipient;
+            }
+
             announcementItem.appendChild(titleElement);
             announcementItem.appendChild(contentElement);
+
 
             announcementsList.appendChild(announcementItem);
 
@@ -126,6 +141,19 @@ function getLatestEvents() {
     })
 }
 
+function assignCrew(){
+    var CrewAssigned = document.getElementById().textContent;
+    $.ajax({
+        url: "/api/admin/assignCrew/",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        }
+    )
+
+}
+
 function getCrewNeeded() {
     $.ajax({
         url: "/api/admin/crewReq",
@@ -149,11 +177,12 @@ function getCrewNeeded() {
 
 function getUser(){
     $.ajax({
-        url: "/api/admin/User",
+        url: "/api/admin/user",
         method: "GET"
     }).done(function (responseData){
-        var welcome = document.getElementById("welcome")
-        welcome.textContent = responseData;
+        console.log(responseData);
+        var welcome = document.getElementById("welcome");
+        welcome.textContent = "Welcome, " + responseData;
     }).fail(function (err) {
         console.log(err);
     })
