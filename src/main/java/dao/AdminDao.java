@@ -234,8 +234,10 @@ public enum AdminDao {
     public String getAllCrewMembers() throws SQLException {
         String query = """
                 SELECT json_agg(jsonb_build_object('id', a.id, 'forename',
-                a.forename, 'surname', a.surname)) FROM shotmaniacs1.account a
-                WHERE a.type='crew_member'""";
+                a.forename, 'surname', a.surname, 'mail', a.email_address,'username',
+                a.username, 'role', c.role, 'team', c.team)) FROM shotmaniacs1.account a, shotmaniacs1.crew_member c
+                WHERE a.type='crew_member'
+                GROUP BY a.id, a.forename, a.surname, a.email_address, a.username, c.role, c.team""";
 
         return getSQLString(query);
     }

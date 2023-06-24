@@ -110,8 +110,6 @@ function addEvent() {
 
 
     }
-
-    console.log(JSON.stringify(data), null, 2);
     $.ajax({
         url: "a pi/admin/crewAssignments/newEvent",
         method: "POST",
@@ -145,13 +143,10 @@ function addCrewMember() {
 
     if (clubTeam.checked) {
         permissionType = clubTeam.value;
-        console.log(permissionType);
     } else if (coreTeam.checked) {
         permissionType = coreTeam.value;
-        console.log(permissionType);
     } else if (clubAndCore.checked) {
         permissionType = clubAndCore.value;
-        console.log(permissionType);
     }
 
 
@@ -271,17 +266,57 @@ function selectCrewMember(name) {
 
 function getAllMembers() {
     let members = [];
-    sendHttpRequest('GET', "/api/admin/crewAssignment/members")
+    sendHttpRequest('GET', "/api/admin/crewAssignments/members")
         .then(responseData => {
             responseData.forEach(member => members.push(member));
             responseData.forEach((member) => {
+                console.log(responseData);
                 const {
-                    id, forename, surname,
-
+                    id, forename, surname, mail, username, role, team
                 } = member;
+                const container = document.getElementById("crewContainer");
 
-                //TODO: complete the html code
+                let card = document.createElement("div");
+                card.setAttribute('class', 'card');
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute('class', 'card-body');
+
+                let crewDetails = document.createElement("div");
+                crewDetails.setAttribute('class', 'crew-details');
+
+                let crewName = document.createElement("div");
+                crewName.setAttribute('class', 'crew-name');
+                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <span>${forename} ${surname}</span>`;
+
+                let crewEmail = document.createElement("div");
+                crewEmail.setAttribute('class', 'crew-email');
+                crewEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
+                                        <p>${mail}</p>`;
+
+                let crewUsername = document.createElement("div");
+                crewUsername.setAttribute('class', 'crew-username');
+                crewUsername.innerHTML = `<p>${username}</p>`;
+
+                let crewRole = document.createElement("div");
+                crewRole.setAttribute('class', 'crew-role');
+                crewRole.innerHTML = `
+                                        <p>${role}</p>`;
+
+                let crewTeam = document.createElement("div");
+                crewTeam.setAttribute('class', 'crew-team');
+                crewTeam.innerHTML = `
+                                        <p>${team}</p>`;
+                container.appendChild(card);
+                card.appendChild(cardBody);
+                cardBody.appendChild(crewDetails)
+                crewDetails.appendChild(crewName);
+                crewDetails.appendChild(crewEmail);
+                crewDetails.appendChild(crewUsername);
+                crewDetails.appendChild(crewTeam);
+                crewDetails.appendChild(crewRole);
             })
+
         })
 }
 
@@ -327,7 +362,7 @@ function getAllEvents() {
                 eventName.innerHTML = `
                         <span>${name}</span>
                         <div class="buttons">
-                            <ion-icon name="pencil-outline" id="pencil-outline-icon"></ion-icon>
+                            <ion-icon name="pencil-outline" id="pencil-outline-icon" onclick = "changeDetails(` + id + `)"></ion-icon>
                             <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
                         </div>`
 
@@ -552,7 +587,6 @@ function getAllEvents() {
 
                 let eventStaff = document.createElement("div");
                 const requirementsArray = event.eventDetails.requirements;
-                console.log(id + " lista de crew " + requirementsArray);
                 eventStaff.setAttribute('class', 'event-staff');
                 eventStaff.innerHTML = '';
                 if (requirementsArray === null) {
@@ -600,7 +634,8 @@ function getAllEvents() {
 }
 
 function changeDetails(eventID) {
-    sendHttpRequest('GET', "/api/admin/crewAssignments/bookings/${eventID}")
+    alert("aaaaaaaaaaaaaaaaa");
+    sendHttpRequest('GET', `/api/admin/crewAssignments`)
         .then(responseData => {
             const event = {
                 id,
@@ -613,6 +648,7 @@ function changeDetails(eventID) {
                 booking_type
                 //TODO integrate type and booking type
             } = responseData
+            console.log("Se ia ev bine? " + responseData)
             const modalBody = document.querySelector('.modal-body');
             let eventInfo = document.createElement("div");
             eventInfo.setAttribute("class", "eventInfo");
@@ -782,6 +818,7 @@ function changeDetails(eventID) {
 }
 
 function deleteEvent(eventID) {
+
     $.ajax({
         url: `/api/admin/crewAssignments/deleteEvent/${eventID}`,
         method: "DELETE",
@@ -820,13 +857,13 @@ function crewButton() {
         if (crewContainer.style.display === 'none') {
             crewContainer.style.display = 'flex';
             bookingContainer.style.display = 'none';
+            getAllMembers();
         } else {
         }
     }
 }
 
 function confirmationToast(id) {
-    console.log(id);
     let toastDeleteEvent = document.getElementById("deleteEventDialog");
     toastDeleteEvent.showModal();
     let deleteButton = document.getElementById('deleteButton')

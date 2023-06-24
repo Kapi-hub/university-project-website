@@ -17,7 +17,9 @@
 }
 
 .choose-crew-booking-container .btns .btn-crew-member,
-.choose-crew-booking-container .btns .btn-booking {
+.choose-crew-booking-container .btns .btn-booking,
+.choose-crew-booking-container .btns .createEventBttn,
+.choose-crew-booking-container .btns .createNewMemberBttn{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -482,7 +484,7 @@ body {
 .deleteEventDialog::backdrop {
     background: var(--bs-primary-bg-subtle)!important;}
 
-.closeBttn, .createEventBttn, .saveEventBttn, .btn-close, .createNewMemberBttn, .change-details, .delete-event, .closeDialogBttn{
+.closeBttn, .saveEventBttn, .btn-close, .change-details, .delete-event, .closeDialogBttn{
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -536,10 +538,6 @@ p {
     color: var(--bs-primary);
     border: 1px solid var(--bs-primary);
     border-radius: 10px;
-}
-
-.createNewMemberBttn, .createEventBttn {
-    margin-left: 25px;
 }
 
 .navbar-custom,
