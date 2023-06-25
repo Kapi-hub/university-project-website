@@ -287,7 +287,7 @@ function getAllMembers() {
 
                 let crewName = document.createElement("div");
                 crewName.setAttribute('class', 'crew-name');
-                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <span>${forename} ${surname}</span>`;
+                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${forename} ${surname}</p>`;
 
                 let crewEmail = document.createElement("div");
                 crewEmail.setAttribute('class', 'crew-email');
