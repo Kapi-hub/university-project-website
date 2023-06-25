@@ -301,12 +301,12 @@ function getAllMembers() {
                 let crewRole = document.createElement("div");
                 crewRole.setAttribute('class', 'crew-role');
                 crewRole.innerHTML = `<ion-icon name="pricetag-outline"></ion-icon>
-                                        <p>${role}</p>`;
+                                        <p>${role}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline"></ion-icon></button>`;
 
                 let crewTeam = document.createElement("div");
                 crewTeam.setAttribute('class', 'crew-team');
                 crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
-                                        <p>${team}</p>`;
+                                        <p>${team}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline"></ion-icon></button>`;
                 container.appendChild(card);
                 card.appendChild(cardBody);
                 cardBody.appendChild(crewDetails)
@@ -838,13 +838,17 @@ function deleteEvent(eventID) {
 function bookingButton() {
     const bookingContainer = document.getElementById("bookingContainer");
     const crewContainer = document.getElementById("crewContainer");
+    // this is to fix the bug where if you go two times on the events
+    // or crew members, the # of events or crew members would fetch again
+    let firstLoad = 0;
 
-    if (bookingContainer && crewContainer) {
+    if (bookingContainer && crewContainer && firstLoad === 0) {
         if (bookingContainer.style.display === 'none') {
-    bookingContainer.style.display = "flex";
-    crewContainer.style.display = "none";
-    getAllEvents();
-    }
+            firstLoad += 1;
+            bookingContainer.style.display = "flex";
+            crewContainer.style.display = "none";
+            getAllEvents();
+        }
     }
 }
 
@@ -852,9 +856,11 @@ function bookingButton() {
 function crewButton() {
     const bookingContainer = document.getElementById("bookingContainer");
     const crewContainer = document.getElementById("crewContainer");
+    let firstLoad = 0;
 
-    if (bookingContainer && crewContainer) {
+    if (bookingContainer && crewContainer && firstLoad === 0) {
         if (crewContainer.style.display === 'none') {
+            firstLoad++;
             crewContainer.style.display = "flex";
             bookingContainer.style.display = "none";
             getAllMembers();
