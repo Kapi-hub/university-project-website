@@ -92,25 +92,24 @@ public class AdminResource {
     @Path("/crewAssignments/changeEvent/{eventId}")
     @RolesAllowed("admin")
     public String handleGetEventWithId(@PathParam("eventId") int id) {
-        String event = null;
         try{
-            event = AdminDao.I.getEventWithId(id);
+            return AdminDao.I.getEventWithId(id);
         }catch (SQLException e){
             System.err.println(e.getMessage());
+            return null;
         }
-        return event;
     }
 
-    @PUT
-    @Path("/crewAssignments/changeEvent")
-    @RolesAllowed("admin")
-    public void handleChangeEvent(EventBean event) {
-        try{
-            AdminDao.I.changeEventDetails(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @PUT
+//    @Path("/crewAssignments/changeEvent/{eventId}")
+//    @RolesAllowed("admin")
+//    public void handleChangeEvent(@PathParam("eventId") int id) {
+//        try{
+//            AdminDao.I.changeEventDetails(id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @DELETE
     @Path("/crewAssignments/deleteEvent/{eventID}")

@@ -135,19 +135,28 @@ public enum AdminDao {
                            ) AS result
                 FROM shotmaniacs1.event e
                  """;
-//TODO make it show latest as group by order by won't give one row
         return getSQLString(insertQuery);
     }
 
     public String getEventWithId(int id) throws SQLException {
-        String query = "SELECT * FROM event WHERE id = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(query);
+        String query = "SELECT json_agg(" +
+                "json_build_object(" +
+                "'id', id," +
+                "'name', name," +
+                "'description', description," +
+                "'start', start," +
+                "'duration', duration," +
+                "'location', location," +
+                "'type', type," +
+                "'booking_type', booking_type))" +
+                "FROM shotmaniacs1.event " +
+                "WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(query);){
             st.setInt(1, id);
+            return getSQLString(st.toString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return getSQLString(query);
     }
 
 

@@ -40,7 +40,7 @@
 
 .container.content-container .card {
     width: 50rem !important;
-    flex-basis: calc(47%); /* 2 cards per row */
+    flex-basis: calc(45%); /* 2 cards per row */
     background-color: var(--bs-dark) !important; /* important to override */
     border-radius: 20px;
 }

@@ -270,7 +270,6 @@ function getAllMembers() {
         .then(responseData => {
             responseData.forEach(member => members.push(member));
             responseData.forEach((member) => {
-                console.log(responseData);
                 const {
                     id, forename, surname, mail, username, role, team
                 } = member;
@@ -325,7 +324,6 @@ function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
         .then(responseData => {
-            console.log(responseData);
             responseData.forEach(event => events.push(event));
             responseData.forEach((event) => {
                 const {
@@ -337,7 +335,6 @@ function getAllEvents() {
                     location,
                     type,
                     booking_type
-                    //TODO integrate type and booking type
                 } = event.eventDetails;
 
                 const {
@@ -347,7 +344,7 @@ function getAllEvents() {
                     phone_number
                 } = event.eventDetails.clients[0]
 
-                const container = document.querySelector('.container.crew-container');
+                const container = document.querySelector('.container.content-container');
 
                 let card = document.createElement("div");
                 card.setAttribute('class', 'card');
@@ -381,7 +378,7 @@ function getAllEvents() {
 
                 let eventDuration = document.createElement("li");
                 eventDuration.setAttribute('class', 'duration');
-                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${duration}</span>`;
+                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${duration} hours</span>`;
 
                 let eventLocation = document.createElement("li");
                 eventLocation.setAttribute('class', 'location');
@@ -391,10 +388,10 @@ function getAllEvents() {
                 eventDescription.setAttribute('class', 'location');
                 eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${description}</span>`;
 
-                detailsList.appendChild(eventDescription);
+                detailsList.appendChild(dateTime);
                 detailsList.appendChild(eventLocation);
                 detailsList.appendChild(eventDuration);
-                detailsList.appendChild(dateTime);
+                detailsList.appendChild(eventDescription);
                 eventOtherDetails.appendChild(detailsList);
 
                 let eventType = document.createElement("div");
@@ -462,7 +459,7 @@ function getAllEvents() {
 
                 let bookingType = document.createElement("div");
                 bookingType.setAttribute('class', 'booking-type');
-                if(booking_type === 'photography') {
+                if (booking_type === 'photography') {
                     bookingType.innerHTML = `<div class="booking-type-card photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
                     <div class="booking-type-card-inner">
                         <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
@@ -636,8 +633,9 @@ function getAllEvents() {
 
 function changeDetails(eventID) {
     alert("aaaaaaaaaaaaaaaaa");
-    sendHttpRequest('GET', `/api/admin/crewAssignments`)
+    sendHttpRequest('GET', `/api/admin/crewAssignments/changeEvent/${eventID}`)
         .then(responseData => {
+            console.log(responseData);
             const event = {
                 id,
                 name,
@@ -647,8 +645,7 @@ function changeDetails(eventID) {
                 location,
                 type,
                 booking_type
-                //TODO integrate type and booking type
-            } = responseData
+            } = responseData[0]
             console.log("Se ia ev bine? " + responseData)
             const modalBody = document.querySelector('.modal-body');
             let eventInfo = document.createElement("div");
@@ -818,8 +815,12 @@ function changeDetails(eventID) {
 
 }
 
-function deleteEvent(eventID) {
 
+function changeTeam(memberID) {
+
+}
+
+function deleteEvent(eventID) {
     $.ajax({
         url: `/api/admin/crewAssignments/deleteEvent/${eventID}`,
         method: "DELETE",
@@ -840,12 +841,10 @@ function bookingButton() {
 
     if (bookingContainer && crewContainer) {
         if (bookingContainer.style.display === 'none') {
-            bookingContainer.style.display = 'flex';
-            crewContainer.style.display = 'none';
-            getAllEvents();
-        } else {
-            // If the bookingContainer is already visible, do nothing or perform any desired action
-        }
+    bookingContainer.style.display = "flex";
+    crewContainer.style.display = "none";
+    getAllEvents();
+    }
     }
 }
 
@@ -856,10 +855,9 @@ function crewButton() {
 
     if (bookingContainer && crewContainer) {
         if (crewContainer.style.display === 'none') {
-            crewContainer.style.display = 'flex';
-            bookingContainer.style.display = 'none';
+            crewContainer.style.display = "flex";
+            bookingContainer.style.display = "none";
             getAllMembers();
-        } else {
         }
     }
 }
