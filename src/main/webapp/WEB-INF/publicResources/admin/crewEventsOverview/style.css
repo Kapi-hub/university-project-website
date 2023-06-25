@@ -438,6 +438,29 @@
     text-align: center;
 }
 
+.container.crew-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em;
+    gap: 1em;
+}
+
+.container.crew-container .card {
+    flex-basis: calc(30%);
+    background-color: var(--bs-dark) !important;
+}
+
+.container.crew-container .card .card-body {
+    background-color: var(--bs-light);
+    border-radius: 20px;
+    color: var(--bs-dark);
+    display: flex;
+}
+
+.container.crew-container .card .card-body > div {
+    flex-grow: 1;
+}
+
 .sidenav {
     height: auto; /* Full-height: remove this if you want "auto" height */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -536,7 +559,6 @@ p {
 .card-body, .collapse.booking, .collapse.crew {
     background-color: var(--bs-dark);
     color: var(--bs-primary);
-    border: 1px solid var(--bs-primary);
     border-radius: 10px;
 }
 

@@ -296,16 +296,17 @@ function getAllMembers() {
 
                 let crewUsername = document.createElement("div");
                 crewUsername.setAttribute('class', 'crew-username');
-                crewUsername.innerHTML = `<p>${username}</p>`;
+                crewUsername.innerHTML = `<ion-icon name="id-card-outline"></ion-icon>
+                                            <p>${username}</p>`;
 
                 let crewRole = document.createElement("div");
                 crewRole.setAttribute('class', 'crew-role');
-                crewRole.innerHTML = `
+                crewRole.innerHTML = `<ion-icon name="pricetag-outline"></ion-icon>
                                         <p>${role}</p>`;
 
                 let crewTeam = document.createElement("div");
                 crewTeam.setAttribute('class', 'crew-team');
-                crewTeam.innerHTML = `
+                crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
                                         <p>${team}</p>`;
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -346,7 +347,7 @@ function getAllEvents() {
                     phone_number
                 } = event.eventDetails.clients[0]
 
-                const container = document.querySelector('.container.content-container');
+                const container = document.querySelector('.container.crew-container');
 
                 let card = document.createElement("div");
                 card.setAttribute('class', 'card');
