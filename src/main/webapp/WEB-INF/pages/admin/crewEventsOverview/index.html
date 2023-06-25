@@ -67,7 +67,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editEventModal">Edit event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl(); addEvent();">
                 </button>
             </div>
 
@@ -371,7 +371,7 @@
 <script>
 
     const saveEventButton = document.querySelector('.saveEventBttn');
-    const saveMemberButton = document.querySelector('.saveMemberBttn');
+    // const saveMemberButton = document.querySelector('.saveMemberBttn');
 
     const toastEvent = new bootstrap.Toast(document.getElementById("successfulEvent"));
     console.log(toastEvent);
@@ -380,7 +380,7 @@
 
     saveEventButton.addEventListener('click', function () {
         try {
-            addEvent();
+            // addEvent();
             console.log("aaaaaaaaaaaaaaa")
             toastEvent.show();
         } catch (error) {

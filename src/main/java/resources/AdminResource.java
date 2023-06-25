@@ -164,7 +164,7 @@ public class AdminResource {
 
 //    //TODO: test with postman
 //    @PUT
-//    @Path("/crewAssignments/Member") //TODO change the url with the member id
+//    @Path("/crewAssignments/") //TODO change the url with the member id
 //    @RolesAllowed("admin")
 //    public void changeRole(CrewMemberBean crewMember, String newRole) {
 //        try {

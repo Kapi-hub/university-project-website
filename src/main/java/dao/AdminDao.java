@@ -173,10 +173,10 @@ public enum AdminDao {
         String query = """
                 DELETE FROM event" +
                 "WHERE id = ?""";
-            PreparedStatement st = connection.prepareStatement(query);
-            st.setInt(1, id);
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, id);
 
-            st.executeUpdate();
+        st.executeUpdate();
     }
 
     /*METHODS RELATED TO CREW MEMBERS*/
@@ -234,11 +234,10 @@ public enum AdminDao {
     public String getAllCrewMembers() throws SQLException {
         String query = """
                 SELECT json_agg(jsonb_build_object('id', a.id, 'forename',
-                a.forename, 'surname', a.surname, 'mail', a.email_address,'username',
-                a.username, 'role', c.role, 'team', c.team)) FROM shotmaniacs1.account a, shotmaniacs1.crew_member c
-                WHERE a.type='crew_member'
-                GROUP BY a.id, a.forename, a.surname, a.email_address, a.username, c.role, c.team""";
-
+                a.forename, 'surname', a.surname, 'mail', a.email_address,'username', a.username, 'role', c.role, 'team'
+                , c.team)) FROM shotmaniacs1.account a
+                JOIN shotmaniacs1.crew_member c ON a.id = c.id
+                WHERE a.type='crew_member'""";
         return getSQLString(query);
     }
 
