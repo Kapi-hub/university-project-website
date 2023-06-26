@@ -161,28 +161,26 @@ public class AdminResource {
         }
     }
 
-//    //TODO: test with postman
-//    @PUT
-//    @Path("/crewAssignments/") //TODO change the url with the member id
-//    @RolesAllowed("admin")
-//    public void changeRole(CrewMemberBean crewMember, String newRole) {
-//        try {
-//            AdminDao.I.changeRole(crewMember, newRole);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    //TODO: test with postman
-//    @PUT
-//    @Path("/crewAssignments/Member") //TODO change the url with the member id
-//    @RolesAllowed("admin")
-//    public void changeTeam(CrewMemberBean crewMember, String newTeam) {
-//        try {
-//            AdminDao.I.changeTeam(crewMember, newTeam);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @PUT
+    @Path("/crewAssignments/changeRole/{memberID}/{role}") //TODO change the url with the member id
+    @RolesAllowed("admin")
+    public void changeRole(@PathParam("memberID") int id, @PathParam("role") String newRole) {
+        try {
+            AdminDao.I.changeRole(id, newRole);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PUT
+    @Path("/crewAssignments/changeTeam/{memberID}/{team}")
+    @RolesAllowed("admin")
+    public void changeTeam(@PathParam("memberID") int id, @PathParam("team") String newTeam) {
+        try {
+            AdminDao.I.changeTeam(id, newTeam);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -62,12 +62,8 @@ function addEvent() {
 
     var data = {
         clientBean: {
-            forename: clientFirstName,
-            surname: clientLastName,
-            phone_number: clientPhone,
-            emailAddress: clientEmail
-        },
-        eventBean: {
+            forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
+        }, eventBean: {
             name: eventTitle,
             description: eventDescription,
             start: eventDateTime,
@@ -77,36 +73,21 @@ function addEvent() {
             booking_type: bookingType
         },
 
-        requiredCrewBeans: [
-            {
-                crew_size: eventPhotographer,
-                role: "PHOTOGRAPHER"
-            },
-            {
-                crew_size: eventAssistant,
-                role: "ASSISTANT"
-            },
-            {
-                crew_size: eventEditor,
-                role: "EDITOR"
-            },
-            {
-                crew_size: eventDataHandler,
-                role: "DATA_HANDLER"
-            },
-            {
-                crew_size: eventPlanner,
-                role: "PLANNER"
-            },
-            {
-                crew_size: 0,
-                role: "PRODUCER"
-            },
-            {
-                crew_size: eventVideographer,
-                role: "VIDEOGRAPHER"
-            }
-        ]
+        requiredCrewBeans: [{
+            crew_size: eventPhotographer, role: "PHOTOGRAPHER"
+        }, {
+            crew_size: eventAssistant, role: "ASSISTANT"
+        }, {
+            crew_size: eventEditor, role: "EDITOR"
+        }, {
+            crew_size: eventDataHandler, role: "DATA_HANDLER"
+        }, {
+            crew_size: eventPlanner, role: "PLANNER"
+        }, {
+            crew_size: 0, role: "PRODUCER"
+        }, {
+            crew_size: eventVideographer, role: "VIDEOGRAPHER"
+        }]
 
 
     }
@@ -216,7 +197,6 @@ function getProducers() {
     let id = 0;
     //TODO fix bug that appends the list for each click
     sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
-        console.log(responseData);
         responseData.forEach(producer => producers.push(producer));
         const producersList = document.querySelector('.dropdown-menu');
         producers.forEach(producer => {
@@ -227,36 +207,40 @@ function getProducers() {
                 selectCrewMember(producer.forename + ' ' + producer.surname);
                 id = producer.id;
             };
-            producerItem.innerHTML = `<span class="producerName" id="producerName">${producer.forename} ${producer.surname}</span>`;
+            //id=`${producer.id}` onclick="function(`+id+`)
+            producerItem.innerHTML = `<span class="producerName">${producer.forename} ${producer.surname}</span>`;
 
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
         })
     });
-    return id;
 }
 
 function sendHttpRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
-            let XHR = new XMLHttpRequest();
+        let XHR = new XMLHttpRequest();
 
-            XHR.open(method, url);
-            XHR.responseType = 'json';
+        XHR.open(method, url);
+        XHR.responseType = 'json';
 
-            XHR.onload = () => {
-                if (XHR.status === 200) {
-                    resolve(XHR.response)
-                } else {
-                    reject(XHR.response)
-                }
+        XHR.onload = () => {
+            if (XHR.status === 200) {
+                resolve(XHR.response)
+            } else {
+                reject(XHR.response)
             }
-            XHR.withCredentials = true;
-            if (data) {
-                XHR.setRequestHeader("Content-Type", "application/json");
-            }
-            XHR.send(JSON.stringify(data));
         }
-    );
+        XHR.withCredentials = true;
+        if (data) {
+            XHR.setRequestHeader("Content-Type", "application/json");
+        }
+        XHR.send(JSON.stringify(data));
+    });
+}
+
+function selectTeam(name) {
+    const selectedTeam = document.getElementById('selectedTeam');
+    selectedTeam.textContent = name;
 }
 
 function selectCrewMember(name) {
@@ -269,6 +253,7 @@ function getAllMembers() {
     sendHttpRequest('GET', "/api/admin/crewAssignments/members")
         .then(responseData => {
             responseData.forEach(member => members.push(member));
+            console.log("response " + responseData);
             responseData.forEach((member) => {
                 const {
                     id, forename, surname, mail, username, role, team
@@ -298,15 +283,18 @@ function getAllMembers() {
                 crewUsername.innerHTML = `<ion-icon name="id-card-outline"></ion-icon>
                                             <p>${username}</p>`;
 
+                let crewTeam = document.createElement("div");
+                crewTeam.setAttribute('class', 'crew-team');
+                crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
+                                        <p>${team}</p> <button class="crew-info-edit-button" id = "crew-info-edit-button" onclick="showChangeTeamModal(${id})" ><ion-icon name="pencil-outline"></ion-icon></button>`
+                // <script>const triggerButton = document.getElementById("crew-info-edit-button");
+                //     triggerButton.addEventListener("click", showChangeTeamModal);</script>`
+
                 let crewRole = document.createElement("div");
                 crewRole.setAttribute('class', 'crew-role');
                 crewRole.innerHTML = `<ion-icon name="pricetag-outline"></ion-icon>
                                         <p>${role}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline"></ion-icon></button>`;
 
-                let crewTeam = document.createElement("div");
-                crewTeam.setAttribute('class', 'crew-team');
-                crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
-                                        <p>${team}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline"></ion-icon></button>`;
                 container.appendChild(card);
                 card.appendChild(cardBody);
                 cardBody.appendChild(crewDetails)
@@ -320,6 +308,137 @@ function getAllMembers() {
         })
 }
 
+function changeTeam(memberID) {
+    let team;
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "changeTeam");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Change Team</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.textContent = "Select the new team";
+
+
+    const dropdown = document.createElement("div");
+    dropdown.setAttribute("class", "dropdown");
+
+    const dropdownButton = document.createElement("button");
+    dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
+    dropdownButton.setAttribute("type", "button");
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    dropdownButton.innerHTML = `<span id="selectedTeam">select team</span>`;
+
+    const teamsList = document.createElement('ul');
+    teamsList.setAttribute("class", "dropdown-menu");
+
+    const coreItem = document.createElement('li');
+    const coreButton = document.createElement('a');
+    coreButton.setAttribute("class", "dropdown-item");
+    coreButton.setAttribute("href", "#");
+    coreButton.textContent = "core";
+    coreButton.onclick = function () {
+        selectTeam("core");
+        team = coreButton.textContent;
+        console.log(team);
+    }
+    coreItem.appendChild(coreButton);
+    teamsList.appendChild(coreItem);
+
+    const clubItem = document.createElement('li');
+    const clubButton = document.createElement('a');
+    clubButton.setAttribute("class", "dropdown-item");
+    clubButton.setAttribute("href", "#");
+    clubButton.textContent = "club";
+    clubButton.onclick = function () {
+        selectTeam("club");
+        team = clubButton.textContent;
+        console.log(team);
+    }
+    clubItem.appendChild(clubButton);
+    teamsList.appendChild(clubItem);
+
+    const bothItem = document.createElement('li');
+    const bothButton = document.createElement('a');
+    bothButton.setAttribute("class", "dropdown-item");
+    bothButton.setAttribute("href", "#");
+    bothButton.textContent = "core&club";
+    bothButton.onclick = function () {
+        selectTeam("core&club");
+        team = bothItem.textContent;
+    }
+    bothItem.appendChild(bothButton);
+    teamsList.appendChild(bothItem);
+
+
+    dropdown.appendChild(dropdownButton);
+    dropdown.appendChild(teamsList);
+
+    console.log("team selected " + team);
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalFooter.innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="sendNewTeamToDB(${memberID}, ${team})">Save changes</button>`;
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modalBody.appendChild(dropdown);
+    dropdown.appendChild(teamsList);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+
+
+}
+
+
+function sendNewTeamToDB(memberID, team) {
+    console.log(team)
+    $.ajax(
+        {
+            url: `api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
+            method: "PUT",
+            success: function () {
+                alert("Successfully changed the team");
+                // location.reload();
+            }, error: function () {
+                alert("Error changing the team");
+            }
+        }
+    )
+}
+
+function showChangeTeamModal(id) {
+    changeTeam(id);
+    const modalElement = document.getElementById("changeTeam");
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    console.log("sunta aici in showchangemodal");
+    console.log(modalElement);
+    bootstrapModal.show();
+}
+
+function changeRole(memberID) {
+
+}
+
 function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
@@ -327,21 +446,11 @@ function getAllEvents() {
             responseData.forEach(event => events.push(event));
             responseData.forEach((event) => {
                 const {
-                    id,
-                    name,
-                    description,
-                    start,
-                    duration,
-                    location,
-                    type,
-                    booking_type
+                    id, name, description, start, duration, location, type, booking_type
                 } = event.eventDetails;
 
                 const {
-                    forename,
-                    surname,
-                    emailAddress,
-                    phone_number
+                    forename, surname, emailAddress, phone_number
                 } = event.eventDetails.clients[0]
 
                 const container = document.querySelector('.container.content-container');
@@ -637,14 +746,7 @@ function changeDetails(eventID) {
         .then(responseData => {
             console.log(responseData);
             const event = {
-                id,
-                name,
-                description,
-                start,
-                duration,
-                location,
-                type,
-                booking_type
+                id, name, description, start, duration, location, type, booking_type
             } = responseData[0]
             console.log("Se ia ev bine? " + responseData)
             const modalBody = document.querySelector('.modal-body');
@@ -812,26 +914,17 @@ function changeDetails(eventID) {
 
         }
     });
-
 }
 
-
-function changeTeam(memberID) {
-
-}
 
 function deleteEvent(eventID) {
     $.ajax({
-        url: `/api/admin/crewAssignments/deleteEvent/${eventID}`,
-        method: "DELETE",
-        success: function () {
+        url: `/api/admin/crewAssignments/deleteEvent/${eventID}`, method: "DELETE", success: function () {
             alert("Successfully deleted this event");
             location.reload();
-        },
-        error: function () {
+        }, error: function () {
             alert("Error deleting this event");
         }
-
     });
 }
 

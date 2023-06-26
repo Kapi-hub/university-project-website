@@ -151,7 +151,7 @@ public enum AdminDao {
                 "'booking_type', booking_type))" +
                 "FROM shotmaniacs1.event " +
                 "WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(query);){
+        try (PreparedStatement st = connection.prepareStatement(query);) {
             st.setInt(1, id);
             return getSQLString(st.toString());
         } catch (SQLException e) {
@@ -259,33 +259,63 @@ public enum AdminDao {
 
     }
 
-    public void changeRole(CrewMemberBean crewMember, String newRole) throws SQLException {
-        String query = "UPDATE crew_member" +
-                "SET role = ?" +
+    public void changeRole(int memberID, String newRole) throws SQLException {
+        String getRole = "SELECT role FROM shotmaniacs1.crew_member WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(getRole);
+        try {
+            statement.setInt(1, memberID);
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+
+        ResultSet rs = statement.executeQuery();
+
+        String crew_role = null;
+        if (rs.next()) {
+            crew_role = rs.getString(1);
+        }
+
+        String query = "UPDATE crew_member " +
+                "SET role = ? " +
                 "FROM account" +
                 "WHERE role = ? AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
         try {
             st.setString(1, newRole);
-            st.setString(2, crewMember.getRole().toString());
-            st.setInt(3, crewMember.getId());
+            st.setString(2, crew_role);
+            st.setInt(3, memberID);
         } catch (SQLException e) {
-            System.out.println(e);
+            System.err.println(e);
         }
     }
 
-    public void changeTeam(CrewMemberBean crewMember, String newTeam) throws SQLException {
-        String query = "UPDATE crew_member" +
-                "SET team = ?" +
+    public void changeTeam(int id, String newTeam) throws SQLException {
+        String getRole = "SELECT team FROM shotmaniacs1.crew_member WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(getRole);
+        try {
+            statement.setInt(1, id);
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+
+        ResultSet rs = statement.executeQuery();
+
+        String crew_team = null;
+        if (rs.next()) {
+            crew_team = rs.getString(1);
+        }
+
+        String query = "UPDATE crew_member " +
+                "SET team = ? " +
                 "FROM account" +
                 "WHERE team = ? AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
         try {
             st.setString(1, newTeam);
-            st.setString(2, crewMember.getRole().toString());
-            st.setInt(3, crewMember.getId());
+            st.setString(2, crew_team);
+            st.setInt(3, id);
         } catch (SQLException e) {
-            System.out.println(e);
+            System.err.println(e);
         }
     }
 
