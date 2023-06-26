@@ -8,8 +8,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static dao.MailService.MAIL;
 
 @Path("/admin")
 public class AdminResource {
@@ -116,11 +122,39 @@ public class AdminResource {
     @RolesAllowed("admin")
     public Response handleDeleteEvent(@PathParam("eventID") int id) {
         try {
+            String[] recipients = AdminDao.I.getEmailsOfEvent(id);
             AdminDao.I.deleteEvent(id);
+            if (recipients != null && recipients.length > 0) {
+                sendDeleteEmail(id, recipients);
+            }
             return Response.ok().build();
         }  catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError().build();
+        }
+    }
+
+    private static void sendDeleteEmail(int id, String[] recipients) {
+        String subject = "Event has been deleted you have been assigned to.";
+        String body = String.format(
+                """
+                        Dear Crew member,
+
+                        An event with id-%s has been deleted, you have been assigned to.
+
+                        Please consult the dashboard for more information.
+
+                        Sincerely,
+                        The Shotmaniacs Team
+                        """, id);
+        try {
+            for (String recipient: recipients) {
+                MAIL.sendMessage(recipient, subject, body);
+            }
+
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            e.printStackTrace();
         }
     }
 

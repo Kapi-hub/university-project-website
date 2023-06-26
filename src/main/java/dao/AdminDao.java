@@ -340,5 +340,24 @@ public enum AdminDao {
         st.close();
         return null;
     }
+
+    public String[] getEmailsOfEvent(int id) throws SQLException {
+        String query = """
+                   SELECT ARRAY_AGG(a.email_address) AS email_addresses
+                             FROM account a, event e, event_enrollment ee
+                             WHERE (
+                               a.id = ee.crew_member_id AND
+                               ee.event_id = e.id AND
+                               e.id = ?
+                             )
+                   """;
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return (String[]) rs.getArray(1).getArray();
+        }
+        return null;
+    }
 }
 
