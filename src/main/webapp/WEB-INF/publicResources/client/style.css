@@ -65,7 +65,7 @@ nav {
     border: none;
     border-radius: 0;
     border-bottom: 2px dotted #6c757d;
-    color: var(--bs-dark);
+    color: #ccc;
 }
 
 .select {
