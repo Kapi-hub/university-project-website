@@ -12,6 +12,9 @@ function saveAnnouncement() {
     ).catch(err => {
         console.log(err)
     }) //TODO figure out what to do when fail
+    const toastLive = document.getElementById('liveToast');
+    const toast = new bootstrap.Toast(toastLive);
+    toast.show();
 }
 
 function sendHttpRequest(method, url, data) {

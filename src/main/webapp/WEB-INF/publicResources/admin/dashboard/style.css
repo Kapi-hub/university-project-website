@@ -5,14 +5,21 @@
     background-color: var(--bs-dark);
 }
 
-.modal.fade .modal-dialog .modal-content .modal-header{
+.modal.fade .modal-dialog .modal-content .modal-header , #inputCBtns, #inputSBtns{
     border-bottom: #1F1F1F 1px;
     justify-content: space-between; /* container is flex by default */
     margin: 5px;
     color: var(--bs-light);
 }
 
-.modal.fade .modal-dialog .modal-content .modal-header .btns ion-icon{
+#inputCBtns{
+    border-color: red;
+}
+#inputSBtns{
+    border-color: var(--bs-primary-rgb);
+}
+#inputCBtns, #inputSBtns{
+    text-align: right   ;
     font-size: 20px;
 }
 
@@ -28,15 +35,15 @@
 
 .modal.fade .modal-dialog .modal-content .modal-body #inputTitle,
 .modal.fade .modal-dialog .modal-content .modal-body #inputDetails,
-.modal.fade .modal-dialog .modal-content .modal-body #inputID {
+.modal.fade .modal-dialog .modal-content .modal-body #inputID{
     border-radius: 5px;
     border-width: 0;
     background: lightgray;
 }
 
-/*
-
-*/
+.inputContainer{
+    width: 40px;
+}
 
 .welcome-message {
     text-align: center;
@@ -79,7 +86,7 @@ body{
     padding: 0 20px;
 }
 
-.postAnnouncementBttn,.latestEvents , .saveBttn, .closeBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
+.postAnnouncementBttn,.latestEvents , .saveBttn, .closeBttn, .btn-close, .createEventBttn, .saveEventBttn {
     margin-left: auto;
     margin-right: 10px;
     font-size: 20px;
@@ -94,21 +101,13 @@ body{
     width : 100%;
 }
 
-.accordion-events-button, .crewButton{
+.crewButton{
     background-color: var(--bs-primary);
     border-radius: 20px;
     border-color: var(--bs-primary);
     color: var(--bs-light);
     margin-left: 10%;
     margin-bottom: 10px;
-}
-
-
-.accordion-button{
-    margin-bottom: 10px;
-    text-align: justify;
-    display: inline-block;
-    width: 100%;
 }
 
 .closeBttn {
@@ -150,7 +149,7 @@ body{
 .title {
     font-weight: bold;
 }
-.announcementTitle, .accordion-item {
+.announcementTitle {
     font-size: 18px;
     display: block;
 }
@@ -162,8 +161,9 @@ body{
 .announcementContent{
     font-size: 14px;
 }
-.accordion-body{
-    color:var(--bs-primary) ;
+
+#eventsAccordion {
+    padding: 10px 0;
 }
 
 .toast{
@@ -183,4 +183,33 @@ body{
 .navbar-custom .container-fluid .modal-content{
     color: var(--bs-light);
     background-color: var(--bs-dark) ;
+}
+
+.accordion-item, .accordion-button {
+    border-radius: 20px !important;
+    border: 0 !important;
+}
+
+.accordion-button {
+    transition: 0.3s;
+}
+
+.accordion-button:not(.collapsed) {
+    color: var(--bs-dark) !important;
+    background-color: var(--bs-primary) !important;
+}
+
+.accordion-button:link, .accordion-button:visited, .accordion-button:hover, .accordion-button:active, .accordion-button:focus {
+    border: hidden !important;
+    box-shadow: none !important;
+    outline: 0;
+}
+
+.accordion-item + .accordion-item {
+    margin-top: 10px;
+}
+
+.accordion-button.collapsed {
+    background-color: var(--bs-primary);
+    display: flex;
 }
