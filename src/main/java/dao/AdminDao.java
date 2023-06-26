@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import static misc.Security.encodeSalt;
+import java.util.List;
 
 
 public enum AdminDao {
@@ -19,7 +20,55 @@ public enum AdminDao {
         connection = ConnectionFactory.getConnection();
     }
 
-    /*METHODS RELATED TO EVENTS*/
+    public void createNewMember(CrewMemberBean crewMember) {
+        //Create new account
+        String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ?, ?::account_type_enum)";
+        try {
+            PreparedStatement st = connection.prepareStatement(insertAccountQuery);
+            st.setString(1, crewMember.getForename());
+            st.setString(2, crewMember.getSurname());
+            st.setString(3, crewMember.getUsername());
+            st.setString(4, crewMember.getEmailAddress());
+            st.setString(5, crewMember.getPassword());
+            st.setString(6, crewMember.getAccountType().toString());
+
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("In insertion of account " + e);
+        }
+
+        //Get the account's id so that it will be used for the foreign key of crew_member
+        int accountId = 0;
+        String getAccountId = "SELECT id FROM account WHERE username LIKE ?;";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(getAccountId);
+            System.out.println(crewMember.getUsername());
+            st.setString(1, crewMember.getUsername());
+            try (ResultSet resultSet = st.executeQuery()) {
+                if (resultSet.next()) {
+
+                    accountId = resultSet.getInt("id");
+                    System.out.println(accountId);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("error getting the account id");
+        }
+
+        //Create crew_member
+        String insertCrewQuery = "INSERT INTO crew_member(id, role, team) VALUES(?, ?::role_enum, ?::team_enum)";
+        try {
+            PreparedStatement st = connection.prepareStatement(insertCrewQuery);
+            st.setInt(1, accountId);
+            st.setString(2, crewMember.getRole().toString());
+            st.setString(3, crewMember.getTeam().toString());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("in insertion of crewMember " + e);
+        }
+    }
+
     public int addClient(ClientBean client) throws SQLException {
         String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -85,21 +134,11 @@ public enum AdminDao {
                     FROM event_enrollment
                     GROUP BY event_id
                 ) ee ON e.id = ee.event_id
-                WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; 
+                WHERE (ee.enrollments < er.crew_size OR ee.enrollments IS NULL)
+                  AND e.id IS NOT NULL
+                  AND e.name IS NOT NULL;
                 """;
-
-        ArrayList<EventBean> events = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                EventBean eb = new EventBean(rs.getInt("id"), rs.getString("name"));
-                events.add(eb);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return events;
+        return getSQLString(insertQuery);
     }
 
     public String getLatestEvent() throws SQLException {
@@ -337,13 +376,14 @@ public enum AdminDao {
                     'announcement_title', subquery.title,
                     'announcement_body', subquery.body,
                     'announcement_timestamp', subquery.date_time,
+                    'recipient', subquery.recipient,
                     'announcer', json_build_object(
                         'forename', subquery.forename,
                         'surname', subquery.surname
                     )
                 )) AS result
                 FROM (
-                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname ,ann.recipient
                     FROM announcement ann
                     JOIN account a ON ann.announcer_id = a.id
                     ORDER BY ann.id DESC
@@ -354,6 +394,20 @@ public enum AdminDao {
         return getSQLString(insertQuery);
     }
 
+    public String getLatestEvent() throws SQLException {
+        String insertQuery = """
+                SELECT json_agg(json_build_object(
+                    'name',name,
+                    'description',description,
+                    'start',start,
+                    'duration',duration,
+                    'type',type
+                        ) 
+                     )AS result
+                    From event
+                    """;//TODO make it show latest as group by order by won't give one row
+        return getSQLString(insertQuery);
+    }
 
     private String getSQLString(String insertQuery) throws SQLException {
         PreparedStatement st = connection.prepareStatement(insertQuery);
@@ -364,7 +418,26 @@ public enum AdminDao {
             st.close();
             return result;
         }
+        rs.close();
+        st.close();
+        return null;
+    }
 
+    public String getUser(int accountId) throws SQLException {
+        String insertQuery = """
+                Select forename 
+                From account
+                Where id = ?;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery) ;
+        st.setInt(1,accountId);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            String result = rs.getString(1);
+            rs.close();
+            st.close();
+            return result;
+        }
         rs.close();
         st.close();
         return null;
