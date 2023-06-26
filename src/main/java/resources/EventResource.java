@@ -221,7 +221,10 @@ public class EventResource {
         }
     }
 
-    private Response unenrol(int crewId, int eventId) {
+    @DELETE
+    @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
+    @RolesAllowed("admin")
+    public Response unenrol(@PathParam("crewId") int crewId, @PathParam("eventId") int eventId) {
         if (!EventDao.instance.isEnrolled(crewId, eventId)) {
             return Response.notModified()
                     .build();
