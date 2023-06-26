@@ -113,94 +113,29 @@
             <div class="flex-container">
                 <p class="eventsText">Events</p>
             </div>
-            <div class="accordion" id="accordionExample">
-                <!--Events that need crew assigned-->
+            <div class="accordion" id="eventsAccordion">
                 <div class="accordion-item">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Events that need crew assigned
-                    </button>
-                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                         data-bs-parent="#accordionExample">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            No crew assigned
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <!--Inside the first accordion element-->
-                            <div class="eventsList" id="eventsListAcc">
-                                <!--First event-->
-                                <div class="eventsList-item">
-                                    <button class="accordion-events-button collapsed" type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOneOne" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        Event 1
-                                    </button>
-                                    <div id="collapseOneOne" class="eventaccordion-collapse collapse"
-                                         aria-labelledby="headingOne"
-                                         data-bs-parent="#eventsListAcc">
-                                        <div class="">
-                                            <span> test</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--Second event-->
-                                <div class="eventsList-item">
-                                    <button class="accordion-events-button collapsed" type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOneTwo" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        Event 2
-                                    </button>
-                                    <div id="collapseOneTwo" class="eventaccordion-collapse collapse"
-                                         aria-labelledby="headingOne"
-                                         data-bs-parent="#eventsListAcc">
-                                        <div class="accordion-body">
-                                            <div class="eventDetails">
-                                                <span>does it work</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--Third event-->
-                                <div class="eventsList-item">
-                                    <button class="accordion-events-button collapsed" type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOneThree" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        Event 3
-                                    </button>
-                                    <div id="collapseOneThree" class="eventaccordion-collapse collapse"
-                                         aria-labelledby="headingOne"
-                                         data-bs-parent="#eventsListAcc">
-                                        <div class="accordion-body">
-                                            <span>details of event 3</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Added via JS-->
                         </div>
                     </div>
                 </div>
-                <!--Events that dont need crew assigned anymore-->
-                <!--                <div class="accordion-item">-->
-                <!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
-                <!--                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
-                <!--                        Events that dont need crew anymore-->
-                <!--                    </button>-->
-                <!--                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"-->
-                <!--                         data-bs-parent="#accordionExample">-->
-                <!--                        <div class="accordion-body">-->
-                <!--                            <span>we dont need crew asap</span>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--Latest upcoming events-->
                 <div class="accordion-item">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Latest incoming events
-                    </button>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                         data-bs-parent="#accordionExample">
-
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Incoming
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <!-- Added via JS-->
+                        </div>
                     </div>
                 </div>
             </div>
