@@ -852,6 +852,8 @@ function getAllEvents() {
                 let eventStaff = document.createElement("div");
                 const requirementsArray = event.eventDetails.requirements;
                 eventStaff.setAttribute('class', 'event-staff');
+                //TODO:replace function
+                eventStaff.setAttribute('onclick', "function()");
                 eventStaff.innerHTML = '';
                 if (requirementsArray === null) {
                     eventStaff.innerHTML = `<span>There is no crew</span>`
@@ -895,6 +897,10 @@ function getAllEvents() {
         .catch(error => {
             console.error("Error fetching events:", error);
         });
+}
+
+function viewCrewsInEvent() {
+
 }
 
 function changeDetails(eventID) {
