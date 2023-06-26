@@ -38,21 +38,6 @@ public enum MailService {
     public boolean success = false;
     private Gmail service;
 
-    MailService() {
-        try {
-            System.out.println("MAIL SENDING CONSTRUCTOR HAS BEEN CALLED.");
-            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
-            success = true;
-        } catch (GeneralSecurityException | IOException e) {
-            System.err.println("An error has occurred setting up the mail service.");
-            e.printStackTrace();
-
-        }
-    }
-
     public static void main(String[] args) throws MessagingException, IOException {
         MAIL.sendMessage("bfc.jonkhout@gmail.com", "TEST SUBJECT", "TEST BODY");
     }
@@ -124,7 +109,17 @@ public enum MailService {
     }
 
     public void setup() {
-
+        try {
+            System.out.println("MAIL SENDING SETUP HAS BEEN CALLED.");
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+            success = true;
+        } catch (GeneralSecurityException | IOException e) {
+            System.err.println("An error has occurred setting up the mail service.");
+            e.printStackTrace();
+        }
     }
 
     public boolean isConnected() {

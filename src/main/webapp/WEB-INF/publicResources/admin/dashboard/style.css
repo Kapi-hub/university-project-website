@@ -111,6 +111,10 @@ body{
 }
 
 .closeBttn {
+    border-radius: 20px;
+    border-color: black;
+    color: var(--bs-light);
+    margin-left: auto;
     background-color: red;
 }
 
@@ -173,6 +177,7 @@ body{
     transform: translate(-50%, -50%);
     background-color: green;
     color: var(--bs-light);
+    z-index: 1;
 }
 
 * {
