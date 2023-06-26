@@ -238,9 +238,9 @@ function sendHttpRequest(method, url, data) {
     });
 }
 
-function selectTeam(name) {
-    const selectedTeam = document.getElementById('selectedTeam');
-    selectedTeam.textContent = name;
+function selectWord(name) {
+    const selectedWord = document.getElementById('selectedWord');
+    selectedWord.textContent = name;
 }
 
 function selectCrewMember(name) {
@@ -293,7 +293,7 @@ function getAllMembers() {
                 let crewRole = document.createElement("div");
                 crewRole.setAttribute('class', 'crew-role');
                 crewRole.innerHTML = `<ion-icon name="pricetag-outline"></ion-icon>
-                                        <p>${role}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline"></ion-icon></button>`;
+                                        <p>${role}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline" onclick="showChangeRoleModal(${id})"></ion-icon></button>`;
 
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -343,7 +343,7 @@ function changeTeam(memberID) {
     dropdownButton.setAttribute("type", "button");
     dropdownButton.setAttribute("data-bs-toggle", "dropdown");
     dropdownButton.setAttribute("aria-expanded", "false");
-    dropdownButton.innerHTML = `<span id="selectedTeam">select team</span>`;
+    dropdownButton.innerHTML = `<span id="selectedWord">select team</span>`;
 
     const teamsList = document.createElement('ul');
     teamsList.setAttribute("class", "dropdown-menu");
@@ -354,7 +354,7 @@ function changeTeam(memberID) {
     coreButton.setAttribute("href", "#");
     coreButton.textContent = "core";
     coreButton.onclick = function () {
-        selectTeam("core");
+        selectWord("core");
         team = coreButton.textContent;
         console.log(team);
     }
@@ -367,7 +367,7 @@ function changeTeam(memberID) {
     clubButton.setAttribute("href", "#");
     clubButton.textContent = "club";
     clubButton.onclick = function () {
-        selectTeam("club");
+        selectWord("club");
         team = clubButton.textContent;
         console.log(team);
     }
@@ -380,7 +380,7 @@ function changeTeam(memberID) {
     bothButton.setAttribute("href", "#");
     bothButton.textContent = "core&club";
     bothButton.onclick = function () {
-        selectTeam("core&club");
+        selectWord("core&club");
         team = bothItem.textContent;
     }
     bothItem.appendChild(bothButton);
@@ -405,8 +405,6 @@ function changeTeam(memberID) {
     modalDialog.appendChild(modalContent);
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
-
-
 }
 
 
@@ -430,13 +428,172 @@ function showChangeTeamModal(id) {
     changeTeam(id);
     const modalElement = document.getElementById("changeTeam");
     const bootstrapModal = new bootstrap.Modal(modalElement);
-    console.log("sunta aici in showchangemodal");
-    console.log(modalElement);
     bootstrapModal.show();
 }
 
 function changeRole(memberID) {
+    let role;
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "changeRole");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
 
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Change Role</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.textContent = "Select the new role";
+
+
+    const dropdown = document.createElement("div");
+    dropdown.setAttribute("class", "dropdown");
+
+    const dropdownButton = document.createElement("button");
+    dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
+    dropdownButton.setAttribute("type", "button");
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    dropdownButton.innerHTML = `<span id="selectedWord">select role</span>`;
+
+    const rolesList = document.createElement('ul');
+    rolesList.setAttribute("class", "dropdown-menu");
+
+    const photoItem = document.createElement('li');
+    const photoButton = document.createElement('a');
+    photoButton.setAttribute("class", "dropdown-item");
+    photoButton.setAttribute("href", "#");
+    photoButton.textContent = "photographer";
+    photoButton.onclick = function () {
+        selectWord("photographer");
+        role = photoButton.textContent;
+    }
+    photoItem.appendChild(photoButton);
+    rolesList.appendChild(photoItem);
+
+    const videoItem = document.createElement('li');
+    const videoButton = document.createElement('a');
+    videoButton.setAttribute("class", "dropdown-item");
+    videoButton.setAttribute("href", "#");
+    videoButton.textContent = "videographer";
+    videoButton.onclick = function () {
+        selectWord("videographer");
+        role = videoButton.textContent;
+    }
+    videoItem.appendChild(videoButton);
+    rolesList.appendChild(videoItem);
+
+    const producerItem = document.createElement('li');
+    const producerButton = document.createElement('a');
+    producerButton.setAttribute("class", "dropdown-item");
+    producerButton.setAttribute("href", "#");
+    producerButton.textContent = "producer";
+    producerButton.onclick = function () {
+        selectWord("producer");
+        role = producerButton.textContent;
+    }
+    producerItem.appendChild(producerButton);
+    rolesList.appendChild(producerItem);
+
+    const assistantItem = document.createElement('li');
+    const assistantButton = document.createElement('a');
+    assistantButton.setAttribute("class", "dropdown-item");
+    assistantButton.setAttribute("href", "#");
+    assistantButton.textContent = "assistant";
+    assistantButton.onclick = function () {
+        selectWord("assistant");
+        role = assistantButton.textContent;
+    }
+    assistantItem.appendChild(assistantButton);
+    rolesList.appendChild(assistantItem);
+
+    const dataItem = document.createElement('li');
+    const dataButton = document.createElement('a');
+    dataButton.setAttribute("class", "dropdown-item");
+    dataButton.setAttribute("href", "#");
+    dataButton.textContent = "data";
+    dataButton.onclick = function () {
+        selectWord("data");
+        role = dataButton.textContent;
+    }
+    dataItem.appendChild(dataButton);
+    rolesList.appendChild(dataItem);
+
+    const plannerItem = document.createElement('li');
+    const plannerButton = document.createElement('a');
+    plannerButton.setAttribute("class", "dropdown-item");
+    plannerButton.setAttribute("href", "#");
+    plannerButton.textContent = "planner";
+    plannerButton.onclick = function () {
+        selectWord("planner");
+        role = plannerButton.textContent;
+    }
+    plannerItem.appendChild(plannerButton);
+    rolesList.appendChild(plannerItem);
+
+    const editorItem = document.createElement('li');
+    const editorButton = document.createElement('a');
+    editorButton.setAttribute("class", "dropdown-item");
+    editorButton.setAttribute("href", "#");
+    editorButton.textContent = "editor";
+    editorButton.onclick = function () {
+        selectWord("editor");
+        role = editorButton.textContent;
+    }
+    editorItem.appendChild(editorButton);
+    rolesList.appendChild(editorItem);
+
+
+    dropdown.appendChild(dropdownButton);
+    dropdown.appendChild(rolesList);
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalFooter.innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modalBody.appendChild(dropdown);
+    dropdown.appendChild(rolesList);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+}
+
+function sendNewRoleToDB(memberID, role) {
+    $.ajax(
+        {
+            url: `api/admin/crewAssignments/changeRole/${memberID}/${role}`,
+            method: "PUT",
+            success: function () {
+                alert("Successfully changed the role");
+            }, error: function () {
+                alert("Error changing the role");
+            }
+        }
+    )
+}
+
+function showChangeRoleModal(id) {
+    changeRole(id);
+    const modalElement = document.getElementById("changeRole");
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    bootstrapModal.show();
 }
 
 function getAllEvents() {
