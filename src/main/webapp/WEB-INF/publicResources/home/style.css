@@ -4,7 +4,9 @@
     padding: 0;
     box-sizing: border-box;
     --shadow: rgba(0,0,0,0.2);
+    color: var(--bs-light);
 }
+
 
 .main{
     position: relative;
@@ -158,5 +160,4 @@ h2 {
 }
 p {
     text-shadow: 5px 5px 5px var(--shadow);
-
 }

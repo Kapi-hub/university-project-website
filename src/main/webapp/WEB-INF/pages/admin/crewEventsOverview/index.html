@@ -6,51 +6,92 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin Overview</title>
-    <link rel="icon" type="image/x-icon" href="/static/img/favicon3.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-            crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!--    ppppp-->
+    <script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
     <link href="/static/general.css" rel="stylesheet">
-    <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/crewEventsOverview/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
-
     <script src="/static/logout.js"></script>
+    <script src="/static/admin/crewEventsOverview/crew&Events.js"></script>
 </head>
 <body>
 
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a href="/" class="navbar-brand">
             <img alt="Logo" class="d-inline-block align-text-middle" width="30"
                  src="/static/img/Shotmaniacs_Logo_White_ZT.png">
             <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
-        <ul class="nav justify-content-end ">
-            <li class="nav-item me-2">
-                <a class="nav-link text-white" href="/admin/dashboard"><strong>Dashboard</strong></a>
+        <ul class="nav justify-contend-end">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/admin/dashboard">Dashboard</a>
             </li>
-            <li class="nav-item border bg-white border-white rounded-pill">
-                <a class="nav-link text-dark" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
+            <li class="nav-item border border-2 bg-white border-white rounded-pill">
+                <a aria-current="page" class="nav-link text-dark" href="/admin/crewAssignments">Crew&Events</a>
             </li>
-            <li class="nav-item me-2">
-                <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
+            <li class="nav-item">
+                <a class="nav-link text-white" onclick="logout()" style="cursor: pointer">Logout</a>
             </li>
-            <!--leave this in case we add another buttons-->
         </ul>
     </div>
 </nav>
 
+
+<div class="choose-crew-booking-container">
+    <div class="btns">
+        <div class="createNewMemberBttn" data-bs-toggle="modal"
+             data-bs-target="#createMemberModal" onclick="setUrl('/newMember')">
+            + member
+        </div>
+        <div class="btn-crew-member" onclick="crewButton()">Members</div>
+        <div class="btn-booking" onclick="bookingButton()">Events</div>
+        <div class="createEventBttn" data-bs-toggle="modal" data-bs-target="#postEventsModal" onclick="setUrl('/newEvent')">
+            <div class="plus-icon">Event +</div>
+        </div>
+    </div>
+</div>
+
+<div class="container content-container" id='bookingContainer'>
+</div>
+
+<div class="container crew-container" id='crewContainer'>
+</div>
+
+
+<div class="modal fade" id="editEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEventModal">Edit event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl(); addEvent();">
+                </button>
+            </div>
+
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()">Close</button>
+                <button type="button" class="saveEditBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save
+                    event
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="postEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createEventModal">Create new event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">
+                </button>
             </div>
 
             <div class="modal-body">
@@ -146,16 +187,9 @@
                     <div id="eventProducer">
                         <button class="crewButton" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                            <span id="selectedCrewMember"> Select crew member </span>
+                            <span id="selectedCrewMember"  onclick="getProducers()" > Select crew member </span>
                         </button>
-                        <ul class="dropdown-menu" id="dropdown-menu" onclick="">
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jack John')">Jack John</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Henry Smith')">Henry
-                                Smith</a>
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="selectCrewMember('Jane Mary')">Jane Mary</a>
-                            </li>
+                        <ul class="dropdown-menu" id="dropdown-menu">
                         </ul>
                     </div>
                     <br>
@@ -190,21 +224,21 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()">Close</button>
+                <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastEvent">Save
                     event
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="createMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createMemberModalText">Create new member account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="setUrl()">
+                </button>
             </div>
             <div class="modal-body">
                 <div class="memberInfo" id="memberInfo">
@@ -242,7 +276,7 @@
                     </label>
 
                     <label class="both">
-                        <input type="radio" name="flexRadioDefault" id="club&core" value = "CORE_AND_CLUB">
+                        <input type="radio" name="flexRadioDefault" id="club&core" value="CORE_AND_CLUB">
                         <span class="checkmark">Core&Club Team</span>
                     </label>
                 </div>
@@ -253,37 +287,37 @@
 
                 <div id="roleType">
                     <label id="photographer">
-                        <input type="checkbox" value="PHOTOGRAPHER">
+                        <input type="radio" name="flexRadioDefault" value="PHOTOGRAPHER">
                         <span class="checkmark">Photographer</span>
                     </label>
 
                     <label id="videographer">
-                        <input type="checkbox" value="VIDEOGRAPHER">
+                        <input type="radio" name="flexRadioDefault" value="VIDEOGRAPHER">
                         <span class="checkmark">Videographer</span>
                     </label>
 
                     <label id="producer">
-                        <input type="checkbox" value="PRODUCER">
+                        <input type="radio" name="flexRadioDefault" value="PRODUCER">
                         <span class="checkmark">Producer</span>
                     </label>
 
                     <label id="assistant">
-                        <input type="checkbox" value="ASSISTANT">
+                        <input type="radio" value="ASSISTANT">
                         <span class="checkmark">Assistant</span>
                     </label>
 
                     <label id="dataHandler">
-                        <input type="checkbox" value="DATA_HANDLER">
+                        <input type="radio" name="flexRadioDefault" value="DATA_HANDLER">
                         <span class="checkmark">Data Handler</span>
                     </label>
 
                     <label id="planner">
-                        <input type="checkbox" value="PLANNER">
+                        <input type="radio" name="flexRadioDefault" value="PLANNER">
                         <span class="checkmark">Planner</span>
                     </label>
 
                     <label id="editor">
-                        <input type="checkbox" value="EDITOR">
+                        <input type="radio" name="flexRadioDefault" value="EDITOR">
                         <span class="checkmark">Editor</span>
                     </label>
                 </div>
@@ -291,7 +325,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
+                <button type="button" class="closeBttn" data-bs-dismiss="modal" onclick="setUrl()">
+                    <strong>Close</strong></button>
                 <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
                         data-bs-target="toastMember"><strong>Create new member</strong>
                 </button>
@@ -301,227 +336,52 @@
 </div>
 
 
-<div class="flex-container">
-    <!--Side bar -->
-    <div class="sidenav">
-        <div class="col">
-            <button class="collapse-button NavC" data-target="crewGroup" type="button">Crew members</button>
-            <button class="collapse-button NavC" data-target="bookingGroup" type="button">Bookings</button>
-        </div>
-    </div>
-
-    <!--crewmember and popup -->
-    <div class="container Crew">
-        <div class="collapse hide" id="crewGroup">
-            <div class="row">
-                <div class="col-4">
-                    <div class="list-group ">
-                        <div class="card-body Crew">
-                            Crew-members
-                            <button type="button" class="createNewMemberBttn" data-bs-toggle="modal"
-                                    data-bs-target="#createMemberModal">
-                                New member +
-                            </button>
-                        </div>
-                        <button class="collapse-button Crew" data-target="crew1" type="button">Crew member 1</button>
-                        <button class="collapse-button Crew" data-target="crew2" type="button">Crew member 2</button>
-                        <button class="collapse-button Crew" data-target="crew3" type="button">Crew member 3</button>
-                        <button class="collapse-button Crew" data-target="crew4" type="button">Crew member 4</button>
-                    </div>
-                </div>
-
-                <!--pop-up-->
-                <div class="col-4">
-                    <div class="list-group">
-                        <div class="card pop-up bg-primary text-light">
-                            <div class="collapse crew" id="crew1">
-                                <div class="card-body">
-                                    <h5>Crewmember 1</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                        bookings</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                </div>
-                            </div>
-                            <div class="collapse crew" id="crew2">
-                                <div class="card-body">
-                                    <h5>Crewmember 2</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                        bookings</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                </div>
-                            </div>
-                            <div class="collapse crew" id="crew3">
-                                <div class="card-body">
-                                    <h5>Crewmember 3</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                        bookings</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                </div>
-                            </div>
-                            <div class="collapse crew" id="crew4">
-                                <div class="card-body">
-                                    <h5>Crewmember 4</h5>
-                                    <a href="#" class="list-group-item list-group-item-action ">Bookings Active</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Hours spent on
-                                        bookings</a>
-                                    <a href="#" class="list-group-item list-group-item-action ">Change role</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--booking and pop-up-->
-<div class="container Booking">
-    <div class="collapse hide" id="bookingGroup">
-        <div class="row">
-            <div class="col-4 ">
-                <div class="list-group">
-                    <div class="card-body Booking">
-                        Bookings
-                        <button type="button" class="createEventBttn" data-bs-toggle="modal"
-                                data-bs-target="#postEventsModal">
-                            Event +
-                        </button>
-                    </div>
-                    <button class="collapse-button booking" data-target="booking1" type="button"> Booking 1</button>
-                    <button class="collapse-button booking" data-target="booking2" type="button">Booking 2</button>
-                    <button class="collapse-button booking" data-target="booking3" type="button">Booking 3</button>
-                    <button class="collapse-button booking" data-target="booking4" type="button">Booking 4</button>
-                </div>
-            </div>
-
-            <!--pup-up -->
-            <div class="col-4">
-                <div class="list-group">
-                    <div class="collapse booking" id="booking1">
-                        <div class="card-body">
-                            <h5>Booking 1</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking2">
-                        <div class="card-body">
-                            <h5>Booking 2</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking3">
-                        <div class="card-body">
-                            <h5>Booking 3</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                    <div class="collapse booking" id="booking4">
-                        <div class="card-body">
-                            <h5>Booking 4</h5>
-                            <a href="#" class="list-group-item list-group-item-action ">Modify details</a>
-                            <a href="#" class="list-group-item list-group-item-action ">Cancel Booking</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="toastEvent" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast" id="successfulEvent" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
         Event created successfully!
     </div>
 </div>
 
 
-<div class="toastMember" id="successfulNewMember" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast" id="successfulNewMember" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-body">
         New member created successfully!
     </div>
 </div>
 
+<dialog id="deleteEventDialog" class="deleteEventDialog">
+    Do you really want to delete this event?
+    <div class="mt-2 pt-2 border-top">
+        <form method="dialog">
+            <button class="actualDelete" type="button" id="deleteButton">Delete event</button>
+            <button type="button" class="closeDialogBttn">Close</button>
+        </form>
+    </div>
+</dialog>
+
+
+<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 <script>
-    // Get all collapse buttons for Crew
-    const collapseButtonsCrew = document.querySelectorAll('.collapse-button.Crew');
-
-    // Add click event listener to each button
-    collapseButtonsCrew.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.crew');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtons = document.querySelectorAll('.collapse-button.booking');
-
-    // Add click event listener to each button
-    collapseButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse.booking');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
-</script>
-<script>
-    // Get all collapse buttons for Booking
-    const collapseButtonsNavC = document.querySelectorAll('.collapse-button.NavC');
-
-    // Add click event listener to each button
-    collapseButtonsNavC.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetCollapse = document.getElementById(targetId);
-            const allCollapses = document.querySelectorAll('.collapse');
-
-            // Hide all collapse elements
-            allCollapses.forEach(collapse => {
-                collapse.classList.remove('show');
-            });
-
-            // Show the target collapse element
-            targetCollapse.classList.add('show');
-        });
-    });
 
     const saveEventButton = document.querySelector('.saveEventBttn');
     const saveMemberButton = document.querySelector('.saveMemberBttn');
 
-    const toastEvent = new bootstrap.Toast(document.querySelector('#successfulEvent'));
-    const toastMember = new bootstrap.Toast(document.querySelector('#successfulNewMember'));
+    const toastEvent = new bootstrap.Toast(document.getElementById("successfulEvent"));
+    console.log(toastEvent);
+    const toastMember = new bootstrap.Toast(document.getElementById("successfulNewMember"));
 
 
     saveEventButton.addEventListener('click', function () {
-        addEvent();
-        toastEvent.show();
+        try {
+            addEvent();
+            console.log("aaaaaaaaaaaaaaa")
+            toastEvent.show();
+        } catch (error) {
+            console.log("error in creating new event: ", error);
+        }
     });
 
     saveMemberButton.addEventListener('click', function () {
@@ -531,7 +391,39 @@
 </script>
 
 
-<script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-<script src="/static/admin/crewEventsOverview/addCrew&Events.js"></script>
+<script>
+    function setUrl(url) {
+        window.history.pushState("", "", "/admin/crewAssignments" + (url === undefined ? "" : url));
+    }
+
+    window.onload = () => {
+        const urlExtra = window.location.pathname.split("/").pop();
+
+        if (urlExtra === "newMember") {
+            $("#bookingGroup").collapse("show");
+            $("#createMemberModal").modal("show");
+        } else if (urlExtra === "newEvent") {
+            $("#crewGroup").collapse("show");
+            $("#postEventsModal").modal("show");
+        }
+    };
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("crewContainer").style.display = "flex";
+        document.getElementById("bookingContainer").style.display = "none";
+        getAllMembers();
+    });
+
+
+</script>
+<script>
+    const paras = document.querySelectorAll(".card-body p");
+    for (const para of paras) {
+        para.scroll(100, 0);
+    }
+</script>
+
 </body>
 </html>
