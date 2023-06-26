@@ -26,7 +26,7 @@ public class EventResponseBean {
     public EventResponseBean() {
     }
 
-    public EventResponseBean(int id, String name, EventType type, Timestamp date, String location, int duration, String client, BookingType bookingType, String productionManager, Object[] crew, Object[] enrolled, EventStatus status, String description) {
+    public EventResponseBean(int id, String name, EventType type, Timestamp date, String location, int duration, String client, BookingType bookingType, String productionManager, Object[] crew, Object[] enrolled, EventStatus status, String description, boolean isEnrolled, boolean canEnrol) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -40,6 +40,8 @@ public class EventResponseBean {
         this.enrolled = enrolled;
         this.status = status;
         this.description = description;
+        this.isEnrolled = isEnrolled;
+        this.canEnrol = canEnrol;
     }
 
     public boolean getIsEnrolled() {

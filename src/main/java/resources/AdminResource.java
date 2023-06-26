@@ -5,8 +5,8 @@ import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import models.AnnouncementBean;
-import models.CrewMemberBean;
+import jakarta.ws.rs.core.Response;
+import models.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -20,22 +20,9 @@ import static dao.MailService.MAIL;
 @Path("/admin")
 public class AdminResource {
 
-    @GET
-    @Path("/user")
-    @RolesAllowed("admin")
-    public String getUser(@CookieParam("accountId") String accountIdString){
-        int accountId = Integer.parseInt(accountIdString);
-        try {
-            return AdminDao.I.getUser(accountId);
-        }catch (SQLException e){
-            System.err.println(e.getMessage());
-        }
-        return null;
-    }
-
     /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
-    @Path("/newAnnouncement")
+    @Path("/dashboard/new")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
@@ -43,8 +30,8 @@ public class AdminResource {
             int accountId = Integer.parseInt(accountIdString);
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
-        }catch (SQLException e){
-            System.err.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -56,7 +43,7 @@ public class AdminResource {
         try {
             return AdminDao.I.getAllAnnouncements();
         }catch (SQLException e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -97,13 +84,14 @@ public class AdminResource {
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
-    public String showEventsWithoutCrew() {
+    public List<EventBean> showEventsWithoutCrew() {
+        List<EventBean> events = null;
         try{
-            return AdminDao.I.getNotFullEvents();
+            events = AdminDao.I.getNotFullEvents();
         }catch (SQLException e){
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
-        return null;
+        return events;
     }
 
     @GET

@@ -13,19 +13,8 @@ public class AnnouncementBean {
     private String title;
     private String body;
     private Timestamp dateTime;
-    private int recipient;
 
     public AnnouncementBean() {}
-    
-    public AnnouncementBean(String title, String body, int recipient) {
-        this.recipient =recipient;
-        this.title = title;
-        this.body = body;
-    }
-    public AnnouncementBean(String title, String body ) {
-        this.title = title;
-        this.body = body;
-    }
 
     public AnnouncementBean(int announcementID, int announcer, String title, String body, Timestamp dateTime) {
         this.announcementID = announcementID;
@@ -49,7 +38,10 @@ public class AnnouncementBean {
         this.announcementID = announcementID;
     }
 
-    
+    public AnnouncementBean(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 
     public int getAnnouncer() {
         return announcer;
@@ -84,12 +76,6 @@ public class AnnouncementBean {
     }
 
 
-    public int getRecipient() {
-        return this.recipient;
-    }
-    public void setRecipient(int recipient){
-        this.recipient= recipient;
-    }
 }
 
 

@@ -150,7 +150,7 @@ public enum EventDao {
         throw new SQLException("Event not found");
     }
 
-    public Object[] getEnrolledMembers(int eventId) {
+    public Object[] getEnrolled(int eventId) {
         String query = "SELECT crew_member_id FROM event_enrollment WHERE event_id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
@@ -207,36 +207,6 @@ public enum EventDao {
         return null;
     }
 
-    public EventBean[] getEnrolledEvents(int accountId) throws SQLException {
-        String query = "SELECT e.id, e.client_id, e.name, e.description, e.start, e.duration, e.location, e.production_manager_id, e.type, e.booking_type, e.status FROM event e, event_enrollment ee WHERE ee.crew_member_id = ? AND ee.event_id = e.id";
-
-        PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, accountId);
-
-        ResultSet rs = st.executeQuery();
-
-        ArrayList<EventBean> eventList = new ArrayList<>();
-
-        while (rs.next()) {
-            int id = rs.getInt("id");
-            int client_id = rs.getInt("client_id");
-            String name = rs.getString("name");
-            String description = rs.getString("description");
-            Timestamp start = rs.getTimestamp("start");
-            int duration = rs.getInt("duration");
-            String location = rs.getString("location");
-            int production_manager_id = rs.getInt("production_manager_id");
-            EventType type = EventType.toEnum(rs.getString("type"));
-            BookingType booking_type = BookingType.toEnum(rs.getString("booking_type"));
-            EventStatus status = EventStatus.toEnum(rs.getString("status"));
-
-            eventList.add(new EventBean(id, client_id, name, description, start, duration, location, production_manager_id, type, booking_type, status));
-        }
-
-        EventBean[] returnValue = new EventBean[eventList.size()];
-        return eventList.size() == 0 ? null : eventList.toArray(returnValue);
-    }
-
     public Map<RoleType, Integer> getRequiredMap(int id) throws SQLException {
         String query = "SELECT role, crew_size FROM event_requirement WHERE event_id = ?";
 
@@ -267,70 +237,5 @@ public enum EventDao {
             System.err.println(e.getMessage());
             return false;
         }
-    }
-
-    public boolean isEventInPast(int eventId) throws SQLException {
-        String query = "SELECT 1 FROM event WHERE id = ? AND start < NOW()";
-        PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, eventId);
-
-        ResultSet rs = st.executeQuery();
-        return rs.next();
-    }
-
-    public int getEventCount(int accountId, AccountType type) {
-        String query;
-        switch (type) {
-            case ADMIN -> query = "SELECT COUNT(*) FROM event WHERE status = 'to do'::status";
-            case CREW_MEMBER ->
-                    query = "SELECT COUNT(*) FROM event_enrollment ee, event e WHERE ee.event_id = e.id AND ee.crew_member_id = ? AND e.start::date BETWEEN NOW()::date AND NOW()::date + '1 day'::interval";
-            default -> {
-                return -1;
-            }
-        }
-        try {
-            PreparedStatement st = connection.prepareStatement(query);
-            if (type == AccountType.CREW_MEMBER) {
-                st.setInt(1, accountId);
-            }
-
-            ResultSet rs = st.executeQuery();
-            rs.next();
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return -1;
-        }
-    }
-
-    public Object[] getHoursWorked(int crewId) throws SQLException {
-        String query = """
-                SELECT SUM(e.duration), CONCAT(m.month, '-', m.year)
-                FROM event e, event_enrollment ee, (
-                    SELECT id, EXTRACT (MONTH FROM start) AS month, EXTRACT (YEAR FROM start) AS year
-                    FROM event
-                ) AS m
-                WHERE (
-                    e.id = ee.event_id AND
-                    ee.crew_member_id = ? AND
-                    e.start < NOW() AND
-                    m.id = e.id
-                )
-                GROUP BY (m.month, m.year)""";
-
-        PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, crewId);
-
-        ResultSet rs = st.executeQuery();
-
-        ArrayList<Object[]> resultList = new ArrayList<>();
-
-        while (rs.next()) {
-            String date = rs.getString(2);
-            int hours = rs.getInt(1);
-            resultList.add(new Object[] {date, hours});
-        }
-
-        return resultList.size() == 0 ? null : resultList.toArray(new Object[0]);
     }
 }
