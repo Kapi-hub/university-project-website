@@ -26,9 +26,6 @@
             success: function () {
                 console.log("Announcement saved successfully");
                 getAnnouncements();
-                const toastLive = document.getElementById('liveToast');
-                const toast = new bootstrap.Toast(toastLive);
-                toast.show();
             },
             error: function () {
                 console.log("Error:", error);

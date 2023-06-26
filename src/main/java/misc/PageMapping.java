@@ -31,8 +31,8 @@ public class PageMapping {
         pageMap.put("/admin/dashboard/", new PageInfo("/admin/dashboard/index.html", AccountType.ADMIN));
         pageMap.put("/admin/crewAssignments/", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
         pageMap.put("/admin/crewAssignments/newMember", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
-        pageMap.put("/admin/crewAssignments/newEvent/", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
-        pageMap.put("/admin/crewAssignments/newMember/", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
+        pageMap.put("/admin/crewAssignments/newEvent", new PageInfo("/admin/crewEventsOverview/index.html", AccountType.ADMIN));
+
         pageMap.put("/crew/dashboard/", new PageInfo("/crew/dashboard/index.html", AccountType.CREW_MEMBER));
         pageMap.put("/crew/calendar/", new PageInfo("/crew/calendar/index.html", AccountType.CREW_MEMBER));
     }
