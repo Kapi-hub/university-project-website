@@ -234,3 +234,24 @@ function addCrewMember() {
 function getProducers() {
 
 }
+
+// When the user clicks on <div>, open the popup
+function showPopUp() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
+function hidePopUp() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("hide");
+}
+
+function myFunction() {
+    var popup = document.getElementById("myPopup");
+
+    popup.classList.toggle("show");
+}
+
+function testcet() {
+    alert('testing cet en baris');
+}
+

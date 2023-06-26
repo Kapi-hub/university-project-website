@@ -13,6 +13,7 @@
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/static/admin/crewEventsOverview/crew&Events.js"></script>
     <link href="/static/general.css" rel="stylesheet">
     <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/crewEventsOverview/style.css" rel="stylesheet">
@@ -50,7 +51,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createEventModal">Create new event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
 
             <div class="modal-body">
@@ -190,7 +190,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="cancelBttn" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="saveEventBttn" data-bs-dismiss="modal" data-bs-target="toastMember">Save
                     event
                 </button>
@@ -204,31 +204,33 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createMemberModalText">Create new member account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
                 <div class="memberInfo" id="memberInfo">
                     <label for="memberFirstName" class="memberFirstNameText"><strong>First name</strong></label>
-                    <input type="text" class="memberName" id="memberFirstName" placeholder="Enter member's first name">
+                    <input type="text" class="memberName" id="memberFirstName" placeholder="Enter first name">
                     <br>
 
                     <label for="memberLastName" class="memberLastNameText"><strong>Last name</strong></label>
-                    <input type="text" class="memberName" id="memberLastName" placeholder="Enter member's last name">
+                    <input type="text" class="memberName" id="memberLastName" placeholder="Enter last name">
                     <br>
 
                     <label for="email" class="emailText"><strong>Email</strong></label>
-                    <input type="email" class="emailText" id="email" placeholder="Enter member's email">
+                    <input type="email" class="emailText" id="email" placeholder="Enter email">
                     <br>
 
                     <label for="username" class="usernameText"><strong>Username</strong></label>
-                    <input type="text" class="usernameText" id="username" placeholder="Enter member's username">
+                    <input type="text" class="usernameText" id="username" placeholder="Enter username">
                     <br>
 
                     <label for="password" class="passwordText"><strong>Password</strong></label>
-                    <input type="password" class="passwordText" id="password" placeholder="Enter member's password">
+                    <input type="password" class="passwordText" id="password" placeholder="Enter password">
+                    <div class="popup" onmouseover="showPopUp()" onmouseout="showPopUp()">&#9432;
+                        <span class="popuptext" id="myPopup"> Password Requirements: <br> at least 8 characters; <br> No spaces; <br> Must contain one lowercase; uppercase; digit; symbol</span>
+                    </div>
                     <br>
                 </div>
-                <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
+                <label for="permissionType" class="permissionTypeText"><strong>Select Permission Level</strong></label>
                 <br>
                 <div id="permissionType">
                     <label class="clubTeam">
@@ -248,42 +250,42 @@
                 </div>
 
 
-                <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
+                <label for="roleType" class="roleTypeText"><strong>Select Role</strong></label>
                 <br>
 
                 <div id="roleType">
                     <label id="photographer">
-                        <input type="checkbox" value="PHOTOGRAPHER">
+                        <input type="radio" value="PHOTOGRAPHER">
                         <span class="checkmark">Photographer</span>
                     </label>
 
                     <label id="videographer">
-                        <input type="checkbox" value="VIDEOGRAPHER">
+                        <input type="radio" value="VIDEOGRAPHER">
                         <span class="checkmark">Videographer</span>
                     </label>
 
                     <label id="producer">
-                        <input type="checkbox" value="PRODUCER">
+                        <input type="radio" value="PRODUCER">
                         <span class="checkmark">Producer</span>
                     </label>
 
                     <label id="assistant">
-                        <input type="checkbox" value="ASSISTANT">
+                        <input type="radio" value="ASSISTANT">
                         <span class="checkmark">Assistant</span>
                     </label>
 
                     <label id="dataHandler">
-                        <input type="checkbox" value="DATA_HANDLER">
+                        <input type="radio" value="DATA_HANDLER">
                         <span class="checkmark">Data Handler</span>
                     </label>
 
                     <label id="planner">
-                        <input type="checkbox" value="PLANNER">
+                        <input type="radio" value="PLANNER">
                         <span class="checkmark">Planner</span>
                     </label>
 
                     <label id="editor">
-                        <input type="checkbox" value="EDITOR">
+                        <input type="radio" value="EDITOR">
                         <span class="checkmark">Editor</span>
                     </label>
                 </div>
@@ -291,7 +293,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="closeBttn" data-bs-dismiss="modal"><strong>Close</strong></button>
+                <button type="button" class="cancelBttn"><strong>Cancel</strong></button>
                 <button type="button" class="saveMemberBttn" data-bs-dismiss="modal"
                         data-bs-target="toastMember"><strong>Create new member</strong>
                 </button>
