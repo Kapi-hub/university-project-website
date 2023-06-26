@@ -529,7 +529,7 @@ body {
 .deleteEventDialog::backdrop {
     background: var(--bs-primary-bg-subtle)!important;}
 
-.saveEventBttn, .btn-close, .change-details, .delete-event, .closeDialogBttn{
+.closeBttn, .saveEventBttn, .btn-close, .change-details, .delete-event, .closeDialogBttn{
     background-color: var(--bs-primary);
     border-radius: 10px;
     border-color: var(--bs-primary);
@@ -540,7 +540,6 @@ body {
 .closeBttn, .actualDelete{
     background-color: red;
     border-radius: 10px;
-    border-color: red;
     color: var(--bs-light);
     margin-left: auto;
 }

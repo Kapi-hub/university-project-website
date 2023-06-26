@@ -309,7 +309,6 @@ function getAllMembers() {
 }
 
 let team;
-
 function changeTeam(memberID) {
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
@@ -428,9 +427,8 @@ function showChangeTeamModal(id) {
     bootstrapModal.show();
 }
 
-let role;
-
 function changeRole(memberID) {
+    let role;
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
     modal.setAttribute("id", "changeRole");
@@ -594,77 +592,6 @@ function showChangeRoleModal(id) {
     bootstrapModal.show();
 }
 
-function showViewCrewsInEventModal() {
-    viewCrewsInEvent();
-    const modalElement = document.getElementById("viewCrews");
-    const bootstrapModal = new bootstrap.Modal(modalElement);
-    bootstrapModal.show();
-}
-
-function viewCrewsInEvent() {
-    //TODO: fetch crews
-    const modal = document.createElement("div");
-    modal.setAttribute("class", "modal fade");
-    modal.setAttribute("id", "viewCrews");
-    modal.setAttribute("tabindex", "-1");
-    modal.setAttribute("aria-labelledby", "exampleModalLabel");
-    modal.setAttribute("aria-hidden", "true");
-
-    const modalDialog = document.createElement("div");
-    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
-
-    const modalContent = document.createElement("div");
-    modalContent.setAttribute("class", "modal-content");
-
-    const modalHeader = document.createElement("div");
-    modalHeader.setAttribute("class", "modal-header");
-    const modalTitle = document.createElement("h5");
-    modalTitle.setAttribute("class", "modal-title");
-    modalTitle.innerHTML = `<span>View assigned roles</span>`;
-    modalHeader.appendChild(modalTitle);
-
-    const modalBody = document.createElement("div");
-    modalBody.setAttribute("class", "modal-body");
-
-    const crewRow = document.createElement("div");
-    crewRow.setAttribute("class", "crew-row");
-    crewRow.textContent = "Raluca Gavrila";
-
-    const deleteButton = document.createElement("div");
-    deleteButton.setAttribute("class", "delete-button");
-    //TODO: fix button
-    deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000">Remove crew from booking</button>`;
-    crewRow.appendChild(deleteButton);
-    modalBody.appendChild(crewRow);
-
-    const modalFooter = document.createElement("div");
-    modalFooter.setAttribute("class", "modal-footer");
-    //TODO call this: onclick = unrollCrew()
-
-    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" >Save changes</button>`;
-
-    modalContent.appendChild(modalHeader);
-    modalContent.appendChild(modalBody);
-    modalContent.appendChild(modalFooter);
-
-    modalDialog.appendChild(modalContent);
-    modal.appendChild(modalDialog);
-    document.body.appendChild(modal);
-}
-
-function unrollCrew(crewId, eventId) {
-    $.ajax({
-            url: "../api/admin/crewAssignments/{crewId}/{eventId}",
-            method: "DELETE",
-            success: function () {
-                alert("Successfully unrolled crew from event");
-            }, error: function () {
-                alert("Error unrolling crew from event!");
-            }
-    });
-}
-
 function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
@@ -732,6 +659,7 @@ function getAllEvents() {
                 let eventType = document.createElement("div");
                 eventType.setAttribute('class', 'event-type');
 
+                //TODO: for alex to change the appearance when smth is selected
                 if (type === 'club_photography') {
                     eventType.innerHTML = `<div class="card-event-type club-photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
                     <div class="inner club-photography-inner">
@@ -920,8 +848,8 @@ function getAllEvents() {
                 let eventStaff = document.createElement("div");
                 const requirementsArray = event.eventDetails.requirements;
                 eventStaff.setAttribute('class', 'event-staff');
-                eventStaff.style.cursor = "pointer";
-                eventStaff.setAttribute("onclick", "showViewCrewsInEventModal()");
+                //TODO:replace function
+                eventStaff.setAttribute('onclick', "function()");
                 eventStaff.innerHTML = '';
                 if (requirementsArray === null) {
                     eventStaff.innerHTML = `<span>There is no crew</span>`
@@ -967,6 +895,9 @@ function getAllEvents() {
         });
 }
 
+function viewCrewsInEvent() {
+
+}
 
 function changeDetails(eventID) {
     alert("aaaaaaaaaaaaaaaaa");
@@ -1155,7 +1086,6 @@ function deleteEvent(eventID) {
         }
     });
 }
-
 // Needed here to maintain the status across multiple callings. If set in bookingButton() or crewButton()
 // then each time the buttons are pressed, a new instance of firstLoad is created
 // so the second if would not work
@@ -1189,7 +1119,7 @@ function crewButton() {
             bookingContainer.style.display = "none";
         }
 
-        if (!firstLoadCrewMembers) {
+        if(!firstLoadCrewMembers) {
             firstLoadCrewMembers = true;
             getAllMembers()
         }
