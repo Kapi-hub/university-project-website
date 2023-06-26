@@ -308,8 +308,8 @@ function getAllMembers() {
         })
 }
 
+let team;
 function changeTeam(memberID) {
-    let team;
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
     modal.setAttribute("id", "changeTeam");
@@ -381,7 +381,6 @@ function changeTeam(memberID) {
     bothButton.onclick = function () {
         selectWord("core&club");
         team = bothItem.textContent;
-        console.log(team)
     }
     bothItem.appendChild(bothButton);
     teamsList.appendChild(bothItem);
@@ -395,7 +394,7 @@ function changeTeam(memberID) {
     modalContent.appendChild(modalHeader);
 
     modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff" onclick="sendNewTeamToDB(${memberID}, team)">Save changes</button>`;
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewTeamToDB(${memberID}, team)">Save changes</button>`;
     modalContent.appendChild(modalBody);
     modalContent.appendChild(modalFooter);
     modalBody.appendChild(dropdown);
@@ -410,7 +409,7 @@ function changeTeam(memberID) {
 function sendNewTeamToDB(memberID, team) {
     $.ajax(
         {
-            url: `api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
+            url: `../api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
             method: 'PUT',
             success: function () {
                 alert("Successfully changed the team");
@@ -559,7 +558,7 @@ function changeRole(memberID) {
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
     modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
 
     modalContent.appendChild(modalHeader);
     modalContent.appendChild(modalBody);
@@ -575,7 +574,7 @@ function changeRole(memberID) {
 function sendNewRoleToDB(memberID, role) {
     $.ajax(
         {
-            url: `api/admin/crewAssignments/changeRole/${memberID}/${role}`,
+            url: `../api/admin/crewAssignments/changeRole/${memberID}/${role}`,
             method: "PUT",
             success: function () {
                 alert("Successfully changed the role");
