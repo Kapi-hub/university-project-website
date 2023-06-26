@@ -1,7 +1,6 @@
 package resources;
 
 import dao.AccountDao;
-import dao.EventDao;
 import dao.SessionDao;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -23,6 +22,7 @@ import models.AccountType;
 import java.net.URI;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Random;
 
 @Path("/login")
 public class LoginResource {
@@ -70,18 +70,8 @@ public class LoginResource {
                 .path(accountTypePaths.get(account.getAccountType()))
                 .build();
 
-        String forename;
-        try {
-            forename = AccountDao.instance.getNames(account.getId())[0];
-        } catch (SQLException e) {
-            forename = "User";
-        }
-        int eventCount = EventDao.instance.getEventCount(account.getId(), account.getAccountType());
-
         return Response.ok()
                 .location(uri)
-                .header("forename", forename)
-                .header("eventCount", eventCount)
                 .cookie(accountIdCookie)
                 .cookie(sessionIdCookie)
                 .build();

@@ -6,7 +6,6 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.Scanner;
 
 public class Security {
     private static final int N = 16384; // CPU/memory cost parameter
@@ -34,16 +33,12 @@ public class Security {
     }
 
     public static boolean checkPassword(String password, String encodedSalt, String encodedPassword) throws GeneralSecurityException {
-        try {
-            byte[] storedHashedPassword = Base64.getDecoder().decode(encodedPassword);
-            byte[] storedSalt = Base64.getDecoder().decode(encodedSalt);
+        byte[] storedHashedPassword = Base64.getDecoder().decode(encodedPassword);
+        byte[] storedSalt = Base64.getDecoder().decode(encodedSalt);
 
-            byte[] inputHashedPassword = SCrypt.scrypt(password.getBytes(), storedSalt, N, r, p, dkLen);
+        byte[] inputHashedPassword = SCrypt.scrypt(password.getBytes(), storedSalt, N, r, p, dkLen);
 
-            return MessageDigest.isEqual(storedHashedPassword, inputHashedPassword);
-        } catch (NullPointerException e) {
-            return false;
-        }
+        return MessageDigest.isEqual(storedHashedPassword, inputHashedPassword);
     }
 
     private static final int SESSION_ID_LENGTH = 16;
@@ -52,25 +47,6 @@ public class Security {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[SESSION_ID_LENGTH];
         secureRandom.nextBytes(randomBytes);
-        // return Base64 url encoded string of random bytes with same length of 16
-        return Base64.getUrlEncoder().encodeToString(randomBytes);
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Enter password to get random salt and encoded password: ");
-        String submission = sc.nextLine();
-
-        String[] retVal;
-        try {
-            retVal = encodeSalt(submission);
-        } catch (GeneralSecurityException e) {
-            System.out.println("Something went wrong, please try again");
-            System.exit(0);
-            return;
-        }
-        System.out.println("Encoded password:\n" + retVal[0]);
-        System.out.println("\nCorresponding salt:\n" + retVal[1]);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 }
