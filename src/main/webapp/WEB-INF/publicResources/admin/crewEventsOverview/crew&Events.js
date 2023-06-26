@@ -413,7 +413,7 @@ function sendNewTeamToDB(memberID, team) {
     $.ajax(
         {
             url: `api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
-            method: "PUT",
+            method: 'PUT',
             success: function () {
                 alert("Successfully changed the team");
                 // location.reload();

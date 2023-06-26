@@ -196,7 +196,7 @@ public class AdminResource {
     }
 
     @PUT
-    @Path("/crewAssignments/changeRole/{memberID}/{role}") //TODO change the url with the member id
+    @Path("/crewAssignments/changeRole/{memberID}/{role}")
     @RolesAllowed("admin")
     public void changeRole(@PathParam("memberID") int id, @PathParam("role") String newRole) {
         try {

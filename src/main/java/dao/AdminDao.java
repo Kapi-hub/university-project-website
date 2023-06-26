@@ -214,13 +214,11 @@ public enum AdminDao {
 
         try {
             PreparedStatement st = connection.prepareStatement(getAccountId);
-            System.out.println(crewMember.getUsername());
             st.setString(1, crewMember.getUsername());
             try (ResultSet resultSet = st.executeQuery()) {
                 if (resultSet.next()) {
 
                     accountId = resultSet.getInt("id");
-                    System.out.println(accountId);
                 }
             }
         } catch (SQLException e) {
@@ -275,15 +273,16 @@ public enum AdminDao {
             crew_role = rs.getString(1);
         }
 
-        String query = "UPDATE crew_member " +
-                "SET role = ? " +
-                "FROM account" +
-                "WHERE role = ? AND crew_member.id = ? AND account.type = 'crew_member';";
+        String query = "UPDATE shotmaniacs1.crew_member " +
+                "SET role = ?::role_enum " +
+                "FROM shotmaniacs1.account " +
+                "WHERE role = ?::role_enum AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
         try {
             st.setString(1, newRole);
             st.setString(2, crew_role);
             st.setInt(3, memberID);
+            st.executeQuery();
         } catch (SQLException e) {
             System.err.println(e);
         }
@@ -305,15 +304,15 @@ public enum AdminDao {
             crew_team = rs.getString(1);
         }
 
-        String query = "UPDATE crew_member " +
-                "SET team = ? " +
-                "FROM account" +
-                "WHERE team = ? AND crew_member.id = ? AND account.type = 'crew_member';";
-        PreparedStatement st = connection.prepareStatement(query);
-        try {
+        String query = "UPDATE shotmaniacs1.crew_member " +
+                "SET team = ?::team_enum " +
+                "FROM shotmaniacs1.account " +
+                "WHERE team = ?::team_enum AND crew_member.id = ? AND account.type = 'crew_member';";
+        try (PreparedStatement st = connection.prepareStatement(query)) {
             st.setString(1, newTeam);
             st.setString(2, crew_team);
             st.setInt(3, id);
+            st.executeQuery();
         } catch (SQLException e) {
             System.err.println(e);
         }
