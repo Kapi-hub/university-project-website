@@ -43,11 +43,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Post announcement</h5>
-                <div class="btns">
+                <div class="btns" id="inputCBtns">
                     <ion-icon name="close-outline"
                               data-bs-dismiss="modal" id="cancelBttn" style="cursor: pointer"></ion-icon>
-                    <ion-icon name="add-outline" data-bs-dismiss="modal" style="cursor: pointer"
-                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBttn"></ion-icon>
                 </div>
             </div>
             <div class="modal-body">
@@ -56,9 +54,15 @@
                 <label for="inputDetails" class="inputTitle"></label>
                 <textarea class="inputTitle" id="inputDetails"
                           placeholder="Description" rows="3" cols="60"></textarea>
-                <label for="inputID" class="inputTitle"></label>
-                <input type="text" class="inputTitle" id="inputID"
-                       placeholder="Crew member ID">
+                <div class="inputContainer">
+                    <label for="inputID" class="inputTitle" id="inputIDLabel"></label>
+                    <input type="text" class="inputTitle" id="inputID"
+                           placeholder="To:">
+                </div>
+                <div class="btns" id="inputSBtns">
+                    <ion-icon name="add-outline" data-bs-dismiss="modal" style="cursor: pointer"
+                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBttn"></ion-icon>
+                </div>
             </div>
         </div>
     </div>
@@ -82,7 +86,6 @@
 
 <!--Welcome message-->
 <div class="welcome-message">
-    Welcome, Raluca!
 </div>
 
 <!--Announcements-->
@@ -150,17 +153,6 @@
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script>
-    const toastTrigger = document.getElementById('saveBttn');
-    const toastLive = document.getElementById('liveToast');
-
-    if (toastTrigger) {
-        toastTrigger.addEventListener('click', () => {
-            const toast = new bootstrap.Toast(toastLive)
-            toast.show()
-        })
-    }
-
-
     document.addEventListener('DOMContentLoaded', function () {
         getAnnouncements();
         getLatestEvents();
