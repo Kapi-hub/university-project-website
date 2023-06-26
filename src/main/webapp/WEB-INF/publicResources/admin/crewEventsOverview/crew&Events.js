@@ -356,7 +356,6 @@ function changeTeam(memberID) {
     coreButton.onclick = function () {
         selectWord("core");
         team = coreButton.textContent;
-        console.log(team);
     }
     coreItem.appendChild(coreButton);
     teamsList.appendChild(coreItem);
@@ -382,6 +381,7 @@ function changeTeam(memberID) {
     bothButton.onclick = function () {
         selectWord("core&club");
         team = bothItem.textContent;
+        console.log(team)
     }
     bothItem.appendChild(bothButton);
     teamsList.appendChild(bothItem);
@@ -390,13 +390,12 @@ function changeTeam(memberID) {
     dropdown.appendChild(dropdownButton);
     dropdown.appendChild(teamsList);
 
-    console.log("team selected " + team);
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
-    modalFooter.innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="sendNewTeamToDB(${memberID}, ${team})">Save changes</button>`;
-
     modalContent.appendChild(modalHeader);
+
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff" onclick="sendNewTeamToDB(${memberID}, team)">Save changes</button>`;
     modalContent.appendChild(modalBody);
     modalContent.appendChild(modalFooter);
     modalBody.appendChild(dropdown);
@@ -409,14 +408,12 @@ function changeTeam(memberID) {
 
 
 function sendNewTeamToDB(memberID, team) {
-    console.log(team)
     $.ajax(
         {
             url: `api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
             method: 'PUT',
             success: function () {
                 alert("Successfully changed the team");
-                // location.reload();
             }, error: function () {
                 alert("Error changing the team");
             }
@@ -561,8 +558,8 @@ function changeRole(memberID) {
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
-    modalFooter.innerHTML = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
 
     modalContent.appendChild(modalHeader);
     modalContent.appendChild(modalBody);
@@ -1090,20 +1087,25 @@ function deleteEvent(eventID) {
         }
     });
 }
+// Needed here to maintain the status across multiple callings. If set in bookingButton() or crewButton()
+// then each time the buttons are pressed, a new instance of firstLoad is created
+// so the second if would not work
+let firstLoadBookings = false;
+let firstLoadCrewMembers = false;
 
 function bookingButton() {
     const bookingContainer = document.getElementById("bookingContainer");
     const crewContainer = document.getElementById("crewContainer");
-    // this is to fix the bug where if you go two times on the events
-    // or crew members, the # of events or crew members would fetch again
-    let firstLoad = 0;
 
-    if (bookingContainer && crewContainer && firstLoad === 0) {
+    if (bookingContainer && crewContainer) {
         if (bookingContainer.style.display === 'none') {
-            firstLoad += 1;
             bookingContainer.style.display = "flex";
             crewContainer.style.display = "none";
-            getAllEvents();
+        }
+
+        if (!firstLoadBookings) {
+            firstLoadBookings = true;
+            getAllEvents()
         }
     }
 }
@@ -1112,14 +1114,15 @@ function bookingButton() {
 function crewButton() {
     const bookingContainer = document.getElementById("bookingContainer");
     const crewContainer = document.getElementById("crewContainer");
-    let firstLoad = 0;
-
-    if (bookingContainer && crewContainer && firstLoad === 0) {
+    if (bookingContainer && crewContainer) {
         if (crewContainer.style.display === 'none') {
-            firstLoad++;
             crewContainer.style.display = "flex";
             bookingContainer.style.display = "none";
-            getAllMembers();
+        }
+
+        if(!firstLoadCrewMembers) {
+            firstLoadCrewMembers = true;
+            getAllMembers()
         }
     }
 }
