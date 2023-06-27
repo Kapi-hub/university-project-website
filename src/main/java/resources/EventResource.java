@@ -221,6 +221,13 @@ public class EventResource {
         }
     }
 
+    @GET
+    @Path("/crewAssignmemts/getCrew/{eventId}")
+    @RolesAllowed("admin")
+    public Object[] getCrewInEvent(@PathParam("eventId") int eventId) {
+        return EventDao.instance.getEnrolled(eventId);
+    }
+
     @DELETE
     @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
     @RolesAllowed("admin")

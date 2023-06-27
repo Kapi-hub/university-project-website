@@ -271,7 +271,8 @@ function getAllMembers() {
 
                 let crewName = document.createElement("div");
                 crewName.setAttribute('class', 'crew-name');
-                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${forename} ${surname}</p>`;
+                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${forename} ${surname}</p>
+                                        <button class="hrs-booking" onclick="showHoursWorkedModal(${id})"> <ion-icon name="time-outline"></ion-icon></button>`;
 
                 let crewEmail = document.createElement("div");
                 crewEmail.setAttribute('class', 'crew-email');
@@ -287,8 +288,6 @@ function getAllMembers() {
                 crewTeam.setAttribute('class', 'crew-team');
                 crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
                                         <p>${team}</p> <button class="crew-info-edit-button" id = "crew-info-edit-button" onclick="showChangeTeamModal(${id})" ><ion-icon name="pencil-outline"></ion-icon></button>`
-                // <script>const triggerButton = document.getElementById("crew-info-edit-button");
-                //     triggerButton.addEventListener("click", showChangeTeamModal);</script>`
 
                 let crewRole = document.createElement("div");
                 crewRole.setAttribute('class', 'crew-role');
@@ -306,6 +305,51 @@ function getAllMembers() {
             })
 
         })
+}
+
+function viewHours(memberId) {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "viewHours");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Hours worked</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.textContent = "View hours worked on bookings";
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalContent.appendChild(modalHeader);
+
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>`;
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+}
+
+function showHoursWorkedModal(memberId) {
+    viewHours(memberId);
+    const modalElement = document.getElementById("viewHours");
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    bootstrapModal.show();
 }
 
 let team;
@@ -601,7 +645,7 @@ function showViewCrewsInEventModal() {
     bootstrapModal.show();
 }
 
-function viewCrewsInEvent() {
+function viewCrewsInEvent(eventId) {
     //TODO: fetch crews
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
@@ -632,17 +676,15 @@ function viewCrewsInEvent() {
 
     const deleteButton = document.createElement("div");
     deleteButton.setAttribute("class", "delete-button");
-    //TODO: fix button
-    deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000">Remove crew from booking</button>`;
+    //TODO: fix button     //TODO call this: onclick = unrollCrew()
+    deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>`;
     crewRow.appendChild(deleteButton);
     modalBody.appendChild(crewRow);
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
-    //TODO call this: onclick = unrollCrew()
 
-    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" >Save changes</button>`;
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>`;
 
     modalContent.appendChild(modalHeader);
     modalContent.appendChild(modalBody);
@@ -655,8 +697,8 @@ function viewCrewsInEvent() {
 
 function unrollCrew(crewId, eventId) {
     $.ajax({
-            url: "../api/admin/crewAssignments/{crewId}/{eventId}",
-            method: "DELETE",
+            url: `../api/admin/crewAssignments/${crewId}/${eventId}`,
+            method: 'DELETE',
             success: function () {
                 alert("Successfully unrolled crew from event");
             }, error: function () {

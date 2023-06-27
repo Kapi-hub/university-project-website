@@ -151,7 +151,7 @@ public enum EventDao {
     }
 
     public Object[] getEnrolled(int eventId) {
-        String query = "SELECT crew_member_id FROM event_enrollment WHERE event_id = ?";
+        String query = "SELECT crew_member_id, role FROM event_enrollment WHERE event_id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(query);
             st.setInt(1, eventId);
