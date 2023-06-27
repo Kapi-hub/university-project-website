@@ -210,48 +210,13 @@ function addCrewMember() {
             console.error(errorThrown);
         }
     });
- //    console.log(JSON.stringify(data));
- //    $.ajax({
- //        url: "../api/admin/crewAssignments",
- //        method: "POST",
- //        dataType: "json",
- //        contentType: "application/json",
- //        data: JSON.stringify(data),
- //        success: function () {
- //            alert("Member successfully sent!");
- //        },
- //        // error: function () {
- //        //     alert("Error creating a new member!");
- //        // }
- // //TODO this error ^^ and this .always function underneath. idk which one but it is used to handle the part when account cannot be added.
- //    }).always(function(jqXHR){
- //        if (jqXHR.status === 400) {
- //            alert("bananacredentials")
- //        }
- //    });
 }
 
 function getProducers() {
 
 }
 
-// When the user clicks on <div>, open the popup
 function showPopUp() {
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show");
 }
-function hidePopUp() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("hide");
-}
-
-function myFunction() {
-    var popup = document.getElementById("myPopup");
-
-    popup.classList.toggle("show");
-}
-
-function testcet() {
-    alert('testing cet en baris');
-}
-
