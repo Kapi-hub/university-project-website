@@ -23,6 +23,13 @@ body {
     margin-bottom: 10px;
 }
 
+.inputField {
+    float: right;
+    width: 330px;
+    border-radius: 100px;
+    padding: 0 4px 0 12px;
+}
+
 .collapse-button {
     background-color: var(--bs-primary);
     border-radius: 10px;
