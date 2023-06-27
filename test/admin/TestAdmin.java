@@ -1,4 +1,4 @@
-package login;
+package admin;
 
 import models.*;
 import org.junit.jupiter.api.BeforeEach;
