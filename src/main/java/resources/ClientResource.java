@@ -162,38 +162,41 @@ public class ClientResource {
     }
 
 
-    private void handleExcelFile(InputStream excel, int client_id) throws IOException, SQLException {
+    public void handleExcelFile(InputStream excel, int client_id) throws IOException, SQLException {
         Workbook booking = new XSSFWorkbook(excel);
         Sheet sheet = booking.getSheetAt(0);
         int i = 1;
-        while (true) {
-            Row row = sheet.getRow(i);
-            for (int j = 0; j < 14; j++) {
-                if (row.getCell(j).getCellType() == CellType.BLANK) return;
-            }
-            EventBean eventBean = new EventBean(
-                    row.getCell(0).getStringCellValue(),
-                    row.getCell(5).getStringCellValue(),
-                    Timestamp.valueOf(row.getCell(2).getStringCellValue() + ":00.000"),
-                    (int) row.getCell(3).getNumericCellValue(),
-                    row.getCell(4).getStringCellValue(),
-                    EventType.valueOf(row.getCell(1).getStringCellValue()),
-                    BookingType.valueOf(row.getCell(6).getStringCellValue())
-            );
-            eventBean.setClient_id(client_id);
-            int event_id = ClientDao.I.addEvent(eventBean);
-            RoleType[] roles = {RoleType.PHOTOGRAPHER, RoleType.VIDEOGRAPHER, RoleType.EDITOR, RoleType.ASSISTANT,
-                    RoleType.DATA_HANDLER, RoleType.PLANNER, RoleType.PRODUCER};
-            int j = 7;
-            for (RoleType role : roles) {
-                RequiredCrewBean requiredCrewBean = new RequiredCrewBean(
-                        event_id, role, (int) row.getCell(j).getNumericCellValue()
+        try {
+            while (true) {
+                Row row = sheet.getRow(i);
+                for (int j = 0; j < 14; j++) {
+                    if (row.getCell(j).getCellType() == CellType.BLANK) return;
+                }
+                EventBean eventBean = new EventBean(
+                        row.getCell(0).getStringCellValue(),
+                        row.getCell(5).getStringCellValue(),
+                        new Timestamp(row.getCell(2).getDateCellValue().getTime()),
+                        (int) row.getCell(3).getNumericCellValue(),
+                        row.getCell(4).getStringCellValue(),
+                        EventType.valueOf(row.getCell(1).getStringCellValue()),
+                        BookingType.valueOf(row.getCell(6).getStringCellValue())
                 );
-                ClientDao.I.addRequirement(requiredCrewBean);
-                j++;
+                eventBean.setClient_id(client_id);
+                int event_id = ClientDao.I.addEvent(eventBean);
+                RoleType[] roles = {RoleType.PHOTOGRAPHER, RoleType.VIDEOGRAPHER, RoleType.EDITOR, RoleType.ASSISTANT,
+                        RoleType.DATA_HANDLER, RoleType.PLANNER, RoleType.PRODUCER};
+                int j = 7;
+                for (RoleType role : roles) {
+                    RequiredCrewBean requiredCrewBean = new RequiredCrewBean(
+                            event_id, role, (int) row.getCell(j).getNumericCellValue()
+                    );
+                    ClientDao.I.addRequirement(requiredCrewBean);
+                    j++;
+                }
+                i++;
             }
-            i++;
-
+        } catch (NullPointerException e) {
+            System.err.println("Could not parse Excel File");
         }
     }
 
@@ -203,13 +206,13 @@ public class ClientResource {
         line = br.readLine();
         while ((line = br.readLine()) != null) {
             String[] values = line.split(",");
-            if (values.length < 14) {
+            if (values.length < 13) {
                 break;
             }
             EventBean eventBean = new EventBean(
                     values[0],
                     values[5],
-                    Timestamp.valueOf(values[2] + ":00.000"),
+                    Timestamp.valueOf(values[2]+":00.000"),
                     Integer.parseInt(values[3]),
                     values[4],
                     EventType.valueOf(values[1]),
