@@ -1,4 +1,4 @@
-package login;
+package admin;
 
 import jakarta.ws.rs.core.Response;
 import models.*;
