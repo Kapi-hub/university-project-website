@@ -3,7 +3,8 @@ package models;
 public enum EventType {
     CLUB_PHOTOGRAPHY,
     FESTIVAL,
-    PRODUCT_SHOOT;
+    PRODUCT_SHOOT,
+    OTHER;
 
     @Override
     public String toString() {
