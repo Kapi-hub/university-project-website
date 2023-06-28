@@ -79,27 +79,17 @@ public enum AdminDao {
         String insertQuery = """
                 SELECT e.id, e.name 
                 FROM event e
-                JOIN event_requirement er ON e.id = er.event_id 
-                LEFT JOIN ( 
+                JOIN event_requirement er ON e.id = er.event_id
+                LEFT JOIN (
                     SELECT event_id, COUNT(*) AS enrollments
                     FROM event_enrollment
                     GROUP BY event_id
                 ) ee ON e.id = ee.event_id
-                WHERE ee.enrollments < er.crew_size OR ee.enrollments IS NULL; 
+                WHERE (ee.enrollments < er.crew_size OR ee.enrollments IS NULL)
+                  AND e.id IS NOT NULL
+                  AND e.name IS NOT NULL;
                 """;
-
-        ArrayList<EventBean> events = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(insertQuery);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                EventBean eb = new EventBean(rs.getInt("id"), rs.getString("name"));
-                events.add(eb);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return events;
+        return getSQLString(insertQuery);
     }
 
     public String getLatestEvent() throws SQLException {
@@ -337,13 +327,14 @@ public enum AdminDao {
                     'announcement_title', subquery.title,
                     'announcement_body', subquery.body,
                     'announcement_timestamp', subquery.date_time,
+                    'recipient', subquery.recipient,
                     'announcer', json_build_object(
                         'forename', subquery.forename,
                         'surname', subquery.surname
                     )
                 )) AS result
                 FROM (
-                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname ,ann.recipient
                     FROM announcement ann
                     JOIN account a ON ann.announcer_id = a.id
                     ORDER BY ann.id DESC
@@ -364,7 +355,26 @@ public enum AdminDao {
             st.close();
             return result;
         }
+        rs.close();
+        st.close();
+        return null;
+    }
 
+    public String getUser(int accountId) throws SQLException {
+        String insertQuery = """
+                Select forename 
+                From account
+                Where id = ?;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery) ;
+        st.setInt(1,accountId);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            String result = rs.getString(1);
+            rs.close();
+            st.close();
+            return result;
+        }
         rs.close();
         st.close();
         return null;

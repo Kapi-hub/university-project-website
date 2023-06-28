@@ -46,12 +46,23 @@ public enum AccountDao {
             return false;
         }
     }
+//    create or replace function checkValidLogin(username_or_email text)
+//    returns setof account as $$
+//            begin
+//--first get the account
+//    SELECT id, type, salt, password
+//    FROM account
+//    WHERE (username=username_or_email OR email_address=username_or_email)
+//
+//--second, set the
+//    end;
+//    $$ language plpgsql;
 
-    public AccountType determineAccountType(int accountId) throws SQLException {
+    public AccountType determineAccountType(int id) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";
 
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, accountId);
+        st.setInt(1, id);
 
         ResultSet rs = st.executeQuery();
 
@@ -85,5 +96,20 @@ public enum AccountDao {
         }
 
         return null;
+    }
+
+    public String[] getNames(int accountId) throws SQLException {
+        String query = "SELECT forename, surname FROM account WHERE id = ?";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, accountId);
+
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+            return new String[] {rs.getString(1), rs.getString(2)};
+        }
+
+        throw new SQLException("Account not found");
     }
 }

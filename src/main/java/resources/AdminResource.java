@@ -1,12 +1,13 @@
 package resources;
 
 import dao.AdminDao;
-import dao.ClientDao;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.*;
+import models.AnnouncementBean;
+import models.CrewMemberBean;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -20,9 +21,22 @@ import static dao.MailService.MAIL;
 @Path("/admin")
 public class AdminResource {
 
+    @GET
+    @Path("/user")
+    @RolesAllowed("admin")
+    public String getUser(@CookieParam("accountId") String accountIdString){
+        int accountId = Integer.parseInt(accountIdString);
+        try {
+            return AdminDao.I.getUser(accountId);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     /* METHODS RELATED TO ANNOUNCEMENTS */
     @POST
-    @Path("/dashboard/new")
+    @Path("/newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
     public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
@@ -30,8 +44,8 @@ public class AdminResource {
             int accountId = Integer.parseInt(accountIdString);
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
-        }catch (Exception e){
-            e.printStackTrace();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
         }
     }
 
@@ -43,7 +57,7 @@ public class AdminResource {
         try {
             return AdminDao.I.getAllAnnouncements();
         }catch (SQLException e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
     }
@@ -84,14 +98,13 @@ public class AdminResource {
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
-    public List<EventBean> showEventsWithoutCrew() {
-        List<EventBean> events = null;
+    public String showEventsWithoutCrew() {
         try{
-            events = AdminDao.I.getNotFullEvents();
+            return AdminDao.I.getNotFullEvents();
         }catch (SQLException e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-        return events;
+        return null;
     }
 
     @GET

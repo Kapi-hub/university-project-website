@@ -80,8 +80,16 @@ body{
 .eventsContainer {
     width: 90vw;
     height: fit-content;
-    background-color: var(--bs-light);
-    margin: 10vh auto auto;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid;
+    border-color: var(--bs-primary);
+    border-radius: 5px;
+    background-color: var(--bs-dark);
+}
+
+.postAnnouncementBttn,.latestEvents , .saveBttn, .btn-close, .accordion-button, .createEventBttn, .saveEventBttn {
+    background-color: var(--bs-primary);
     border-radius: 20px;
     padding: 0 20px;
 }
@@ -111,10 +119,19 @@ body{
 }
 
 .closeBttn {
+    border-radius: 20px;
+    border-color: black;
+    color: var(--bs-light);
+    margin-left: auto;
     background-color: red;
 }
+.inputRecipients{
+    display: compact;
+    width: 100%;
+    overflow-y: auto;
+}
 
-.inputTitle{
+.inputTitle {
     display: block;
     width: 100%;
     overflow-y: auto;
@@ -173,6 +190,7 @@ body{
     transform: translate(-50%, -50%);
     background-color: green;
     color: var(--bs-light);
+    z-index: 1;
 }
 
 * {

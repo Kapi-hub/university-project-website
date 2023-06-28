@@ -6,10 +6,13 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon3.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="/static/admin/dashboard/Dashboard.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="/static/general.css" rel="stylesheet">
+    <link href="/static/admin/admin.css" rel="stylesheet">
     <link href="/static/admin/dashboard/style.css" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/kiona-2" rel="stylesheet">
     <script src="/static/logout.js"></script>
@@ -18,21 +21,20 @@
 
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
-        <a href="/" class="navbar-brand">
-            <img alt="Logo" class="d-inline-block align-text-middle" width="30"
-                 src="/static/img/Shotmaniacs_Logo_White_ZT.png">
-            <span class="ps-3 LogoText color">Shotmaniacs</span>
+        <img alt="Logo" class="d-inline-block align-text-middle" width="30" src="/static/img/Shotmaniacs_Logo_White_ZT.png">
+        <span class="ps-3 LogoText color">Shotmaniacs</span>
         </a>
-        <ul class="nav justify-contend-end">
-            <li class="nav-item border border-2 bg-white border-white rounded-pill">
-                <a aria-current="page" class="nav-link text-dark" href="/admin/dashboard">Dashboard</a>
+        <ul class="nav justify-content-end ">
+            <li class="nav-item border bg-white border-white rounded-pill">
+                <a class="nav-link text-dark" href="/admin/dashboard"><strong>Dashboard</strong></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="/admin/crewAssignments">Crew&Events</a>
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" href="/admin/crewAssignments"><strong>Crew&Events</strong></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" onclick="logout()" style="cursor: pointer">Logout</a>
+            <li class="nav-item me-2">
+                <a class="nav-link text-white" onclick="logout()" style="cursor: pointer"><strong>Logout</strong></a>
             </li>
+            <!--leave this in case we add another buttons-->
         </ul>
     </div>
 </nav>
@@ -43,49 +45,45 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Post announcement</h5>
-                <div class="btns" id="inputCBtns">
-                    <ion-icon name="close-outline"
-                              data-bs-dismiss="modal" id="cancelBttn" style="cursor: pointer"></ion-icon>
-                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
-                <label for="inputTitle" class="inputTitle"></label>
-                <input type="text" class="inputTitle" id="inputTitle" placeholder="Title" autofocus>
-                <label for="inputDetails" class="inputTitle"></label>
-                <textarea class="inputTitle" id="inputDetails"
-                          placeholder="Description" rows="3" cols="60"></textarea>
-                <div class="inputContainer">
-                    <label for="inputID" class="inputTitle" id="inputIDLabel"></label>
-                    <input type="text" class="inputTitle" id="inputID"
-                           placeholder="To:">
-                </div>
-                <div class="btns" id="inputSBtns">
-                    <ion-icon name="add-outline" data-bs-dismiss="modal" style="cursor: pointer"
-                              data-bs-target="toast" onclick="saveAnnouncement()" id="saveBttn"></ion-icon>
-                </div>
+                <label for="inputTitle" class="inputTitle">Announcement Title</label>
+                <input type="text" class="inputTitle" id="inputTitle">
+
+                <label for="inputDetails" class="inputTitle">Announcement Details</label>
+                <input type="text" class="inputTitle" id="inputDetails">
+
+                <label for="inputRecipients" class="inputRecipients">Recipients</label>
+                <input type="text" class="inputRecipients" id="inputRecipients">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closeBttn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="saveBttn" data-bs-dismiss="modal" data-bs-target="toast" onclick="saveAnnouncement();getAnnouncements()">Save changes
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Congratulations</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Announcement posted successfully!
-        </div>
+
+<!--Post Events Manually Modal-->
+
+<div class="toast" id="successful" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
+        Announcement posted successfully!
     </div>
 </div>
+
+
 
 
 <!--Navigation bar-->
 
 
 <!--Welcome message-->
-<div class="welcome-message">
+<div class="welcome-message" id="welcome">
+    Welcome, admin!
 </div>
 
 <!--Announcements-->
@@ -97,12 +95,12 @@
                     <p class="announcementText">Announcements</p>
                     <button type="button" class="postAnnouncementBttn" data-bs-toggle="modal"
                             data-bs-target="#postAnnouncementModal">
-                        <ion-icon name="add-outline"></ion-icon>
+                        Post New
                     </button>
                 </div>
                 <div class="announcementsList">
-                    <div class=announcementItem id="announcementPlaceholder">
-                        <span class="Title">There are No Announcements</span>
+                    <div class = announcementItem id="announcementPlaceholder">
+                        <span class="Title" >There are No Announcements</span>
                     </div>
                 </div>
             </div>
@@ -116,29 +114,38 @@
             <div class="flex-container">
                 <p class="eventsText">Events</p>
             </div>
-            <div class="accordion" id="eventsAccordion">
+            <div class="accordion" id="accordionExample">
+                <!--Events that need crew assigned-->
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            No crew assigned
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <!-- Added via JS-->
-                        </div>
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Events that need crew assigned
+                    </button>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                         data-bs-parent="#accordionExample">
                     </div>
                 </div>
+                <!--Events that dont need crew assigned anymore-->
+<!--                <div class="accordion-item">-->
+<!--                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">-->
+<!--                        Events that dont need crew anymore-->
+<!--                    </button>-->
+<!--                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"-->
+<!--                         data-bs-parent="#accordionExample">-->
+<!--                        <div class="accordion-body">-->
+<!--                            <span>we dont need crew asap</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <!--Latest upcoming events-->
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Incoming
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <!-- Added via JS-->
-                        </div>
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Latest incoming events
+                    </button>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                         data-bs-parent="#accordionExample">
                     </div>
                 </div>
             </div>
@@ -146,18 +153,27 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.0.slim.js" integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
-<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    const savePostButton = document.querySelector('.saveBttn');
+    // const toast = new bootstrap.Toast(document.querySelector('#successful'));
+
+    savePostButton.addEventListener('click', function () {
+        // toast.show();
+    });
+    function selectCrewMember(name) {
+        const selectedCrewMember = document.getElementById('selectedCrewMember');
+        selectedCrewMember.textContent = name;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
         getAnnouncements();
         getLatestEvents();
+        getCrewNeeded();
+        getUser();
     });
 
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 </html>
