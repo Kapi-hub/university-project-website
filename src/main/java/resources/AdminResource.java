@@ -5,9 +5,11 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import models.AccountBean;
 import models.AnnouncementBean;
 import models.CrewMemberBean;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
@@ -191,6 +193,14 @@ public class AdminResource {
     public String getProducers() {
         try {
             return AdminDao.I.getProducers();
+        }  catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public AccountBean[] getProducersArray() {
+        try {
+            return AdminDao.I.getProducersArray();
         }  catch (SQLException e){
             e.printStackTrace();
             return null;

@@ -4,6 +4,7 @@ import misc.ConnectionFactory;
 import models.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -147,10 +148,37 @@ public enum AdminDao {
 
     public String getProducers() throws SQLException {
         String query = "SELECT a.forename, a.surname " +
-                "FROM account a, crew_member" +
+                "FROM account a, crew_member c " +
                 "WHERE a.id = c.id AND c.role = 'producer'";
         return getSQLString(query);
 
+    }
+    public AccountBean[] getProducersArray() throws SQLException {
+        String query = "SELECT a.forename, a.surname " +
+                "FROM account a, crew_member c " +
+                "WHERE a.id = c.id AND c.role = 'producer'";
+        PreparedStatement st = connection.prepareStatement(query);
+        ResultSet rs = st.executeQuery();
+
+        ArrayList<ArrayList<Object>> rsList = new ArrayList<>();
+
+        int count;
+        for (count = 0; rs.next(); count++) {
+            ArrayList<Object> rowData = new ArrayList<>();
+            rowData.add(rs.getString("forename"));
+            rowData.add(rs.getString("surname"));
+            rsList.add(rowData);
+        }
+        if (count == 0) {
+            return null;
+        }
+        AccountBean[] producers = new AccountBean[count];
+        int i = 0;
+        for (ArrayList<Object> row : rsList) {
+            producers[i] = new AccountBean((String) row.get(0), (String) row.get(1));
+            i++;
+        }
+        return producers;
     }
 
     /**

@@ -6,18 +6,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import resources.AdminResource;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestAdmin {
+class TestAdmin {
 
 
     CrewMemberBean goodCrew;
+    AdminResource resource;
     @BeforeEach
-    public void setCrew() {
+    void setCrew() {
+        resource = new AdminResource();
         goodCrew = new CrewMemberBean("Forename", "Surname", "Username",
-                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CLUB);
-    }
+                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.PRODUCER, Team.CLUB);
+        resource.handleCreateNewMember(goodCrew);
 
+    }
     @Test
     void testValidEmail() {
         CrewMemberBean badCrew = new CrewMemberBean("Forename", "Surname", "Username",
@@ -60,13 +65,22 @@ public class TestAdmin {
     }
     @Test
     void testHandleCreateNewMember() {
-        AdminResource admin = new AdminResource();
         CrewMemberBean badCrewInvalidPassword = new CrewMemberBean("Forename", "Surname", "Username",
                 "b.yilmaz-1@student.utwente.nl", "N0t My R34L Pa$$WoRd", RoleType.EDITOR, Team.CORE);
         CrewMemberBean badCrewInvalidEmail = new CrewMemberBean("Forename", "Surname", "Username",
                 ".yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CORE);
-        assertEquals((Response.ok().build()).toString(), (admin.handleCreateNewMember(goodCrew)).toString());
-        assertEquals((Response.status(400).build()).toString(), (admin.handleCreateNewMember(badCrewInvalidPassword)).toString());
-        assertEquals((Response.status(400).build()).toString(), (admin.handleCreateNewMember(badCrewInvalidEmail)).toString());
+        assertEquals((Response.ok().build()).toString(), (resource.handleCreateNewMember(goodCrew)).toString());
+        assertEquals((Response.status(400).build()).toString(), (resource.handleCreateNewMember(badCrewInvalidPassword)).toString());
+        assertEquals((Response.status(400).build()).toString(), (resource.handleCreateNewMember(badCrewInvalidEmail)).toString());
+    }
+    @Test
+    void testGetProducers(){
+        CrewMemberBean videoCrew = new CrewMemberBean("Forename", "Surname", "Username",
+                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.VIDEOGRAPHER, Team.CLUB);
+        resource.handleCreateNewMember(videoCrew);
+        CrewMemberBean assistentCrew = new CrewMemberBean("Forename", "Surname", "Username",
+                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.ASSISTANT, Team.CLUB);
+        resource.handleCreateNewMember(assistentCrew);
+        assertEquals("testing, obviously not equal", resource.getProducersArray());
     }
 }
