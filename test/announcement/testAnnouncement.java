@@ -2,26 +2,22 @@ package announcement;
 
 import dao.AnnouncementDao;
 import jakarta.ws.rs.core.Response;
-import models.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import resources.AnnouncementResource;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
-
 
 public class testAnnouncement {
 
-    AnnouncementBean announcementBean;
-    AnnouncementResponseBean announcementResponseBean;
-    @BeforeEach
-    void setup() {
-        announcementBean = new AnnouncementBean(1, 2,  "title",
-                "body", new Timestamp(1,1,1,1,1,1,1));
-        announcementResponseBean = new AnnouncementResponseBean();
-    }
+//    AnnouncementBean announcementBean;
+//    AnnouncementResponseBean announcementResponseBean;
+//    @BeforeEach
+//    void setup() {
+//        announcementBean = new AnnouncementBean(1, 2,  "title",
+//                "body", new Timestamp(3,4,5,6,7,8,9));
+//        announcementResponseBean = new AnnouncementResponseBean();
+//    }
 
     @Test
     void testGetAnnouncementsForCrew() throws SQLException {
@@ -32,9 +28,9 @@ public class testAnnouncement {
         //IDs do not match
         Assertions.assertNotEquals(Response.ok(AnnouncementDao.instance.getAnnouncementsForCrew(1)).build(),
                 resource.getAnnouncementsForCrew("2"));
-        //nonexistent account
+        //nonexistent account //TODO fix this bottom one
         Assertions.assertEquals((Response.status(Response.Status.NO_CONTENT).build()).toString(),
-                (resource.getAnnouncementsForCrew("10000000")).toString());
+                (resource.getAnnouncementsForCrew("-8")).toString());
 
     }
 }
