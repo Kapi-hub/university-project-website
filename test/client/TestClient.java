@@ -40,7 +40,14 @@ public class TestClient {
 
     @Test
     public void testHandleCSV() {
+        try {
+            InputStream inputStream = new FileInputStream("src/main/webapp/WEB-INF/publicResources/client/template/Template_example.csv");
+            new ClientResource().handleCsvFile(inputStream, 190);
 
+        } catch (SQLException | IOException e) {
+            System.err.println(e.getMessage());
+            fail();
+        }
     }
 
     @Test
@@ -54,7 +61,5 @@ public class TestClient {
             System.err.println(e.getMessage());
             fail();
         }
-
-
     }
 }
