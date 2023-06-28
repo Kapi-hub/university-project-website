@@ -3,14 +3,9 @@ package login;
 import dao.AdminDao;
 import misc.ConnectionFactory;
 import models.CrewMemberBean;
-import models.RoleType;
-import models.Team;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,12 +27,12 @@ public class TestAdmin {
         assertNotNull(connection);
     }
 
-    @BeforeEach
-    public void setCrew() {
-        crew = new CrewMemberBean(
-                "Crew", "member", generateRandomString(20), "crew_member123@gmail.com",
-                RoleType.PHOTOGRAPHER, Team.CORE);
-    }
+//    @BeforeEach
+//    public void setCrew() {
+//        crew = new CrewMemberBean(
+//                "Crew", "member", generateRandomString(20), "crew_member123@gmail.com",
+//                RoleType.PHOTOGRAPHER, Team.CORE);
+//    }
 
     @Test
     public void addNewCrewMember() throws GeneralSecurityException, SQLException {
