@@ -330,7 +330,29 @@ function viewHours(memberId) {
 
     const modalBody = document.createElement("div");
     modalBody.setAttribute("class", "modal-body");
-    modalBody.textContent = "View hours worked on bookings";
+    modalBody.textContent = "View hours worked on bookings"
+
+    let times = [];
+    sendHttpRequest('GET', `/api/event/getCrewHoursWorked/${memberId}`)
+        .then(responseData => {
+            if (responseData != null) {
+                //TODO fix bug in which the response data does not change
+                responseData.forEach(time => times.push(time));
+                responseData.forEach((time) => {
+                    let date = time[0];
+                    let hours = time[1];
+                    const details = document.createElement("div");
+                    details.setAttribute("class", "worked-hours-details");
+                    details.innerHTML = `<span>In month ${date} this crew member worked ${hours} hours</span>`;
+                    modalBody.appendChild(details);
+                })
+            } else {
+                const details = document.createElement("div");
+                details.setAttribute("class", "worked-hours-details");
+                details.innerHTML = `<span>This crew member does not have any registered worked hours</span>`;
+                modalBody.appendChild(details);
+            }
+        })
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
@@ -677,7 +699,7 @@ function viewCrewsInEvent(eventId) {
     const deleteButton = document.createElement("div");
     deleteButton.setAttribute("class", "delete-button");
     //TODO: fix button     //TODO call this: onclick = unrollCrew()
-    deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>`;
+    // deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>`;
     crewRow.appendChild(deleteButton);
     modalBody.appendChild(crewRow);
 

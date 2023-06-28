@@ -161,6 +161,21 @@ public class EventResource {
                 .build();
     }
 
+    @Path("/getCrewHoursWorked/{memberId}")
+    @RolesAllowed("admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public Response getHoursWorked(@PathParam("memberId") int id) {
+        try {
+            return Response.ok(EventDao.instance.getHoursWorked(id))
+                    .build();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
+    }
+
     @Path("/getHoursWorked")
     @RolesAllowed("crew_member")
     @Produces(MediaType.APPLICATION_JSON)
@@ -251,10 +266,10 @@ public class EventResource {
     }
 
     @GET
-    @Path("/crewAssignmemts/getCrew/{eventId}")
+    @Path("/crewAssignments/getCrew/{eventId}")
     @RolesAllowed("admin")
     public Object[] getCrewInEvent(@PathParam("eventId") int eventId) {
-        return EventDao.instance.getEnrolled(eventId);
+        return EventDao.instance.getEnrolledMembers(eventId);
     }
 
     @DELETE

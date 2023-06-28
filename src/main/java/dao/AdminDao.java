@@ -75,7 +75,7 @@ public enum AdminDao {
                 required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
     }
 
-    public ArrayList<EventBean> getNotFullEvents() throws SQLException {
+    public String getNotFullEvents() throws SQLException {
         String insertQuery = """
                 SELECT e.id, e.name 
                 FROM event e
