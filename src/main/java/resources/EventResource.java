@@ -3,17 +3,26 @@ package resources;
 import dao.AccountDao;
 import dao.CrewMemberDao;
 import dao.EventDao;
+import dao.MailService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static dao.MailService.MAIL;
+
+import static dao.MailService.MAIL;
 
 @Path("/event")
 public class EventResource {
@@ -139,10 +148,10 @@ public class EventResource {
     @Path("/getEnrolled")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"crew_member"})
-    public Response getEnrolled(@CookieParam("accountId") String accountIdString) {
+    public Response getEnrolled(@CookieParam("accountId") String accountIdString, @QueryParam("client") int client, @QueryParam("month") int month) {
         EventBean[] events;
         try {
-            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString));
+            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString), client, month);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError()
@@ -263,6 +272,34 @@ public class EventResource {
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    private void sendNotificationToCrewMember(int account_id) {
+        String recipient;
+        try {
+            recipient = AccountDao.instance.getEmailAddressById(account_id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        String subject = "You have been unassigned from a booking.";
+        String body =   """
+                        Dear Crew member,
+                                        
+                        You have been unassigned from a booking. 
+                        
+                        Please consult the dashboard.
+                        
+                        Sincerely,
+                        The computer behind Shotmaniacs.
+                        """;
+        try {
+            MAIL.sendMessage(recipient, subject, body);
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            System.err.println(e.getMessage());
+        }
+
     }
 
     @GET
