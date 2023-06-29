@@ -178,7 +178,7 @@ public class EventResource {
     public Response getEnrolled(@CookieParam("accountId") String accountIdString, @QueryParam("client") int client, @QueryParam("month") int month) {
         EventBean[] events;
         try {
-            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString), client, month);
+            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString));
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError()
