@@ -11,6 +11,7 @@ import models.CrewMemberBean;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,13 +40,14 @@ public class AdminResource {
     @Path("/newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
-    public void handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
+    public Response handlePostAnnouncement(AnnouncementBean announcement, @CookieParam("accountId") String accountIdString) {
         try {
             int accountId = Integer.parseInt(accountIdString);
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
-        }catch (SQLException e){
-            System.err.println(e.getMessage());
+            return Response.ok().build();
+        } catch (SQLException e){
+            return Response.serverError().build();
         }
     }
 
@@ -53,12 +55,12 @@ public class AdminResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/announcements")
     @RolesAllowed("admin")
-    public String getAnnouncement() {
+    public Response getAnnouncement() {
         try {
-            return AdminDao.I.getAllAnnouncements();
+            return Response.ok(AdminDao.I.getAllAnnouncements()).build();
         }catch (SQLException e){
             System.err.println(e.getMessage());
-            return null;
+            return Response.serverError().build();
         }
     }
 
@@ -68,7 +70,7 @@ public class AdminResource {
     @Path("/crewAssignments/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
-    public void handleCreateNewEvent(FormBean form) throws SQLException {
+    public Response handleCreateNewEvent(FormBean form) {
         try {
             int client_id = AdminDao.I.addClient(form.getClientBean());
             form.getEventBean().setClient_id(client_id);
@@ -77,20 +79,22 @@ public class AdminResource {
                 required.setEvent_id(event_id);
                 AdminDao.I.addRequirement(required);
             }
+            return Response.ok().build();
         } catch (Exception e) {
-            e.printStackTrace();
+            Response.serverError().build();
         }
+        return null;
     }
 
     @GET
     @Path("/crewAssignments/bookings")
     @RolesAllowed("admin")
-    public String getLatestEvent() {
+    public Response getLatestEvent() {
         try {
-            return AdminDao.I.getLatestEvent();
+            return Response.ok(AdminDao.I.getLatestEvent()).build();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
+            return Response.serverError().build();
         }
 
     }
@@ -98,37 +102,24 @@ public class AdminResource {
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
-    public String showEventsWithoutCrew() {
+    public Response showEventsWithoutCrew() {
         try{
-            return AdminDao.I.getNotFullEvents();
+            return Response.ok(AdminDao.I.getNotFullEvents()).build();
         }catch (SQLException e){
-            System.err.println(e.getMessage());
+            return Response.serverError().build();
         }
-        return null;
     }
 
     @GET
     @Path("/crewAssignments/changeEvent/{eventId}")
     @RolesAllowed("admin")
-    public String handleGetEventWithId(@PathParam("eventId") int id) {
+    public Response handleGetEventWithId(@PathParam("eventId") int id) {
         try{
-            return AdminDao.I.getEventWithId(id);
+            return Response.ok(AdminDao.I.getEventWithId(id)).build();
         }catch (SQLException e){
-            System.err.println(e.getMessage());
-            return null;
+            return Response.serverError().build();
         }
     }
-
-//    @PUT
-//    @Path("/crewAssignments/changeEvent/{eventId}")
-//    @RolesAllowed("admin")
-//    public void handleChangeEvent(@PathParam("eventId") int id) {
-//        try{
-//            AdminDao.I.changeEventDetails(id);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @DELETE
     @Path("/crewAssignments/deleteEvent/{eventID}")
@@ -176,57 +167,58 @@ public class AdminResource {
     @Path("/crewAssignments/newMember")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
-    public void handleCreateNewMember(CrewMemberBean crewMember) {
+    public Response handleCreateNewMember(CrewMemberBean crewMember) {
         try {
             AdminDao.I.createNewMember(crewMember);
-        } catch (Exception e) {
-            e.printStackTrace();
+            return Response.ok().build();
+        } catch (SQLException | GeneralSecurityException e) {
+            return Response.serverError().build();
         }
     }
 
     @GET
     @Path("/crewAssignments/members")
     @RolesAllowed("admin")
-    public String getAllCrewMembers() {
+    public Response getAllCrewMembers() {
         try {
-            return AdminDao.I.getAllCrewMembers();
+            return Response.ok(AdminDao.I.getAllCrewMembers()).build();
         }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
+           return Response.serverError().build();
         }
     }
 
     @GET
     @Path("/crewAssignments/newEvent")
     @RolesAllowed("admin")
-    public String getProducers() {
+    public Response getProducers() {
         try {
-            return AdminDao.I.getProducers();
+            return Response.ok(AdminDao.I.getProducers()).build();
         }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
+           return Response.serverError().build();
         }
     }
 
     @PUT
     @Path("/crewAssignments/changeRole/{memberID}/{role}")
     @RolesAllowed("admin")
-    public void changeRole(@PathParam("memberID") int id, @PathParam("role") String newRole) {
+    public Response changeRole(@PathParam("memberID") int id, @PathParam("role") String newRole) {
         try {
             AdminDao.I.changeRole(id, newRole);
+            return Response.ok().build();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return Response.serverError().build();
         }
     }
 
     @PUT
     @Path("/crewAssignments/changeTeam/{memberID}/{team}")
     @RolesAllowed("admin")
-    public void changeTeam(@PathParam("memberID") int id, @PathParam("team") String newTeam) {
+    public Response changeTeam(@PathParam("memberID") int id, @PathParam("team") String newTeam) {
         try {
             AdminDao.I.changeTeam(id, newTeam);
+            return Response.ok().build();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return Response.serverError().build();
         }
     }
 

@@ -143,31 +143,24 @@ public enum AdminDao {
                 "'booking_type', booking_type))" +
                 "FROM shotmaniacs1.event " +
                 "WHERE id = ?";
-        try (PreparedStatement st = connection.prepareStatement(query);) {
-            st.setInt(1, id);
-            return getSQLString(st.toString());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, id);
+        return getSQLString(st.toString());
     }
 
 
-    public void changeEventDetails(EventBean event) {
+    public void changeEventDetails(EventBean event) throws SQLException {
         String updateQuery = "UPDATE event SET name=?, description=?, start=?, duration=?, location=?, type=?, " +
                 "booking_type=? WHERE id=?";
-        try {
-            PreparedStatement st = connection.prepareStatement(updateQuery);
-            st.setString(1, event.getName());
-            st.setString(2, event.getDescription());
-            st.setTimestamp(3, event.getStart());
-            st.setInt(4, event.getDuration());
-            st.setString(5, event.getLocation());
-            st.setString(6, event.getType().toString());
-            st.setString(7, event.getBooking_type().toString());
-            st.setInt(8, event.getId());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        PreparedStatement st = connection.prepareStatement(updateQuery);
+        st.setString(1, event.getName());
+        st.setString(2, event.getDescription());
+        st.setTimestamp(3, event.getStart());
+        st.setInt(4, event.getDuration());
+        st.setString(5, event.getLocation());
+        st.setString(6, event.getType().toString());
+        st.setString(7, event.getBooking_type().toString());
+        st.setInt(8, event.getId());
     }
 
     public void deleteEvent(int id) throws SQLException {
@@ -182,52 +175,43 @@ public enum AdminDao {
 
     /*METHODS RELATED TO CREW MEMBERS*/
 
-    public void createNewMember(CrewMemberBean crewMember) throws GeneralSecurityException {
+    public void createNewMember(CrewMemberBean crewMember) throws GeneralSecurityException, SQLException {
         String[] passwords = encodeSalt(crewMember.getPassword());
         //Create new account
         String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type, salt) VALUES (?,?, ?, ?, ?,  ?::account_type_enum, ?)";
-        try {
-            PreparedStatement st = connection.prepareStatement(insertAccountQuery);
-            st.setString(1, crewMember.getForename());
-            st.setString(2, crewMember.getSurname());
-            st.setString(3, crewMember.getUsername());
-            st.setString(4, crewMember.getEmailAddress());
-            st.setString(5, passwords[0]);
-            st.setString(6, crewMember.getAccountType().toString());
-            st.setString(7, passwords[1]);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("In insertion of account " + e);
-        }
+
+        PreparedStatement st = connection.prepareStatement(insertAccountQuery);
+        st.setString(1, crewMember.getForename());
+        st.setString(2, crewMember.getSurname());
+        st.setString(3, crewMember.getUsername());
+        st.setString(4, crewMember.getEmailAddress());
+        st.setString(5, passwords[0]);
+        st.setString(6, crewMember.getAccountType().toString());
+        st.setString(7, passwords[1]);
+        st.executeUpdate();
 
         //Get the account's id so that it will be used for the foreign key of crew_member
         int accountId = 0;
         String getAccountId = "SELECT id FROM account WHERE username LIKE ?;";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(getAccountId);
-            st.setString(1, crewMember.getUsername());
-            try (ResultSet resultSet = st.executeQuery()) {
-                if (resultSet.next()) {
+        st = connection.prepareStatement(getAccountId);
+        st.setString(1, crewMember.getUsername());
+        try (ResultSet resultSet = st.executeQuery()) {
+            if (resultSet.next()) {
 
-                    accountId = resultSet.getInt("id");
-                }
+                accountId = resultSet.getInt("id");
             }
-        } catch (SQLException e) {
-            System.out.println("error getting the account id");
         }
 
         //Create crew_member
         String insertCrewQuery = "INSERT INTO crew_member(id, role, team) VALUES(?, ?::role_enum, ?::team_enum)";
-        try {
-            PreparedStatement st = connection.prepareStatement(insertCrewQuery);
-            st.setInt(1, accountId);
-            st.setString(2, crewMember.getRole().toString());
-            st.setString(3, crewMember.getTeam().toString());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("in insertion of crewMember " + e);
-        }
+
+        st = connection.prepareStatement(insertCrewQuery);
+        st.setInt(1, accountId);
+        st.setString(2, crewMember.getRole().toString());
+        st.setString(3, crewMember.getTeam().toString());
+        st.executeUpdate();
+
     }
 
     public String getAllCrewMembers() throws SQLException {
@@ -252,11 +236,9 @@ public enum AdminDao {
     public void changeRole(int memberID, String newRole) throws SQLException {
         String getRole = "SELECT role FROM shotmaniacs1.crew_member WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(getRole);
-        try {
-            statement.setInt(1, memberID);
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
+
+        statement.setInt(1, memberID);
+
 
         ResultSet rs = statement.executeQuery();
 
@@ -270,24 +252,19 @@ public enum AdminDao {
                 "FROM shotmaniacs1.account " +
                 "WHERE role = ?::role_enum AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
-        try {
-            st.setString(1, newRole);
-            st.setString(2, crew_role);
-            st.setInt(3, memberID);
-            st.executeQuery();
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
+
+        st.setString(1, newRole);
+        st.setString(2, crew_role);
+        st.setInt(3, memberID);
+        st.executeQuery();
     }
 
     public void changeTeam(int id, String newTeam) throws SQLException {
         String getRole = "SELECT team FROM shotmaniacs1.crew_member WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(getRole);
-        try {
-            statement.setInt(1, id);
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
+
+        statement.setInt(1, id);
+
 
         ResultSet rs = statement.executeQuery();
 
@@ -300,14 +277,12 @@ public enum AdminDao {
                 "SET team = ?::team_enum " +
                 "FROM shotmaniacs1.account " +
                 "WHERE team = ?::team_enum AND crew_member.id = ? AND account.type = 'crew_member';";
-        try (PreparedStatement st = connection.prepareStatement(query)) {
-            st.setString(1, newTeam);
-            st.setString(2, crew_team);
-            st.setInt(3, id);
-            st.executeQuery();
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setString(1, newTeam);
+        st.setString(2, crew_team);
+        st.setInt(3, id);
+        st.executeQuery();
+
     }
 
 
@@ -368,8 +343,8 @@ public enum AdminDao {
                 From account
                 Where id = ?;
                 """;
-        PreparedStatement st = connection.prepareStatement(insertQuery) ;
-        st.setInt(1,accountId);
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1, accountId);
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
             String result = rs.getString(1);
@@ -384,14 +359,14 @@ public enum AdminDao {
 
     public String[] getEmailsOfEvent(int id) throws SQLException {
         String query = """
-                   SELECT ARRAY_AGG(a.email_address) AS email_addresses
-                             FROM account a, event e, event_enrollment ee
-                             WHERE (
-                               a.id = ee.crew_member_id AND
-                               ee.event_id = e.id AND
-                               e.id = ?
-                             )
-                   """;
+                SELECT ARRAY_AGG(a.email_address) AS email_addresses
+                          FROM account a, event e, event_enrollment ee
+                          WHERE (
+                            a.id = ee.crew_member_id AND
+                            ee.event_id = e.id AND
+                            e.id = ?
+                          )
+                """;
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, id);
         ResultSet rs = st.executeQuery();

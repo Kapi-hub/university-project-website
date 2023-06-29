@@ -52,8 +52,6 @@ function addEvent() {
     const eventPlanner = eventCrewQuery.children[13].value;
     const eventVideographer = eventCrewQuery.children[16].value;
 
-    console.log("producer id" + selectedCrewMemberId);
-
     var data = {
         clientBean: {
             forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
@@ -81,7 +79,6 @@ function addEvent() {
 
 
     }
-    console.log(JSON.stringify(data));
     $.ajax({
         url: `/api/admin/crewAssignments/newEvent`,
         method: "POST",
@@ -165,7 +162,6 @@ function addCrewMember() {
         team: permissionType,
     }
 
-    console.log(data);
     $.ajax({
         url: "/api/admin/crewAssignments/newMember",
         method: "POST",
@@ -427,7 +423,6 @@ function changeTeam(memberID) {
     clubButton.onclick = function () {
         selectWord("club");
         team = clubButton.textContent;
-        console.log(team);
     }
     clubItem.appendChild(clubButton);
     teamsList.appendChild(clubItem);
@@ -730,7 +725,6 @@ function getAllEvents() {
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
         .then(responseData => {
             responseData.forEach(event => events.push(event));
-            console.log(responseData);
             responseData.forEach((event) => {
                 const {
                     id, name, description, start, duration, location, production_manager_id, type, booking_type
@@ -740,7 +734,6 @@ function getAllEvents() {
                     forename, surname, emailAddress, phone_number
                 } = event.eventDetails.clients[0]
 
-                console.log("prod" + production_manager_id);
                 const container = document.querySelector('.container.content-container');
 
                 let card = document.createElement("div");
@@ -1011,7 +1004,6 @@ function getAllEvents() {
                 if (production_manager_id != null) {
                     sendHttpRequest('GET', `../api/event/getName/${production_manager_id}`)
                         .then(responseName => {
-                            console.log(responseName[0]);
                             eventProducer.innerHTML = `<div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
                             <div class="text">Event Prod</div>
                             <div class="producer-name">${responseName[0].forename} ${responseName[0].surname} </div>`;
