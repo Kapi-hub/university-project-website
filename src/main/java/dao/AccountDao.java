@@ -113,6 +113,22 @@ public enum AccountDao {
         throw new SQLException("Account not found");
     }
 
+    public String getNamesAsJSON(int accountId) throws SQLException {
+        String query = "SELECT json_agg(json_build_object('forename', forename, 'surname', surname))FROM account WHERE id = ?";
+
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, accountId);
+
+        ResultSet rs = st.executeQuery();
+
+        if (rs.next()) {
+//            return new String[] {rs.getString(1), rs.getString(2)};
+            return rs.getString(1);
+        }
+
+        throw new SQLException("Account not found");
+    }
+
     public String getEmailAddressById(int accountId) throws SQLException {
         String query = "SELECT email_address FROM account WHERE id = ?";
         PreparedStatement st = connection.prepareStatement(query);
