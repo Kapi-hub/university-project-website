@@ -111,17 +111,17 @@ public enum EventDao {
                 rowData.add(EventStatus.toEnum(rs.getString("status")));
                 rsList.add(rowData);
             }
-                if (count == 0) {
-                    return null;
-                }
+            if (count == 0) {
+                return null;
+            }
 
-                EventBean[] events = new EventBean[count];
-                int i = 0;
-                for (ArrayList<Object> row : rsList) {
-                    events[i] = new EventBean((int) row.get(0), (int) row.get(1), (String) row.get(2), (String) row.get(3), (Timestamp) row.get(4), (int) row.get(5), (String) row.get(6), (int) row.get(7), (EventType) row.get(8), (BookingType) row.get(9), (EventStatus) row.get(10));
-                    i++;
-                }
-                return events;
+            EventBean[] events = new EventBean[count];
+            int i = 0;
+            for (ArrayList<Object> row : rsList) {
+                events[i] = new EventBean((int) row.get(0), (int) row.get(1), (String) row.get(2), (String) row.get(3), (Timestamp) row.get(4), (int) row.get(5), (String) row.get(6), (int) row.get(7), (EventType) row.get(8), (BookingType) row.get(9), (EventStatus) row.get(10));
+                i++;
+            }
+            return events;
 
 
         } catch (SQLException e) {
@@ -215,12 +215,13 @@ public enum EventDao {
                 rolesPerId.add(CrewMemberDao.I.getRole(id));
             }
 
-            Map<RoleType, ArrayList<String>> roleMap = new HashMap<>();
+            Map<RoleType, ArrayList<Object[]>> roleMap = new HashMap<>();
             for (int i = 0; i < rolesPerId.size(); i++) {
                 RoleType currentRoletype = rolesPerId.get(i);
-                String currentName = AccountDao.instance.getName(enrolledIds.get(i));
+                int currentId = enrolledIds.get(i);
+                String currentName = AccountDao.instance.getName(currentId);
 
-                ArrayList<String> toBeAssigned;
+                ArrayList<Object[]> toBeAssigned;
 
                 if (roleMap.containsKey(currentRoletype)) {
                     toBeAssigned = roleMap.get(currentRoletype);
@@ -228,21 +229,19 @@ public enum EventDao {
                     toBeAssigned = new ArrayList<>();
                 }
 
-                toBeAssigned.add(currentName);
+                toBeAssigned.add(new Object[] {currentId, currentName});
                 roleMap.put(currentRoletype, toBeAssigned);
             }
             Object[] returnValue = new Object[roleMap.size()];
 
             int i = 0;
             for (RoleType role : roleMap.keySet()) {
-                ArrayList<String> memberArrayList = roleMap.get(role);
-                String[] members = new String[memberArrayList.size()];
+                ArrayList<Object[]> memberArrayList = roleMap.get(role);
+                Object[] members = new Object[memberArrayList.size()];
                 for (int j = 0; j < memberArrayList.size(); j++) {
                     members[j] = memberArrayList.get(j);
                 }
-                Object[] innerObjectArray = new Object[2];
-                innerObjectArray[0] = role;
-                innerObjectArray[1] = members;
+                Object[] innerObjectArray = new Object[] {role, members};
                 returnValue[i] = innerObjectArray;
                 i++;
             }
@@ -375,7 +374,7 @@ public enum EventDao {
         while (rs.next()) {
             String date = rs.getString(2);
             int hours = rs.getInt(1);
-            resultList.add(new Object[] {date, hours});
+            resultList.add(new Object[]{date, hours});
         }
 
         return resultList.size() == 0 ? null : resultList.toArray(new Object[0]);
