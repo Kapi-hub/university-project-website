@@ -6,16 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PageMapping {
-    private static final Map<String, PageInfo> pageMap = new HashMap<>() {
-        @Override
-        public PageInfo get(Object key) { // allow for both "/admin" and "/admin/" to be valid
-            PageInfo pageInfo = super.get(key);
-            if (pageInfo == null) {
-                return super.get(key + "/");
-            }
-            return pageInfo;
-        }
-    };
+    private static final Map<String, PageInfo> pageMap = new HashMap<>();
 
     // place all the page mappings here, fellow teammates ^^
     // key: url, value: resource location and required account type (null if accessible to all)
@@ -38,15 +29,23 @@ public class PageMapping {
     }
 
     public static String getResourceLocation(String url) {
-        PageInfo pageInfo = pageMap.get(url);
+        PageInfo pageInfo = getPageInfo(url);
         return pageInfo == null ? null : pageInfo.resourceLocation();
     }
 
     public static AccountType getRequiredAccountType(String url) {
-        PageInfo pageInfo = pageMap.get(url);
+        PageInfo pageInfo = getPageInfo(url);
         return pageInfo == null ? null : pageInfo.requiredAccountType();
     }
 
     private record PageInfo(String resourceLocation, AccountType requiredAccountType) {
+    }
+
+    private static PageInfo getPageInfo(String key) {
+        PageInfo pageInfo = pageMap.get(key);
+        if (pageInfo == null) {
+            pageInfo = pageMap.get(key + "/");
+        }
+        return pageInfo;
     }
 }
