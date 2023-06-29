@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import models.AccountType;
 
 import java.io.IOException;
@@ -62,7 +63,11 @@ public class StaticAuthenticationFilter implements Filter {
         switch (sessionInvalidReason) {
             case EXPIRED -> servletRes.sendRedirect(loginURL + "sessionExpired=true");
             case NOT_LOGGED_IN -> servletRes.sendRedirect(loginURL + "loginRequired=true");
-            case UNAUTHORIZED -> servletRes.sendError(403, "You don't have the permission to view this page");
+            case UNAUTHORIZED -> {
+                servletRes.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                HttpServletResponseWrapper wrappedResponse = new HttpServletResponseWrapper(servletRes);
+                Custom403Response.writeCustom403Page(wrappedResponse.getWriter());
+            }
         }
     }
 }
