@@ -44,7 +44,7 @@ public enum AdminDao {
     }
 
     public int addEvent(EventBean event) throws SQLException {
-        String query = "INSERT INTO event (client_id, name, description, start, duration, location, type, booking_type) VALUES (?,?,?,?,?,?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
+        String query = "INSERT INTO event (client_id, name, description, start, duration, location, production_manager_id, type, booking_type) VALUES (?,?,?,?,?,?, ?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, event.getClient_id());
         st.setString(2, event.getName());
@@ -52,8 +52,9 @@ public enum AdminDao {
         st.setTimestamp(4, event.getStart());
         st.setInt(5, event.getDuration());
         st.setString(6, event.getLocation());
-        st.setString(7, event.getType().toString());
-        st.setString(8, event.getBooking_type().toString());
+        st.setInt(7, event.getProduction_manager_id());
+        st.setString(8, event.getType().toString());
+        st.setString(9, event.getBooking_type().toString());
 
 
         ResultSet rs = st.executeQuery();
