@@ -229,6 +229,10 @@ function loadAnnouncements() {
         accordionHeader.className = "accordion-header";
         let button = document.createElement("button");
         button.className = "accordion-button collapsed";
+        if (announcement.urgent) {
+            button.classList.add("urgent")
+            button.innerHTML = "URGENT:&ensp;";
+        }
         button.type = "button";
         button.setAttribute("data-bs-toggle", "collapse");
         button.setAttribute("data-bs-target", "#collapse" + announcement.id);
