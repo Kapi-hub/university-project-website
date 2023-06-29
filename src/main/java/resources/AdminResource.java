@@ -198,7 +198,7 @@ public class AdminResource {
             return null;
         }
     }
-    public AccountBean[] getProducersArray() {
+    public String getProducersArray() {
         try {
             return AdminDao.I.getProducersArray();
         }  catch (SQLException e){
