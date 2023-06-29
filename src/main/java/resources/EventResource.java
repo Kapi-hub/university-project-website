@@ -139,10 +139,10 @@ public class EventResource {
     @Path("/getEnrolled")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"crew_member"})
-    public Response getEnrolled(@CookieParam("accountId") String accountIdString) {
+    public Response getEnrolled(@CookieParam("accountId") String accountIdString, @QueryParam("client") int client, @QueryParam("month") int month) {
         EventBean[] events;
         try {
-            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString));
+            events = EventDao.instance.getEnrolledEvents(Integer.parseInt(accountIdString), client, month);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError()
