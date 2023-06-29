@@ -647,6 +647,7 @@ function showChangeRoleModal(id) {
     bootstrapModal.show();
 }
 
+//TODO: debug why it doesnt refresh after clicking on multiple modals
 function showViewCrewsInEventModal(id) {
     viewCrewsInEvent(id);
     const modalElement = document.getElementById("viewCrews");
@@ -681,13 +682,6 @@ function viewCrewsInEvent(eventId) {
     sendHttpRequest('GET', `../api/event/getCrew/${eventId}`)
         .then(responseData => {
             const enrolled = responseData[0].enrolled;
-            console.log(enrolled);
-            console.log(enrolled[0]); // ar trb videographer
-            console.log(enrolled[1]); // ar trebui data handler
-            console.log(enrolled[0][0]); // ar trebui rolul videographer
-            console.log(enrolled[0][1]); // ar trebui array cu billy jeans si 11
-            console.log(enrolled[0][1][0][0]); // ar trebui 11
-            console.log(enrolled[0][1][0][1]); // ar trebui billy jeans
             enrolled.forEach((element) => {
                 let role = element[0];
                 element[1].forEach((member) => {
@@ -695,7 +689,6 @@ function viewCrewsInEvent(eventId) {
                     let name = member[1];
                     const crewRow = document.createElement("div");
                     crewRow.setAttribute("class", "crew-row");
-
                     crewRow.innerHTML = `<span> ${name} ROLE: ${role}</span> <br> <button type="button" class="btn" style="background-color: var(--bs-primary);
             color: #fff; font-weight: 1000" onclick="unrollCrew(${id}, ${eventId})">Remove crew from booking</button>`;
                     modalBody.appendChild(crewRow);
