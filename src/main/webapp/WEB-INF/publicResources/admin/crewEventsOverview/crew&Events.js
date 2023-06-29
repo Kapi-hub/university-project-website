@@ -208,7 +208,7 @@ function getProducers() {
                 id = producer.id;
             };
             //id=`${producer.id}` onclick="function(`+id+`)
-            producerItem.innerHTML = `<span class="producerName">${producer.forename} ${producer.surname}</span>`;
+            producerItem.innerHTML = `<span class="producerName">${escapeHtml(producer.forename)} ${escapeHtml(producer.surname)}</span>`;
 
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
@@ -271,18 +271,18 @@ function getAllMembers() {
 
                 let crewName = document.createElement("div");
                 crewName.setAttribute('class', 'crew-name');
-                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${forename} ${surname}</p>
+                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${escapeHtml(forename)} ${escapeHtml(surname)}</p>
                                         <button class="hrs-booking" onclick="showHoursWorkedModal(${id})"> <ion-icon name="time-outline"></ion-icon></button>`;
 
                 let crewEmail = document.createElement("div");
                 crewEmail.setAttribute('class', 'crew-email');
                 crewEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
-                                        <p>${mail}</p>`;
+                                        <p>${escapeHtml(mail)}</p>`;
 
                 let crewUsername = document.createElement("div");
                 crewUsername.setAttribute('class', 'crew-username');
                 crewUsername.innerHTML = `<ion-icon name="id-card-outline"></ion-icon>
-                                            <p>${username}</p>`;
+                                            <p>${escapeHtml(username)}</p>`;
 
                 let crewTeam = document.createElement("div");
                 crewTeam.setAttribute('class', 'crew-team');
@@ -757,7 +757,7 @@ function getAllEvents() {
                 let eventName = document.createElement("div");
                 eventName.setAttribute('class', 'event-name');
                 eventName.innerHTML = `
-                        <span>${name}</span>
+                        <span>${escapeHtml(name)}</span>
                         <div class="buttons">
                             <ion-icon name="pencil-outline" id="pencil-outline-icon" onclick = "changeDetails(` + id + `)"></ion-icon>
                             <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
@@ -773,19 +773,19 @@ function getAllEvents() {
                 let date = new Date(start);
                 let minutes = date.getMinutes().toString().padStart(2, '0');
                 let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + minutes;
-                dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${dateFormat}</span>`;
+                dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${escapeHtml(dateFormat)}</span>`;
 
                 let eventDuration = document.createElement("li");
                 eventDuration.setAttribute('class', 'duration');
-                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${duration} hours</span>`;
+                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${escapeHtml(duration)} hours</span>`;
 
                 let eventLocation = document.createElement("li");
                 eventLocation.setAttribute('class', 'location');
-                eventLocation.innerHTML = `<ion-icon name="pin-outline"></ion-icon> <span>${location}</span>`;
+                eventLocation.innerHTML = `<ion-icon name="pin-outline"></ion-icon> <span>${escapeHtml(location)}</span>`;
 
                 let eventDescription = document.createElement("li");
                 eventDescription.setAttribute('class', 'location');
-                eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${description}</span>`;
+                eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${escapeHtml(description)}</span>`;
 
                 detailsList.appendChild(dateTime);
                 detailsList.appendChild(eventLocation);
@@ -964,17 +964,17 @@ function getAllEvents() {
                 let clientName = document.createElement("div");
                 clientName.setAttribute('class', 'last-first-name');
                 clientName.innerHTML = `<ion-icon name="person-outline"></ion-icon>
-                                        <p>${forename} ${surname}</p>`;
+                                        <p>${escapeHtml(forename)} ${escapeHtml(surname)}</p>`;
 
                 let clientEmail = document.createElement("div");
                 clientEmail.setAttribute('class', 'email');
                 clientEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
-                                        <p>${emailAddress}</p>`;
+                                        <p>${escapeHtml(emailAddress)}</p>`;
 
                 let clientPhone = document.createElement("div");
                 clientPhone.setAttribute('class', 'phone');
                 clientPhone.innerHTML = `<ion-icon name="call-outline"></ion-icon>
-                                           <p>${phone_number}</p>`;
+                                           <p>${escapeHtml(phone_number)}</p>`;
 
                 clientDetails.appendChild(clientName);
                 clientDetails.appendChild(clientPhone);
