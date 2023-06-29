@@ -1,5 +1,4 @@
 function addEvent() {
-
     //get client Information
     let clientQuery = document.querySelector('#clientInfo');
     const clientFirstName = clientQuery.children[1].value;
@@ -19,9 +18,6 @@ function addEvent() {
     const festival = document.getElementById('festivalBox');
     const product = document.getElementById('productBox');
 
-    const spanElement = document.getElementById('producerName');
-    const spanText = spanElement.textContent;
-    console.log("producer name " + spanText);
 
     let eventType = '';
     if (club_photo.checked) {
@@ -56,21 +52,15 @@ function addEvent() {
     const eventPlanner = eventCrewQuery.children[13].value;
     const eventVideographer = eventCrewQuery.children[16].value;
 
-
-    //TODO: check how to do with the drop down list - how do i extract the name that is selected
-    // const eventProducer;
+    console.log("producer id" + selectedCrewMemberId);
 
     var data = {
         clientBean: {
             forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
         }, eventBean: {
-            name: eventTitle,
-            description: eventDescription,
-            start: eventDateTime,
-            duration: eventDuration,
-            location: eventLocation,
-            type: eventType,
-            booking_type: bookingType
+            name: eventTitle, description: eventDescription, start: eventDateTime, duration: eventDuration,
+             production_manager_id: selectedCrewMemberId,
+            location: eventLocation, type: eventType, booking_type: bookingType
         },
 
         requiredCrewBeans: [{
@@ -91,8 +81,9 @@ function addEvent() {
 
 
     }
+    console.log(JSON.stringify(data));
     $.ajax({
-        url: "a pi/admin/crewAssignments/newEvent",
+        url: `/api/admin/crewAssignments/newEvent`,
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -133,13 +124,13 @@ function addCrewMember() {
 
     //get member's roles
     var roles = '';
-    let photographer = document.querySelector('#photographer input[type="checkbox"]');
-    let videographer = document.querySelector('#videographer input[type="checkbox"]');
-    let producer = document.querySelector('#producer input[type="checkbox"]');
-    let assistant = document.querySelector('#assistant input[type="checkbox"]');
-    let dataHandler = document.querySelector('#dataHandler input[type="checkbox"]');
-    let planner = document.querySelector('#planner input[type="checkbox"]');
-    let editor = document.querySelector('#editor input[type="checkbox"]');
+    let photographer = document.querySelector('#photographer input[type="radio"]');
+    let videographer = document.querySelector('#videographer input[type="radio"]');
+    let producer = document.querySelector('#producer input[type="radio"]');
+    let assistant = document.querySelector('#assistant input[type="radio"]');
+    let dataHandler = document.querySelector('#dataHandler input[type="radio"]');
+    let planner = document.querySelector('#planner input[type="radio"]');
+    let editor = document.querySelector('#editor input[type="radio"]');
 
     if (photographer.checked) {
         roles = photographer.value;
@@ -174,7 +165,7 @@ function addCrewMember() {
         team: permissionType,
     }
 
-    console.log(JSON.stringify(data));
+    console.log(data);
     $.ajax({
         url: "/api/admin/crewAssignments/newMember",
         method: "POST",
@@ -204,8 +195,7 @@ function getProducers() {
             const buttonElement = document.createElement('a');
             producerItem.classList.add('dropdown-item');
             producerItem.onclick = function () {
-                selectCrewMember(producer.forename + ' ' + producer.surname);
-                id = producer.id;
+                selectCrewMember(producer.forename + ' ' + producer.surname, producer.id);
             };
             //id=`${producer.id}` onclick="function(`+id+`)
             producerItem.innerHTML = `<span class="producerName">${producer.forename} ${producer.surname}</span>`;
@@ -243,9 +233,11 @@ function selectWord(name) {
     selectedWord.textContent = name;
 }
 
-function selectCrewMember(name) {
+let selectedCrewMemberId = 0;
+function selectCrewMember(name, id) {
     const selectedCrewMember = document.getElementById('selectedCrewMember');
     selectedCrewMember.textContent = name;
+    selectedCrewMemberId = id;
 }
 
 function getAllMembers() {
@@ -253,7 +245,6 @@ function getAllMembers() {
     sendHttpRequest('GET', "/api/admin/crewAssignments/members")
         .then(responseData => {
             responseData.forEach(member => members.push(member));
-            console.log("response " + responseData);
             responseData.forEach((member) => {
                 const {
                     id, forename, surname, mail, username, role, team
@@ -660,15 +651,14 @@ function showChangeRoleModal(id) {
     bootstrapModal.show();
 }
 
-function showViewCrewsInEventModal() {
-    viewCrewsInEvent();
+function showViewCrewsInEventModal(id) {
+    viewCrewsInEvent(id);
     const modalElement = document.getElementById("viewCrews");
     const bootstrapModal = new bootstrap.Modal(modalElement);
     bootstrapModal.show();
 }
 
 function viewCrewsInEvent(eventId) {
-    //TODO: fetch crews
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
     modal.setAttribute("id", "viewCrews");
@@ -692,16 +682,21 @@ function viewCrewsInEvent(eventId) {
     const modalBody = document.createElement("div");
     modalBody.setAttribute("class", "modal-body");
 
-    const crewRow = document.createElement("div");
-    crewRow.setAttribute("class", "crew-row");
-    crewRow.textContent = "Raluca Gavrila";
-
-    const deleteButton = document.createElement("div");
-    deleteButton.setAttribute("class", "delete-button");
-    //TODO: fix button     //TODO call this: onclick = unrollCrew()
-    // deleteButton.innerHTML = `<button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>`;
-    crewRow.appendChild(deleteButton);
-    modalBody.appendChild(crewRow);
+    sendHttpRequest('GET', `../api/event/getCrew/${eventId}`)
+        .then(responseData => {
+            const enrolled = responseData[0].enrolled;
+            enrolled.forEach((crew_role) => {
+                crew_role.forEach((member => {
+                    const crewRow = document.createElement("div");
+                    crewRow.setAttribute("class", "crew-row");
+                    console.log("how many times do u enter here");
+                    // <button type="button" class="btn" style="background-color: var(--bs-primary);
+                    // color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>
+                    crewRow.innerHTML = `<span> ${member} ROLE: ${crew_role}`;
+                    modalBody.appendChild(crewRow);
+                }))
+            })
+        })
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
@@ -736,7 +731,7 @@ function getAllEvents() {
             responseData.forEach(event => events.push(event));
             responseData.forEach((event) => {
                 const {
-                    id, name, description, start, duration, location, type, booking_type
+                    id, name, description, start, duration, location, production_manager_id, type, booking_type
                 } = event.eventDetails;
 
                 const {
@@ -985,7 +980,7 @@ function getAllEvents() {
                 const requirementsArray = event.eventDetails.requirements;
                 eventStaff.setAttribute('class', 'event-staff');
                 eventStaff.style.cursor = "pointer";
-                eventStaff.setAttribute("onclick", "showViewCrewsInEventModal()");
+                eventStaff.setAttribute("onclick", `showViewCrewsInEventModal(${id})`);
                 eventStaff.innerHTML = '';
                 if (requirementsArray === null) {
                     eventStaff.innerHTML = `<span>There is no crew</span>`
@@ -1030,184 +1025,6 @@ function getAllEvents() {
             console.error("Error fetching events:", error);
         });
 }
-
-
-function changeDetails(eventID) {
-    alert("aaaaaaaaaaaaaaaaa");
-    sendHttpRequest('GET', `/api/admin/crewAssignments/changeEvent/${eventID}`)
-        .then(responseData => {
-            console.log(responseData);
-            const event = {
-                id, name, description, start, duration, location, type, booking_type
-            } = responseData[0]
-            console.log("Se ia ev bine? " + responseData)
-            const modalBody = document.querySelector('.modal-body');
-            let eventInfo = document.createElement("div");
-            eventInfo.setAttribute("class", "eventInfo");
-            eventInfo.setAttribute("id", "eventDetails");
-            eventInfo.innerHTML = ` <label for="eventTitle" class="eventTitleText">Event Title</label>
-                    <input type="text" class="eventTitle" id="editEventTitle" >
-                    <br>
-
-                    <label for="eventDescription" class="eventDescriptionText"> Event Description</label>
-                    <input type="text" class="eventTime" id="editEventDescription" >
-                    <br>
-
-                    <label for="eventDate&Time" class="eventDate&TimeText"> Event Date&Time</label>
-                    <input type="datetime-local" class="eventTime" id="editEventDate_Time">
-                    <br>
-
-                    <label for="eventLocation" class="eventLocationText"> Event Location</label>
-                    <input type="text" class="eventTime" id="editEventLocation">
-                    <br>
-
-                    <label for="eventDuration" class="eventDurationText"> Event Duration</label>
-                    <input type="number" min="0" class="eventTime" id="editEventDuration"
-                           >
-                    <br>
-
-                    <label for="eventType" class="eventTypeText">Event Type</label>
-                    <br>`;
-            // Set the textContent of elements
-            eventInfo.querySelector('#editEventTitle').textContent = event.name;
-            eventInfo.querySelector('#editEventDescription').textContent = event.description;
-            eventInfo.querySelector('#editEventDate_Time').textContent = event.start;
-            eventInfo.querySelector('#editEventLocation').textContent = event.location;
-            eventInfo.querySelector('#editEventDuration').textContent = event.duration;
-            // Set the textContent for eventType
-            let editEventType = document.createElement("div");
-            editEventType.setAttribute("id", "editEventType");
-            editEventType.innerHTML = ` <label class="photoBox">
-                            <input type="radio" name="eventRadio" id="editPhotoBox" value="CLUB_PHOTOGRAPHY">
-                            <span class="checkmark">Club Photography</span>
-                        </label>
-
-                        <label class="festivalBox">
-                            <input type="radio" name="eventRadio" id="editFestivalBox" value="FESTIVAL">
-                            <span class="checkmark">Festival</span>
-                        </label>
-
-                        <label class="productBox">
-                            <input type="radio" name="eventRadio" id="editProductBox" value="PRODUCT_SHOOT">
-                            <span class="checkmark">Product Shoot</span>
-                        </label>`
-
-            if (type === "club_photography") {
-                document.getElementById("editPhotoBox").checked = true;
-            } else if (type === "festival") {
-                document.getElementById("editFestivalBox").checked = true;
-            } else {
-                document.getElementById("editProductBox").checked = true;
-            }
-
-            let editBookingType = document.createElement("div");
-            editBookingType.innerHTML = `<label for="bookingType" class="bookingTypeText">Booking Type</label>
-                    <br>
-                    <label class="photographyBox">
-                            <input type="radio" name="bookingRadio" value="PHOTOGRAPHY" id="editPhotographyBox">
-                            <span class="checkmark">Photography</span>
-                        </label>
-
-                        <label class="filmBox">
-                            <input type="radio" name="bookingRadio" id="editFilmBox" value="FILM">
-                            <span class="checkmark">Film</span>
-                        </label>
-
-                        <label class="marketingBox">
-                            <input type="radio" name="bookingRadio" id="editMarketingBox" value="MARKETING">
-                            <span class="checkmark">Marketing</span>
-                        </label>
-
-                        <label class="otherBox">
-                            <input type="radio" name="bookingRadio" id="editOtherBox" value="OTHER">
-                            <span class="checkmark">Other</span>
-                        </label>`
-            if (booking_type === "photography") {
-                document.getElementById("editPhotographyBox").checked = true;
-
-            } else if (booking_type === "videography") {
-                document.getElementById("editFilmBox").checked = true;
-
-            } else if (booking_type === "marketing") {
-                document.getElementById("editMarkteingBox").checked = true;
-
-            } else {
-                document.getElementById("editOtherBox").checked = true;
-            }
-            // let editEventProducer = document.createElement("div");
-            // let editRequiredCrew = document.createElement("div");
-
-            eventInfo.appendChild(editRequiredCrew);
-            eventInfo.appendChild(editEventProducer);
-            eventInfo.appendChild(editBookingType);
-            eventInfo.appendChild(editEventType);
-            modalBody.appendChild(eventInfo);
-
-        })
-
-    const eventTitle = document.getElementById('eventTitle').value;
-    const eventDescription = document.getElementById('eventDescription').value;
-    const eventDateTime = document.getElementById("eventDate&Time").value;
-    const eventLocation = document.getElementById('eventLocation').value;
-    const eventDuration = document.getElementById('eventDuration').value;
-
-
-    const club_photo = document.getElementById('photoBox');
-    const festival = document.getElementById('festivalBox');
-    const product = document.getElementById('productBox');
-
-    let eventType = '';
-    if (club_photo.checked) {
-        eventType = club_photo.value;
-    } else if (festival.checked) {
-        eventType = festival.value;
-    } else if (product.checked) {
-        eventType = product.value;
-    }
-
-    const photography = document.getElementById('photographyBox');
-    const film = document.getElementById('filmBox');
-    const marketing = document.getElementById('marketingBox');
-    const other = document.getElementById('otherBox');
-
-    let bookingType = '';
-    if (photography.checked) {
-        bookingType = photography.value;
-    } else if (film.checked) {
-        bookingType = film.value;
-    } else if (marketing.checked) {
-        bookingType = marketing.value;
-    } else if (other.checked) {
-        bookingType = other.value;
-    }
-
-    var data = {
-        eventBean: {
-            name: eventTitle,
-            description: eventDescription,
-            start: eventDateTime,
-            duration: eventDuration,
-            location: eventLocation,
-            type: eventType,
-            booking_type: bookingType
-        }
-    }
-    $.ajax({
-        url: "../api/admin/crewAssignments/{eventId}",
-        method: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function () {
-            alert("Event successfully edited!");
-        },
-        error: function () {
-            alert("Error editing this event!");
-
-        }
-    });
-}
-
 
 function deleteEvent(eventID) {
     $.ajax({

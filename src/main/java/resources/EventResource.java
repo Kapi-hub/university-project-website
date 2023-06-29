@@ -109,6 +109,33 @@ public class EventResource {
     }
 
     @GET
+    @Path("/getFromMonthAdmin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public Response getCrewsEventsFromMonth(@QueryParam("month") String QueryDate, @QueryParam("eventId") int id){
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getFromMonth(Timestamp.valueOf(QueryDate + "-01 00:00:00"));
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println("Timestamp: " + QueryDate + "-01 00:00:00");
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] finalBeans = beansToBeans(events);
+        for (EventResponseBean bean : finalBeans) {
+            bean.setCanEnrol(canEnrol(bean.getId(), id));
+            bean.setIsEnrolled(EventDao.instance.isEnrolled(id, bean.getId()));
+        }
+        return Response.ok(finalBeans)
+                .build();
+    }
+
+    @GET
     @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
@@ -161,6 +188,28 @@ public class EventResource {
                 .build();
     }
 
+    @Path("/getCrew/{eventId}")
+    @RolesAllowed("admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public Response getDetailsOfEvent(@PathParam("eventId") int id) {
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getAllDetails(id);
+        } catch (SQLException e) {
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] finalBeans = beansToBeans(events);
+
+        return Response.ok(finalBeans)
+                .build();
+    }
+
     @Path("/getCrewHoursWorked/{memberId}")
     @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
@@ -191,6 +240,13 @@ public class EventResource {
                     .build();
         }
     }
+
+//    @GET
+//    @Path("/getCrew/{eventId}")
+//    @RolesAllowed("admin")
+//    public Object[] getCrewInEven(@PathParam("eventId") int eventId) {
+//        return EventDao.instance.getEnrolledMembers(eventId);
+//    }
 
     private Object[] getMissingCrew(int id) {
         Map<RoleType, Integer> required;
@@ -265,12 +321,7 @@ public class EventResource {
         }
     }
 
-    @GET
-    @Path("/crewAssignments/getCrew/{eventId}")
-    @RolesAllowed("admin")
-    public Object[] getCrewInEvent(@PathParam("eventId") int eventId) {
-        return EventDao.instance.getEnrolledMembers(eventId);
-    }
+
 
     @DELETE
     @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
