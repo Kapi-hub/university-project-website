@@ -1095,9 +1095,10 @@ function crewButton() {
 }
 
 function confirmationToast(id) {
-    let toastDeleteEvent = document.getElementById("deleteEventDialog");
-    toastDeleteEvent.showModal();
-    let deleteButton = document.getElementById('deleteButton')
+    let toastDeleteEvent = document.getElementById("deleteEventsModal");
+    const modal = new bootstrap.Modal(toastDeleteEvent);
+    modal.show();
+    let deleteButton = document.getElementById('confirmButton')
     deleteButton.addEventListener('click', function () {
         deleteEvent(id)
     });

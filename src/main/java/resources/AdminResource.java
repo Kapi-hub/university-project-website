@@ -80,10 +80,9 @@ public class AdminResource {
                 AdminDao.I.addRequirement(required);
             }
             return Response.ok().build();
-        } catch (Exception e) {
-            Response.serverError().build();
+        } catch (SQLException e) {
+            return Response.serverError().build();
         }
-        return null;
     }
 
     @GET

@@ -351,7 +351,7 @@
     </div>
 </div>
 
-<dialog id="deleteEventDialog" class="deleteEventDialog">
+<div class="modal fade" id="deleteEventDialog" class="deleteEventDialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     Do you really want to delete this event?
     <div class="mt-2 pt-2 border-top">
         <form method="dialog">
@@ -359,7 +359,27 @@
             <button type="button" class="closeDialogBttn">Close</button>
         </form>
     </div>
-</dialog>
+</div>
+
+<div class="modal fade" id="deleteEventsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEventModal">Delete event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div>
+                <span>Do you really want to delete this event?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closeBttn" data-bs-dismiss="modal"> Cancel </button>
+                <button type="button" class="confirmBttn" id="confirmButton" data-bs-dismiss="modal"> Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
