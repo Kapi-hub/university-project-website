@@ -348,7 +348,20 @@ public class EventResource {
             System.err.println("An error has occurred when sending the confirmation message.");
             System.err.println(e.getMessage());
         }
+    }
 
+    @GET
+    @Path("/getName/{id}")
+    @RolesAllowed("admin")
+    public String getNameFromId(@PathParam("id") int id) {
+        String name = null;
+        try {
+            name = AccountDao.instance.getNamesAsJSON(id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return name;
+        }
+        return name;
     }
 
     @GET
@@ -360,7 +373,7 @@ public class EventResource {
 
 
     @DELETE
-    @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
+    @Path("/deenrol/{crewId}/{eventId}")
     @RolesAllowed("admin")
     public Response unenrol(@PathParam("crewId") int crewId, @PathParam("eventId") int eventId) {
         if (!EventDao.instance.isEnrolled(crewId, eventId)) {
@@ -381,6 +394,8 @@ public class EventResource {
                     .build();
         }
     }
+
+
 
     private EventResponseBean[] beansToBeans(EventBean[] oldBeans) {
         EventResponseBean[] newBeans = new EventResponseBean[oldBeans.length];

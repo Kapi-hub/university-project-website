@@ -59,7 +59,7 @@ function addEvent() {
             forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
         }, eventBean: {
             name: eventTitle, description: eventDescription, start: eventDateTime, duration: eventDuration,
-             production_manager_id: selectedCrewMemberId,
+            production_manager_id: selectedCrewMemberId,
             location: eventLocation, type: eventType, booking_type: bookingType
         },
 
@@ -234,6 +234,7 @@ function selectWord(name) {
 }
 
 let selectedCrewMemberId = 0;
+
 function selectCrewMember(name, id) {
     const selectedCrewMember = document.getElementById('selectedCrewMember');
     selectedCrewMember.textContent = name;
@@ -714,13 +715,13 @@ function viewCrewsInEvent(eventId) {
 
 function unrollCrew(crewId, eventId) {
     $.ajax({
-            url: `../api/admin/crewAssignments/${crewId}/${eventId}`,
-            method: 'DELETE',
-            success: function () {
-                alert("Successfully unrolled crew from event");
-            }, error: function () {
-                alert("Error unrolling crew from event!");
-            }
+        url: `../api/admin/crewAssignments/${crewId}/${eventId}`,
+        method: 'DELETE',
+        success: function () {
+            alert("Successfully unrolled crew from event");
+        }, error: function () {
+            alert("Error unrolling crew from event!");
+        }
     });
 }
 
@@ -729,6 +730,7 @@ function getAllEvents() {
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
         .then(responseData => {
             responseData.forEach(event => events.push(event));
+            console.log(responseData);
             responseData.forEach((event) => {
                 const {
                     id, name, description, start, duration, location, production_manager_id, type, booking_type
@@ -738,6 +740,7 @@ function getAllEvents() {
                     forename, surname, emailAddress, phone_number
                 } = event.eventDetails.clients[0]
 
+                console.log("prod" + production_manager_id);
                 const container = document.querySelector('.container.content-container');
 
                 let card = document.createElement("div");
@@ -1005,9 +1008,20 @@ function getAllEvents() {
                 }
                 let eventProducer = document.createElement("div");
                 eventProducer.setAttribute('class', 'event-producer');
-                eventProducer.innerHTML = ` <div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
-                <div class="text">Event Prod</div>
-                <div class="producer-name">Antoine Moghadar</div>`;
+                if (production_manager_id != null) {
+                    sendHttpRequest('GET', `../api/event/getName/${production_manager_id}`)
+                        .then(responseName => {
+                            console.log(responseName[0]);
+                            eventProducer.innerHTML = `<div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
+                            <div class="text">Event Prod</div>
+                            <div class="producer-name">${responseName[0].forename} ${responseName[0].surname} </div>`;
+                        })
+                } else {
+                    eventProducer.innerHTML = ` <div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
+                    <div class="text">Event Prod</div>
+                    <div class="producer-name"> - </div>`;
+                }
+
 
                 container.appendChild(card);
                 card.appendChild(cardBody);
@@ -1088,7 +1102,7 @@ function confirmationToast(id) {
 
 function escapeHtml(unsafe) {
     var safe = String(unsafe); // Convert input to a string
-    return safe.replace(/[&<"'>]/g, function(match) {
+    return safe.replace(/[&<"'>]/g, function (match) {
         switch (match) {
             case '&':
                 return '&amp;';

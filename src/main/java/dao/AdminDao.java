@@ -104,6 +104,7 @@ public enum AdminDao {
                                        'start', e.start,
                                        'duration', e.duration,
                                        'location', e.location,
+                                       'production_manager_id', e.production_manager_id,
                                        'type', e.type,
                                        'booking_type', e.booking_type,
                                        'clients', (SELECT json_agg(
