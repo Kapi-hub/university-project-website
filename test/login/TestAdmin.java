@@ -27,12 +27,12 @@ public class TestAdmin {
         assertNotNull(connection);
     }
 
-//    @BeforeEach
-//    public void setCrew() {
-//        crew = new CrewMemberBean(
-//                "Crew", "member", generateRandomString(20), "crew_member123@gmail.com",
-//                RoleType.PHOTOGRAPHER, Team.CORE);
-//    }
+    @BeforeEach
+    public void setCrew() {
+        crew = new CrewMemberBean(
+                "Crew", "member", generateRandomString(20), "crew_member123@gmail.com",
+                RoleType.PHOTOGRAPHER, Team.CORE);
+    }
 
     @Test
     public void addNewCrewMember() throws GeneralSecurityException, SQLException {
