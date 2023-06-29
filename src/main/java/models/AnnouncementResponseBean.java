@@ -11,16 +11,25 @@ public class AnnouncementResponseBean {
     private String title;
     private String body;
     private Timestamp dateTime;
-    private Boolean isPersonal;
+    private boolean isPersonal;
+    private boolean urgent;
 
     public AnnouncementResponseBean() {
     }
 
-    public Boolean getIsPersonal() {
+    public boolean getUrgent() {
+        return urgent;
+    }
+
+    public void setUrgent(boolean urgent) {
+        this.urgent = urgent;
+    }
+
+    public boolean getIsPersonal() {
         return isPersonal;
     }
 
-    public void setIsPersonal(Boolean isPersonal) {
+    public void setIsPersonal(boolean isPersonal) {
         this.isPersonal = isPersonal;
     }
 
