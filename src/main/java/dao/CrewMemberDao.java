@@ -35,6 +35,5 @@ import java.sql.SQLException;
             throw new SQLException("Role not found");
         }
 
-
     }
 
