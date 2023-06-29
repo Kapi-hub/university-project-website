@@ -16,24 +16,6 @@ function enroll(eventId) {
     }));
 }
 
-function unenroll(eventId) {
-    const XHR = new XMLHttpRequest();
-    XHR.open("POST", "/api/event/unenroll-self");
-    XHR.setRequestHeader('Content-Type', 'application/json');
-    XHR.withCredentials = true;
-    XHR.addEventListener("load", function () {
-        if (this.status === 200) {
-            updateTaskBar();
-            alert("Unenrolled successfully");
-        } else {
-            alert("An error occurred, unenrolling unsuccessful.");
-        }
-    });
-    XHR.send(JSON.stringify({
-        id: eventId
-    }));
-}
-
 function getFormattedDate(string) {
     return (new Date(string)).toLocaleDateString("en-GB", {
         day: "numeric",
@@ -138,7 +120,12 @@ function getBottomButton(canEnrol, isEnrolled, id) {
     if (canEnrol) {
         return `<br><button class="btn btn-primary" style="background-color: var(--bs-primary)" onclick="enroll(${id})">Enroll</button>`;
     } else if (isEnrolled) {
-        return `<br><button class="btn btn-primary" style="background-color: red" onclick="unenroll(${id})">Unenroll</button>`;
+        return `
+               <br>
+               <button class="btn btn-primary inactive-btn" style="background-color: grey" disabled">
+               You are already enrolled for this event
+               </button>
+               `;
     } else {
         return `
                <br>
@@ -198,9 +185,7 @@ function getHtmlElement(event) {
 
     returnDiv.appendChild(innerDiv);
 
-    if (status !== "done") {
         returnDiv.innerHTML += getBottomButton(canEnrol, isEnrolled, id);
-    }
 
     return returnDiv;
 }

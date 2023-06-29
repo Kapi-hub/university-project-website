@@ -37,22 +37,6 @@ public class EventResource {
     /**
      * In JSON, use syntax:
      * "{
-     * "id": *the event id*
-     * }"
-     */
-    @Path("/unenroll-self")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed("crew_member")
-    public Response unenrollSelf(EventBean event, @CookieParam("accountId") String accountIdString) {
-        System.out.println("Unenrolling self from event " + event.getId());
-        int accountId = Integer.parseInt(accountIdString);
-        return unenrol(accountId, event.getId());
-    }
-
-    /**
-     * In JSON, use syntax:
-     * "{
      * "crewMember": {
      * "id": *the crewMember's account id*
      * },
