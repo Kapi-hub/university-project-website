@@ -318,7 +318,7 @@ function viewHours(memberId) {
 
     const modalBody = document.createElement("div");
     modalBody.setAttribute("class", "modal-body");
-    modalBody.textContent = "View hours worked on bookings"
+    modalBody.innerHTML = `<h5>View hours worked on bookings</h5>`;
 
     let times = [];
     sendHttpRequest('GET', `/api/event/getCrewHoursWorked/${memberId}`)
@@ -681,18 +681,29 @@ function viewCrewsInEvent(eventId) {
     sendHttpRequest('GET', `../api/event/getCrew/${eventId}`)
         .then(responseData => {
             const enrolled = responseData[0].enrolled;
-            enrolled.forEach((crew_role) => {
-                crew_role.forEach((member => {
+            console.log(enrolled);
+            console.log(enrolled[0]); // ar trb videographer
+            console.log(enrolled[1]); // ar trebui data handler
+            console.log(enrolled[0][0]); // ar trebui rolul videographer
+            console.log(enrolled[0][1]); // ar trebui array cu billy jeans si 11
+            console.log(enrolled[0][1][0][0]); // ar trebui 11
+            console.log(enrolled[0][1][0][1]); // ar trebui billy jeans
+            enrolled.forEach((element) => {
+                let role = element[0];
+                element[1].forEach((member) => {
+                    let id = member[0];
+                    let name = member[1];
                     const crewRow = document.createElement("div");
                     crewRow.setAttribute("class", "crew-row");
-                    console.log("how many times do u enter here");
-                    // <button type="button" class="btn" style="background-color: var(--bs-primary);
-                    // color: #fff; font-weight: 1000" onclick="unrollCrew(${crewId}, ${eventId})">Remove crew from booking</button>
-                    crewRow.innerHTML = `<span> ${member} ROLE: ${crew_role}`;
+
+                    crewRow.innerHTML = `<span> ${name} ROLE: ${role}</span> <br> <button type="button" class="btn" style="background-color: var(--bs-primary);
+            color: #fff; font-weight: 1000" onclick="unrollCrew(${id}, ${eventId})">Remove crew from booking</button>`;
                     modalBody.appendChild(crewRow);
-                }))
+                })
+
             })
         })
+
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
@@ -710,7 +721,7 @@ function viewCrewsInEvent(eventId) {
 
 function unrollCrew(crewId, eventId) {
     $.ajax({
-        url: `../api/admin/crewAssignments/${crewId}/${eventId}`,
+        url: `../api/event/deenrol/${crewId}/${eventId}`,
         method: 'DELETE',
         success: function () {
             alert("Successfully unrolled crew from event");

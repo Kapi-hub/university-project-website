@@ -22,7 +22,6 @@ import java.util.Set;
 
 import static dao.MailService.MAIL;
 
-import static dao.MailService.MAIL;
 
 @Path("/event")
 public class EventResource {
@@ -387,6 +386,7 @@ public class EventResource {
                         .build();
             }
             EventDao.instance.removeEnrolment(crewId, eventId);
+            sendNotificationToCrewMember(crewId);
             return Response.ok()
                     .build();
         } catch (SQLException e) {
