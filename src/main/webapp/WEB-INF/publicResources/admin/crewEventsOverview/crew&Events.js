@@ -1268,3 +1268,23 @@ function confirmationToast(id) {
         deleteEvent(id)
     });
 }
+
+function escapeHtml(unsafe) {
+    var safe = String(unsafe); // Convert input to a string
+    return safe.replace(/[&<"'>]/g, function(match) {
+        switch (match) {
+            case '&':
+                return '&amp;';
+            case '<':
+                return '&lt;';
+            case '>':
+                return '&gt;';
+            case '"':
+                return '&quot;';
+            case "'":
+                return '&#039;';
+            default:
+                return match;
+        }
+    });
+}
