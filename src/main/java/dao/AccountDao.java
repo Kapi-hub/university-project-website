@@ -112,4 +112,12 @@ public enum AccountDao {
 
         throw new SQLException("Account not found");
     }
+
+    public String getEmailAddressById(int accountId) throws SQLException {
+        String query = "SELECT email_address FROM account WHERE id = ?";
+        PreparedStatement st = connection.prepareStatement(query);
+        st.setInt(1, accountId);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) return rs.getString(1);
+        throw new SQLException("Account not found, so no email address found either.");}
 }

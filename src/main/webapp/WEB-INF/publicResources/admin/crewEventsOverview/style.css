@@ -383,9 +383,11 @@
     margin: 0 !important;
     padding-left: 5px;
     flex-grow: 1;
-    overflow: scroll;
     white-space: nowrap;
-    text-overflow: clip ellipsis;
+    /* Those two go together, and they make the cards to look very ugly ;
+    They put scrollbars on each line, even if it doesn't overflow. */
+    /*overflow: scroll;*/
+    /*text-overflow: clip ellipsis;*/
 }
 
 .container.content-container .card .card-body .event-details .event-other-details .location p {
@@ -398,6 +400,8 @@
 .container.content-container .card .card-body .event-staff {
     scroll-snap-type: y mandatory;
     overflow: auto;
+    padding: 0 !important;
+
 }
 .container.content-container .card .card-body .event-staff .slide{
     grid-area: 3 / 3 / 4 / 4;
@@ -560,9 +564,21 @@ body {
     box-sizing: border-box;
     font-family: 'Kiona', sans-serif;
     list-style: none;
+    /* For firefox */
     scrollbar-width: thin;
     scrollbar-color: #000000 #ffffff;
     font-weight: 1000;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--bs-dark);
+    border-radius: 15px;
+    border: 3px solid #ffffff;
 }
 
 p {
