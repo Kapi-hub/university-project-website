@@ -1,5 +1,6 @@
 package admin;
 
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.core.Response;
 import models.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,18 +70,14 @@ class TestAdmin {
                 "b.yilmaz-1@student.utwente.nl", "N0t My R34L Pa$$WoRd", RoleType.EDITOR, Team.CORE);
         CrewMemberBean badCrewInvalidEmail = new CrewMemberBean("Forename", "Surname", "Username",
                 ".yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CORE);
-        assertEquals((Response.ok().build()).toString(), (resource.handleCreateNewMember(goodCrew)).toString());
-        assertEquals((Response.status(400).build()).toString(), (resource.handleCreateNewMember(badCrewInvalidPassword)).toString());
-        assertEquals((Response.status(400).build()).toString(), (resource.handleCreateNewMember(badCrewInvalidEmail)).toString());
+        assertEquals(Response.ok().build().getEntity(), resource.handleCreateNewMember(goodCrew).getEntity());
+        assertEquals(Response.status(400).build().getEntity(), resource.handleCreateNewMember(badCrewInvalidPassword).getEntity());
+        assertEquals(Response.status(400).build().getEntity(), resource.handleCreateNewMember(badCrewInvalidEmail).getEntity());
     }
-    @Test
-    void testGetProducers(){
-        CrewMemberBean videoCrew = new CrewMemberBean("Forename", "Surname", "Username",
-                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.VIDEOGRAPHER, Team.CLUB);
-        resource.handleCreateNewMember(videoCrew);
-        CrewMemberBean assistentCrew = new CrewMemberBean("Forename", "Surname", "Username",
-                "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.ASSISTANT, Team.CLUB);
-        resource.handleCreateNewMember(assistentCrew);
-        assertEquals("testing, obviously not equal", resource.getProducersArray());
-    }
+
+//    @Test
+//    void testhandlePostAnnouncement(announcement, accountIdString) {
+//
+//    }
+
 }

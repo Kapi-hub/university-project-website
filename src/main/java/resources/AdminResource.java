@@ -115,7 +115,7 @@ public class AdminResource {
             } else{
                 return Response.status(400).build();
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
             return Response.serverError().build();
         }
@@ -198,12 +198,5 @@ public class AdminResource {
             return null;
         }
     }
-    public String getProducersArray() {
-        try {
-            return AdminDao.I.getProducersArray();
-        }  catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 }

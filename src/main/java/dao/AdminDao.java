@@ -16,10 +16,9 @@ public enum AdminDao {
         connection = ConnectionFactory.getConnection();
     }
 
-    public void createNewMember(CrewMemberBean crewMember) {
+    public void createNewMember(CrewMemberBean crewMember) throws SQLException {
         //Create new account
         String insertAccountQuery = "INSERT INTO account(forename, surname, username, email_address, password, type) VALUES (?,?, ?, ?, ?, ?::account_type_enum)";
-        try {
             PreparedStatement st = connection.prepareStatement(insertAccountQuery);
             st.setString(1, crewMember.getForename());
             st.setString(2, crewMember.getSurname());
@@ -27,42 +26,28 @@ public enum AdminDao {
             st.setString(4, crewMember.getEmailAddress());
             st.setString(5, crewMember.getPassword());
             st.setString(6, crewMember.getAccountType().toString());
-
             st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("In insertion of account " + e);
-        }
 
         //Get the account's id so that it will be used for the foreign key of crew_member
         int accountId = 0;
         String getAccountId = "SELECT id FROM account WHERE username LIKE ?;";
-
-        try {
-            PreparedStatement st = connection.prepareStatement(getAccountId);
-            System.out.println(crewMember.getUsername());
-            st.setString(1, crewMember.getUsername());
-            try (ResultSet resultSet = st.executeQuery()) {
-                if (resultSet.next()) {
-
-                    accountId = resultSet.getInt("id");
-                    System.out.println(accountId);
-                }
+        PreparedStatement st1 = connection.prepareStatement(getAccountId);
+        System.out.println(crewMember.getUsername());
+        st1.setString(1, crewMember.getUsername());
+        ResultSet resultSet = st.executeQuery();
+            if (resultSet.next()) {
+                accountId = resultSet.getInt("id");
+                System.out.println(accountId);
             }
-        } catch (SQLException e) {
-            System.out.println("error getting the account id");
-        }
+
 
         //Create crew_member
         String insertCrewQuery = "INSERT INTO crew_member(id, role, team) VALUES(?, ?::role_enum, ?::team_enum)";
-        try {
-            PreparedStatement st = connection.prepareStatement(insertCrewQuery);
-            st.setInt(1, accountId);
-            st.setString(2, crewMember.getRole().toString());
-            st.setString(3, crewMember.getTeam().toString());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("in insertion of crewMember " + e);
-        }
+        PreparedStatement st2 = connection.prepareStatement(insertCrewQuery);
+        st2.setInt(1, accountId);
+        st2.setString(2, crewMember.getRole().toString());
+        st2.setString(3, crewMember.getTeam().toString());
+        st2.executeUpdate();
     }
 
     public int addClient(ClientBean client) throws SQLException {
@@ -152,33 +137,7 @@ public enum AdminDao {
                 "WHERE a.id = c.id AND c.role = 'producer'";
         return getSQLString(query);
     }
-    public String getProducersArray() throws SQLException {
-        String query = "SELECT a.forename, a.surname " +
-                "FROM account a, crew_member c " +
-                "WHERE a.id = c.id AND c.role = 'producer'";
-        PreparedStatement st = connection.prepareStatement(query);
-        ResultSet rs = st.executeQuery();
 
-        ArrayList<ArrayList<Object>> rsList = new ArrayList<>();
-
-        int count;
-        for (count = 0; rs.next(); count++) {
-            ArrayList<Object> rowData = new ArrayList<>();
-            rowData.add(rs.getString("forename"));
-            rowData.add(rs.getString("surname"));
-            rsList.add(rowData);
-        }
-        if (count == 0) {
-            return null;
-        }
-        String producers = "";
-        int i = 0;
-        for (ArrayList<Object> row : rsList) {
-            producers = (String) row.get(0) + " " + (String) row.get(1) + "";
-            i++;
-        }
-        return producers;
-    }
 
     /**
      * CREATE OR REPLACE FUNCTION insert_requirements(event_id_input int, crew_size_input int, role_input role_enum) RETURNS void AS
