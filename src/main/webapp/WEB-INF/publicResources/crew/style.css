@@ -238,6 +238,14 @@ doesn't get in the way of building / maintaining the website*/
     display: none;
 }
 
+.urgent.collapsed {
+    background-color: rgba(255, 0, 0, 0.25) !important;
+}
+
+.accordion-button.urgent:not(.collapsed) {
+    background-color: red !important;
+}
+
 /*.content-container .tab_content.tab_past {*/
 /*    overflow: scroll;*/
 /*}*/
@@ -636,7 +644,7 @@ body {
 
 .accordion-button:not(.collapsed) {
     color: white !important;
-    background-color: var(--bs-primary) !important;
+    background-color: var(--bs-primary);
 }
 
 .accordion-button:link, .accordion-button:visited, .accordion-button:hover, .accordion-button:active, .accordion-button:focus {

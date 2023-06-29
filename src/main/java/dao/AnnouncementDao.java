@@ -36,6 +36,7 @@ public enum AnnouncementDao {
             announcement.setBody(rs.getString("body"));
             announcement.setDateTime(rs.getTimestamp("date_time"));
             announcement.setIsPersonal(rs.getInt("recipient") == crewMemberId);
+            announcement.setUrgent(rs.getBoolean("urgent"));
             announcements.add(announcement);
         }
 
