@@ -25,11 +25,20 @@ public class ConnectionFactory {
     private static Connection connection;
     private static boolean connected = false;
 
+    /**
+     * Returns the connection
+     * If not connected, it sets up the connection.
+     * @return the connection
+     */
     public static Connection getConnection() {
         if (!connected) setup();
         return connection;
     }
 
+    /**
+     * Sets up the database connection.
+     * Depending on the USE_PREVIDER_DB variable, it chooses a specific database.
+     */
     public static void setup() {
         String host = USE_PREVIDER_DB ? PREVIDER_HOST : BRONTO_HOST;
         String dbName = USE_PREVIDER_DB ? PREVIDER_DB_NAME : BRONTO_DB_NAME;
@@ -54,10 +63,17 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * A method to read the password safely.
+     * @return the read password
+     */
     private static String readPassword() {
         return System.getenv("DB_PASSWORD");
     }
 
+    /**
+     * Reconnects when something has been changed remotely.
+     */
     public static void reconnect() {
         try {
             connection.close();
@@ -68,10 +84,18 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Setter for the previder bool
+     * @param bool
+     */
     public static void setPreviderBool (boolean bool) {
         USE_PREVIDER_DB = bool;
     }
 
+    /**
+     * Alternative way of password reading.
+     * @param pass the pass it will read.
+     */
     public static void setDbPassword (String pass) {
         password = pass;
     }

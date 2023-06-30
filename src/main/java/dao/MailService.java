@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
+ * Class to give a nice interface to send emails on behalf of shotmaniacs.
  * Singleton pattern.
  */
 public enum MailService {

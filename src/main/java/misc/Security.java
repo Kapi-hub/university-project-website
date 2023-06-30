@@ -8,6 +8,9 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Scanner;
 
+/**
+ * A security class for the project, including cryptography.
+ */
 public class Security {
     private static final int N = 16384; // CPU/memory cost parameter
     private static final int r = 8; // block size parameter
@@ -33,6 +36,14 @@ public class Security {
         return new String[]{encodedHashedPassword, encodedSalt};
     }
 
+    /**
+     * Checks the password for a given set of inputs
+     * @param password the password it needs to check
+     * @param encodedSalt the salt normally stored on the database
+     * @param encodedPassword the encoded password stored on the database
+     * @return true if the password match
+     * @throws GeneralSecurityException when an issue occurs with the cryptography.
+     */
     public static boolean checkPassword(String password, String encodedSalt, String encodedPassword) throws GeneralSecurityException {
         try {
             byte[] storedHashedPassword = Base64.getDecoder().decode(encodedPassword);
@@ -48,6 +59,10 @@ public class Security {
 
     private static final int SESSION_ID_LENGTH = 16;
 
+    /**
+     * A secure way of generation session ID's
+     * @return the generated session ID
+     */
     public static String generateSessionId() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[SESSION_ID_LENGTH];
@@ -56,6 +71,7 @@ public class Security {
         return Base64.getUrlEncoder().encodeToString(randomBytes);
     }
 
+    @Deprecated
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 

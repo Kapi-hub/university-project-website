@@ -27,6 +27,9 @@ import java.sql.Timestamp;
 
 import static dao.MailService.MAIL;
 
+/**
+ * Handles all the communication between front-end and back-end relating to the client.
+ */
 @PermitAll
 @Path("/client")
 public class ClientResource {
@@ -188,7 +191,7 @@ public class ClientResource {
     /**
      * A method that can handle a file input stream from excel and adds uses ClientDAO to add it to the database.
      *
-     * @param excel     the excel file
+     * @param excel the Excel file
      * @param client_id the client_id it belongs to
      * @throws IOException  an error with the communication and file uploading
      * @throws SQLException an error with the database

@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Different type of events in an enum.
+ */
 public enum EventType {
     CLUB_PHOTOGRAPHY,
     FESTIVAL,

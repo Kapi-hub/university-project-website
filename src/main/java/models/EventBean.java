@@ -4,6 +4,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.sql.Timestamp;
 
+/**
+ * An event bean following the database structure.
+ */
 @XmlRootElement(name = "event")
 public class EventBean {
     private int id;
