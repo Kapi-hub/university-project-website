@@ -1,1 +1,0 @@
-sonar-scanner -D"sonar.projectKey=shotmaniacs1" -D"sonar.sources=./src" -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_19599aedf42e11dfb13866f0e03a1e1cbc18f97a" -D"sonar.java.binaries=target/classes/"

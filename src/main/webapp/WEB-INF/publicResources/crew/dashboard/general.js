@@ -1,3 +1,31 @@
+function filterEvents() {
+    $("#applyFilterButton").on("click", function() {
+        // Get the filter values from the text input fields
+        const clientFilterValue = $("#clientFilter").val();
+        const monthFilterValue = parseInt($(".dropdown-item.active").data("month"));
+
+        // Parse the filter values and provide default values of 0 if empty
+        const client = clientFilterValue !== "" ? parseInt(clientFilterValue) : 0;
+        const month = isNaN(monthFilterValue) ? 0 : monthFilterValue;
+
+        // Call fetchEvents with the filter values
+        fetchEvents(client, month);
+    });
+
+    // Add click event listener to month filter dropdown items
+    $(".dropdown-item").on("click", function() {
+        // Remove active class from previous active item and add it to the clicked item
+        $(".dropdown-item.active").removeClass("active");
+        $(this).addClass("active");
+
+        // Update the dropdown button text with the selected month
+        const selectedMonth = $(this).text();
+        $("#monthFilterDropdown").text(selectedMonth);
+    });
+}
+
+filterEvents();
+
 function resizeContainer() {
     let container =
         document.getElementById("welcomeContainer");
@@ -6,8 +34,13 @@ function resizeContainer() {
 
 let eventMap = new Map();
 
-function fetchEvents() {
-    fetch("/api/event/getEnrolled", {
+function fetchEvents(client, month) {
+    const params = new URLSearchParams();
+    params.set("client", client);
+    params.set("month", month);
+
+    const url = `/api/event/getEnrolled?${params.toString()}`;
+    fetch(url, {
         method: "GET",
         headers: {
             "Accept": "application/json"
@@ -38,7 +71,7 @@ function fetchEvents() {
     });
 }
 
-fetchEvents();
+fetchEvents(0,0);
 
 if (isFromLogin()) {
     const nameContainer = document.getElementsByClassName("welcomeMessageName");
@@ -196,6 +229,10 @@ function loadAnnouncements() {
         accordionHeader.className = "accordion-header";
         let button = document.createElement("button");
         button.className = "accordion-button collapsed";
+        if (announcement.urgent) {
+            button.classList.add("urgent")
+            button.innerHTML = "URGENT:&ensp;";
+        }
         button.type = "button";
         button.setAttribute("data-bs-toggle", "collapse");
         button.setAttribute("data-bs-target", "#collapse" + announcement.id);

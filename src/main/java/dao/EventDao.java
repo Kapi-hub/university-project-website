@@ -7,6 +7,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -207,12 +208,30 @@ public enum EventDao {
         return null;
     }
 
-    public EventBean[] getEnrolledEvents(int accountId) throws SQLException {
-        String query = "SELECT e.id, e.client_id, e.name, e.description, e.start, e.duration, e.location, e.production_manager_id, e.type, e.booking_type, e.status FROM event e, event_enrollment ee WHERE ee.crew_member_id = ? AND ee.event_id = e.id";
-
+    public EventBean[] getEnrolledEvents(int accountId, int client, int month) throws SQLException {
+        String query = """
+            SELECT e.id, e.client_id, e.name, e.description, e.start, e.duration, 
+            e.location, e.production_manager_id, e.type, e.booking_type, e.status 
+            FROM event e, event_enrollment ee 
+            WHERE 
+              ee.crew_member_id = ? AND 
+              ee.event_id = e.id
+            """;
+        List<Integer> params = new ArrayList<>();
+        params.add(accountId);
+        if (client != 0) {
+            query += " AND e.client_id = ?";
+            params.add(client);
+        }
+        if (month != 0) {
+            query += " AND EXTRACT(MONTH FROM e.start) = ?";
+            params.add(month);
+        }
         PreparedStatement st = connection.prepareStatement(query);
-        st.setInt(1, accountId);
-
+        int index = 1;
+        for (int param : params) {
+            st.setInt(index++, param);
+        }
         ResultSet rs = st.executeQuery();
 
         ArrayList<EventBean> eventList = new ArrayList<>();
@@ -230,7 +249,8 @@ public enum EventDao {
             BookingType booking_type = BookingType.toEnum(rs.getString("booking_type"));
             EventStatus status = EventStatus.toEnum(rs.getString("status"));
 
-            eventList.add(new EventBean(id, client_id, name, description, start, duration, location, production_manager_id, type, booking_type, status));
+            eventList.add(new EventBean(id, client_id, name, description, start, duration, location,
+                    production_manager_id, type, booking_type, status));
         }
 
         EventBean[] returnValue = new EventBean[eventList.size()];
