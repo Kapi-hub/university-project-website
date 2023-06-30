@@ -14,6 +14,13 @@ import models.AccountType;
 import java.io.IOException;
 import java.security.Principal;
 
+/**
+ * Class to handle the authentication of requests to the api
+ * It uses the Jax-RS ContainerRequestFilter interface to intercept requests
+ * It is annotated with @Provider to register it as a provider
+ * It is annotated with @Priority to give it a higher priority than the other filters
+ * It is needed for the @RolesAllowed annotation
+ */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class JerseyAuthenticationFilter implements ContainerRequestFilter {
@@ -21,6 +28,13 @@ public class JerseyAuthenticationFilter implements ContainerRequestFilter {
     @Context
     private HttpHeaders headers;
 
+    /**
+     * Method to handle the authentication of requests to the api
+     * It checks the sessionId and accountId cookies to determine the account type of the user
+     * If the sessionId is invalid, the user is treated as a client
+     * This account type is then stored in the request context of the request
+     * @param requestContext the request context
+     */
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         Cookie sessionIdCookie = headers.getCookies() != null ? headers.getCookies().get("sessionId") : null;
