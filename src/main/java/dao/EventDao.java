@@ -482,7 +482,8 @@ public enum EventDao {
                     e.start < NOW() AND
                     m.id = e.id
                 )
-                GROUP BY (m.month, m.year)""";
+                GROUP BY (m.month, m.year)
+                ORDER BY m.year DESC, m.month DESC""";
 
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, crewId);

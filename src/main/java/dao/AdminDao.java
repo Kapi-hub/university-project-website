@@ -19,7 +19,6 @@ public enum AdminDao {
     AdminDao() {
         connection = ConnectionFactory.getConnection();
     }
-
     /*METHODS RELATED TO EVENTS*/
 
     /**
@@ -28,6 +27,7 @@ public enum AdminDao {
      * @return the client_id
      * @throws SQLException error when working with SQL
      */
+
     public int addClient(ClientBean client) throws SQLException {
         String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -93,70 +93,89 @@ public enum AdminDao {
                 required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
     }
 
+
+    public void addRequirement(List<RequiredCrewBean> required) throws SQLException {
+        for (RequiredCrewBean requiredCrewBean : required) {
+//            String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
+            PreparedStatement st = connection.prepareStatement("SELECT insert_requirements(?, ?, ?::role_enum)" );
+            st.setInt(1, requiredCrewBean.getEvent_id());
+            st.setInt(2, requiredCrewBean.getCrew_size());
+            st.setString(3, requiredCrewBean.getRole().toString());
+            st.executeUpdate();
+        }
+    }
+
+
+    public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
+        if (announcement.getRecipient() == 0 && !announcement.isUrgent()){
+            String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.executeUpdate();
+
+        }
+        else if (announcement.getRecipient() != 0 && !announcement.isUrgent()){
+        String insertQuery = "INSERT INTO announcement(announcer_id,title,body,recipient) VALUES (?,?,?,?)";
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1, announcement.getAnnouncer());
+        st.setString(2, announcement.getTitle());
+        st.setString(3, announcement.getBody());
+        st.setInt(4, announcement.getRecipient());
+        st.executeUpdate();
+        }
+        else if (announcement.getRecipient() == 0 && announcement.isUrgent()){
+            String insertQuery = "INSERT INTO announcement(announcer_id,title,body,urgent) VALUES (?,?,?,true)";
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.executeUpdate();
+        }
+        else {
+            String insertQuery = "INSERT INTO announcement(announcer_id,title,body,recipient,urgent) VALUES (?,?,?,?,true)";
+            PreparedStatement st = connection.prepareStatement(insertQuery);
+            st.setInt(1, announcement.getAnnouncer());
+            st.setString(2, announcement.getTitle());
+            st.setString(3, announcement.getBody());
+            st.setInt(4, announcement.getRecipient());
+            st.executeUpdate();
+        }
+    }
+
     /**
      * This method fetches the events that need crew to be assigned
      * @return a String with all the results
      * @throws SQLException
      */
-
     public String getNotFullEvents() throws SQLException {
-        String insertQuery = """
-                SELECT e.id, e.name 
+        String insertQuery =
+                """
+                SELECT json_agg(DISTINCT jsonb_build_object(
+                        'event_id', e.id,
+                        'event_title', e.name
+                    )) AS result
                 FROM event e
-                JOIN event_requirement er ON e.id = er.event_id
-                LEFT JOIN (
+                         JOIN event_requirement er ON e.id = er.event_id
+                         LEFT JOIN (
                     SELECT event_id, COUNT(*) AS enrollments
                     FROM event_enrollment
                     GROUP BY event_id
                 ) ee ON e.id = ee.event_id
-                WHERE (ee.enrollments < er.crew_size OR ee.enrollments IS NULL)
+                WHERE (ee.enrollments < (
+                    SELECT SUM(crew_size)
+                    FROM event_requirement
+                    WHERE event_id = e.id
+                    GROUP BY ee.event_id
+                ) OR ee.enrollments IS NULL)
                   AND e.id IS NOT NULL
-                  AND e.name IS NOT NULL;
-                """;
+                  AND e.name IS NOT NULL
+                  AND e.status != 'to do';
+                        """;
         return getSQLString(insertQuery);
     }
 
-    /**
-     * This method fetches all the events from the database
-     * @return a String with all the events put in a JSON
-     * @throws SQLException
-     */
-    public String getLatestEvent() throws SQLException {
-        String insertQuery = """
-                SELECT json_agg(
-                               json_build_object(
-                                       'eventDetails', json_build_object(
-                                       'id', e.id,
-                                       'name', e.name,
-                                       'description', e.description,
-                                       'start', e.start,
-                                       'duration', e.duration,
-                                       'location', e.location,
-                                       'production_manager_id', e.production_manager_id,
-                                       'type', e.type,
-                                       'booking_type', e.booking_type,
-                                       'clients', (SELECT json_agg(
-                                                                  json_build_object(
-                                                                          'forename', a.forename,
-                                                                          'surname', a.surname,
-                                                                          'emailAddress', a.email_address,
-                                                                          'phone_number', c.phone_number
-                                                                      ))
-                                                   FROM account a
-                                                            JOIN client c ON a.id = c.id
-                                                   WHERE a.type = 'client'
-                                                     AND c.id = e.client_id),
-                                       'requirements',
-                                       (SELECT json_agg(json_build_object('role', role, 'crew_size', crew_size)) AS json_data
-                                        FROM event_requirement r
-                                        WHERE e.id = r.event_id
-                                        GROUP BY r.event_id)
-                ))
-                           ) AS result
-                FROM event e
-                 """;
-        return getSQLString(insertQuery);
-    }
 
     /**
      * This method returns all the event details based on an id
@@ -342,15 +361,7 @@ public enum AdminDao {
     }
 
 
-    /*METHODS RELATED TO ANNOUNCEMENTS*/
-    public void addAnnouncement(AnnouncementBean announcement) throws SQLException {
-        String insertQuery = "INSERT INTO announcement(announcer_id,title,body) VALUES (?,?,?)";
-        PreparedStatement st = connection.prepareStatement(insertQuery);
-        st.setInt(1, announcement.getAnnouncer());
-        st.setString(2, announcement.getTitle());
-        st.setString(3, announcement.getBody());
-        st.executeUpdate();
-    }
+
 
 
     /**
@@ -366,20 +377,37 @@ public enum AdminDao {
                     'announcement_body', subquery.body,
                     'announcement_timestamp', subquery.date_time,
                     'recipient', subquery.recipient,
+                    'urgency',subquery.urgent,
                     'announcer', json_build_object(
                         'forename', subquery.forename,
                         'surname', subquery.surname
                     )
                 )) AS result
                 FROM (
-                    SELECT ann.id, ann.title, ann.body, ann.date_time, a.forename, a.surname ,ann.recipient
+                    SELECT ann.id, ann.title, ann.body, ann.date_time, ann.urgent, a.forename, a.surname ,ann.recipient
                     FROM announcement ann
                     JOIN account a ON ann.announcer_id = a.id
                     ORDER BY ann.id DESC
-                    LIMIT 10
                 ) subquery;
                 """;
 
+        return getSQLString(insertQuery);
+    }
+
+    public String getIncomingEvents() throws SQLException {
+        String insertQuery = """
+                SELECT json_agg(json_build_object(
+                        'name',name,
+                        'id',id,
+                        'description',description,
+                        'start',start,
+                        'duration',duration,
+                        'type',type
+                    )
+                           )AS result
+                From event
+                WHERE status = 'to do'
+                    """;//TODO make it show latest as group by order by won't give one row
         return getSQLString(insertQuery);
     }
 
@@ -415,8 +443,8 @@ public enum AdminDao {
                 From account
                 Where id = ?;
                 """;
-        PreparedStatement st = connection.prepareStatement(insertQuery);
-        st.setInt(1, accountId);
+        PreparedStatement st = connection.prepareStatement(insertQuery) ;
+        st.setInt(1,accountId);
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
             String result = rs.getString(1);
@@ -453,6 +481,92 @@ public enum AdminDao {
             return (String[]) arr.getArray();
         }
         return null;
+    }
+
+    public String getEvent(int id) throws SQLException {
+        String insertQuery = """
+               SELECT JSON_BUILD_OBJECT(
+               'eventTitle', name,
+               'eventDescription', description,
+               'eventDateTime', start,
+               'eventDuration', duration,
+               'eventLocation', location,
+               'eventType', type::text,
+               'bookingType', booking_type::text
+           ) AS json_data
+            FROM shotmaniacs1.event
+            WHERE id = ?;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1,id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()){
+            return rs.getString(1);
+        }
+        return null;
+    }
+
+    public String getCrewReq(int id) throws SQLException {
+        String insertQuery = """
+                SELECT JSON_AGG(json_data) AS json_result 
+                FROM (
+                       SELECT
+                       JSON_BUILD_OBJECT(
+                               'videographer', SUM(CASE WHEN role = 'videographer' THEN crew_size ELSE 0 END),
+                               'assistant', SUM(CASE WHEN role = 'assistant' THEN crew_size ELSE 0 END),
+                               'photographer', SUM(CASE WHEN role = 'photographer' THEN crew_size ELSE 0 END),
+                               'producer', SUM(CASE WHEN role = 'producer' THEN crew_size ELSE 0 END),
+                               'planner', SUM(CASE WHEN role = 'planner' THEN crew_size ELSE 0 END),
+                               'data_handler', SUM(CASE WHEN role = 'data_handler' THEN crew_size ELSE 0 END),
+                               'editor', SUM(CASE WHEN role = 'editor' THEN crew_size ELSE 0 END)
+                       ) AS json_data
+                       FROM event_requirement
+                       WHERE event_id = ?
+                   ) AS subquery;
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1,id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()){
+            return rs.getString(1);
+        }
+        return null;
+    }
+
+    public String getEnrolledCrew(int id) throws SQLException {
+        String insertQuery= """
+        SELECT JSON_AGG(json_data)
+        FROM (
+                SELECT JSON_BUILD_OBJECT(
+                        'id', crew_member.id,
+                        'name', forename,
+                        'lastName', surname,
+                        'role', crew_member.role
+                ) AS json_data
+                FROM shotmaniacs1.crew_member
+                INNER JOIN event_enrollment ON crew_member.id = event_enrollment.crew_member_id
+                JOIN account ON account.id = crew_member.id
+                WHERE account.id = crew_member.id
+                AND event_id = ?
+        ) AS subquery
+        """;
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1,id);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) return rs.getString(1);
+        return null;
+    }
+
+    public void toInProgress(int id) throws SQLException {
+        String insertQuery = """
+                UPDATE event
+                set status ='review'
+                WHERE id = ?
+                """;
+        PreparedStatement st = connection.prepareStatement(insertQuery);
+        st.setInt(1,id);
+        st.executeUpdate();
+
     }
 }
 

@@ -229,18 +229,22 @@ function loadAnnouncements() {
         accordionHeader.className = "accordion-header";
         let button = document.createElement("button");
         button.className = "accordion-button collapsed";
-        if (announcement.urgent) {
-            button.classList.add("urgent")
-            button.innerHTML = "URGENT:&ensp;";
-        }
         button.type = "button";
         button.setAttribute("data-bs-toggle", "collapse");
         button.setAttribute("data-bs-target", "#collapse" + announcement.id);
         button.setAttribute("aria-expanded", "false");
         button.setAttribute("aria-controls", "collapse" + announcement.id);
+        if (announcement.urgent) {
+            let urgentTag = document.createElement("span");
+            urgentTag.classList.add("urgent")
+            urgentTag.textContent = "Urgent";
+            button.appendChild(urgentTag);
+            button.innerHTML += "&ensp;";
+        }
         let b = document.createElement("b");
         b.textContent = announcement.title;
         let i = document.createElement("i");
+        i.className = "announcer";
         i.textContent = announcement.announcer;
         button.appendChild(b);
         button.innerHTML += "&ensp;-&ensp;";
@@ -250,10 +254,10 @@ function loadAnnouncements() {
             personalTag.classList.add("personalTag")
             personalTag.textContent = "Personal Message";
             button.appendChild(personalTag);
+            button.innerHTML += "&ensp;";
         }
         let date = document.createElement("span");
         date.textContent = getFormattedDate(announcement.dateTime) + " " + getFormattedTime(announcement.dateTime);
-        date.classList.add("announcement-date-span")
         button.appendChild(date);
         accordionHeader.appendChild(button);
         accordionItem.appendChild(accordionHeader);
