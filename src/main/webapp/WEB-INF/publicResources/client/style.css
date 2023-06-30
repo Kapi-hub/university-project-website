@@ -49,11 +49,8 @@ nav {
 
 .sub-title {
     font-size: 3rem;
-    font-style: italic;
     text-align: center;
     animation: movingSubTitle 1.5s;
-
-
 }
 .heading {
     font-size: 2rem;
@@ -61,8 +58,8 @@ nav {
     text-align: center;
 }
 .paragraph {
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: 1.2rem;
+    font-weight: 70;
     text-align: center;
 
 }
