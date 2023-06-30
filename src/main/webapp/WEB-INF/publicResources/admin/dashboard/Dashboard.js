@@ -52,7 +52,7 @@ function escapeHtml(unsafe) {
     });
 }
 
-function sendHttpRequest(method, url, data) {
+function sendHttpRequest(method, url, data){
     return new Promise(function (resolve, reject) {
             let XHR = new XMLHttpRequest();
 

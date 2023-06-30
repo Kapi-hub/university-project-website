@@ -1,3 +1,6 @@
+# If it doesn't work, then they were already tested, such that the DELETE functions
+# already deleted the id that was given as a param.
+
 ### LOGIN
 POST http://localhost:8080/api/login/submit-form
 Content-Type: application/json
@@ -68,5 +71,57 @@ Content-Type: application/json
 GET http://localhost:8080/api/admin/crewAssignments/newEvent
 Accept: application/json
 
-###
-PUT http://localhost:8080/api/admin/crewAssignments/changeTeam/359/core
+### Fetch worked hours for specific crew member; first member id
+GET http://localhost:8080/api/event/getCrewHoursWorked/384
+Accept: application/json
+
+### Fetch crew members to show in specific event; first event id
+GET http://localhost:8080/api/event/getCrew/101
+Accept: application/json
+
+### Fetch events from DB
+GET http://localhost:8080/api/admin/crewAssignments/bookings
+Accept: application/json
+
+### Fetch name of event production manager; first production manager id
+GET http://localhost:8080/api/event/getName/364
+Accept: application/json
+
+### Update event's team; first member id; second team name
+PUT http://localhost:8080/api/admin/crewAssignments/changeTeam/384/club
+Content-Type: application/json
+
+### De-enrolls member from team
+DELETE http://localhost:8080/api/event/deenrol/180/101
+
+### Deletes events; first event id
+DELETE http://localhost:8080/api/admin/crewAssignments/deleteEvent/101
+
+### Creates/=Saves new announcement
+POST http://localhost:8080/api/admin/newAnnouncement
+Content-Type: application/json
+
+{
+  "title": "Title of announcement",
+  "body": "From testing.http",
+  "recipient": "384"
+}
+
+### Fetches name of event
+GET http://localhost:8080/api/admin/crewReq
+Accept: application/json
+
+### Fetches the user
+GET http://localhost:8080/api/admin/user
+Accept: application/json
+
+### Fetches the announcements
+GET http://localhost:8080/api/admin/announcements
+Accept: application/json
+
+### Fetches events
+GET http://localhost:8080/api/admin/events
+Accept: application/json
+
+
+
