@@ -2,6 +2,7 @@ package dao;
 import misc.ConnectionFactory;
 import models.*;
 
+import java.security.GeneralSecurityException;
 import java.sql.*;
 
 import static misc.Security.encodeSalt;

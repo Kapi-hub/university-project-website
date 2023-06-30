@@ -304,10 +304,6 @@ public class EventResource {
         }
     }
 
-    @DELETE
-    @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
-    @RolesAllowed("admin")
-    public Response unenrol(@PathParam("crewId") int crewId, @PathParam("eventId") int eventId) {
     private void sendNotificationToCrewMember(int account_id) {
         String recipient;
         try {

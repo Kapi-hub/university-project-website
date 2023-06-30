@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.Response;
 import models.*;
 import models.AnnouncementBean;
 import models.CrewMemberBean;
->>>>>>>>> Temporary merge branch 2
 
 import javax.mail.MessagingException;
 import java.io.IOException;
