@@ -512,11 +512,15 @@ body {
     margin-bottom: 10px;
 }
 
-.inputField {
+.inputField, .inputFieldContainer {
     float: right;
     width: 330px;
     border-radius: 100px;
-    padding: 0 4px 0 12px;
+    /*padding: 0 4px 0 12px;*/
+}
+
+.inputFieldContainer {
+    margin-bottom: 10px;
 }
 
 .collapse-button {
@@ -550,7 +554,7 @@ body {
     margin-left: auto;
     padding: 0 4px 1px 4px;}
 
-.closeBttn, .actualDelete{
+.actualDelete{
     background-color: red;
     border-radius: 10px;
     border-color: red;
