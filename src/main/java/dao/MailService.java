@@ -101,7 +101,7 @@ public enum MailService {
         if (success) {
             sendMessage(recipient, createEmail(subject, body));
         } else {
-            System.err.println("===MAIL=== Cannot send email, because system has not been setup.");
+            System.err.printf("===MAIL=== Cannot send email to %s, because system has not been setup.\n", recipient);
         }
     }
 
