@@ -1,12 +1,13 @@
 package dao;
+
 import misc.ConnectionFactory;
 import models.*;
 
 import java.security.GeneralSecurityException;
 import java.sql.*;
+import java.util.List;
 
 import static misc.Security.encodeSalt;
-import java.util.List;
 
 
 public enum AdminDao {
@@ -391,6 +392,48 @@ public enum AdminDao {
                 ) subquery;
                 """;
 
+        return getSQLString(insertQuery);
+    }
+
+    /**
+     * This method fetches all the events from the database
+     * @return a String with all the events put in a JSON
+     * @throws SQLException
+     */
+    public String getLatestEvent() throws SQLException {
+        String insertQuery = """
+                SELECT json_agg(
+                               json_build_object(
+                                       'eventDetails', json_build_object(
+                                       'id', e.id,
+                                       'name', e.name,
+                                       'description', e.description,
+                                       'start', e.start,
+                                       'duration', e.duration,
+                                       'location', e.location,
+                                       'production_manager_id', e.production_manager_id,
+                                       'type', e.type,
+                                       'booking_type', e.booking_type,
+                                       'clients', (SELECT json_agg(
+                                                                  json_build_object(
+                                                                          'forename', a.forename,
+                                                                          'surname', a.surname,
+                                                                          'emailAddress', a.email_address,
+                                                                          'phone_number', c.phone_number
+                                                                      ))
+                                                   FROM account a
+                                                            JOIN client c ON a.id = c.id
+                                                   WHERE a.type = 'client'
+                                                     AND c.id = e.client_id),
+                                       'requirements',
+                                       (SELECT json_agg(json_build_object('role', role, 'crew_size', crew_size)) AS json_data
+                                        FROM event_requirement r
+                                        WHERE e.id = r.event_id
+                                        GROUP BY r.event_id)
+                ))
+                           ) AS result
+                FROM event e
+                 """;
         return getSQLString(insertQuery);
     }
 
