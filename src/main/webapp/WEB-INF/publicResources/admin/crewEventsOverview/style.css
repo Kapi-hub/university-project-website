@@ -384,9 +384,10 @@
     flex-grow: 1;
     white-space: nowrap;
     /* Those two go together, and they make the cards to look very ugly ;
-    They put scrollbars on each line, even if it doesn't overflow. */
-    /*overflow: scroll;*/
-    /*text-overflow: clip ellipsis;*/
+    They put scrollbars on each line, even if it doesn't overflow.
+    This happens only in google chrome. For firefox, they look nice.*/
+    overflow: scroll;
+    text-overflow: clip ellipsis;
 }
 
 .container.content-container .card .card-body .event-details .event-other-details .location p {

@@ -97,6 +97,7 @@ function addEvent() {
         }
     });
 }
+
 /*
     This method fetches the data from the front-end and sends it to the database
  */
@@ -382,7 +383,7 @@ function viewHours(memberId) {
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
 
-    $(".modal").on("hidden.bs.modal", function(){
+    $(".modal").on("hidden.bs.modal", function () {
         document.body.removeChild(modal);
     });
 }
@@ -513,6 +514,7 @@ function sendNewTeamToDB(memberID, team) {
         }
     )
 }
+
 /*
     This method initializes the modal that is showed for changing the team.
  */
@@ -736,20 +738,28 @@ function viewCrewsInEvent(eventId) {
 
     sendHttpRequest('GET', `../api/event/getCrew/${eventId}`)
         .then(responseData => {
-            const enrolled = responseData[0].enrolled;
-            enrolled.forEach((element) => {
-                let role = element[0];
-                element[1].forEach((member) => {
-                    let id = member[0];
-                    let name = member[1];
-                    const crewRow = document.createElement("div");
-                    crewRow.setAttribute("class", "crew-row");
-                    crewRow.innerHTML = `<span> ${name} ROLE: ${role}</span> <br> <button type="button" class="btn" style="background-color: var(--bs-primary);
-            color: #fff; font-weight: 1000" onclick="unrollCrew(${id}, ${eventId})">Remove crew from booking</button>`;
-                    modalBody.appendChild(crewRow);
+            console.log(responseData);
+            if (responseData[0].enrolled.length !== 0) {
+                const enrolled = responseData[0].enrolled;
+                enrolled.forEach((element) => {
+                    let role = element[0];
+                    element[1].forEach((member) => {
+                        let id = member[0];
+                        let name = member[1];
+                        const crewRow = document.createElement("div");
+                        crewRow.setAttribute("class", "crew-row");
+                        crewRow.innerHTML = `<span> ${name} ROLE: ${role}</span> <br> <button type="button" class="btn" style="background-color: var(--bs-primary);
+                            color: #fff; font-weight: 1000" onclick="unrollCrew(${id}, ${eventId})">Remove crew from booking</button>`;
+                        modalBody.appendChild(crewRow);
+                    })
                 })
-
-            })
+            } else {
+                const crewRow = document.createElement("div");
+                crewRow.setAttribute("class", "crew-row");
+                crewRow.innerHTML = `<span> There are no crew members enrolled in this event</span>`;
+                console.log(crewRow);
+                modalBody.appendChild(crewRow);
+            }
         })
 
 
@@ -766,10 +776,11 @@ function viewCrewsInEvent(eventId) {
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
 
-    $(".modal").on("hidden.bs.modal", function(){
+    $(".modal").on("hidden.bs.modal", function () {
         document.body.removeChild(modal);
     });
 }
+
 /*
     This method is called when a de-enroll button is clicked
  */
@@ -1049,7 +1060,14 @@ function getAllEvents() {
                 eventStaff.setAttribute("onclick", `showViewCrewsInEventModal(${id})`);
                 eventStaff.innerHTML = '';
                 if (requirementsArray === null) {
-                    eventStaff.innerHTML = `<span>There is no crew</span>`
+                    let noCrewTextContainer = document.createElement("div");
+                    noCrewTextContainer.setAttribute('class', 'noCrewTextContainer');
+                    noCrewTextContainer.style.height = "100%";
+                    noCrewTextContainer.style.color = "var(--bs-dark)";
+                    noCrewTextContainer.style.paddingTop = "calc(16vh/3.5)";
+                    noCrewTextContainer.style.textAlign = "center";
+                    noCrewTextContainer.innerHTML = `There is no crew`;
+                    eventStaff.appendChild(noCrewTextContainer);
                 } else {
                     requirementsArray.forEach(requirement => {
                         const {role, crew_size} = requirement;
