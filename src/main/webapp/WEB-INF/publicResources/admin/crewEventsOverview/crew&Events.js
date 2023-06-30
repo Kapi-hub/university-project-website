@@ -470,9 +470,9 @@ function changeTeam(memberID) {
     const bothButton = document.createElement('a');
     bothButton.setAttribute("class", "dropdown-item");
     bothButton.setAttribute("href", "#");
-    bothButton.textContent = "core&club";
+    bothButton.textContent = "core_club";
     bothButton.onclick = function () {
-        selectWord("core&club");
+        selectWord("core_club");
         team = bothItem.textContent;
     }
     bothItem.appendChild(bothButton);
@@ -508,8 +508,6 @@ function sendNewTeamToDB(memberID, team) {
             method: 'PUT',
             success: function () {
                 alert("Successfully changed the team");
-            }, error: function () {
-                alert("Error changing the team");
             }
         }
     )

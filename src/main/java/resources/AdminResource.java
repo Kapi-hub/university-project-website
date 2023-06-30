@@ -32,7 +32,7 @@ public class AdminResource {
         int accountId = Integer.parseInt(accountIdString);
         try {
             return AdminDao.I.getUser(accountId);
-        }catch (SQLException e){
+        } catch (SQLException e){
             System.err.println(e.getMessage());
         }
         return null;

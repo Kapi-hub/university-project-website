@@ -300,7 +300,7 @@ public enum AdminDao {
         st.setString(1, newRole);
         st.setString(2, crew_role);
         st.setInt(3, memberID);
-        st.executeQuery();
+        st.executeUpdate();
     }
 
     /**
@@ -328,7 +328,7 @@ public enum AdminDao {
         st.setString(1, newTeam);
         st.setString(2, crew_team);
         st.setInt(3, id);
-        st.executeQuery();
+        st.executeUpdate();
 
     }
 
