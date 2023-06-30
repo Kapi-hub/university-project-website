@@ -1,5 +1,7 @@
+/*
+    This method fetches the data from the front-end and sends it to the database
+ */
 function addEvent() {
-
     //get client Information
     let clientQuery = document.querySelector('#clientInfo');
     const clientFirstName = clientQuery.children[1].value;
@@ -18,6 +20,7 @@ function addEvent() {
     const club_photo = document.getElementById('photoBox');
     const festival = document.getElementById('festivalBox');
     const product = document.getElementById('productBox');
+
 
     let eventType = '';
     if (club_photo.checked) {
@@ -52,62 +55,35 @@ function addEvent() {
     const eventPlanner = eventCrewQuery.children[13].value;
     const eventVideographer = eventCrewQuery.children[16].value;
 
-
-    //TODO: check how to do with the drop down list - how do i extract the name that is selected
-    // const eventProducer;
-
     var data = {
         clientBean: {
-            forename: clientFirstName,
-            surname: clientLastName,
-            phone_number: clientPhone,
-            emailAddress: clientEmail
-        },
-        eventBean: {
-            name: eventTitle,
-            description: eventDescription,
-            start: eventDateTime,
-            duration: eventDuration,
-            location: eventLocation,
-            type: eventType,
-            booking_type: bookingType
+            forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
+        }, eventBean: {
+            name: eventTitle, description: eventDescription, start: eventDateTime, duration: eventDuration,
+            production_manager_id: selectedCrewMemberId,
+            location: eventLocation, type: eventType, booking_type: bookingType
         },
 
-        requiredCrewBeans: [
-            {
-                crew_size: eventPhotographer,
-                role: "PHOTOGRAPHER"
-            },
-            {
-                crew_size: eventAssistant,
-                role: "ASSISTANT"
-            },
-            {
-                crew_size: eventEditor,
-                role: "EDITOR"
-            },
-            {
-                crew_size: eventDataHandler,
-                role: "DATA_HANDLER"
-            },
-            {
-                crew_size: eventPlanner,
-                role: "PLANNER"
-            },
-            {
-                crew_size: 0,
-                role: "PRODUCER"
-            },
-            {
-                crew_size: eventVideographer,
-                role: "VIDEOGRAPHER"
-            }
-        ]
+        requiredCrewBeans: [{
+            crew_size: eventPhotographer, role: "PHOTOGRAPHER"
+        }, {
+            crew_size: eventAssistant, role: "ASSISTANT"
+        }, {
+            crew_size: eventEditor, role: "EDITOR"
+        }, {
+            crew_size: eventDataHandler, role: "DATA_HANDLER"
+        }, {
+            crew_size: eventPlanner, role: "PLANNER"
+        }, {
+            crew_size: 0, role: "PRODUCER"
+        }, {
+            crew_size: eventVideographer, role: "VIDEOGRAPHER"
+        }]
+
+
     }
-
-    console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: `/api/admin/crewAssignments/newEvent`,
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -116,12 +92,15 @@ function addEvent() {
             alert("Event successfully sent!");
         },
         error: function () {
-            alert("Error creating a new event!");
+            // alert("Error creating a new event!");
 
         }
     });
 }
 
+/*
+    This method fetches the data from the front-end and sends it to the database
+ */
 function addCrewMember() {
     let memberQuery = document.querySelector('#memberInfo');
     const memberFirstName = memberQuery.children[1].value;
@@ -139,25 +118,22 @@ function addCrewMember() {
 
     if (clubTeam.checked) {
         permissionType = clubTeam.value;
-        console.log(permissionType);
     } else if (coreTeam.checked) {
         permissionType = coreTeam.value;
-        console.log(permissionType);
     } else if (clubAndCore.checked) {
         permissionType = clubAndCore.value;
-        console.log(permissionType);
     }
+
 
     //get member's roles
     var roles = '';
-    let photographer = document.querySelector('#photographer input[type="checkbox"]');
-    let videographer = document.querySelector('#videographer input[type="checkbox"]');
-    let producer = document.querySelector('#producer input[type="checkbox"]');
-    let assistant = document.querySelector('#assistant input[type="checkbox"]');
-    let dataHandler = document.querySelector('#dataHandler input[type="checkbox"]');
-    let planner = document.querySelector('#planner input[type="checkbox"]');
-    let editor = document.querySelector('#editor input[type="checkbox"]');
-
+    let photographer = document.querySelector('#photographer input[type="radio"]');
+    let videographer = document.querySelector('#videographer input[type="radio"]');
+    let producer = document.querySelector('#producer input[type="radio"]');
+    let assistant = document.querySelector('#assistant input[type="radio"]');
+    let dataHandler = document.querySelector('#dataHandler input[type="radio"]');
+    let planner = document.querySelector('#planner input[type="radio"]');
+    let editor = document.querySelector('#editor input[type="radio"]');
 
     if (photographer.checked) {
         roles = photographer.value;
@@ -187,13 +163,14 @@ function addCrewMember() {
         emailAddress: memberEmail,
         password: memberPassword,
         accountType: "CREW_MEMBER",
+        salt: memberPassword,
         role: roles,
-        team: permissionType
+        team: permissionType,
     }
 
     console.log(JSON.stringify(data));
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: "/api/admin/crewAssignments/newMember",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -202,13 +179,1031 @@ function addCrewMember() {
             alert("Member successfully sent!");
         },
         error: function () {
-            alert("Error creating a new member!");
+            // alert("Error creating a new member!");
 
         }
 
     });
 }
 
-function getProducers() {
+/*
+    This method shows all the producers fetched from the data base and shows them in a drop-down list
+ */
+// First time page is loaded, the counter is 0
+let producerListOpenerCounter = 0;
 
+function getProducers() {
+    let producers = [];
+    let id = 0;
+
+    if (producerListOpenerCounter === 0) {
+        sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
+            responseData.forEach(producer => producers.push(producer));
+            const producersList = document.querySelector('.dropdown-menu');
+            producers.forEach(producer => {
+                const producerItem = document.createElement('li');
+                const buttonElement = document.createElement('a');
+                producerItem.classList.add('dropdown-item');
+                producerItem.onclick = function () {
+                    selectCrewMember(producer.forename + ' ' + producer.surname, producer.id);
+                };
+                //id=`${producer.id}` onclick="function(`+id+`)
+                producerItem.innerHTML = `<span class="producerName">${escapeHtml(producer.forename)} ${escapeHtml(producer.surname)}</span>`;
+
+                producerItem.appendChild(buttonElement);
+                producersList.appendChild(producerItem);
+            })
+        });
+        producerListOpenerCounter = 1;
+    }
+}
+
+function sendHttpRequest(method, url, data) {
+    return new Promise(function (resolve, reject) {
+        let XHR = new XMLHttpRequest();
+
+        XHR.open(method, url);
+        XHR.responseType = 'json';
+
+        XHR.onload = () => {
+            if (XHR.status === 200) {
+                resolve(XHR.response)
+            } else {
+                reject(XHR.response)
+            }
+        }
+        XHR.withCredentials = true;
+        if (data) {
+            XHR.setRequestHeader("Content-Type", "application/json");
+        }
+        XHR.send(JSON.stringify(data));
+    });
+}
+
+/*
+  This method helps to show on the drop-down's first button the selection that the user has made
+ */
+function selectWord(name) {
+    const selectedWord = document.getElementById('selectedWord');
+    selectedWord.textContent = name;
+}
+
+/*
+    This method helps to show on the drop-down's first button the crew member that the user has selected and save his id
+ */
+let selectedCrewMemberId = 0;
+
+function selectCrewMember(name, id) {
+    const selectedCrewMember = document.getElementById('selectedCrewMember');
+    selectedCrewMember.textContent = name;
+    selectedCrewMemberId = id;
+}
+
+/*
+    This method shows all the data related to crew members fetched from the database and displays them
+    in the right places in the front end
+ */
+function getAllMembers() {
+    let members = [];
+    sendHttpRequest('GET', "/api/admin/crewAssignments/members")
+        .then(responseData => {
+            responseData.forEach(member => members.push(member));
+            responseData.forEach((member) => {
+                const {
+                    id, forename, surname, mail, username, role, team
+                } = member;
+                const container = document.getElementById("crewContainer");
+
+                let card = document.createElement("div");
+                card.setAttribute('class', 'card');
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute('class', 'card-body');
+
+                let crewDetails = document.createElement("div");
+                crewDetails.setAttribute('class', 'crew-details');
+
+                let crewName = document.createElement("div");
+                crewName.setAttribute('class', 'crew-name');
+                crewName.innerHTML = `<ion-icon name="person-outline"></ion-icon> <p>${escapeHtml(forename)} ${escapeHtml(surname)}</p>
+                                        <button class="hrs-booking" onclick="showHoursWorkedModal(${id})"> <ion-icon name="time-outline"></ion-icon></button>`;
+
+                let crewEmail = document.createElement("div");
+                crewEmail.setAttribute('class', 'crew-email');
+                crewEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
+                                        <p>${escapeHtml(mail)}</p>`;
+
+                let crewUsername = document.createElement("div");
+                crewUsername.setAttribute('class', 'crew-username');
+                crewUsername.innerHTML = `<ion-icon name="id-card-outline"></ion-icon>
+                                            <p>${escapeHtml(username)}</p>`;
+
+                let crewTeam = document.createElement("div");
+                crewTeam.setAttribute('class', 'crew-team');
+                crewTeam.innerHTML = `<ion-icon name="people-circle-outline"></ion-icon>
+                                        <p>${team}</p> <button class="crew-info-edit-button" id = "crew-info-edit-button" onclick="showChangeTeamModal(${id})" ><ion-icon name="pencil-outline"></ion-icon></button>`
+
+                let crewRole = document.createElement("div");
+                crewRole.setAttribute('class', 'crew-role');
+                crewRole.innerHTML = `<ion-icon name="pricetag-outline"></ion-icon>
+                                        <p>${role}</p> <button class="crew-info-edit-button"><ion-icon name="pencil-outline" onclick="showChangeRoleModal(${id})"></ion-icon></button>`;
+
+                container.appendChild(card);
+                card.appendChild(cardBody);
+                cardBody.appendChild(crewDetails)
+                crewDetails.appendChild(crewName);
+                crewDetails.appendChild(crewEmail);
+                crewDetails.appendChild(crewUsername);
+                crewDetails.appendChild(crewTeam);
+                crewDetails.appendChild(crewRole);
+            })
+
+        })
+}
+
+/*
+    This method builds the modal in which the hours worked by each member are displayed. Created the modal through
+    Javascript in order to avoid the issue that Bootstrap has with creating multiple instances of modal from different
+    buttons. This is the reason for creating modals in JS in all the following methods.
+ */
+function viewHours(memberId) {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "viewHours");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Hours worked</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.innerHTML = `<h5>View hours worked on bookings</h5>`;
+
+    let times = [];
+    sendHttpRequest('GET', `/api/event/getCrewHoursWorked/${memberId}`)
+        .then(responseData => {
+            if (responseData != null) {
+                responseData.forEach(time => times.push(time));
+                responseData.forEach((time) => {
+                    let date = time[0];
+                    let hours = time[1];
+                    const details = document.createElement("div");
+                    details.setAttribute("class", "worked-hours-details");
+                    details.innerHTML = `<span>In month ${date} this crew member worked ${hours} hours</span>`;
+                    modalBody.appendChild(details);
+                })
+            } else {
+                const details = document.createElement("div");
+                details.setAttribute("class", "worked-hours-details");
+                details.innerHTML = `<span>This crew member does not have any registered worked hours</span>`;
+                modalBody.appendChild(details);
+            }
+        })
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>`;
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+
+    $(".modal").on("hidden.bs.modal", function () {
+        document.body.removeChild(modal);
+    });
+}
+
+/*
+    This method initializes the modal that is displayed for showing the worked hours.
+ */
+function showHoursWorkedModal(memberId) {
+    viewHours(memberId);
+    const modalElement = document.getElementById("viewHours");
+    (new bootstrap.Modal(modalElement)).show();
+}
+
+/*
+    This method creates the modal in which the team of a crew member can be changed.
+ */
+
+let team;
+
+function changeTeam(memberID) {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "changeTeam");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Change Team</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.textContent = "Select the new team";
+
+
+    const dropdown = document.createElement("div");
+    dropdown.setAttribute("class", "dropdown");
+
+    const dropdownButton = document.createElement("button");
+    dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
+    dropdownButton.setAttribute("type", "button");
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    dropdownButton.innerHTML = `<span id="selectedWord">select team</span>`;
+
+    const teamsList = document.createElement('ul');
+    teamsList.setAttribute("class", "dropdown-menu");
+
+    const coreItem = document.createElement('li');
+    const coreButton = document.createElement('a');
+    coreButton.setAttribute("class", "dropdown-item");
+    coreButton.setAttribute("href", "#");
+    coreButton.textContent = "core";
+    coreButton.onclick = function () {
+        selectWord("core");
+        team = coreButton.textContent;
+    }
+    coreItem.appendChild(coreButton);
+    teamsList.appendChild(coreItem);
+
+    const clubItem = document.createElement('li');
+    const clubButton = document.createElement('a');
+    clubButton.setAttribute("class", "dropdown-item");
+    clubButton.setAttribute("href", "#");
+    clubButton.textContent = "club";
+    clubButton.onclick = function () {
+        selectWord("club");
+        team = clubButton.textContent;
+    }
+    clubItem.appendChild(clubButton);
+    teamsList.appendChild(clubItem);
+
+    const bothItem = document.createElement('li');
+    const bothButton = document.createElement('a');
+    bothButton.setAttribute("class", "dropdown-item");
+    bothButton.setAttribute("href", "#");
+    bothButton.textContent = "core_club";
+    bothButton.onclick = function () {
+        selectWord("core_club");
+        team = bothItem.textContent;
+    }
+    bothItem.appendChild(bothButton);
+    teamsList.appendChild(bothItem);
+
+
+    dropdown.appendChild(dropdownButton);
+    dropdown.appendChild(teamsList);
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalContent.appendChild(modalHeader);
+
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewTeamToDB(${memberID}, team)">Save changes</button>`;
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modalBody.appendChild(dropdown);
+    dropdown.appendChild(teamsList);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+}
+
+/*
+    This method is called when the changes regarding the team are saved
+ */
+function sendNewTeamToDB(memberID, team) {
+    $.ajax(
+        {
+            url: `../api/admin/crewAssignments/changeTeam/${memberID}/${team}`,
+            method: 'PUT',
+            success: function () {
+                alert("Successfully changed the team");
+            }
+        }
+    )
+}
+
+/*
+    This method initializes the modal that is showed for changing the team.
+ */
+function showChangeTeamModal(id) {
+    changeTeam(id);
+    const modalElement = document.getElementById("changeTeam");
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    bootstrapModal.show();
+}
+
+/*
+    This method creates the modal in which the role of a crew member can be changed.
+ */
+let role;
+
+function changeRole(memberID) {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "changeRole");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>Change Role</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+    modalBody.textContent = "Select the new role";
+
+
+    const dropdown = document.createElement("div");
+    dropdown.setAttribute("class", "dropdown");
+
+    const dropdownButton = document.createElement("button");
+    dropdownButton.setAttribute("class", "btn btn-secondary dropdown-toggle");
+    dropdownButton.setAttribute("type", "button");
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    dropdownButton.innerHTML = `<span id="selectedWord">select role</span>`;
+
+    const rolesList = document.createElement('ul');
+    rolesList.setAttribute("class", "dropdown-menu");
+
+    const photoItem = document.createElement('li');
+    const photoButton = document.createElement('a');
+    photoButton.setAttribute("class", "dropdown-item");
+    photoButton.setAttribute("href", "#");
+    photoButton.textContent = "photographer";
+    photoButton.onclick = function () {
+        selectWord("photographer");
+        role = photoButton.textContent;
+    }
+    photoItem.appendChild(photoButton);
+    rolesList.appendChild(photoItem);
+
+    const videoItem = document.createElement('li');
+    const videoButton = document.createElement('a');
+    videoButton.setAttribute("class", "dropdown-item");
+    videoButton.setAttribute("href", "#");
+    videoButton.textContent = "videographer";
+    videoButton.onclick = function () {
+        selectWord("videographer");
+        role = videoButton.textContent;
+    }
+    videoItem.appendChild(videoButton);
+    rolesList.appendChild(videoItem);
+
+    const producerItem = document.createElement('li');
+    const producerButton = document.createElement('a');
+    producerButton.setAttribute("class", "dropdown-item");
+    producerButton.setAttribute("href", "#");
+    producerButton.textContent = "producer";
+    producerButton.onclick = function () {
+        selectWord("producer");
+        role = producerButton.textContent;
+    }
+    producerItem.appendChild(producerButton);
+    rolesList.appendChild(producerItem);
+
+    const assistantItem = document.createElement('li');
+    const assistantButton = document.createElement('a');
+    assistantButton.setAttribute("class", "dropdown-item");
+    assistantButton.setAttribute("href", "#");
+    assistantButton.textContent = "assistant";
+    assistantButton.onclick = function () {
+        selectWord("assistant");
+        role = assistantButton.textContent;
+    }
+    assistantItem.appendChild(assistantButton);
+    rolesList.appendChild(assistantItem);
+
+    const dataItem = document.createElement('li');
+    const dataButton = document.createElement('a');
+    dataButton.setAttribute("class", "dropdown-item");
+    dataButton.setAttribute("href", "#");
+    dataButton.textContent = "data_handler";
+    dataButton.onclick = function () {
+        selectWord("data");
+        role = dataButton.textContent;
+    }
+    dataItem.appendChild(dataButton);
+    rolesList.appendChild(dataItem);
+
+    const plannerItem = document.createElement('li');
+    const plannerButton = document.createElement('a');
+    plannerButton.setAttribute("class", "dropdown-item");
+    plannerButton.setAttribute("href", "#");
+    plannerButton.textContent = "planner";
+    plannerButton.onclick = function () {
+        selectWord("planner");
+        role = plannerButton.textContent;
+    }
+    plannerItem.appendChild(plannerButton);
+    rolesList.appendChild(plannerItem);
+
+    const editorItem = document.createElement('li');
+    const editorButton = document.createElement('a');
+    editorButton.setAttribute("class", "dropdown-item");
+    editorButton.setAttribute("href", "#");
+    editorButton.textContent = "editor";
+    editorButton.onclick = function () {
+        selectWord("editor");
+        role = editorButton.textContent;
+    }
+    editorItem.appendChild(editorButton);
+    rolesList.appendChild(editorItem);
+
+
+    dropdown.appendChild(dropdownButton);
+    dropdown.appendChild(rolesList);
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewRoleToDB(${memberID}, role)">Save changes</button>`;
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modalBody.appendChild(dropdown);
+    dropdown.appendChild(rolesList);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+}
+
+/*
+    This method is called when the changes regarding the team are saved
+ */
+
+function sendNewRoleToDB(memberID, role) {
+    $.ajax(
+        {
+            url: `../api/admin/crewAssignments/changeRole/${memberID}/${role}`,
+            method: "PUT",
+            success: function () {
+                alert("Successfully changed the role");
+            }, error: function () {
+                // alert("Error changing the role");
+            }
+        }
+    )
+}
+
+/*
+    This method initializes the modal that is showed for changing the team.
+*/
+function showChangeRoleModal(id) {
+    changeRole(id);
+    const modalElement = document.getElementById("changeRole");
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+    bootstrapModal.show();
+}
+
+function showViewCrewsInEventModal(id) {
+    viewCrewsInEvent(id);
+    const modalElement = document.getElementById("viewCrews");
+    (new bootstrap.Modal(modalElement)).show();
+}
+
+/*
+  This method creates the modal in which the crews assigned to a team are displayed.
+  From this modal crews can be removed.
+ */
+
+function viewCrewsInEvent(eventId) {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "modal fade");
+    modal.setAttribute("id", "viewCrews");
+    modal.setAttribute("tabindex", "-1");
+    modal.setAttribute("aria-labelledby", "exampleModalLabel");
+    modal.setAttribute("aria-hidden", "true");
+
+    const modalDialog = document.createElement("div");
+    modalDialog.setAttribute("class", "modal-dialog modal-dialog-centered");
+
+    const modalContent = document.createElement("div");
+    modalContent.setAttribute("class", "modal-content");
+
+    const modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class", "modal-header");
+    const modalTitle = document.createElement("h5");
+    modalTitle.setAttribute("class", "modal-title");
+    modalTitle.innerHTML = `<span>View assigned roles</span>`;
+    modalHeader.appendChild(modalTitle);
+
+    const modalBody = document.createElement("div");
+    modalBody.setAttribute("class", "modal-body");
+
+    sendHttpRequest('GET', `../api/event/getCrew/${eventId}`)
+        .then(responseData => {
+            console.log(responseData);
+            if (responseData[0].enrolled.length !== 0) {
+                const enrolled = responseData[0].enrolled;
+                enrolled.forEach((element) => {
+                    let role = element[0];
+                    element[1].forEach((member) => {
+                        let id = member[0];
+                        let name = member[1];
+                        const crewRow = document.createElement("div");
+                        crewRow.setAttribute("class", "crew-row");
+                        crewRow.innerHTML = `<span> ${name} ROLE: ${role}</span> <br> <button type="button" class="btn" style="background-color: var(--bs-primary);
+                            color: #fff; font-weight: 1000" onclick="unrollCrew(${id}, ${eventId})">Remove crew from booking</button>`;
+                        modalBody.appendChild(crewRow);
+                    })
+                })
+            } else {
+                const crewRow = document.createElement("div");
+                crewRow.setAttribute("class", "crew-row");
+                crewRow.innerHTML = `<span> There are no crew members enrolled in this event</span>`;
+                console.log(crewRow);
+                modalBody.appendChild(crewRow);
+            }
+        })
+
+
+    const modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class", "modal-footer");
+
+    modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>`;
+
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+
+    modalDialog.appendChild(modalContent);
+    modal.appendChild(modalDialog);
+    document.body.appendChild(modal);
+
+    $(".modal").on("hidden.bs.modal", function () {
+        document.body.removeChild(modal);
+    });
+}
+
+/*
+    This method is called when a de-enroll button is clicked
+ */
+
+function unrollCrew(crewId, eventId) {
+    $.ajax({
+        url: `../api/event/deenrol/${crewId}/${eventId}`,
+        method: 'DELETE',
+        success: function () {
+            alert("Successfully unrolled crew from event");
+        }, error: function () {
+            // alert("Error unrolling crew from event!");
+        }
+    });
+}
+
+/*
+    This method shows all the data related to events fetched from the database and displays them
+    in the right places in the front end
+ */
+function getAllEvents() {
+    let events = [];
+    sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
+        .then(responseData => {
+            responseData.forEach(event => events.push(event));
+            responseData.forEach((event) => {
+                const {
+                    id, name, description, start, duration, location, production_manager_id, type, booking_type
+                } = event.eventDetails;
+
+                const {
+                    forename, surname, emailAddress, phone_number
+                } = event.eventDetails.clients[0]
+
+                const container = document.querySelector('.container.content-container');
+
+                let card = document.createElement("div");
+                card.setAttribute('class', 'card');
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute('class', 'card-body');
+
+                let eventDetails = document.createElement("div");
+                eventDetails.setAttribute('class', 'event-details');
+
+                let eventName = document.createElement("div");
+                eventName.setAttribute('class', 'event-name');
+                eventName.innerHTML = `
+                        <span>${escapeHtml(name)}</span>
+                        <div class="buttons">
+                            <ion-icon name="pencil-outline" id="pencil-outline-icon" onclick = "changeDetails(` + id + `)"></ion-icon>
+                            <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
+                        </div>`
+
+                let eventOtherDetails = document.createElement("div");
+                eventOtherDetails.setAttribute('class', 'event-other-details');
+
+                let detailsList = document.createElement("ul");
+
+                let dateTime = document.createElement("li");
+                dateTime.setAttribute('class', 'date-time');
+                let date = new Date(start);
+                let minutes = date.getMinutes().toString().padStart(2, '0');
+                let dateFormat = date.toDateString() + ", " + date.getHours() + ":" + minutes;
+                dateTime.innerHTML = `<ion-icon name="calendar-outline"></ion-icon> <span>${escapeHtml(dateFormat)}</span>`;
+
+                let eventDuration = document.createElement("li");
+                eventDuration.setAttribute('class', 'duration');
+                eventDuration.innerHTML = `<ion-icon name="time-outline"></ion-icon> <span>${escapeHtml(duration)} hours</span>`;
+
+                let eventLocation = document.createElement("li");
+                eventLocation.setAttribute('class', 'location');
+                eventLocation.innerHTML = `<ion-icon name="pin-outline"></ion-icon> <span>${escapeHtml(location)}</span>`;
+
+                let eventDescription = document.createElement("li");
+                eventDescription.setAttribute('class', 'location');
+                eventDescription.innerHTML = `<ion-icon name="document-outline"></ion-icon> <span>${escapeHtml(description)}</span>`;
+
+                detailsList.appendChild(dateTime);
+                detailsList.appendChild(eventLocation);
+                detailsList.appendChild(eventDuration);
+                detailsList.appendChild(eventDescription);
+                eventOtherDetails.appendChild(detailsList);
+
+                let eventType = document.createElement("div");
+                eventType.setAttribute('class', 'event-type');
+
+                if (type === 'club_photography') {
+                    eventType.innerHTML = `<div class="card-event-type club-photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+                } else if (type === 'festival') {
+                    eventType.innerHTML = `<div class="card-event-type club-photography">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+                } else {
+                    eventType.innerHTML = `<div class="card-event-type club-photography" style="color: white;">
+                    <div class="inner club-photography-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type festival">
+                    <div class="inner festival-inner">
+                        <div class="front-side"><ion-icon name="musical-notes-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Festival</p></div>
+                    </div>
+                </div>
+                <div class="card-event-type product-shot" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="inner product-shot-inner">
+                        <div class="front-side"><ion-icon name="videocam-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Prod<br>Shoot</p></div>
+                    </div>
+                </div>`;
+                }
+
+                let bookingType = document.createElement("div");
+                bookingType.setAttribute('class', 'booking-type');
+                if (booking_type === 'photography') {
+                    bookingType.innerHTML = `<div class="booking-type-card photography" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                } else if (booking_type === 'film') {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                } else if (booking_type === "marketing") {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                } else {
+                    bookingType.innerHTML = `<div class="booking-type-card photography">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Photo</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card film">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="film-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Film</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card marketing">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Marketing</p></div>
+                    </div>
+                </div>
+                <div class="booking-type-card other" style="border-color: #1F1F1F; color: white; border-radius: 10px;">
+                    <div class="booking-type-card-inner">
+                        <div class="front-side"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></div>
+                        <div class="back-side"><p class="card-description">Other</p></div>
+                    </div>
+                </div>`;
+                }
+
+                let clientDetails = document.createElement("div");
+                clientDetails.setAttribute('class', 'client-details');
+                let clientName = document.createElement("div");
+                clientName.setAttribute('class', 'last-first-name');
+                clientName.innerHTML = `<ion-icon name="person-outline"></ion-icon>
+                                        <p>${escapeHtml(forename)} ${escapeHtml(surname)}</p>`;
+
+                let clientEmail = document.createElement("div");
+                clientEmail.setAttribute('class', 'email');
+                clientEmail.innerHTML = `<ion-icon name="mail-outline"></ion-icon>
+                                        <p>${escapeHtml(emailAddress)}</p>`;
+
+                let clientPhone = document.createElement("div");
+                clientPhone.setAttribute('class', 'phone');
+                clientPhone.innerHTML = `<ion-icon name="call-outline"></ion-icon>
+                                           <p>${escapeHtml(phone_number)}</p>`;
+
+                clientDetails.appendChild(clientName);
+                clientDetails.appendChild(clientPhone);
+                clientDetails.appendChild(clientEmail);
+
+
+                let eventStaff = document.createElement("div");
+                const requirementsArray = event.eventDetails.requirements;
+                eventStaff.setAttribute('class', 'event-staff');
+                eventStaff.style.cursor = "pointer";
+                eventStaff.setAttribute("onclick", `showViewCrewsInEventModal(${id})`);
+                eventStaff.innerHTML = '';
+                if (requirementsArray === null) {
+                    let noCrewTextContainer = document.createElement("div");
+                    noCrewTextContainer.setAttribute('class', 'noCrewTextContainer');
+                    noCrewTextContainer.style.height = "100%";
+                    noCrewTextContainer.style.color = "var(--bs-dark)";
+                    noCrewTextContainer.style.paddingTop = "calc(16vh/3.5)";
+                    noCrewTextContainer.style.textAlign = "center";
+                    noCrewTextContainer.innerHTML = `There is no crew`;
+                    eventStaff.appendChild(noCrewTextContainer);
+                } else {
+                    requirementsArray.forEach(requirement => {
+                        const {role, crew_size} = requirement;
+
+                        let roleHtml = `<div class="slide ${role}">
+                        <div class="icon" id="${role}-icon">
+                            <ion-icon name="person-outline"></ion-icon>
+                        </div>
+                        <div class="text" id="${role}-text">
+                            <p>${role}</p>
+                        </div>
+                        <div class="counter" id="${role}-counter">
+                            <p>${crew_size}</p>
+                        </div>
+                    </div>`
+                        eventStaff.innerHTML += roleHtml;
+
+                    })
+                }
+                let eventProducer = document.createElement("div");
+                eventProducer.setAttribute('class', 'event-producer');
+                if (production_manager_id != null) {
+                    sendHttpRequest('GET', `../api/event/getName/${production_manager_id}`)
+                        .then(responseName => {
+                            eventProducer.innerHTML = `<div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
+                            <div class="text">Event Prod</div>
+                            <div class="producer-name">${responseName[0].forename} ${responseName[0].surname} </div>`;
+                        })
+                } else {
+                    eventProducer.innerHTML = ` <div class="icon"><ion-icon name="briefcase-outline"></ion-icon></div>
+                    <div class="text">Event Prod</div>
+                    <div class="producer-name"> - </div>`;
+                }
+
+
+                container.appendChild(card);
+                card.appendChild(cardBody);
+                cardBody.appendChild(eventDetails);
+                eventDetails.appendChild(eventName);
+                eventDetails.appendChild(eventOtherDetails);
+                cardBody.appendChild(eventType);
+                cardBody.appendChild(bookingType);
+                cardBody.appendChild(clientDetails);
+                cardBody.appendChild(eventProducer);
+                cardBody.appendChild(eventStaff);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching events:", error);
+        });
+}
+
+/*
+    This method is called when an event needs to be deleted
+ */
+function deleteEvent(eventID) {
+    $.ajax({
+        url: `/api/admin/crewAssignments/deleteEvent/${eventID}`, method: "DELETE", success: function () {
+            alert("Successfully deleted this event");
+            location.reload();
+        }, error: function () {
+            // alert("Error deleting this event");
+        }
+    });
+}
+
+// Needed here to maintain the status across multiple callings. If set in bookingButton() or crewButton()
+// then each time the buttons are pressed, a new instance of firstLoad is created
+// so the second if would not work
+let firstLoadBookings = false;
+let firstLoadCrewMembers = false;
+
+function bookingButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+
+    if (bookingContainer && crewContainer) {
+        if (bookingContainer.style.display === 'none') {
+            bookingContainer.style.display = "flex";
+            crewContainer.style.display = "none";
+        }
+
+        if (!firstLoadBookings) {
+            firstLoadBookings = true;
+            getAllEvents()
+        }
+    }
+}
+
+/*
+    This method shows the data when the "members" button is pressed.
+ */
+function crewButton() {
+    const bookingContainer = document.getElementById("bookingContainer");
+    const crewContainer = document.getElementById("crewContainer");
+    if (bookingContainer && crewContainer) {
+        if (crewContainer.style.display === 'none') {
+            crewContainer.style.display = "flex";
+            bookingContainer.style.display = "none";
+        }
+
+        if (!firstLoadCrewMembers) {
+            firstLoadCrewMembers = true;
+            getAllMembers()
+        }
+    }
+}
+
+/*
+    This method initializes the confirmation for deletion toast
+ */
+function confirmationToast(id) {
+    let toastDeleteEvent = document.getElementById("deleteEventsModal");
+    const modal = new bootstrap.Modal(toastDeleteEvent);
+    modal.show();
+    let deleteButton = document.getElementById('confirmButton')
+    deleteButton.addEventListener('click', function () {
+        deleteEvent(id)
+    });
+}
+
+function escapeHtml(unsafe) {
+    var safe = String(unsafe); // Convert input to a string
+    return safe.replace(/[&<"'>]/g, function (match) {
+        switch (match) {
+            case '&':
+                return '&amp;';
+            case '<':
+                return '&lt;';
+            case '>':
+                return '&gt;';
+            case '"':
+                return '&quot;';
+            case "'":
+                return '&#039;';
+            default:
+                return match;
+        }
+    });
 }

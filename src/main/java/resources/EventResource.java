@@ -9,11 +9,17 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static dao.MailService.MAIL;
+
 
 @Path("/event")
 public class EventResource {
@@ -93,6 +99,33 @@ public class EventResource {
     }
 
     @GET
+    @Path("/getFromMonthAdmin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public Response getCrewsEventsFromMonth(@QueryParam("month") String QueryDate, @QueryParam("eventId") int id){
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getFromMonth(Timestamp.valueOf(QueryDate + "-01 00:00:00"));
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println("Timestamp: " + QueryDate + "-01 00:00:00");
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] finalBeans = beansToBeans(events);
+        for (EventResponseBean bean : finalBeans) {
+            bean.setCanEnrol(canEnrol(bean.getId(), id));
+            bean.setIsEnrolled(EventDao.instance.isEnrolled(id, bean.getId()));
+        }
+        return Response.ok(finalBeans)
+                .build();
+    }
+
+    @GET
     @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "crew_member"})
@@ -143,6 +176,43 @@ public class EventResource {
         }
         return Response.ok(returnValue)
                 .build();
+    }
+
+    @Path("/getCrew/{eventId}")
+    @RolesAllowed("admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public Response getDetailsOfEvent(@PathParam("eventId") int id) {
+        EventBean[] events;
+        try {
+            events = EventDao.instance.getAllDetails(id);
+        } catch (SQLException e) {
+            return Response.serverError()
+                    .build();
+        }
+        if (events == null) {
+            return Response.noContent()
+                    .build();
+        }
+        EventResponseBean[] finalBeans = beansToBeans(events);
+
+        return Response.ok(finalBeans)
+                .build();
+    }
+
+    @Path("/getCrewHoursWorked/{memberId}")
+    @RolesAllowed("admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public Response getHoursWorked(@PathParam("memberId") int id) {
+        try {
+            return Response.ok(EventDao.instance.getHoursWorked(id))
+                    .build();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError()
+                    .build();
+        }
     }
 
     @Path("/getHoursWorked")
@@ -234,7 +304,63 @@ public class EventResource {
         }
     }
 
-    private Response unenrol(int crewId, int eventId) {
+    @DELETE
+    @Path("/crewAssignments/deenrol/{crewId}/{eventId}")
+    @RolesAllowed("admin")
+    public Response unenrol(@PathParam("crewId") int crewId, @PathParam("eventId") int eventId) {
+    private void sendNotificationToCrewMember(int account_id) {
+        String recipient;
+        try {
+            recipient = AccountDao.instance.getEmailAddressById(account_id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+        String subject = "You have been unassigned from a booking.";
+        String body =   """
+                        Dear Crew member,
+                                        
+                        You have been unassigned from a booking. 
+                        
+                        Please consult the dashboard.
+                        
+                        Sincerely,
+                        The computer behind Shotmaniacs.
+                        """;
+        try {
+            MAIL.sendMessage(recipient, subject, body);
+        } catch (MessagingException | IOException e) {
+            System.err.println("An error has occurred when sending the confirmation message.");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/getName/{id}")
+    @RolesAllowed("admin")
+    public String getNameFromId(@PathParam("id") int id) {
+        String name = null;
+        try {
+            name = AccountDao.instance.getNamesAsJSON(id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return name;
+        }
+        return name;
+    }
+
+    @GET
+    @Path("/crewAssignments/getCrew/{eventId}")
+    @RolesAllowed("admin")
+    public Object[] getCrewInEvent(@PathParam("eventId") int eventId) {
+        return EventDao.instance.getEnrolledMembers(eventId);
+    }
+
+
+    @DELETE
+    @Path("/deenrol/{crewId}/{eventId}")
+    @RolesAllowed("admin")
+    public Response unenrol(@PathParam("crewId") int crewId, @PathParam("eventId") int eventId) {
         if (!EventDao.instance.isEnrolled(crewId, eventId)) {
             return Response.notModified()
                     .build();
@@ -246,6 +372,7 @@ public class EventResource {
                         .build();
             }
             EventDao.instance.removeEnrolment(crewId, eventId);
+            sendNotificationToCrewMember(crewId);
             return Response.ok()
                     .build();
         } catch (SQLException e) {
@@ -253,6 +380,8 @@ public class EventResource {
                     .build();
         }
     }
+
+
 
     private EventResponseBean[] beansToBeans(EventBean[] oldBeans) {
         EventResponseBean[] newBeans = new EventResponseBean[oldBeans.length];

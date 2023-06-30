@@ -127,6 +127,7 @@ function getLatestEvents() {
     sendHttpRequest('Get', "/api/admin/events").then(responseData => {
         console.log(responseData);
         responseData.forEach(event => events.push(event));
+        let o = 0;
         var parent = document.getElementById("collapseThree");
         events.forEach(event =>{
         const titleElement = document.createElement('div');
