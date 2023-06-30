@@ -9,11 +9,20 @@ public enum EventType {
     PRODUCT_SHOOT,
     OTHER;
 
+    /**
+     * Convert the EventType to a string by converting its name to lowercase
+     * @return
+     */
     @Override
     public String toString() {
         return this.name().toLowerCase();
     }
 
+    /**
+     * Convert a string holding the name of the event type to an EventType, regardless of case
+     * @param string the string to convert
+     * @return the EventType
+     */
     public static EventType toEnum(String string) {
         return string == null ? null : switch(string.toLowerCase()) {
             case "club_photography" -> CLUB_PHOTOGRAPHY;

@@ -2,6 +2,10 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A class that represents the amount of each crew role required for a specific event
+ * It is annotated with @XmlRootElement to allow it to be converted to and from JSON
+ */
 @XmlRootElement
 public class EventRequiresBean {
     int eventId;

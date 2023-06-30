@@ -4,6 +4,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.sql.Timestamp;
 
+/**
+ * A class that represents an announcement
+ * It is annotated with @XmlRootElement to allow it to be converted to and from JSON
+ */
 @XmlRootElement
 public class AnnouncementResponseBean {
     private int id;
