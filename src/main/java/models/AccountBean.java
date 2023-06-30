@@ -2,6 +2,10 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A class that represents an account
+ * It is annotated with @XmlRootElement to allow it to be converted to and from JSON
+ */
 @XmlRootElement(name = "account")
 public class AccountBean {
     private int accountId;

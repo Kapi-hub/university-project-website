@@ -5,6 +5,16 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+/**
+ * A class used to send information about an event to the client.
+ * It holds all the information the event bean holds, but also adds
+ * information about the crew required and enrolled members, as well
+ * as whether the user requesting the information is enrolled and whether
+ * they can enrol.
+ * Further, ids hae been replaced with names where possible to make the
+ * information more readable and save the client from having to make
+ * additional requests.
+ */
 @XmlRootElement
 public class EventResponseBean {
     int id;

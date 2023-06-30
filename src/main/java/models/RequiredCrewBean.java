@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * A class that represents the amount of each crew role required for a specific event
+ */
 public class RequiredCrewBean {
     private int event_id;
 

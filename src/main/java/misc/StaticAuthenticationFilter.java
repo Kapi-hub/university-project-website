@@ -9,8 +9,19 @@ import models.AccountType;
 
 import java.io.IOException;
 
+/**
+ * Class to handle the authentication of requests to the static pages
+ * It uses the Servlet Filter interface to intercept requests
+ */
 public class StaticAuthenticationFilter implements Filter {
 
+    /**
+     * The doFilter method establishes the account type of the user, and checks if the user is allowed to access
+     * the requested page. If the user is not allowed to access the page, the user is served the custom error page.
+     * @param request the <code>ServletRequest</code> object contains the client's request
+     * @param response the <code>ServletResponse</code> object contains the filter's response
+     * @param chain the <code>FilterChain</code> for invoking the next filter or the resource
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletReq = (HttpServletRequest) request;

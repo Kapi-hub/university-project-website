@@ -2,6 +2,10 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A class with the information necessary for the crew member.
+ * It extends the account with a role and team.
+ */
 @XmlRootElement(name="crew_member")
 public class CrewMemberBean extends AccountBean {
     private int id;

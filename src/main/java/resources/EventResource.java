@@ -29,6 +29,9 @@ public class EventResource {
      * "{
      * "id": *the event id*
      * }"
+     * @param event the event it will enroll in.
+     * @param accountIdString the account id that enrolls
+     * @return a response based on what changed in the database
      */
     @Path("/enroll-self")
     @POST
@@ -50,6 +53,9 @@ public class EventResource {
      * "id": *the event id*
      * }
      * }"
+     * use the admin to enroll crew members in events
+     * @param beans the bean includes all details on where to enroll crew members
+     * @return a response based on what changed in the database.
      */
     @Path("/force-enroll")
     @POST
@@ -77,7 +83,10 @@ public class EventResource {
      * *Amount3*
      * ]
      * }"
-     **/
+     * Gets the required crew.
+     * @param required the specific event, role and other information to retrieve the information.
+     * @return a response based on success or server error.
+     */
     @Path("/crewRequired")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -98,6 +107,14 @@ public class EventResource {
                 .build();
     }
 
+    /**
+     * Retrieves the events associated with a crew for a specific month, based on the provided query parameters.
+     * @param QueryDate The date of the month in the format "yyyy-MM" (e.g., "2023-06") to retrieve the events from.
+     * @param id The ID of the crew for which to retrieve the events.
+     * @return A Response object containing the events associated with the crew for the specified month.
+     * @throws SQLException if a database access error occurs
+     * @throws IllegalArgumentException if the provided QueryDate is not in the correct format
+     */
     @GET
     @Path("/getFromMonthAdmin")
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,6 +142,13 @@ public class EventResource {
                 .build();
     }
 
+    /**
+     * Retrieves the events for a specific month based on the provided query parameters.
+     * @param QueryDate The date of the month in the format "yyyy-MM" (e.g., "2023-06") to retrieve the events from.
+     * @param accountIdString The ID of the account associated with the user making the request.
+     * @return A Response object containing the events for the specified month.
+     * @throws SQLException if a database access error occurs
+     */
     @GET
     @Path("/getFromMonth")
     @Produces(MediaType.APPLICATION_JSON)
@@ -151,7 +175,14 @@ public class EventResource {
         return Response.ok(finalBeans)
                 .build();
     }
-
+    /**
+     * Retrieves the events in which the account with the specified ID is enrolled, filtered by client and month.
+     * @param accountIdString The ID of the account associated with the user making the request.
+     * @param client The ID of the client to filter the enrolled events (optional).
+     * @param month The month to filter the enrolled events (optional).
+     * @return A Response object containing the enrolled events based on the provided filters.
+     * @throws SQLException if a database access error occurs
+     */
     @GET
     @Path("/getEnrolled")
     @Produces(MediaType.APPLICATION_JSON)
@@ -178,6 +209,11 @@ public class EventResource {
                 .build();
     }
 
+    /**
+     * Retrieves the details of a specific event based on the provided event ID.
+     * @param id The ID of the event for which to retrieve the details.
+     * @return A Response object containing the details of the event.
+     */
     @Path("/getCrew/{eventId}")
     @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
@@ -200,6 +236,11 @@ public class EventResource {
                 .build();
     }
 
+    /**
+     * Retrieves the total hours worked by a specific crew member based on the provided member ID.
+     * @param id The ID of the crew member for which to retrieve the total hours worked.
+     * @return The response with the total hours worked of a crew member
+     */
     @Path("/getCrewHoursWorked/{memberId}")
     @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
@@ -215,6 +256,11 @@ public class EventResource {
         }
     }
 
+    /**
+     * Retrieves the total hours worked by a specific crew member based on the provided member ID.
+     * @param accountIdString The ID of the crew member for which to retrieve the total hours worked.
+     * @return The response with the total hours worked of a crew member
+     */
     @Path("/getHoursWorked")
     @RolesAllowed("crew_member")
     @Produces(MediaType.APPLICATION_JSON)
@@ -231,6 +277,12 @@ public class EventResource {
         }
     }
 
+    /**
+     *
+     * Retrieves the missing crew roles and the corresponding number of crew members needed for a specific event based on the provided event ID.
+     * @param id The ID of the event for which to retrieve the missing crew roles and members.
+     * @return An array of Object arrays representing the missing crew roles and the number of crew members needed.
+     */
     private Object[] getMissingCrew(int id) {
         Map<RoleType, Integer> required;
         try {
@@ -271,6 +323,15 @@ public class EventResource {
         return returnValue;
     }
 
+    /**
+     * Enrolls a crew member in an event.
+     * @param crewId The ID of the crew member to enroll.
+     * @param eventId The ID of the event in which to enroll the crew member.
+     * @return A Response object indicating the result of the enrollment.
+     *     If the crew member is not eligible to enroll in the event, the Response will have a status of 304 (Not Modified).
+     *     If the enrollment is successful, the Response will have a status of 200 (OK).
+     *     If an error occurs during the enrollment process, the Response will have
+     */
     private Response enrol(int crewId, int eventId) {
         if (!canEnrol(eventId, crewId)) {
             return Response.notModified()
@@ -286,6 +347,12 @@ public class EventResource {
         }
     }
 
+    /**
+     *Checks if a crew member is eligible to enroll in an event.
+     * @param eventId The ID of the event for which to check eligibility.
+     * @param crewId The ID of the crew member for whom to check eligibility.
+     * @return true if the crew member is eligible to enroll in the event, false otherwise.
+     */
     private boolean canEnrol(int eventId, int crewId) {
         if (EventDao.instance.isEnrolled(crewId, eventId)) {
             return false;
@@ -304,6 +371,10 @@ public class EventResource {
         }
     }
 
+    /**
+     * Sends notification to the crew member when unassigned from a booking
+     * @param account_id the account ID in question/
+     */
     private void sendNotificationToCrewMember(int account_id) {
         String recipient;
         try {
@@ -316,7 +387,7 @@ public class EventResource {
         String body =   """
                         Dear Crew member,
                                         
-                        You have been unassigned from a booking. 
+                        You have been unassigned from a booking.
                         
                         Please consult the dashboard.
                         
@@ -331,6 +402,11 @@ public class EventResource {
         }
     }
 
+    /**
+     * Get the name from a user based on the name.
+     * @param id the ID the admin requests the name for
+     * @return the name in json format
+     */
     @GET
     @Path("/getName/{id}")
     @RolesAllowed("admin")
@@ -345,6 +421,11 @@ public class EventResource {
         return name;
     }
 
+    /**
+     * Returns all the enrolled members based on the event
+     * @param eventId the event in question
+     * @return the enrolled members
+     */
     @GET
     @Path("/crewAssignments/getCrew/{eventId}")
     @RolesAllowed("admin")
@@ -353,6 +434,12 @@ public class EventResource {
     }
 
 
+    /**
+     * Deenrol members as the admin
+     * @param crewId the crew member you want to deenrol
+     * @param eventId the event Id you want to deenrol them from.
+     * @return the response with status
+     */
     @DELETE
     @Path("/deenrol/{crewId}/{eventId}")
     @RolesAllowed("admin")
@@ -378,7 +465,11 @@ public class EventResource {
     }
 
 
-
+    /**
+     * Converts an array of EventBean objects to an array of EventResponseBean objects.
+     * @param oldBeans The array of EventBean objects to be converted.
+     * @return An array of EventResponseBean objects representing the converted EventBean objects.
+     */
     private EventResponseBean[] beansToBeans(EventBean[] oldBeans) {
         EventResponseBean[] newBeans = new EventResponseBean[oldBeans.length];
         for (int i = 0; i < oldBeans.length; i++) {

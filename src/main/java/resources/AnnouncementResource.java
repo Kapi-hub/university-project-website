@@ -15,6 +15,11 @@ import java.sql.SQLException;
 @Path("/announcement")
 public class AnnouncementResource {
 
+    /**
+     * Returns a list of announcements
+     * @param accountIdString the account ID that requests it
+     * @return a response including a list of announcements.
+     */
     @Path("/forCrew")
     @GET
     @RolesAllowed("crew_member")
