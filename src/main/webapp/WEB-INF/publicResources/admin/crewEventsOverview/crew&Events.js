@@ -56,9 +56,6 @@ function addEvent() {
     const eventVideographer = eventCrewQuery.children[16].value;
 
 
-    //TODO: check how to do with the drop down list - how do i extract the name that is selected
-    // const eventProducer;
-
     var data = {
         clientBean: {
             forename: clientFirstName,
@@ -110,7 +107,7 @@ function addEvent() {
 
     console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: "../api/admin/crewAssignments/newEvent",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -205,12 +202,14 @@ function addCrewMember() {
         error: function (xhr, textStatus, errorThrown) {
             if (xhr.status === 400) {
                 alert("Invalid email or password");
-            } else {
-                alert("An error occurred");
+                //     } else {
+                //         alert("An error occurred");
+                //     }
+                //     console.error("text status " + textStatus);
+                //     console.error("here should be the error" + errorThrown);
             }
-            console.error(errorThrown);
-        }
 
+        }
     });
 }
 
