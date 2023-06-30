@@ -97,7 +97,6 @@ body{
     background-color: var(--bs-primary-bg-subtle);
     border-radius: 10px;
     border-color: var(--bs-primary-bg-subtle);
-    color: var(--bs-primary);
     margin-left: 10%;
 }
 
