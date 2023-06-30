@@ -3,7 +3,6 @@ package resources;
 import dao.AccountDao;
 import dao.CrewMemberDao;
 import dao.EventDao;
-import dao.MailService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,8 +11,7 @@ import models.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import javax.mail.MessagingException;
-import java.io.IOException;
+
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;

@@ -1,12 +1,9 @@
 package dao;
-
-import jdk.jfr.Event;
 import misc.ConnectionFactory;
 import models.*;
 
 import java.security.GeneralSecurityException;
 import java.sql.*;
-import java.util.ArrayList;
 
 import static misc.Security.encodeSalt;
 
@@ -20,6 +17,9 @@ public enum AdminDao {
     }
 
     /*METHODS RELATED TO EVENTS*/
+    /**
+     * This method inserts a new client into the database
+     */
     public int addClient(ClientBean client) throws SQLException {
         String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -33,16 +33,20 @@ public enum AdminDao {
         if (rs.next()) {
             client_id = rs.getInt(1);
         }
-        System.out.printf("===SQL=== ADDED A CLIENT TO ACCOUNT TABLE, RETURNED ID %s.\n", client_id);
         query = "INSERT INTO client (id, phone_number) VALUES (?, ?)";
         st = connection.prepareStatement(query);
         st.setInt(1, client_id);
         st.setString(2, client.getPhone_number());
         st.executeUpdate();
-        System.out.printf("===SQL=== ADDED A CLIENT TO CLIENT TABLE WITH ID %s\n", client_id);
         return client_id;
     }
 
+    /**
+     * This method inserts a new event in the database
+     * @param event - the event to be inserted
+     * @return - the new event's id
+     * @throws SQLException
+     */
     public int addEvent(EventBean event) throws SQLException {
         String query = "INSERT INTO event (client_id, name, description, start, duration, location, production_manager_id, type, booking_type) VALUES (?,?,?,?,?,?, ?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -61,10 +65,14 @@ public enum AdminDao {
         int event_id = -1;
         if (rs.next())
             event_id = rs.getInt(1);
-        System.out.printf("===SQL=== ADDED AN EVENT TO DATABASE RETURNING ID %s\n", event_id);
         return event_id;
     }
 
+    /**
+     * This method inserts in the database the required crews needed for each new event
+     * @param required
+     * @throws SQLException
+     */
     public void addRequirement(RequiredCrewBean required) throws SQLException {
         String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
         PreparedStatement st = connection.prepareStatement(query);
@@ -75,6 +83,12 @@ public enum AdminDao {
         System.out.printf("===SQL=== ADDED A ROLE REQUIREMENT WITH VALUES %s, %s, %s\n",
                 required.getEvent_id(), required.getCrew_size(), required.getRole().toString());
     }
+
+    /**
+     * This method fetches the events that need crew to be assigned
+     * @return a String with all the results
+     * @throws SQLException
+     */
 
     public String getNotFullEvents() throws SQLException {
         String insertQuery = """
@@ -93,6 +107,11 @@ public enum AdminDao {
         return getSQLString(insertQuery);
     }
 
+    /**
+     * This method fetches all the events from the database
+     * @return a String with all the events put in a JSON
+     * @throws SQLException
+     */
     public String getLatestEvent() throws SQLException {
         String insertQuery = """
                 SELECT json_agg(
@@ -114,22 +133,28 @@ public enum AdminDao {
                                                                           'emailAddress', a.email_address,
                                                                           'phone_number', c.phone_number
                                                                       ))
-                                                   FROM shotmaniacs1.account a
-                                                            JOIN shotmaniacs1.client c ON a.id = c.id
+                                                   FROM account a
+                                                            JOIN client c ON a.id = c.id
                                                    WHERE a.type = 'client'
                                                      AND c.id = e.client_id),
                                        'requirements',
                                        (SELECT json_agg(json_build_object('role', role, 'crew_size', crew_size)) AS json_data
-                                        FROM shotmaniacs1.event_requirement r
+                                        FROM event_requirement r
                                         WHERE e.id = r.event_id
                                         GROUP BY r.event_id)
                 ))
                            ) AS result
-                FROM shotmaniacs1.event e
+                FROM event e
                  """;
         return getSQLString(insertQuery);
     }
 
+    /**
+     * This method returns all the event details based on an id
+     * @param id - event id
+     * @return a string with all the details in a JSON form
+     * @throws SQLException
+     */
     public String getEventWithId(int id) throws SQLException {
         String query = "SELECT json_agg(" +
                 "json_build_object(" +
@@ -141,7 +166,7 @@ public enum AdminDao {
                 "'location', location," +
                 "'type', type," +
                 "'booking_type', booking_type))" +
-                "FROM shotmaniacs1.event " +
+                "FROM event " +
                 "WHERE id = ?";
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, id);
@@ -163,6 +188,11 @@ public enum AdminDao {
         st.setInt(8, event.getId());
     }
 
+    /**
+     * This method deletes an event based on the id
+     * @param id - the event's id
+     * @throws SQLException
+     */
     public void deleteEvent(int id) throws SQLException {
         String query = """
                 DELETE FROM event" +
@@ -175,6 +205,12 @@ public enum AdminDao {
 
     /*METHODS RELATED TO CREW MEMBERS*/
 
+    /**
+     * This method inserts a new crew member into the database.
+     * @param crewMember
+     * @throws GeneralSecurityException
+     * @throws SQLException
+     */
     public void createNewMember(CrewMemberBean crewMember) throws GeneralSecurityException, SQLException {
         String[] passwords = encodeSalt(crewMember.getPassword());
         //Create new account
@@ -213,17 +249,22 @@ public enum AdminDao {
         st.executeUpdate();
 
     }
-
+    /**
+     * This method fetches all the crew members that are in the database.
+     */
     public String getAllCrewMembers() throws SQLException {
         String query = """
                 SELECT json_agg(jsonb_build_object('id', a.id, 'forename',
                 a.forename, 'surname', a.surname, 'mail', a.email_address,'username', a.username, 'role', c.role, 'team'
-                , c.team)) FROM shotmaniacs1.account a
-                JOIN shotmaniacs1.crew_member c ON a.id = c.id
+                , c.team)) FROM account a
+                JOIN crew_member c ON a.id = c.id
                 WHERE a.type='crew_member'""";
         return getSQLString(query);
     }
 
+    /**
+     * This method fetches all the producers from the database
+     */
     public String getProducers() throws SQLException {
         String query = """
                 SELECT json_agg(json_build_object('id', a.id, 'forename',a.forename, 'surname', a.surname) ) 
@@ -233,8 +274,11 @@ public enum AdminDao {
 
     }
 
+    /**
+     * This method changes the role of a crew member.
+     */
     public void changeRole(int memberID, String newRole) throws SQLException {
-        String getRole = "SELECT role FROM shotmaniacs1.crew_member WHERE id = ?";
+        String getRole = "SELECT role FROM crew_member WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(getRole);
 
         statement.setInt(1, memberID);
@@ -247,9 +291,9 @@ public enum AdminDao {
             crew_role = rs.getString(1);
         }
 
-        String query = "UPDATE shotmaniacs1.crew_member " +
+        String query = "UPDATE crew_member " +
                 "SET role = ?::role_enum " +
-                "FROM shotmaniacs1.account " +
+                "FROM account " +
                 "WHERE role = ?::role_enum AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
 
@@ -259,8 +303,11 @@ public enum AdminDao {
         st.executeQuery();
     }
 
+    /**
+     * This method changes the team of a crew member
+     */
     public void changeTeam(int id, String newTeam) throws SQLException {
-        String getRole = "SELECT team FROM shotmaniacs1.crew_member WHERE id = ?";
+        String getRole = "SELECT team FROM crew_member WHERE id = ?";
         PreparedStatement statement = connection.prepareStatement(getRole);
 
         statement.setInt(1, id);
@@ -273,9 +320,9 @@ public enum AdminDao {
             crew_team = rs.getString(1);
         }
 
-        String query = "UPDATE shotmaniacs1.crew_member " +
+        String query = "UPDATE crew_member " +
                 "SET team = ?::team_enum " +
-                "FROM shotmaniacs1.account " +
+                "FROM account " +
                 "WHERE team = ?::team_enum AND crew_member.id = ? AND account.type = 'crew_member';";
         PreparedStatement st = connection.prepareStatement(query);
         st.setString(1, newTeam);

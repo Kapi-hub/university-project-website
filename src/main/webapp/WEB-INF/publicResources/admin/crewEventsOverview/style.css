@@ -120,7 +120,6 @@
 
 .container.content-container .card .card-body .event-details .event-name .buttons ion-icon#trash-outline-icon:hover {
     border-radius: 5px;
-    background-color: red;
     transform: scale(1.30);
     transition: all 0.3s ease-in-out;
 }

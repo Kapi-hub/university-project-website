@@ -21,7 +21,10 @@ import static dao.MailService.MAIL;
 
 @Path("/admin")
 public class AdminResource {
-
+    /**
+     * @param accountIdString the user's account id
+     * @return the user id based on the cookie
+     */
     @GET
     @Path("/user")
     @RolesAllowed("admin")
@@ -66,6 +69,12 @@ public class AdminResource {
 
 
     /* METHODS RELATED TO EVENTS */
+
+    /**
+     * This method handles the creation of a new event based on a FormBean object.
+     * @param form - object of type Formbean that contains an object of type EventBean and another one of type ClientBean
+     * @return a response 200 if the creation of a new event is successful, of 500 if something fails
+     */
     @POST
     @Path("/crewAssignments/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -85,6 +94,10 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method fetches all the events from the database
+     * @return a response 200 if the fetch of all events is successful, of 500 if something fails
+     */
     @GET
     @Path("/crewAssignments/bookings")
     @RolesAllowed("admin")
@@ -98,6 +111,11 @@ public class AdminResource {
 
     }
 
+    /**
+     * This method fetches all the events that do not have all the crew needed assigned.
+     * @return a response 200 if the fetching of events without all crew assigned is successful,
+     * or 500 if something fails
+     */
     @GET
     @Path("/crewReq")
     @RolesAllowed("admin")
@@ -109,6 +127,12 @@ public class AdminResource {
         }
     }
 
+    /**
+     *
+     * This method fetches all event details based on its id
+     * @param id - event id
+     * @return a response 200 if the fetching of the event is successful, or 500 if something fails
+     */
     @GET
     @Path("/crewAssignments/changeEvent/{eventId}")
     @RolesAllowed("admin")
@@ -120,6 +144,11 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method deletes an event based on its id.
+     * @param id - event id
+     * @return a response 200 if the deletion of an event is successful, or 500 if something fails
+     */
     @DELETE
     @Path("/crewAssignments/deleteEvent/{eventID}")
     @RolesAllowed("admin")
@@ -162,6 +191,12 @@ public class AdminResource {
     }
 
     /* METHODS RELATED TO CREW-MEMBERS */
+
+    /**
+     * This method creates a new crew member based on a CrewMemberBean object.
+     * @param crewMember - object that contains all attributes
+     * @return a response 200 if the creation of a new crew member is successful, or 500 if something fails
+     */
     @POST
     @Path("/crewAssignments/newMember")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -175,6 +210,10 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method fetches all members from the database.
+     * @return a response 200 if the fetch of crew members is successful, or 500 if something fails
+     */
     @GET
     @Path("/crewAssignments/members")
     @RolesAllowed("admin")
@@ -186,6 +225,10 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method fetches all members that have the "producer" role
+     * @return a response 200 if the fetch of producers is successful, or 500 if something fails
+     */
     @GET
     @Path("/crewAssignments/newEvent")
     @RolesAllowed("admin")
@@ -197,6 +240,12 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method changes the role of a given crew member with a new role
+     * @param id - crew member's id
+     * @param newRole - crew member's new role
+     * @return a response 200 if the change of role is successful, or 500 if something fails
+     */
     @PUT
     @Path("/crewAssignments/changeRole/{memberID}/{role}")
     @RolesAllowed("admin")
@@ -209,6 +258,12 @@ public class AdminResource {
         }
     }
 
+    /**
+     * This method changes the team of a given crew member with a new team
+     * @param id - crew member's id
+     * @param newTeam - crew member's new team
+     * @return a response 200 if the change of team is successful, or 500 if something fails
+     */
     @PUT
     @Path("/crewAssignments/changeTeam/{memberID}/{team}")
     @RolesAllowed("admin")

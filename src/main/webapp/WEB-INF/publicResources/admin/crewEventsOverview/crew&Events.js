@@ -1,3 +1,6 @@
+/*
+    This method fetches the data from the front-end and sends it to the database
+ */
 function addEvent() {
     //get client Information
     let clientQuery = document.querySelector('#clientInfo');
@@ -94,7 +97,9 @@ function addEvent() {
         }
     });
 }
-
+/*
+    This method fetches the data from the front-end and sends it to the database
+ */
 function addCrewMember() {
     let memberQuery = document.querySelector('#memberInfo');
     const memberFirstName = memberQuery.children[1].value;
@@ -179,6 +184,9 @@ function addCrewMember() {
     });
 }
 
+/*
+    This method shows all the producers fetched from the data base and shows them in a drop-down list
+ */
 function getProducers() {
     let producers = [];
     let id = 0;
@@ -193,9 +201,7 @@ function getProducers() {
             producerItem.onclick = function () {
                 selectCrewMember(producer.forename + ' ' + producer.surname, producer.id);
             };
-            //id=`${producer.id}` onclick="function(`+id+`)
             producerItem.innerHTML = `<span class="producerName">${escapeHtml(producer.forename)} ${escapeHtml(producer.surname)}</span>`;
-
             producerItem.appendChild(buttonElement);
             producersList.appendChild(producerItem);
         })
@@ -224,11 +230,17 @@ function sendHttpRequest(method, url, data) {
     });
 }
 
+/*
+  This method helps to show on the drop-down's first button the selection that the user has made
+ */
 function selectWord(name) {
     const selectedWord = document.getElementById('selectedWord');
     selectedWord.textContent = name;
 }
 
+/*
+    This method helps to show on the drop-down's first button the crew member that the user has selected and save his id
+ */
 let selectedCrewMemberId = 0;
 
 function selectCrewMember(name, id) {
@@ -237,6 +249,10 @@ function selectCrewMember(name, id) {
     selectedCrewMemberId = id;
 }
 
+/*
+    This method shows all the data related to crew members fetched from the database and displays them
+    in the right places in the front end
+ */
 function getAllMembers() {
     let members = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/members")
@@ -295,6 +311,11 @@ function getAllMembers() {
         })
 }
 
+/*
+    This method builds the modal in which the hours worked by each member are displayed. Created the modal through
+    Javascript in order to avoid the issue that Bootstrap has with creating multiple instances of modal from different
+    buttons. This is the reason for creating modals in JS in all the following methods.
+ */
 function viewHours(memberId) {
     const modal = document.createElement("div");
     modal.setAttribute("class", "modal fade");
@@ -355,12 +376,19 @@ function viewHours(memberId) {
     document.body.appendChild(modal);
 }
 
+/*
+    This method initializes the modal that is displayed for showing the worked hours.
+ */
 function showHoursWorkedModal(memberId) {
     viewHours(memberId);
     const modalElement = document.getElementById("viewHours");
     const bootstrapModal = new bootstrap.Modal(modalElement);
     bootstrapModal.show();
 }
+
+/*
+    This method creates the modal in which the team of a crew member can be changed.
+ */
 
 let team;
 
@@ -459,7 +487,9 @@ function changeTeam(memberID) {
     document.body.appendChild(modal);
 }
 
-
+/*
+    This method is called when the changes regarding the team are saved
+ */
 function sendNewTeamToDB(memberID, team) {
     $.ajax(
         {
@@ -473,7 +503,9 @@ function sendNewTeamToDB(memberID, team) {
         }
     )
 }
-
+/*
+    This method initializes the modal that is showed for changing the team.
+ */
 function showChangeTeamModal(id) {
     changeTeam(id);
     const modalElement = document.getElementById("changeTeam");
@@ -481,6 +513,9 @@ function showChangeTeamModal(id) {
     bootstrapModal.show();
 }
 
+/*
+    This method creates the modal in which the role of a crew member can be changed.
+ */
 let role;
 
 function changeRole(memberID) {
@@ -626,6 +661,10 @@ function changeRole(memberID) {
     document.body.appendChild(modal);
 }
 
+/*
+    This method is called when the changes regarding the team are saved
+ */
+
 function sendNewRoleToDB(memberID, role) {
     $.ajax(
         {
@@ -640,6 +679,9 @@ function sendNewRoleToDB(memberID, role) {
     )
 }
 
+/*
+    This method initializes the modal that is showed for changing the team.
+*/
 function showChangeRoleModal(id) {
     changeRole(id);
     const modalElement = document.getElementById("changeRole");
@@ -647,6 +689,9 @@ function showChangeRoleModal(id) {
     bootstrapModal.show();
 }
 
+/*
+  This method initializes the modal that is showed for presenting the crews that are enrolled in an event
+ */
 //TODO: debug why it doesnt refresh after clicking on multiple modals
 function showViewCrewsInEventModal(id) {
     viewCrewsInEvent(id);
@@ -654,6 +699,11 @@ function showViewCrewsInEventModal(id) {
     const bootstrapModal = new bootstrap.Modal(modalElement);
     bootstrapModal.show();
 }
+
+/*
+  This method creates the modal in which the crews assigned to a team are displayed.
+  From this modal crews can be removed.
+ */
 
 function viewCrewsInEvent(eventId) {
     const modal = document.createElement("div");
@@ -711,6 +761,9 @@ function viewCrewsInEvent(eventId) {
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
 }
+/*
+    This method is called when a de-enroll button is clicked
+ */
 
 function unrollCrew(crewId, eventId) {
     $.ajax({
@@ -724,6 +777,10 @@ function unrollCrew(crewId, eventId) {
     });
 }
 
+/*
+    This method shows all the data related to events fetched from the database and displays them
+    in the right places in the front end
+ */
 function getAllEvents() {
     let events = [];
     sendHttpRequest('GET', "/api/admin/crewAssignments/bookings")
@@ -830,7 +887,7 @@ function getAllEvents() {
                     </div>
                 </div>`;
                 } else {
-                    eventType.innerHTML = `<div class="card-event-type club-photography" style="background-color: red; color: white;">
+                    eventType.innerHTML = `<div class="card-event-type club-photography" style="color: white;">
                     <div class="inner club-photography-inner">
                         <div class="front-side"><ion-icon name="camera-outline"></ion-icon></div>
                         <div class="back-side"><p class="card-description">Club<br>Photo</p></div>
@@ -1036,6 +1093,9 @@ function getAllEvents() {
         });
 }
 
+/*
+    This method is called when an event needs to be deleted
+ */
 function deleteEvent(eventID) {
     $.ajax({
         url: `/api/admin/crewAssignments/deleteEvent/${eventID}`, method: "DELETE", success: function () {
@@ -1070,7 +1130,9 @@ function bookingButton() {
     }
 }
 
-
+/*
+    This method shows the data when the "members" button is pressed.
+ */
 function crewButton() {
     const bookingContainer = document.getElementById("bookingContainer");
     const crewContainer = document.getElementById("crewContainer");
@@ -1087,6 +1149,9 @@ function crewButton() {
     }
 }
 
+/*
+    This method initializes the confirmation for deletion toast
+ */
 function confirmationToast(id) {
     let toastDeleteEvent = document.getElementById("deleteEventsModal");
     const modal = new bootstrap.Modal(toastDeleteEvent);
