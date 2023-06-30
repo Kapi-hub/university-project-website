@@ -54,6 +54,10 @@ public class EventBean {
         this.status = status;
     }
 
+    public EventBean(int eventId) {
+        this.id= eventId;
+    }
+
     public BookingType getBooking_type() {
         return booking_type;
     }

@@ -5,7 +5,10 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import models.*;
+import models.AnnouncementBean;
+import models.CrewMemberBean;
+import models.FormBean;
+import models.RequiredCrewBean;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -44,8 +47,10 @@ public class AdminResource {
             announcement.setAnnouncer(accountId);
             AdminDao.I.addAnnouncement(announcement);
             return Response.ok().build();
-        } catch (SQLException e){
-            return Response.serverError().build();
+        }catch (SQLException e){
+
+            System.err.println(e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Database error occurred").build();
         }
     }
 
@@ -64,6 +69,24 @@ public class AdminResource {
 
 
     /* METHODS RELATED TO EVENTS */
+    @PUT
+    @Path("/accept/{id}")
+    public void changeInprogress(@PathParam("id") int id){
+        try{
+            AdminDao.I.toInProgress(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+    }
+    @DELETE
+    @Path("/delete/{id}")
+    public void deleteEvent(@PathParam("id") int id){
+        try{
+            AdminDao.I.deleteEvent(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     /**
      * This method handles the creation of a new event based on a FormBean object.
@@ -94,11 +117,11 @@ public class AdminResource {
      * @return a response 200 if the fetch of all events is successful, of 500 if something fails
      */
     @GET
-    @Path("/crewAssignments/bookings")
+    @Path("/events")
     @RolesAllowed("admin")
     public Response getLatestEvent() {
         try {
-            return Response.ok(AdminDao.I.getLatestEvent()).build();
+            return Response.ok(AdminDao.I.getIncomingEvents()).build();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return Response.serverError().build();
@@ -106,6 +129,40 @@ public class AdminResource {
 
     }
 
+    @GET
+    @Path("/event/{id}")
+    @RolesAllowed("admin")
+    public String getEvent(@PathParam("id") int id){
+        try{
+            return AdminDao.I.getEvent(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    @GET
+    @Path("/enrolledCrew/{id}")
+    @RolesAllowed("admin")
+    public String getEnrolledCrew(@PathParam("id") int id){
+        try{
+             String returned = AdminDao.I.getEnrolledCrew(id);
+            return returned;
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+    @GET
+    @Path("/reqCrew/{id}")
+    @RolesAllowed("admin")
+    public String getCrewReq(@PathParam("id") int id){
+        try{
+            return AdminDao.I.getCrewReq(id);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
     /**
      * This method fetches all the events that do not have all the crew needed assigned.
      * @return a response 200 if the fetching of events without all crew assigned is successful,
@@ -210,6 +267,7 @@ public class AdminResource {
         }
     }
 
+
     /**
      * user stories
      * 33 The password must contain at least 8 characters.
@@ -277,6 +335,7 @@ public class AdminResource {
            return Response.serverError().build();
         }
     }
+
 
     /**
      * This method fetches all members that have the "producer" role
