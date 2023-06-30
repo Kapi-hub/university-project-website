@@ -22,6 +22,7 @@ public class AdminResource {
     /**
      * @param accountIdString the user's account id
      * @return the user id based on the cookie
+     * @throws SQLException when there is a sql error
      */
     @GET
     @Path("/user")
@@ -37,6 +38,15 @@ public class AdminResource {
     }
 
     /* METHODS RELATED TO ANNOUNCEMENTS */
+
+    /**
+     *
+     *
+     * @param announcement the contents  of the announcement to be posted
+     * @param accountIdString the poster's accountID
+     * @return a Response to indicate failure or success
+     * @throws SQLException when there is a sql error
+     */
     @POST
     @Path("/newAnnouncement")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,6 +64,11 @@ public class AdminResource {
         }
     }
 
+    /**
+     *
+     * @return all the announcements in a responsbody
+     * @throws SQLException when there is a sql error
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/announcements")
@@ -78,15 +93,7 @@ public class AdminResource {
             System.err.println(e.getMessage());
         }
     }
-    @DELETE
-    @Path("/delete/{id}")
-    public void deleteEvent(@PathParam("id") int id){
-        try{
-            AdminDao.I.deleteEvent(id);
-        }catch (SQLException e){
-            System.err.println(e.getMessage());
-        }
-    }
+
 
     /**
      * This method handles the creation of a new event based on a FormBean object.

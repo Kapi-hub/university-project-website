@@ -435,7 +435,7 @@ function acceptE(){
 }
 function reject(){
     $.ajax({
-        url:`/api/admin/delete/${clickedEvent}`,
+        url:`/api/admin/crewAssignments/deleteEvent/${clickedEvent}`,
         type:"DELETE",
         success : function(){
             getEventsCrewNeeded();
