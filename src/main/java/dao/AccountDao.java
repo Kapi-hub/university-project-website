@@ -21,6 +21,11 @@ public enum AccountDao {
         connection = ConnectionFactory.getConnection();
     }
 
+    /**
+     * Handles the logging in with a specific account bean
+     * @param account the account bean in question
+     * @return true if the password in the account bean is, after digesting, equal otherwise false.
+     */
     public boolean checkValidLogin(AccountBean account) {
         try {
             String query = "SELECT id, type, salt, password FROM account WHERE (username=? OR email_address=?)";
@@ -58,6 +63,12 @@ public enum AccountDao {
 //    end;
 //    $$ language plpgsql;
 
+    /**
+     * Determines account type based on the Account ID.
+     * @param id the account id in question
+     * @return the account type
+     * @throws SQLException if SQL error occurs
+     */
     public AccountType determineAccountType(int id) throws SQLException {
         String query = "SELECT type FROM account WHERE id = ?";
 
@@ -73,6 +84,11 @@ public enum AccountDao {
         throw new SQLException("Account not found");
     }
 
+    /**
+     * Gets the forename and surname of an account given a specific client id
+     * @param id the account id
+     * @return the forename and surname
+     */
     public String getName(int id) {
         if (id == 0) {
             return null;
@@ -98,6 +114,11 @@ public enum AccountDao {
         return null;
     }
 
+    /**
+     * Gets the forename and surname of an account given a specific client id
+     * @param accountId the account id
+     * @return the forename and surname
+     */
     public String[] getNames(int accountId) throws SQLException {
         String query = "SELECT forename, surname FROM account WHERE id = ?";
 
@@ -113,6 +134,11 @@ public enum AccountDao {
         throw new SQLException("Account not found");
     }
 
+    /**
+     * Gets the forename and surname of an account given a specific client id
+     * @param accountId the client id
+     * @return the forename and surname in JSON format
+     */
     public String getNamesAsJSON(int accountId) throws SQLException {
         String query = "SELECT json_agg(json_build_object('forename', forename, 'surname', surname))FROM account WHERE id = ?";
 
@@ -129,6 +155,12 @@ public enum AccountDao {
         throw new SQLException("Account not found");
     }
 
+    /**
+     * Get email address by ID
+     * @param accountId the account id in question
+     * @return the email address of a specific account
+     * @throws SQLException if sql error occurs.
+     */
     public String getEmailAddressById(int accountId) throws SQLException {
         String query = "SELECT email_address FROM account WHERE id = ?";
         PreparedStatement st = connection.prepareStatement(query);

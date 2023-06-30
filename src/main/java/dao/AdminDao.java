@@ -13,11 +13,21 @@ public enum AdminDao {
     I;
     final Connection connection;
 
+    /**
+     * Sets up connection with singleton pattern
+     */
     AdminDao() {
         connection = ConnectionFactory.getConnection();
     }
 
     /*METHODS RELATED TO EVENTS*/
+
+    /**
+     * Adds a client to the database
+     * @param client the client it will add
+     * @return the client_id
+     * @throws SQLException error when working with SQL
+     */
     public int addClient(ClientBean client) throws SQLException {
         String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -343,6 +353,11 @@ public enum AdminDao {
     }
 
 
+    /**
+     * Returns all announcements in JSON form
+     * @return announcencements in JSON format
+     * @throws SQLException sql error
+     */
     public String getAllAnnouncements() throws SQLException {
         String insertQuery = """
                 SELECT json_agg(jsonb_build_object(
@@ -368,7 +383,12 @@ public enum AdminDao {
         return getSQLString(insertQuery);
     }
 
-
+    /**
+     * Gets the first string result
+     * @param insertQuery the query it will handle
+     * @return the first string of the first row
+     * @throws SQLException sql error
+     */
     private String getSQLString(String insertQuery) throws SQLException {
         PreparedStatement st = connection.prepareStatement(insertQuery);
         ResultSet rs = st.executeQuery();
@@ -383,6 +403,12 @@ public enum AdminDao {
         return null;
     }
 
+    /**
+     * Gets the forename based of accountID
+     * @param accountId the accountID
+     * @return the forename
+     * @throws SQLException sql error
+     */
     public String getUser(int accountId) throws SQLException {
         String insertQuery = """
                 Select forename 
@@ -403,6 +429,12 @@ public enum AdminDao {
         return null;
     }
 
+    /**
+     * Returns a list of all emails of enrolled crew members
+     * @param id the id of the event
+     * @return the email list it returns
+     * @throws SQLException sql error
+     */
     public String[] getEmailsOfEvent(int id) throws SQLException {
         String query = """
                 SELECT ARRAY_AGG(a.email_address) AS email_addresses

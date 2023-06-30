@@ -11,15 +11,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class to handle connectivity with the database related to events
+ */
 public enum EventDao {
     instance;
 
     private final Connection connection;
 
+    /**
+     * Setting up of the connection
+     */
     EventDao() {
         connection = ConnectionFactory.getConnection();
     }
 
+    /**
+     * Enrolls account with event
+     * @param accountId account that enrolls
+     * @param eventId the event the account enrolls in
+     * @throws SQLException occurs when SQL error
+     */
     public void addEnrolment(int accountId, int eventId) throws SQLException {
         String query = "INSERT INTO event_enrollment VALUES (?, ?)";
 
@@ -30,6 +42,12 @@ public enum EventDao {
         st.executeUpdate();
     }
 
+    /**
+     * removes enrolls of account
+     * @param accountId account that unenrolls
+     * @param eventId the event it unenrolls in
+     * @throws SQLException occurs when SQL error
+     */
     public void removeEnrolment(int accountId, int eventId) throws SQLException {
         String query = "DELETE FROM event_enrollment WHERE event_id = ? AND crew_member_id = ?";
 
@@ -40,6 +58,13 @@ public enum EventDao {
         st.executeUpdate();
     }
 
+    /**
+     * Get the required crew_size for a role given
+     * @param role role given
+     * @param eventId the event in question
+     * @return the number of people needed for that role
+     * @throws SQLException occurs when SQL error
+     */
     public int getRequiredCrewSize(RoleType role, int eventId) throws SQLException {
         String query = "SELECT crew_size FROM event_requirement WHERE event_id = ? AND role = ?::role_enum";
 
@@ -56,6 +81,13 @@ public enum EventDao {
         throw new SQLException("Event not found");
     }
 
+    /**
+     * Returns the amount of people enrolled for a specific role and event
+     * @param role the role in question
+     * @param eventID the event in question
+     * @return the amount of people enrolled
+     * @throws SQLException occurs when SQL error.
+     */
     public int getCurrentEnrolmentsForRole(RoleType role, int eventID) throws SQLException {
         String query = "SELECT COUNT(*) FROM crew_member c, event_enrollment ee WHERE ee.event_id = ? AND c.role = ?::role_enum AND c.id = ee.crew_member_id";
 
@@ -72,6 +104,13 @@ public enum EventDao {
         throw new SQLException("No enrolments");
     }
 
+    /**
+     * Update the required crew members needed.
+     * @param eventId the event in question
+     * @param role the role in question
+     * @param amount the value it will change it to
+     * @throws SQLException occurs when an SQL error.
+     */
     public void overwriteRequired(int eventId, RoleType role, int amount) throws SQLException {
         String query = "INSERT INTO event_requirement (event_id, crew_size, role)" +
                 "VALUES (?, ?, ?::role_enum) " +
@@ -86,6 +125,12 @@ public enum EventDao {
         st.executeUpdate();
     }
 
+    /**
+     * Get all information of a specific eventBean
+     * @param eventId the event ID in question
+     * @return all information ranging from event_id to status of the event
+     * @throws SQLException happens when an SQL error occurs
+     */
     public EventBean[] getAllDetails(int eventId) throws SQLException {
         String query = "SELECT * FROM event WHERE id = ?";
         try {
@@ -132,6 +177,12 @@ public enum EventDao {
 
     }
 
+    /**
+     * Gets all events from a specific month
+     * @param timestamp the timestamp it needs the month from
+     * @return all the events in the month.
+     * @throws SQLException occurs when an SQL error is there.
+     */
     public EventBean[] getFromMonth(Timestamp timestamp) throws SQLException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(timestamp);
@@ -182,7 +233,12 @@ public enum EventDao {
         return events;
     }
 
-
+    /**
+     * Gets the event status of a given event
+     * @param eventId the event in question
+     * @return the event status
+     * @throws SQLException occurs when there is an SQL error.
+     */
     public EventStatus getEventStatus(int eventId) throws SQLException {
         String query = "SELECT status FROM event WHERE id = ?";
 
@@ -198,6 +254,11 @@ public enum EventDao {
         throw new SQLException("Event not found");
     }
 
+    /**
+     * Get all enrolled members of a given event
+     * @param eventId the event in question
+     * @return all enrolled members
+     */
     public Object[] getEnrolledMembers(int eventId) {
         String query = "SELECT crew_member_id FROM event_enrollment WHERE event_id = ?";
         try {
@@ -254,6 +315,14 @@ public enum EventDao {
         return null;
     }
 
+    /**
+     * Gets the information of the event that a person has also enrolled in.
+     * @param accountId the account id that requests it
+     * @param client an optional extra filter to specify the client ID
+     * @param month an optional extra filter to specify the month
+     * @return the list of events
+     * @throws SQLException occurs when SQL error.
+     */
     public EventBean[] getEnrolledEvents(int accountId, int client, int month) throws SQLException {
         String query = """
             SELECT e.id, e.client_id, e.name, e.description, e.start, e.duration, 
@@ -303,6 +372,12 @@ public enum EventDao {
         return eventList.size() == 0 ? null : eventList.toArray(returnValue);
     }
 
+    /**
+     * Returns a map of all the required roles
+     * @param id the event ID in question
+     * @return a map (RoleType -> Amount of people needed)
+     * @throws SQLException occurs when SQL error occurs.
+     */
     public Map<RoleType, Integer> getRequiredMap(int id) throws SQLException {
         String query = "SELECT role, crew_size FROM event_requirement WHERE event_id = ?";
 
@@ -319,6 +394,12 @@ public enum EventDao {
         return returnValue;
     }
 
+    /**
+     * Checks whether a crew member has been enrolled or not.
+     * @param crewId the crew member in question
+     * @param eventId the event in question
+     * @return true if enrolled otherwise false.
+     */
     public boolean isEnrolled(int crewId, int eventId) {
         String query = "SELECT 1 FROM event_enrollment WHERE crew_member_id = ? AND event_id = ?";
         try {
@@ -335,6 +416,12 @@ public enum EventDao {
         }
     }
 
+    /**
+     * A method to check whether an event is in the path
+     * @param eventId the event in question
+     * @return true if the event is in the past
+     * @throws SQLException occurs when an SQL error
+     */
     public boolean isEventInPast(int eventId) throws SQLException {
         String query = "SELECT 1 FROM event WHERE id = ? AND start < NOW()";
         PreparedStatement st = connection.prepareStatement(query);
@@ -344,6 +431,12 @@ public enum EventDao {
         return rs.next();
     }
 
+    /**
+     * Retrieves the count of events based on the provided account ID and account type.
+     * @param accountId The ID of the account for which to retrieve event count.
+     * @param type The type of the account (ADMIN or CREW_MEMBER).
+     * @return The count of events based on the provided account ID and account type.
+     */
     public int getEventCount(int accountId, AccountType type) {
         String query;
         switch (type) {
@@ -369,6 +462,13 @@ public enum EventDao {
         }
     }
 
+    /**
+
+     Retrieves the total hours worked by a crew member for each month and year, based on the provided crew ID.
+     @param crewId The ID of the crew member for which to retrieve the hours worked.
+     @return An array of Object arrays containing the total hours worked and corresponding month-year for each entry.
+     @throws SQLException if a database access error occurs
+     */
     public Object[] getHoursWorked(int crewId) throws SQLException {
         String query = """
                 SELECT SUM(e.duration), CONCAT(m.month, '-', m.year)

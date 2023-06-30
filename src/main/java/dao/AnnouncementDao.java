@@ -9,15 +9,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Class to handle connectivity with the database related to announcements
+ */
 public enum AnnouncementDao {
     instance;
 
     private final Connection connection;
 
+    /**
+     * Setting up of the connection
+     */
     AnnouncementDao() {
         connection = ConnectionFactory.getConnection();
     }
 
+    /**
+     * Returns a list of announcements
+     * @param crewMemberId the crew member that requests the announcements sent to him
+     * @return a list of announcements
+     * @throws SQLException sql error
+     */
     public AnnouncementResponseBean[] getAnnouncementsForCrew(int crewMemberId) throws SQLException {
         String query = "SELECT * FROM announcement WHERE recipient = ? OR recipient IS NULL ORDER BY date_time DESC";
 
