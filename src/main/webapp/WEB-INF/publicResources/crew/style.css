@@ -125,15 +125,14 @@ doesn't get in the way of building / maintaining the website*/
 }
 
 .personalTag {
-    margin-left: 5px;
     padding: 5px;
     border-radius: 5px;
     background-color: var(--bs-light);
     color: var(--bs-dark);
 }
 
-.announcement-date-span {
-    margin-left: auto;
+.announcer {
+    margin-right: auto;
 }
 
 .tab_content {
@@ -238,12 +237,12 @@ doesn't get in the way of building / maintaining the website*/
     display: none;
 }
 
-.urgent.collapsed {
-    background-color: rgba(255, 0, 0, 0.25) !important;
-}
-
-.accordion-button.urgent:not(.collapsed) {
-    background-color: red !important;
+.urgent {
+    background-color: red;
+    margin-left: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--bs-light);
 }
 
 /*.content-container .tab_content.tab_past {*/
