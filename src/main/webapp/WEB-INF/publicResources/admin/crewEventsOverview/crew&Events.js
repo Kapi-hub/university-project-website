@@ -92,7 +92,7 @@ function addEvent() {
             alert("Event successfully sent!");
         },
         error: function () {
-            alert("Error creating a new event!");
+            // alert("Error creating a new event!");
 
         }
     });
@@ -178,7 +178,7 @@ function addCrewMember() {
             alert("Member successfully sent!");
         },
         error: function () {
-            alert("Error creating a new member!");
+            // alert("Error creating a new member!");
 
         }
 
@@ -683,7 +683,7 @@ function sendNewRoleToDB(memberID, role) {
             success: function () {
                 alert("Successfully changed the role");
             }, error: function () {
-                alert("Error changing the role");
+                // alert("Error changing the role");
             }
         }
     )
@@ -790,7 +790,7 @@ function unrollCrew(crewId, eventId) {
         success: function () {
             alert("Successfully unrolled crew from event");
         }, error: function () {
-            alert("Error unrolling crew from event!");
+            // alert("Error unrolling crew from event!");
         }
     });
 }
@@ -1127,7 +1127,7 @@ function deleteEvent(eventID) {
             alert("Successfully deleted this event");
             location.reload();
         }, error: function () {
-            alert("Error deleting this event");
+            // alert("Error deleting this event");
         }
     });
 }

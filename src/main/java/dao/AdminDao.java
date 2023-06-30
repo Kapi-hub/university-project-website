@@ -61,11 +61,12 @@ public enum AdminDao {
         st.setString(9, event.getBooking_type().toString());
 
 
-        ResultSet rs = st.executeQuery();
-        int event_id = -1;
-        if (rs.next())
-            event_id = rs.getInt(1);
-        return event_id;
+        int rs = st.executeUpdate();
+//        int event_id = -1;
+//        if (rs.next())
+//            event_id = rs.getInt(1);
+        System.out.println(rs);
+        return rs;
     }
 
     /**
