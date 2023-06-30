@@ -187,25 +187,33 @@ function addCrewMember() {
 /*
     This method shows all the producers fetched from the data base and shows them in a drop-down list
  */
+// First time page is loaded, the counter is 0
+let producerListOpenerCounter = 0;
+
 function getProducers() {
     let producers = [];
     let id = 0;
-    //TODO fix bug that appends the list for each click
-    sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
-        responseData.forEach(producer => producers.push(producer));
-        const producersList = document.querySelector('.dropdown-menu');
-        producers.forEach(producer => {
-            const producerItem = document.createElement('li');
-            const buttonElement = document.createElement('a');
-            producerItem.classList.add('dropdown-item');
-            producerItem.onclick = function () {
-                selectCrewMember(producer.forename + ' ' + producer.surname, producer.id);
-            };
-            producerItem.innerHTML = `<span class="producerName">${escapeHtml(producer.forename)} ${escapeHtml(producer.surname)}</span>`;
-            producerItem.appendChild(buttonElement);
-            producersList.appendChild(producerItem);
-        })
-    });
+
+    if (producerListOpenerCounter === 0) {
+        sendHttpRequest('GET', "/api/admin/crewAssignments/newEvent").then(responseData => {
+            responseData.forEach(producer => producers.push(producer));
+            const producersList = document.querySelector('.dropdown-menu');
+            producers.forEach(producer => {
+                const producerItem = document.createElement('li');
+                const buttonElement = document.createElement('a');
+                producerItem.classList.add('dropdown-item');
+                producerItem.onclick = function () {
+                    selectCrewMember(producer.forename + ' ' + producer.surname, producer.id);
+                };
+                //id=`${producer.id}` onclick="function(`+id+`)
+                producerItem.innerHTML = `<span class="producerName">${escapeHtml(producer.forename)} ${escapeHtml(producer.surname)}</span>`;
+
+                producerItem.appendChild(buttonElement);
+                producersList.appendChild(producerItem);
+            })
+        });
+        producerListOpenerCounter = 1;
+    }
 }
 
 function sendHttpRequest(method, url, data) {
@@ -345,7 +353,6 @@ function viewHours(memberId) {
     sendHttpRequest('GET', `/api/event/getCrewHoursWorked/${memberId}`)
         .then(responseData => {
             if (responseData != null) {
-                //TODO fix bug in which the response data does not change
                 responseData.forEach(time => times.push(time));
                 responseData.forEach((time) => {
                     let date = time[0];
@@ -365,15 +372,19 @@ function viewHours(memberId) {
 
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
-    modalContent.appendChild(modalHeader);
-
     modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>`;
+
+    modalContent.appendChild(modalHeader);
     modalContent.appendChild(modalBody);
     modalContent.appendChild(modalFooter);
 
     modalDialog.appendChild(modalContent);
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
+
+    $(".modal").on("hidden.bs.modal", function(){
+        document.body.removeChild(modal);
+    });
 }
 
 /*
@@ -382,8 +393,7 @@ function viewHours(memberId) {
 function showHoursWorkedModal(memberId) {
     viewHours(memberId);
     const modalElement = document.getElementById("viewHours");
-    const bootstrapModal = new bootstrap.Modal(modalElement);
-    bootstrapModal.show();
+    (new bootstrap.Modal(modalElement)).show();
 }
 
 /*
@@ -689,15 +699,10 @@ function showChangeRoleModal(id) {
     bootstrapModal.show();
 }
 
-/*
-  This method initializes the modal that is showed for presenting the crews that are enrolled in an event
- */
-//TODO: debug why it doesnt refresh after clicking on multiple modals
 function showViewCrewsInEventModal(id) {
     viewCrewsInEvent(id);
     const modalElement = document.getElementById("viewCrews");
-    const bootstrapModal = new bootstrap.Modal(modalElement);
-    bootstrapModal.show();
+    (new bootstrap.Modal(modalElement)).show();
 }
 
 /*
@@ -760,6 +765,10 @@ function viewCrewsInEvent(eventId) {
     modalDialog.appendChild(modalContent);
     modal.appendChild(modalDialog);
     document.body.appendChild(modal);
+
+    $(".modal").on("hidden.bs.modal", function(){
+        document.body.removeChild(modal);
+    });
 }
 /*
     This method is called when a de-enroll button is clicked
