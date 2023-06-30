@@ -77,7 +77,6 @@ body{
     margin: auto;
     border-radius: 20px;
     background-color: var(--bs-light);
-
 }
 
 .overflow-auto::-webkit-scrollbar{
