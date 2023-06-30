@@ -417,8 +417,9 @@ public enum AdminDao {
         PreparedStatement st = connection.prepareStatement(query);
         st.setInt(1, id);
         ResultSet rs = st.executeQuery();
-        if (rs.next()) {
-            return (String[]) rs.getArray(1).getArray();
+        Array arr;
+        if (rs.next() && (arr=rs.getArray(1)) != null) {
+            return (String[]) arr.getArray();
         }
         return null;
     }
