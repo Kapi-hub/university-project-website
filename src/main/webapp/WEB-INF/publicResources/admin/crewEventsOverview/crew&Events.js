@@ -110,7 +110,7 @@ function addEvent() {
 
     console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: "../api/admin/crewAssignments",
+        url: "../api/admin/crewAssignments/newEvent",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
