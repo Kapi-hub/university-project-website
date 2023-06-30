@@ -37,11 +37,6 @@ public class TestAdmin {
     CrewMemberBean goodCrew;
     @BeforeEach
     public void setCrew() {
-        crew = new CrewMemberBean(
-                "Crew", "member", generateRandomString(20), "crew_member123@gmail.com",
-                RoleType.PHOTOGRAPHER, Team.CORE);
-    }
-    public void setCrew() {
         goodCrew = new CrewMemberBean("Forename", "Surname", "Username",
                 "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CLUB);
     }
