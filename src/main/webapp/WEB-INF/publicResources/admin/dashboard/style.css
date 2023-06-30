@@ -4,8 +4,15 @@
 .modal.fade .modal-dialog .modal-content {
     background-color: var(--bs-dark);
 }
+#ddCrew ,#collapseOne, #collapseTwo{
+     max-height: 200px; /* Set the maximum height of the dropdown */
+     overflow-y: auto; /* Enable vertical scrolling */
+ }
+#collapseOne, #collapseTwo{
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
 
-.modal.fade .modal-dialog .modal-content .modal-header , #inputCBtns, #inputSBtns{
+.modal.fade .modal-dialog .modal-content .modal-header , #inputCBtns, #inputSBtns , #checkboxText,#postEventsModal,#acceptEvent{
     border-bottom: #1F1F1F 1px;
     justify-content: space-between; /* container is flex by default */
     margin: 5px;
@@ -15,7 +22,7 @@
 #inputCBtns{
     border-color: red;
 }
-#inputSBtns{
+#inputSBtns {
     border-color: var(--bs-primary-rgb);
 }
 #inputCBtns, #inputSBtns{
@@ -55,6 +62,7 @@
 body{
     background-color: var(--bs-dark);
 }
+
 .announcementText, .eventsText{
     font-weight: bold;
     font-size: 22px;
@@ -84,8 +92,15 @@ body{
     border-radius: 20px;
     padding: 0 20px;
 }
+.latestEvents {
+    background-color: var(--bs-primary-bg-subtle);
+    border-radius: 10px;
+    border-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    margin-left: 10%;
+}
 
-.postAnnouncementBttn,.latestEvents , .saveBttn, .closeBttn, .btn-close, .createEventBttn, .saveEventBttn {
+.postAnnouncementBttn , .saveBttn, .closeBttn, .btn-close, .createEventBttn, .saveEventBttn {
     margin-left: auto;
     margin-right: 10px;
     font-size: 20px;
@@ -100,7 +115,7 @@ body{
     width : 100%;
 }
 
-.crewButton{
+.crewButton ,.saveEventCrewBttn{
     background-color: var(--bs-primary);
     border-radius: 20px;
     border-color: var(--bs-primary);
@@ -109,20 +124,11 @@ body{
     margin-bottom: 10px;
 }
 
-.closeBttn {
-    border-radius: 20px;
-    border-color: black;
-    color: var(--bs-light);
-    margin-left: auto;
-    background-color: red;
-}
-.inputRecipients{
-    display: compact;
-    width: 100%;
-    overflow-y: auto;
+.closeBttn,.btn-close {
+    background-color: red; !important;
 }
 
-.inputTitle {
+.inputTitle{
     display: block;
     width: 100%;
     overflow-y: auto;
@@ -174,14 +180,14 @@ body{
     padding: 10px 0;
 }
 
-.toast{
+#liveToast{
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: green;
     color: var(--bs-light);
-    z-index: 1;
+    transition-duration: 1s; /* Adjust this value to change the duration */
 }
 
 * {
