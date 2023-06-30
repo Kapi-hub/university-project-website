@@ -55,35 +55,62 @@ function addEvent() {
     const eventPlanner = eventCrewQuery.children[13].value;
     const eventVideographer = eventCrewQuery.children[16].value;
 
+
+    //TODO: check how to do with the drop down list - how do i extract the name that is selected
+    // const eventProducer;
+
     var data = {
         clientBean: {
-            forename: clientFirstName, surname: clientLastName, phone_number: clientPhone, emailAddress: clientEmail
-        }, eventBean: {
-            name: eventTitle, description: eventDescription, start: eventDateTime, duration: eventDuration,
-            production_manager_id: selectedCrewMemberId,
-            location: eventLocation, type: eventType, booking_type: bookingType
+            forename: clientFirstName,
+            surname: clientLastName,
+            phone_number: clientPhone,
+            emailAddress: clientEmail
+        },
+        eventBean: {
+            name: eventTitle,
+            description: eventDescription,
+            start: eventDateTime,
+            duration: eventDuration,
+            location: eventLocation,
+            type: eventType,
+            booking_type: bookingType
         },
 
-        requiredCrewBeans: [{
-            crew_size: eventPhotographer, role: "PHOTOGRAPHER"
-        }, {
-            crew_size: eventAssistant, role: "ASSISTANT"
-        }, {
-            crew_size: eventEditor, role: "EDITOR"
-        }, {
-            crew_size: eventDataHandler, role: "DATA_HANDLER"
-        }, {
-            crew_size: eventPlanner, role: "PLANNER"
-        }, {
-            crew_size: 0, role: "PRODUCER"
-        }, {
-            crew_size: eventVideographer, role: "VIDEOGRAPHER"
-        }]
-
-
+        requiredCrewBeans: [
+            {
+                crew_size: eventPhotographer,
+                role: "PHOTOGRAPHER"
+            },
+            {
+                crew_size: eventAssistant,
+                role: "ASSISTANT"
+            },
+            {
+                crew_size: eventEditor,
+                role: "EDITOR"
+            },
+            {
+                crew_size: eventDataHandler,
+                role: "DATA_HANDLER"
+            },
+            {
+                crew_size: eventPlanner,
+                role: "PLANNER"
+            },
+            {
+                crew_size: 0,
+                role: "PRODUCER"
+            },
+            {
+                crew_size: eventVideographer,
+                role: "VIDEOGRAPHER"
+            }
+        ]
     }
+
+    console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: `/api/admin/crewAssignments/newEvent`,
+        url: "../api/admin/crewAssignments",
         method: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -92,15 +119,12 @@ function addEvent() {
             alert("Event successfully sent!");
         },
         error: function () {
-            // alert("Error creating a new event!");
+            alert("Error creating a new event!");
 
         }
     });
 }
 
-/*
-    This method fetches the data from the front-end and sends it to the database
- */
 function addCrewMember() {
     let memberQuery = document.querySelector('#memberInfo');
     const memberFirstName = memberQuery.children[1].value;
@@ -165,7 +189,7 @@ function addCrewMember() {
         accountType: "CREW_MEMBER",
         salt: memberPassword,
         role: roles,
-        team: permissionType,
+        team: permissionType
     }
 
     console.log(JSON.stringify(data));
@@ -178,9 +202,13 @@ function addCrewMember() {
         success: function () {
             alert("Member successfully sent!");
         },
-        error: function () {
-            // alert("Error creating a new member!");
-
+        error: function (xhr, textStatus, errorThrown) {
+            if (xhr.status === 400) {
+                alert("Invalid email or password");
+            } else {
+                alert("An error occurred");
+            }
+            console.error(errorThrown);
         }
 
     });
@@ -779,6 +807,12 @@ function viewCrewsInEvent(eventId) {
         document.body.removeChild(modal);
     });
 }
+
+function showPopUp() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
+
 
 /*
     This method is called when a de-enroll button is clicked

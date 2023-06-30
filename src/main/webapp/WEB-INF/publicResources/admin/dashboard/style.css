@@ -55,7 +55,6 @@
 body{
     background-color: var(--bs-dark);
 }
-
 .announcementText, .eventsText{
     font-weight: bold;
     font-size: 22px;

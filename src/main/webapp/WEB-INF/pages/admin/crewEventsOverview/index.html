@@ -246,26 +246,29 @@
             <div class="modal-body">
                 <div class="memberInfo" id="memberInfo">
                     <label for="memberFirstName" class="memberFirstNameText"><strong>First name</strong></label>
-                    <input type="text" class="memberName" id="memberFirstName" placeholder="Enter member's first name">
+                    <input type="text" class="inputField" id="memberFirstName" placeholder="Enter first name">
                     <br>
 
                     <label for="memberLastName" class="memberLastNameText"><strong>Last name</strong></label>
-                    <input type="text" class="memberName" id="memberLastName" placeholder="Enter member's last name">
+                    <input type="text" class="inputField" id="memberLastName" placeholder="Enter last name">
                     <br>
 
                     <label for="email" class="emailText"><strong>Email</strong></label>
-                    <input type="email" class="emailText" id="email" placeholder="Enter member's email">
+                    <input type="email" class="inputField" id="email" placeholder="Enter email">
                     <br>
 
                     <label for="username" class="usernameText"><strong>Username</strong></label>
-                    <input type="text" class="usernameText" id="username" placeholder="Enter member's username">
+                    <input type="text" class="inputField" id="username" placeholder="Enter username">
                     <br>
 
                     <label for="password" class="passwordText"><strong>Password</strong></label>
-                    <input type="password" class="passwordText" id="password" placeholder="Enter member's password">
+                    <input type="password" class="inputField" id="password" placeholder="Enter password">
+                    <div class="popup" onmouseover="showPopUp()" onmouseout="showPopUp()">&#9432;
+                        <span class="popuptext" id="myPopup"> Password Requirements: <br> at least 8 characters; <br> No spaces; <br> Must contain one lowercase; uppercase; digit; symbol</span>
+                    </div>
                     <br>
                 </div>
-                <label for="permissionType" class="permissionTypeText"><strong>Permission</strong></label>
+                <label for="permissionType" class="permissionTypeText"><strong>Select Permission Level</strong></label>
                 <br>
                 <div id="permissionType">
                     <label class="clubTeam">
@@ -285,7 +288,7 @@
                 </div>
 
 
-                <label for="roleType" class="roleTypeText"><strong>Role</strong></label>
+                <label for="roleType" class="roleTypeText"><strong>Select Role</strong></label>
                 <br>
 
                 <div id="roleType">
