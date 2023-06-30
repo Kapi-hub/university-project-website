@@ -217,7 +217,7 @@ public class EventResource {
         return returnValue;
     }
 
-    private Response enrol(int crewId, int eventId) {
+    public Response enrol(int crewId, int eventId) {
         if (!canEnrol(eventId, crewId)) {
             return Response.notModified()
                     .build();

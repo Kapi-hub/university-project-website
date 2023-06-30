@@ -22,7 +22,6 @@ class TestAdmin {
         goodCrew = new CrewMemberBean("Forename", "Surname", "Username",
                 "b.yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.PRODUCER, Team.CLUB);
         resource.handleCreateNewMember(goodCrew);
-
     }
     @Test
     void testValidEmail() {
