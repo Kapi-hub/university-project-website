@@ -136,6 +136,24 @@ public class AdminResource {
 
     }
 
+    /**
+     *
+     * fetches all the events from the database
+     * @return a response 200 if the fetch of all events is successful, of 500 if something fail
+     */
+    @GET
+    @Path("/crewAssignments/bookings")
+    @RolesAllowed("admin")
+    public Response getAllEvents() {
+        try {
+            return Response.ok(AdminDao.I.getLatestEvent()).build();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return Response.serverError().build();
+        }
+
+    }
+
     @GET
     @Path("/event/{id}")
     @RolesAllowed("admin")
