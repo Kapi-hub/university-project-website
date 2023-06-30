@@ -1,0 +1,72 @@
+### LOGIN
+POST http://localhost:8080/api/login/submit-form
+Content-Type: application/json
+
+{
+  "username": "RalucAdmin",
+  "password": "N0tMyP4$$word"
+}
+
+### Fetch all events
+GET http://localhost:8080/api/admin/crewAssignments/bookings
+Accept: application/json
+
+### Fetch all members
+GET http://localhost:8080/api/admin/crewAssignments/members
+Accept: application/json
+
+### Create a new event
+POST http://localhost:8080/api/admin/crewAssignments/newEvent
+Content-Type: application/json
+
+{
+  "clientBean": {
+    "forename": "Pavan",
+    "surname": "Pavan",
+    "phone_number": "0728291",
+    "emailAddress": "pavanita28@gmail.com"
+  },
+  "eventBean": {
+    "name": "henlohenlo",
+    "description": "huge festival",
+    "start": "2023-08-26T16:00:10.000",
+    "duration": "5",
+    "location": "Enschede",
+    "type": "FESTIVAL",
+    "booking_type": "PHOTOGRAPHY"
+  },
+
+  "requiredCrewBeans": [
+    {
+      "crew_size": "1",
+      "role": "PHOTOGRAPHER"
+    },
+    {
+      "crew_size": 2,
+      "role": "ASSISTANT"
+    },
+    {
+      "crew_size": 1,
+      "role": "EDITOR"
+    },
+    {
+      "crew_size": 0,
+      "role": "DATA_HANDLER"
+    },
+    {
+      "crew_size": 0,
+      "role": "PLANNER"
+    },
+    {
+      "crew_size": 1,
+      "role": "VIDEOGRAPHER"
+    }
+  ]
+}
+
+### Fetch all producers
+GET http://localhost:8080/api/admin/crewAssignments/newEvent
+Accept: application/json
+
+###
+PUT http://localhost:8080/api/admin/crewAssignments/changeTeam/359/core
