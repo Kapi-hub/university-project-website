@@ -7,8 +7,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
+
+import static dao.MailService.MAIL;
 
 @Path("/admin")
 public class AdminResource {
