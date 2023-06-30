@@ -71,7 +71,7 @@ const formatCrewString = (crew) => {
 const formatEnrolled = (enrolled, eventName) => {
     let enrolledArray = [];
     enrolled.forEach(([role, people]) => {
-        const peopleString = people.join(", ");
+        const peopleString = people.map(idAndName => idAndName[1]).join(", ");
         const detailsId = `details-${(eventName + role).replace(/\s/g, "")}`;
         let enrolledSpan = document.createElement("span");
         enrolledSpan.classList.add("hoverable");

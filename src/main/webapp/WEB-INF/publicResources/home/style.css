@@ -3,12 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    --shadow: rgba(0,0,0,0.2);
 }
 
 .main{
     position: relative;
-    background: linear-gradient(120deg, var(--bs-primary), var(--bs-primary) 60%, var(--bs-dark) 60%);
+    background: linear-gradient(120deg, var(--bs-primary), var(--bs-primary) 25%, var(--bs-dark) 90%);
     min-height: 90vh;
     padding: 0 100px;
     display: flex;
@@ -45,11 +44,14 @@
 }
 
 .main .contentBx .text h2 {
+    color: white;
+    font-weight: bold;
     font-size: 3em;
     text-align: center;
 }
 
 .main .contentBx .text p {
+    color: white;
     font-size: 1.2em;
     font-family: "Segoe UI", sans-serif !important;
     line-height: 1.8em;
@@ -151,12 +153,4 @@
 .main .contentBx .sci a ion-icon:hover {
     transform: scale(1.15);
     transition: 0.5s ease-in-out;
-}
-
-h2 {
-    text-shadow: 5px 5px 5px var(--shadow);
-}
-p {
-    text-shadow: 5px 5px 5px var(--shadow);
-
 }

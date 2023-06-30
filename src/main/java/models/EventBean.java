@@ -4,6 +4,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.sql.Timestamp;
 
+/**
+ * An event bean following the database structure.
+ */
 @XmlRootElement(name = "event")
 public class EventBean {
     private int id;
@@ -49,6 +52,10 @@ public class EventBean {
         this.type = type;
         this.booking_type = booking_type;
         this.status = status;
+    }
+
+    public EventBean(int eventId) {
+        this.id= eventId;
     }
 
     public BookingType getBooking_type() {

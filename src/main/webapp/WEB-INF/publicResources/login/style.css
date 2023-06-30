@@ -15,17 +15,10 @@
     padding: 10px;
     margin-bottom: 30px;
     align-items: center;
-    /*color:var(--bs-light);*/
     backdrop-filter: blur(2px);
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
     box-shadow: 0 0 30px rgba(0, 0, 0, .5);
-    /*display: flex;*/
-    /*align-items: flex-start;*/
-
-    /*border: 1px solid var(--bs-primary);*/
-    /*border-radius: 5px;*/
-    /*background-color: var(--bs-dark);*/
 }
 
 .email.ion-icon, .password.ion-icon {
@@ -42,7 +35,7 @@
     display: flex;
     align-items: center;
     height: 100vh;
-    background: url('/static/img/img411.jpg') no-repeat center;
+    background: url('/static/img/login.jpg') no-repeat;
     background-size: cover;
 
 }
@@ -60,7 +53,6 @@
 * {
     font-family: 'Kiona', sans-serif;
     color: var(--bs-primary);
-    font-weight: bolder;
 }
 
 .navbar-custom .navbar-brand {

@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 public enum Team {
     CORE,
     CLUB,
-    CORE_AND_CLUB;
+    CORE_CLUB;
 
     @Override
     public String toString() {

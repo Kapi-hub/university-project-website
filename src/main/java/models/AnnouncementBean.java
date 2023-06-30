@@ -15,6 +15,33 @@ public class AnnouncementBean {
     private Timestamp dateTime;
     private int recipient;
 
+    public AnnouncementBean(int announcementID, int announcer, String title, String body, boolean urgent) {
+        this.announcementID = announcementID;
+        this.announcer = announcer;
+        this.title = title;
+        this.body = body;
+        this.urgent = urgent;
+    }
+
+    public AnnouncementBean(int announcementID, int announcer, String title, String body, int recipient, boolean urgent) {
+        this.announcementID = announcementID;
+        this.announcer = announcer;
+        this.title = title;
+        this.body = body;
+        this.recipient = recipient;
+        this.urgent = urgent;
+    }
+
+    public boolean isUrgent() {
+        return urgent;
+    }
+
+    public void setUrgent(boolean urgent) {
+        this.urgent = urgent;
+    }
+
+    private boolean urgent;
+
     public AnnouncementBean() {}
     
     public AnnouncementBean(String title, String body, int recipient) {

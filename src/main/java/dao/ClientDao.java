@@ -12,17 +12,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Class to modify data relating to the client
  * Singleton Pattern // Data access Object
  */
 public enum ClientDao {
+    /**
+     * Enum constant to make sure only one instance exists that handles the code.
+     */
     I;
 
+    /**
+     * The connection retrieved by the connection Factory.
+     */
     final Connection connection;
 
+    /**
+     * Constructor to set up connection
+     */
     ClientDao() {
         connection = ConnectionFactory.getConnection();
     }
 
+    /**
+     * Adds a client to the database
+     * @param client a client object to define the data necessary
+     * @return the client_id of which it has been generated
+     * @throws SQLException occurs when an SQL issue arises.
+     */
     public int addClient(ClientBean client) throws SQLException {
         String query = "INSERT INTO account (forename, surname, username, email_address, type) VALUES (?,?,?,?,'client'::account_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -46,6 +62,12 @@ public enum ClientDao {
         return client_id;
     }
 
+    /**
+     * Adds an event to the database
+     * @param event an event object to define the data necessary
+     * @return the event_id of which it has been generated
+     * @throws SQLException occurs when an SQL issue arises.
+     */
     public int addEvent(EventBean event) throws SQLException {
         String query = "INSERT INTO event (client_id, name, description, start, duration, location, type, booking_type) VALUES (?,?,?,?,?,?, ?::event_type_enum, ?::booking_type_enum) RETURNING id";
         PreparedStatement st = connection.prepareStatement(query);
@@ -67,6 +89,11 @@ public enum ClientDao {
         return event_id;
     }
 
+    /**
+     * Adds the crew required
+     * @param required an requiredCrew object to define the appropriate relation of staff needed
+     * @throws SQLException occurs when an SQL issue arises.
+     */
     public void addRequirement(RequiredCrewBean required) throws SQLException {
         String query = "INSERT INTO event_requirement (event_id, crew_size, role) VALUES (?, ?, ?::role_enum)";
         PreparedStatement st = connection.prepareStatement(query);

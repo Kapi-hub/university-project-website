@@ -1,0 +1,127 @@
+# If it doesn't work, then they were already tested, such that the DELETE functions
+# already deleted the id that was given as a param.
+
+### LOGIN
+POST http://localhost:8080/api/login/submit-form
+Content-Type: application/json
+
+{
+  "username": "RalucAdmin",
+  "password": "N0tMyP4$$word"
+}
+
+### Fetch all events
+GET http://localhost:8080/api/admin/crewAssignments/bookings
+Accept: application/json
+
+### Fetch all members
+GET http://localhost:8080/api/admin/crewAssignments/members
+Accept: application/json
+
+### Create a new event
+POST http://localhost:8080/api/admin/crewAssignments/newEvent
+Content-Type: application/json
+
+{
+  "clientBean": {
+    "forename": "Pavan",
+    "surname": "Pavan",
+    "phone_number": "0728291",
+    "emailAddress": "pavanita28@gmail.com"
+  },
+  "eventBean": {
+    "name": "henlohenlo",
+    "description": "huge festival",
+    "start": "2023-08-26T16:00:10.000",
+    "duration": "5",
+    "location": "Enschede",
+    "type": "FESTIVAL",
+    "booking_type": "PHOTOGRAPHY"
+  },
+
+  "requiredCrewBeans": [
+    {
+      "crew_size": "1",
+      "role": "PHOTOGRAPHER"
+    },
+    {
+      "crew_size": 2,
+      "role": "ASSISTANT"
+    },
+    {
+      "crew_size": 1,
+      "role": "EDITOR"
+    },
+    {
+      "crew_size": 0,
+      "role": "DATA_HANDLER"
+    },
+    {
+      "crew_size": 0,
+      "role": "PLANNER"
+    },
+    {
+      "crew_size": 1,
+      "role": "VIDEOGRAPHER"
+    }
+  ]
+}
+
+### Fetch all producers
+GET http://localhost:8080/api/admin/crewAssignments/newEvent
+Accept: application/json
+
+### Fetch worked hours for specific crew member; first member id
+GET http://localhost:8080/api/event/getCrewHoursWorked/384
+Accept: application/json
+
+### Fetch crew members to show in specific event; first event id
+GET http://localhost:8080/api/event/getCrew/101
+Accept: application/json
+
+### Fetch events from DB
+GET http://localhost:8080/api/admin/crewAssignments/bookings
+Accept: application/json
+
+### Fetch name of event production manager; first production manager id
+GET http://localhost:8080/api/event/getName/364
+Accept: application/json
+
+### Update event's team; first member id; second team name
+PUT http://localhost:8080/api/admin/crewAssignments/changeTeam/384/club
+Content-Type: application/json
+
+### De-enrolls member from team
+DELETE http://localhost:8080/api/event/deenrol/180/101
+
+### Deletes events; first event id
+DELETE http://localhost:8080/api/admin/crewAssignments/deleteEvent/101
+
+### Creates/=Saves new announcement
+POST http://localhost:8080/api/admin/newAnnouncement
+Content-Type: application/json
+
+{
+  "title": "Title of announcement",
+  "body": "From testing.http",
+  "recipient": "384"
+}
+
+### Fetches name of event
+GET http://localhost:8080/api/admin/crewReq
+Accept: application/json
+
+### Fetches the user
+GET http://localhost:8080/api/admin/user
+Accept: application/json
+
+### Fetches the announcements
+GET http://localhost:8080/api/admin/announcements
+Accept: application/json
+
+### Fetches events
+GET http://localhost:8080/api/admin/events
+Accept: application/json
+
+
+

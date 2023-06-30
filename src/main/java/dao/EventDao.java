@@ -86,6 +86,52 @@ public enum EventDao {
         st.executeUpdate();
     }
 
+    public EventBean[] getAllDetails(int eventId) throws SQLException {
+        String query = "SELECT * FROM event WHERE id = ?";
+        try {
+
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setInt(1, eventId);
+            ResultSet rs = st.executeQuery();
+
+            ArrayList<ArrayList<Object>> rsList = new ArrayList<>();
+
+            int count;
+            for (count = 0; rs.next(); count++) {
+                ArrayList<Object> rowData = new ArrayList<>();
+                rowData.add(rs.getInt("id"));
+                rowData.add(rs.getInt("client_id"));
+                rowData.add(rs.getString("name"));
+                rowData.add(rs.getString("description"));
+                rowData.add(rs.getTimestamp("start"));
+                rowData.add(rs.getInt("duration"));
+                rowData.add(rs.getString("location"));
+                rowData.add(rs.getInt("production_manager_id"));
+                rowData.add(EventType.toEnum(rs.getString("type")));
+                rowData.add(BookingType.toEnum(rs.getString("booking_type")));
+                rowData.add(EventStatus.toEnum(rs.getString("status")));
+                rsList.add(rowData);
+            }
+            if (count == 0) {
+                return null;
+            }
+
+            EventBean[] events = new EventBean[count];
+            int i = 0;
+            for (ArrayList<Object> row : rsList) {
+                events[i] = new EventBean((int) row.get(0), (int) row.get(1), (String) row.get(2), (String) row.get(3), (Timestamp) row.get(4), (int) row.get(5), (String) row.get(6), (int) row.get(7), (EventType) row.get(8), (BookingType) row.get(9), (EventStatus) row.get(10));
+                i++;
+            }
+            return events;
+
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return null;
+
+    }
+
     public EventBean[] getFromMonth(Timestamp timestamp) throws SQLException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(timestamp);
@@ -136,6 +182,7 @@ public enum EventDao {
         return events;
     }
 
+
     public EventStatus getEventStatus(int eventId) throws SQLException {
         String query = "SELECT status FROM event WHERE id = ?";
 
@@ -169,12 +216,13 @@ public enum EventDao {
                 rolesPerId.add(CrewMemberDao.I.getRole(id));
             }
 
-            Map<RoleType, ArrayList<String>> roleMap = new HashMap<>();
+            Map<RoleType, ArrayList<Object[]>> roleMap = new HashMap<>();
             for (int i = 0; i < rolesPerId.size(); i++) {
                 RoleType currentRoletype = rolesPerId.get(i);
-                String currentName = AccountDao.instance.getName(enrolledIds.get(i));
+                int currentId = enrolledIds.get(i);
+                String currentName = AccountDao.instance.getName(currentId);
 
-                ArrayList<String> toBeAssigned;
+                ArrayList<Object[]> toBeAssigned;
 
                 if (roleMap.containsKey(currentRoletype)) {
                     toBeAssigned = roleMap.get(currentRoletype);
@@ -182,21 +230,19 @@ public enum EventDao {
                     toBeAssigned = new ArrayList<>();
                 }
 
-                toBeAssigned.add(currentName);
+                toBeAssigned.add(new Object[] {currentId, currentName});
                 roleMap.put(currentRoletype, toBeAssigned);
             }
             Object[] returnValue = new Object[roleMap.size()];
 
             int i = 0;
             for (RoleType role : roleMap.keySet()) {
-                ArrayList<String> memberArrayList = roleMap.get(role);
-                String[] members = new String[memberArrayList.size()];
+                ArrayList<Object[]> memberArrayList = roleMap.get(role);
+                Object[] members = new Object[memberArrayList.size()];
                 for (int j = 0; j < memberArrayList.size(); j++) {
                     members[j] = memberArrayList.get(j);
                 }
-                Object[] innerObjectArray = new Object[2];
-                innerObjectArray[0] = role;
-                innerObjectArray[1] = members;
+                Object[] innerObjectArray = new Object[] {role, members};
                 returnValue[i] = innerObjectArray;
                 i++;
             }
@@ -349,7 +395,7 @@ public enum EventDao {
         while (rs.next()) {
             String date = rs.getString(2);
             int hours = rs.getInt(1);
-            resultList.add(new Object[] {date, hours});
+            resultList.add(new Object[]{date, hours});
         }
 
         return resultList.size() == 0 ? null : resultList.toArray(new Object[0]);

@@ -2,6 +2,10 @@ package models;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+/**
+ * A class with the information necessary for the client.
+ * It extends the client with just a phone number.
+ */
 @XmlRootElement
 public class ClientBean extends AccountBean {
     private String phone_number;

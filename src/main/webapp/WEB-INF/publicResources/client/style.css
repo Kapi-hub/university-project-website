@@ -49,15 +49,19 @@ nav {
 
 .sub-title {
     font-size: 3rem;
-    font-style: italic;
     text-align: center;
     animation: movingSubTitle 1.5s;
-
-
 }
 .heading {
     font-size: 2rem;
     font-weight: 500;
+    text-align: center;
+}
+.paragraph {
+    font-size: 1.2rem;
+    font-weight: 70;
+    text-align: center;
+
 }
 
 .form-group input, .form-control {
