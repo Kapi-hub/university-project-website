@@ -50,4 +50,3 @@
 + Admins can view all events and crew members.
 + Admins can change crew members' roles and teams.
 + Admins can delete events.
-+ Admins can change event details.
