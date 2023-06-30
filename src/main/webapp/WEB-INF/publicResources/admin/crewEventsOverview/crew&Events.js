@@ -619,7 +619,7 @@ function changeRole(memberID) {
     const dataButton = document.createElement('a');
     dataButton.setAttribute("class", "dropdown-item");
     dataButton.setAttribute("href", "#");
-    dataButton.textContent = "data";
+    dataButton.textContent = "data_handler";
     dataButton.onclick = function () {
         selectWord("data");
         role = dataButton.textContent;
@@ -658,7 +658,7 @@ function changeRole(memberID) {
     const modalFooter = document.createElement("div");
     modalFooter.setAttribute("class", "modal-footer");
     modalFooter.innerHTML = `<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewRoleToDB(${memberID}, ${role})">Save changes</button>`;
+            <button type="button" class="btn" style="background-color: var(--bs-primary); color: #fff; font-weight: 1000" onclick="sendNewRoleToDB(${memberID}, role)">Save changes</button>`;
 
     modalContent.appendChild(modalHeader);
     modalContent.appendChild(modalBody);
