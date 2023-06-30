@@ -863,7 +863,6 @@ function getAllEvents() {
                 eventName.innerHTML = `
                         <span>${escapeHtml(name)}</span>
                         <div class="buttons">
-                            <ion-icon name="pencil-outline" id="pencil-outline-icon" onclick = "changeDetails(` + id + `)"></ion-icon>
                             <ion-icon name="trash-outline" id="trash-outline-icon" onclick = "confirmationToast(` + id + `)"></ion-icon>
                         </div>`
 
