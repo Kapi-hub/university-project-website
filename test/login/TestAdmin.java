@@ -65,8 +65,8 @@ public class TestAdmin {
                 "b.yilmaz-1@student.utwente.nl", "N0t My R34L Pa$$WoRd", RoleType.EDITOR, Team.CORE);
         CrewMemberBean badCrewInvalidEmail = new CrewMemberBean("Forename", "Surname", "Username",
                 ".yilmaz-1@student.utwente.nl", "N0tMyR34LPa$$WoRd", RoleType.EDITOR, Team.CORE);
-        assertEquals((Response.ok().build()).toString(), (admin.handleCreateNewMember(goodCrew)).toString());
-        assertEquals((Response.status(400).build()).toString(), (admin.handleCreateNewMember(badCrewInvalidPassword)).toString());
-        assertEquals((Response.status(400).build()).toString(), (admin.handleCreateNewMember(badCrewInvalidEmail)).toString());
+        assertEquals(Response.ok().build().getEntity(), admin.handleCreateNewMember(goodCrew).getEntity());
+        assertEquals(Response.status(400).build().getEntity(), admin.handleCreateNewMember(badCrewInvalidPassword).getEntity());
+        assertEquals(Response.status(400).build().getEntity(), admin.handleCreateNewMember(badCrewInvalidEmail).getEntity());
     }
 }
