@@ -7,6 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * Class to handle the static resources
+ * It is used to serve the static resources
+ * This class comes into play when the user requests a resource from the /static/ folder
+ * This folder is where publicly accessible resources are stored
+ * For instance, the css files, the images, the javascript files, etc.
+ * If the url is found, the user is served the correct file located in the WEB-INF/publicResources/ folder
+ */
 public class StaticResources extends HttpServlet {
 
     private static final String PUBLIC_URL = "/static/";

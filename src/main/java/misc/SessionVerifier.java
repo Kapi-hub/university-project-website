@@ -10,7 +10,8 @@ import java.sql.SQLException;
 /**
  * This class is used to verify that a session is valid.
  * It has only one public method, determineAccountType, which takes a session ID and an account ID.
- * It returns the account type of the user if the session is valid, and throws an InvalidSessionException otherwise.
+ * It returns the account type of the user if the session is valid, and throws an InvalidSessionException
+ * holding the reason why the session is invalid if it is not valid.
  **/
 public class SessionVerifier {
     public static AccountType determineAccountType(String sessionId, String accountIdString) throws InvalidSessionException {

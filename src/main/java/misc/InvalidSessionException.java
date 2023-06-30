@@ -1,5 +1,9 @@
 package misc;
 
+/**
+ * An exception that is thrown when the session is invalid
+ * It holds the reason why the session is invalid
+ */
 public class InvalidSessionException extends Exception {
     private final SessionInvalidReason reason;
 
