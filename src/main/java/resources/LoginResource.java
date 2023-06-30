@@ -34,6 +34,11 @@ public class LoginResource {
             AccountType.CLIENT, "submit"
     );
 
+    /**
+     * Handle the login and set a cookie with the session ID for logging in.
+     * @param account the account trying to authenticate
+     * @return a response with a status code based on how it went.
+     */
     @Path("/submit-form")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -87,6 +92,12 @@ public class LoginResource {
                 .build();
     }
 
+    /**
+     * Logouts person and also deletes the session ID and account ID in the database.
+     * @param sessionId the session ID that will be removed.
+     * @param accountIdString the account ID that will be removed.
+     * @return a response on whether ti worked or not.
+     */
     @Path("/logout")
     @POST
     @RolesAllowed({"admin", "crew_member"})
@@ -116,6 +127,12 @@ public class LoginResource {
                 .build();
     }
 
+    /**
+     * Creates a cookie
+     * @param name with this as the name
+     * @param value and this as the value
+     * @return the new cookie object with the right values set.
+     */
     public NewCookie createCookie(String name, String value) {
         NewCookie.Builder cookieBuilder = new NewCookie.Builder(name);
         cookieBuilder.value(value);
