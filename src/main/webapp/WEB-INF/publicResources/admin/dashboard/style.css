@@ -3,6 +3,8 @@
 */
 .modal.fade .modal-dialog .modal-content {
     background-color: var(--bs-dark);
+    border-color: #1696D2;
+    border-width: 5px;
 }
 #ddCrew ,#collapseOne, #collapseTwo{
      max-height: 200px; /* Set the maximum height of the dropdown */
@@ -121,10 +123,16 @@ body{
     color: var(--bs-light);
     margin-left: 10%;
     margin-bottom: 10px;
+    padding: 0 4px 1px 4px;
 }
 
 .closeBttn,.btn-close {
-    background-color: red; !important;
+    background-color: #ff0000;
+    border-radius: 20px;
+    border-color: #ff0000;
+    color: var(--bs-light);
+    margin-left: auto;
+    padding: 0 4px 1px 4px;
 }
 
 .inputTitle{
