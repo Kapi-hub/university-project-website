@@ -123,13 +123,11 @@ function addEvent() {
 }
 
 function addCrewMember() {
-    let memberQuery = document.querySelector('#memberInfo');
-    const memberFirstName = memberQuery.children[1].value;
-    const memberLastName = memberQuery.children[4].value;
-    const memberEmail = memberQuery.children[7].value;
-    const memberUsername = memberQuery.children[10].value;
-    const memberPassword = memberQuery.children[13].value;
-
+    const memberFirstName = document.getElementById("memberFirstName").value;
+    const memberLastName = document.getElementById("memberLastName").value;
+    const memberEmail = document.getElementById("email").value;
+    const memberUsername = document.getElementById("username").value;
+    const memberPassword = document.getElementById("password").value;
     //get member's permissions
 
     let permissionType = '';
