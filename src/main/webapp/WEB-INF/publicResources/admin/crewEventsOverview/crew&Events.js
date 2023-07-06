@@ -107,18 +107,18 @@ function addEvent() {
 
     console.log(JSON.stringify(data), null, 2);
     $.ajax({
-        url: "../api/admin/crewAssignments/newEvent",
+        url: `/api/admin/crewAssignments/newEvent`,
         method: "POST",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function () {
             alert("Event successfully sent!");
-        },
-        error: function () {
-            alert("Error creating a new event!");
-
         }
+        // error: function () {
+        //     alert("Error creating a new event!");
+        //     // console.log("do u get here n the js?")
+        // }
     });
 }
 
